@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: "F1 Telemetry",
@@ -45,6 +46,7 @@ export default function RootLayout({
 
       </head>
       <body>{children}</body>
+        <Analytics />
     </html>
   )
 }
