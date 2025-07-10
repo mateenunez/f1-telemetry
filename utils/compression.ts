@@ -3,8 +3,6 @@ import pako from "pako"
 // Utility para manejar datos comprimidos del WebSocket
 export function decompressData(compressedData: string): any {
   try {
-    console.log("Attempting to decompress data, length:", compressedData.length)
-    console.log("First 100 chars:", compressedData.substring(0, 100))
 
     // Método 1: Intentar decodificar directamente como base64 + gzip
     try {
@@ -16,7 +14,6 @@ export function decompressData(compressedData: string): any {
 
       // Verificar si los primeros bytes son de gzip (1f 8b)
       if (bytes[0] === 0x1f && bytes[1] === 0x8b) {
-        console.log("Detected gzip header, decompressing...")
         const decompressed = pako.inflate(bytes, { to: "string" })
         return JSON.parse(decompressed)
       }
@@ -32,7 +29,6 @@ export function decompressData(compressedData: string): any {
         bytes[i] = binaryString.charCodeAt(i)
       }
 
-      console.log("Trying deflate decompression...")
       const decompressed = pako.inflateRaw(bytes, { to: "string" })
       return JSON.parse(decompressed)
     } catch (deflateError) {
@@ -42,7 +38,6 @@ export function decompressData(compressedData: string): any {
     // Método 3: Intentar decodificar directamente como JSON (puede no estar comprimido)
     try {
       const decoded = atob(compressedData)
-      console.log("Trying direct JSON parse of base64 decoded data...")
       return JSON.parse(decoded)
     } catch (jsonError) {
       console.log("Direct JSON parse failed:", jsonError)
@@ -50,7 +45,6 @@ export function decompressData(compressedData: string): any {
 
     // Método 4: Intentar como string directo (puede ser JSON sin codificar)
     try {
-      console.log("Trying direct JSON parse...")
       return JSON.parse(compressedData)
     } catch (directError) {
       console.log("Direct string JSON parse failed:", directError)
@@ -64,17 +58,7 @@ export function decompressData(compressedData: string): any {
         bytes[i] = binaryString.charCodeAt(i)
       }
 
-      console.log(
-        "First 10 bytes as hex:",
-        Array.from(bytes)
-          .map((b) => b.toString(16).padStart(2, "0"))
-          .join(" "),
-      )
-
-      // Intentar diferentes métodos basados en los headers
       if (bytes[0] === 0x78) {
-        // zlib header
-        console.log("Detected zlib header, trying zlib decompression...")
         const fullBytes = new Uint8Array(binaryString.length)
         for (let i = 0; i < binaryString.length; i++) {
           fullBytes[i] = binaryString.charCodeAt(i)

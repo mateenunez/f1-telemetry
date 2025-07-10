@@ -7,6 +7,7 @@ import { RaceControlProcessor, type ProcessedRaceControl } from "./processors/ra
 import { PitProcessor, type ProcessedPitStop, type ProcessedStint } from "./processors/pit-processor"
 import { SessionProcessor, type ProcessedSession } from "./processors/session-processor"
 import { CarDataProcessor, type ProcessedCarData } from "./processors/car-data-processor"
+import { PositionDataProcessor, type ProcessedPositionData } from "./processors/position-data-processor"
 
 export interface TelemetryData {
   positions: ProcessedPosition[]
@@ -18,6 +19,7 @@ export interface TelemetryData {
   stints: ProcessedStint[]
   session: ProcessedSession | null
   carData: ProcessedCarData[]
+  positionData: ProcessedPositionData[]
   driversWithDRS: number[]
 }
 
@@ -31,6 +33,7 @@ export class TelemetryManager {
   private pitProcessor: PitProcessor
   private sessionProcessor: SessionProcessor
   private carDataProcessor: CarDataProcessor
+  private positionDataProcessor: PositionDataProcessor
 
   private onDataUpdateCallback: ((data: TelemetryData) => void) | null = null
 
@@ -44,6 +47,7 @@ export class TelemetryManager {
     this.pitProcessor = new PitProcessor()
     this.sessionProcessor = new SessionProcessor()
     this.carDataProcessor = new CarDataProcessor()
+    this.positionDataProcessor = new PositionDataProcessor()
   }
 
   connect(url: string, onDataUpdate: (data: TelemetryData) => void) {
@@ -61,6 +65,12 @@ export class TelemetryManager {
     // Procesar CarData comprimido
     if (R.CarData || R["CarData.z"]) {
       this.carDataProcessor.processCarData(R.CarData, R["CarData.z"])
+    }
+
+    // Procesar Position comprimido
+    if (R.Position || R["Position.z"]) {
+      this.positionDataProcessor.processPositionData(R.Position, R["Position.z"])
+      this.positionProcessor.processPositionData(R.Position, R["Position.z"])
     }
 
     // Procesar TopThree para posiciones
@@ -128,6 +138,7 @@ export class TelemetryManager {
       stints: [],
       session: this.sessionProcessor.getSessionInfo(),
       carData: this.carDataProcessor.getAllCarData(),
+      positionData: this.positionDataProcessor.getAllPositions(),
       driversWithDRS: this.carDataProcessor.getDriversWithDRS(),
     }
 
@@ -158,5 +169,7 @@ export class TelemetryManager {
   getDriverCarData(driverNumber: number): ProcessedCarData | undefined {
     return this.carDataProcessor.getDriverCarData(driverNumber)
   }
+
+
 
 }

@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { Geist } from "next/font/google";
 import { Anta } from "next/font/google";
+import Map from "@/components/Map";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const regularAnta = Anta({ subsets: ["latin"], weight: "400" });
@@ -42,11 +43,10 @@ export default function F1Dashboard() {
     // Conectar al WebSocket de telemetría
 
     // Reemplaza esta URL con tu WebSocket real
-    const wsUrl = "ws://localhost:4000";
+    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || "";
 
     const handleConnection = async () => {
       await telemetryManager.connect(wsUrl, (data: TelemetryData) => {
-        console.log("Datos: " + data);
 
         setTelemetryData(data);
         setLastUpdate(new Date());
@@ -54,12 +54,18 @@ export default function F1Dashboard() {
     };
 
     handleConnection();
-    setLoading(false);
+    
 
     return () => {
       telemetryManager.disconnect();
     };
   }, [telemetryManager]);
+
+    useEffect(() => {
+    if (telemetryData) {
+      setLoading(false);
+    }
+  }, [telemetryData]);
 
   const getDriverInfo = (driverNumber: number): ProcessedDriver | undefined => {
     return telemetryData?.drivers.find((d) => d.driver_number === driverNumber);
@@ -165,6 +171,7 @@ export default function F1Dashboard() {
                 <div className="flex items-center gap-1 text-xs ">
                   <a
                     href="https://cafecito.app/skoncito"
+                    target="_blank"
                     className="hover:underline"
                   >
                     Apoyanos!
@@ -198,12 +205,12 @@ export default function F1Dashboard() {
         </Card>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 ">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 m-2">
           {/* Posiciones Actuales */}
-          <Card className="lg:col-span-1 bg-gray-700 border-gray-900 ">
-            <CardHeader className="pb-3">
+          <Card className="lg:col-span-1 bg-gray-700 border-gray-900 max-h-screen">
+            <CardHeader className="pb-4">
               <CardTitle
-                className="flex items-center gap-2 text-white"
+                className="flex items-center gap-2 text-white text-lg "
                 style={regularAnta.style}
               >
                 <Trophy className="h-5 w-5 text-red-600" />
@@ -213,8 +220,8 @@ export default function F1Dashboard() {
                 </div>
               </CardTitle>
             </CardHeader>
-            <CardContent className="overflow-x-auto">
-              <ScrollArea className="overflow-x-auto min-w-max h-90">
+            <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full">
+              <ScrollArea className="overflow-x-auto min-w-max h-full">
                 <div className="space-y-2">
                   {getCurrentPositions().map((pos) => {
                     const driver = getDriverInfo(pos.driver_number);
@@ -231,7 +238,7 @@ export default function F1Dashboard() {
                           pinnedDriver === pos.driver_number
                             ? "border-2 border-red-500 sticky top-0 z-10"
                             : ""
-                        } max-w-full overflow-x-auto min-w-0`}
+                        } max-w-full overflow-x-auto min-w-0 min-h-full`}
                         onDoubleClick={() =>
                           setPinnedDriver(
                             pinnedDriver === pos.driver_number
@@ -405,10 +412,10 @@ export default function F1Dashboard() {
           </Card>
 
           {/* Mapa en tiempo real */}
-          <Card className="lg:col-span-1 bg-gray-700 border-gray-900">
+          <Card className="lg:col-span-1 bg-gray-700 border-gray-900 max-h-screen">
             <CardHeader className="pb-3">
               <CardTitle
-                className="flex items-center gap-2 text-white"
+                className="flex items-center gap-2 text-white text-lg"
                 style={regularAnta.style}
               >
                 <Clock className="h-5 w-5 text-red-600" />
@@ -418,24 +425,9 @@ export default function F1Dashboard() {
                 </div>
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col gap-4">
+            <CardContent className="flex flex-col justify-evenly max-h-[90vh] h-[90vh]">
               <ScrollArea className="overflow-hidden">
-                <iframe
-                  src="https://mateenunez.github.io/f1-map/"
-                  className="w-full h-80 border rounded-lg overflow-hidden"
-                  style={{
-                    transform:
-                      typeof window !== "undefined" && window.innerWidth <= 768
-                        ? "scale(1.3)"
-                        : "scale(1.15)",
-                    height:
-                      typeof window !== "undefined" && window.innerWidth <= 768
-                        ? "30vh"
-                        : "20rem",
-                  }}
-                  title="F1 Frameable Map"
-                  scrolling="no"
-                />
+                {(telemetryData && telemetryData.session?.circuit_key) && <Map positions={telemetryData.positionData} drivers={telemetryData.drivers} timing={telemetryData.timing} circuitKey={telemetryData.session.circuit_key}/>}
               </ScrollArea>
 
               {/* Race Control */}
@@ -470,10 +462,12 @@ export default function F1Dashboard() {
                   </ScrollArea>
                 </CardContent>
               </Card>
+
             </CardContent>
           </Card>
         </div>
       </div>
     </div>
   );
+
 }

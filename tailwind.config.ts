@@ -92,7 +92,7 @@ const config: Config = {
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		},
 		height: {
-			90: "33rem", 
+			50: "35rem", 
 		},
   	}
   },

@@ -23,7 +23,6 @@ export class CarDataProcessor {
     if (compressedData) {
       try {
         data = decompressData(compressedData)
-        console.log("Decompressed CarData:", data)
       } catch (error) {
         console.error("Error decompressing car data:", error)
       }
