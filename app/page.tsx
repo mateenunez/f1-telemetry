@@ -251,7 +251,7 @@ export default function F1Dashboard() {
                           driver?.team_colour
                         } transition-opacity ${
                           pinnedDriver === pos.driver_number
-                            ? "border-2 border-red-500 sticky top-0 z-10"
+                            ? `border-2 border-offWhite sticky top-0 z-10`
                             : ""
                         } max-w-full overflow-x-auto min-w-0 min-h-full cursor-pointer`}
                         onDoubleClick={() =>
