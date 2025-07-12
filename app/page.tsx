@@ -178,7 +178,7 @@ export default function F1Dashboard() {
                   >
                     {session?.session_type} - {session?.location}
                   </CardTitle>
-                  <p className="text-red-100 text-sm">
+                  <p className="text-red-100 text-sm" style={mediumGeist.style}>
                     {session?.circuit_short_name} • {session?.country_name} •{" "}
                     {session?.year}
                   </p>
@@ -188,7 +188,7 @@ export default function F1Dashboard() {
                 className="flex items-center justify-between text-sm flex-col "
                 style={mediumGeist.style}
               ></div>
-              <div className="flex items-center gap-4 flex-col md:flex-row text-xs md:text-sm">
+              <div className="flex items-center gap-4 text-nowrap flex-col md:flex-row text-xs md:text-sm" style={mediumGeist.style}>
                 {/* Weather Info */}
                 {weather && (
                   <div className="flex items-center gap-2 text-red-100">
@@ -476,7 +476,7 @@ export default function F1Dashboard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="py-2">
-                  <ScrollArea className="h-28">
+                  <ScrollArea className="md:h-28 h-80">
                     <div className="space-y-1">
                       {telemetryData?.raceControl.map((control, index) => (
                         <div className="flex gap-3 flex-col" key={index}>
