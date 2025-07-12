@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "F1 Telemetry",
-    description: "Telemetry Dashboard interactivo de Fórmula 1 con datos en tiempo real de OpenF1 API.",
+    description: "Dashboard, telemetria y mapa en tiempo real de Formula 1. Circuito en tiempo real formula 1. Podes ver la carrera con datos en tiempo real de Formula 1.",
     url: "https://f1-websocket-telemetry.vercel.app/", 
     siteName: "F1 Telemetry",
     locale: "es_ES",
