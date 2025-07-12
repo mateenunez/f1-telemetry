@@ -42,7 +42,7 @@ export class WebSocketManager {
         const text = await blob.text()
         const data = JSON.parse(text) as WebSocketData
 
-   
+
         if (this.onDataCallback) {
           this.onDataCallback(data)
         }

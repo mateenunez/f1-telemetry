@@ -62,8 +62,14 @@ const config: Config = {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
-  			}
-  		},
+  			},
+			// Colores para la telemetría de F1
+			f1WarmRed: "#ff1e29ee",      // F1 Warm Red
+            carbonBlack: "#232323",    // Carbon Black
+            offWhite: "#F3F3F3",       // Off White
+            highWhite: "#FFFFFF",      // High White
+
+          },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

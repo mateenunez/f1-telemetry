@@ -20,8 +20,8 @@ import {
   CloudRain,
   Sun,
   Cloud,
-  Zap,
-  Wind,
+  MapPin,
+  Info,
 } from "lucide-react";
 import { Geist } from "next/font/google";
 import { Anta } from "next/font/google";
@@ -38,6 +38,7 @@ export default function F1Dashboard() {
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [pinnedDriver, setPinnedDriver] = useState<number | null>(null);
   const [telemetryManager] = useState(() => new TelemetryManager());
+  const [mapFullscreen, setMapFullscreen] = useState(false);
 
   useEffect(() => {
     // Conectar al WebSocket de telemetría
@@ -47,21 +48,19 @@ export default function F1Dashboard() {
 
     const handleConnection = async () => {
       await telemetryManager.connect(wsUrl, (data: TelemetryData) => {
-
         setTelemetryData(data);
         setLastUpdate(new Date());
       });
     };
 
     handleConnection();
-    
 
     return () => {
       telemetryManager.disconnect();
     };
   }, [telemetryManager]);
 
-    useEffect(() => {
+  useEffect(() => {
     if (telemetryData) {
       setLoading(false);
     }
@@ -124,14 +123,19 @@ export default function F1Dashboard() {
     );
   };
 
+  const handleMapFullscreen = () => {
+    setMapFullscreen(!mapFullscreen);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4 flex items-center justify-center">
         <div className="text-center">
           <img
             src="/logo-girando.gif"
-            alt="Al Angulo Tv Cargando..."
+            alt="F1 Dashboard Telemetría Al Angulo TV"
             className="h-12 w-12 mx-auto flex align-center"
+            loading="lazy"
           />
           <p className="text-white">Cargando datos de F1...</p>
         </div>
@@ -142,11 +146,27 @@ export default function F1Dashboard() {
   const session = telemetryData?.session;
   const weather = telemetryData?.weather;
 
+  if (mapFullscreen && telemetryData && telemetryData.session?.circuit_key) {
+    return (
+      <div
+        className="fixed inset-0 bg-gradient-to-br from-gray-800 to-gray-900 z-50 bg-flex items-center justify-center"
+        onDoubleClick={handleMapFullscreen}
+      >
+        <Map
+          positions={telemetryData.positionData}
+          drivers={telemetryData.drivers}
+          timing={telemetryData.timing}
+          circuitKey={telemetryData.session.circuit_key}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-800 to-gray-900 p-2 sm:p-4">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
         {/* Header */}
-        <Card className="bg-gradient-to-r from-red-600 to-red-800 text-white border-none">
+        <Card className="bg-gradient-to-r from-red-900 to-f1WarmRed text-white border-none mx-2">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -167,18 +187,7 @@ export default function F1Dashboard() {
               <div
                 className="flex items-center justify-between text-sm flex-col "
                 style={mediumGeist.style}
-              >
-                <div className="flex items-center gap-1 text-xs ">
-                  <a
-                    href="https://cafecito.app/skoncito"
-                    target="_blank"
-                    className="hover:underline"
-                  >
-                    Apoyanos!
-                  </a>
-                  🎁
-                </div>
-              </div>
+              ></div>
               <div className="flex items-center gap-4 flex-col md:flex-row text-xs md:text-sm">
                 {/* Weather Info */}
                 {weather && (
@@ -192,7 +201,10 @@ export default function F1Dashboard() {
                     </div>
                   </div>
                 )}
-                <Separator orientation="vertical" className="h-8 bg-red-400 hidden md:block" />
+                <Separator
+                  orientation="vertical"
+                  className="h-8 bg-red-400 hidden md:block"
+                />
                 <div className="text-right ">
                   <div className="flex items-center gap-1 text-red-100">
                     <Clock className="h-4 w-4" />
@@ -205,18 +217,19 @@ export default function F1Dashboard() {
         </Card>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 m-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 m-2">
           {/* Posiciones Actuales */}
           <Card className="lg:col-span-1 bg-gray-700 border-gray-900 max-h-screen">
             <CardHeader className="pb-4">
               <CardTitle
-                className="flex items-center gap-2 text-white text-lg "
-                style={regularAnta.style}
+                className="flex items-center gap-2 text-white text-lg font-light "
+                style={mediumGeist.style}
               >
-                <Trophy className="h-5 w-5 text-red-600" />
-                Telemetría
-                <div className="border border-white rounded-md px-3 py-1 bg-white/10 text-white text-xs shadow-sm">
-                  Beta
+                <div className="relative group flex items-center text-nowrap">
+                  <Info className="h-4 w-4 text-offWhite cursor-pointer" />
+                  <span className="absolute left-6 top-1/2 -translate-y-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                    Doble click para fijar un piloto.
+                  </span>
                 </div>
               </CardTitle>
             </CardHeader>
@@ -234,11 +247,13 @@ export default function F1Dashboard() {
                     return (
                       <div
                         key={pos.driver_number}
-                        className={`flex items-center gap-5 p-1.5 rounded-lg bg-gray-600 transition-opacity ${
+                        className={`flex items-center gap-5 p-1.5 rounded-lg bg-gradient-to-br from-gray-600 to-${
+                          driver?.team_colour
+                        } transition-opacity ${
                           pinnedDriver === pos.driver_number
                             ? "border-2 border-red-500 sticky top-0 z-10"
                             : ""
-                        } max-w-full overflow-x-auto min-w-0 min-h-full`}
+                        } max-w-full overflow-x-auto min-w-0 min-h-full cursor-pointer`}
                         onDoubleClick={() =>
                           setPinnedDriver(
                             pinnedDriver === pos.driver_number
@@ -246,12 +261,15 @@ export default function F1Dashboard() {
                               : pos.driver_number
                           )
                         }
+                        style={{
+                          background: `linear-gradient(-90deg, #4b5563 92%, #${driver?.team_colour} 100%)`,
+                        }}
                       >
                         {/* Posición */}
                         <Badge
                           className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
                           style={{
-                            backgroundColor: `#${driver?.team_colour}`,
+                            backgroundColor: `transparent`,
                             fontFamily: regularAnta.style.fontFamily,
                           }}
                         >
@@ -261,7 +279,7 @@ export default function F1Dashboard() {
                         {/* Info del piloto */}
                         <div
                           className="flex-1 justify-evenly"
-                          style={mediumGeist.style}
+                          style={regularAnta.style}
                         >
                           <div className="flex items-center gap-1">
                             <span
@@ -270,7 +288,10 @@ export default function F1Dashboard() {
                             >
                               #{pos.driver_number}
                             </span>
-                            <span className="font-semibold text-sm text-white">
+                            <span
+                              className="font-semibold text-sm text-white"
+                              style={mediumGeist.style}
+                            >
                               {driver?.name_acronym}
                             </span>
                           </div>
@@ -296,7 +317,7 @@ export default function F1Dashboard() {
 
                           <p
                             className="text-xs text-gray-300"
-                            style={mediumGeist.style}
+                            style={regularAnta.style}
                           >
                             RPM: {carData?.rpm || "--"}{" "}
                             <span className="text-red-400">
@@ -306,7 +327,10 @@ export default function F1Dashboard() {
                         </div>
 
                         {/* Minisectores */}
-                        <div className="text-xs text-white">
+                        <div
+                          className="text-xs text-white"
+                          style={regularAnta.style}
+                        >
                           {(["sector1", "sector2", "sector3"] as const).map(
                             (sectorKey, sectorIdx) => {
                               const minisectors =
@@ -319,8 +343,9 @@ export default function F1Dashboard() {
                                   S{sectorIdx + 1}
                                   {minisectors.map(
                                     (s: number, sIdx: number) => {
-                                      let bg = "#cccccc"; 
-                                      if (s === 2048) bg = "#ffe066"; // Amarillo
+                                      let bg = "#cccccc";
+                                      if (s === 2048)
+                                        bg = "#ffe066"; // Amarillo
                                       else if (s === 2049)
                                         bg = "#51cf66"; // Verde
                                       else if (s === 2051) bg = "#b197fc"; // Violeta
@@ -377,7 +402,7 @@ export default function F1Dashboard() {
                         {/* Tiempo de vuelta */}
                         <div
                           className="flex items-center flex-col text-xs text-white"
-                          style={mediumGeist.style}
+                          style={regularAnta.style}
                         >
                           <span className="text-xxs text-gray-300">LAP</span>
                           <p>{timing?.last_lap_time || "---:---"}</p>
@@ -386,7 +411,7 @@ export default function F1Dashboard() {
                         {/* Gap */}
                         <div
                           className="flex items-center flex-col text-xs text-white"
-                          style={mediumGeist.style}
+                          style={regularAnta.style}
                         >
                           <span className="text-xxs text-gray-300">GAP</span>
                           <p>{timing?.gap_to_leader || ""}</p>
@@ -416,29 +441,38 @@ export default function F1Dashboard() {
             <CardHeader className="pb-3">
               <CardTitle
                 className="flex items-center gap-2 text-white text-lg"
-                style={regularAnta.style}
+                style={mediumGeist.style}
               >
-                <Clock className="h-5 w-5 text-red-600" />
-                Mapa
-                <div className="border border-white rounded-md px-3 py-1 bg-white/10 text-white text-xs shadow-sm">
-                  Beta
+                <div className="relative group flex items-center text-nowrap">
+                  <Info className="h-4 w-4 text-offWhite cursor-pointer" />
+                  <span className="absolute left-6 top-1/2 -translate-y-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                    Doble click para pantalla completa.
+                  </span>
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col justify-evenly max-h-[90vh] h-[90vh]">
               <ScrollArea className="overflow-hidden">
-                {(telemetryData && telemetryData.session?.circuit_key) && <Map positions={telemetryData.positionData} drivers={telemetryData.drivers} timing={telemetryData.timing} circuitKey={telemetryData.session.circuit_key}/>}
+                {telemetryData && telemetryData.session?.circuit_key && (
+                  <div onDoubleClick={handleMapFullscreen}>
+                    <Map
+                      positions={telemetryData.positionData}
+                      drivers={telemetryData.drivers}
+                      timing={telemetryData.timing}
+                      circuitKey={telemetryData.session.circuit_key}
+                    />
+                  </div>
+                )}
               </ScrollArea>
 
               {/* Race Control */}
               <Card className="bg-gradient-to-r from-red-900 to-gray-900 text-white border-none">
                 <CardHeader className="pb-2">
                   <CardTitle
-                    className="text-lg flex items-center gap-2"
-                    style={regularAnta.style}
+                    className="text-lg flex items-center gap-2 justify-center"
+                    style={mediumGeist.style}
                   >
                     <AlertTriangle className="h-5 w-5 text-red-500" />
-                    Avisos de Carrera
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="py-2">
@@ -462,12 +496,27 @@ export default function F1Dashboard() {
                   </ScrollArea>
                 </CardContent>
               </Card>
-
             </CardContent>
           </Card>
+        </div>
+
+        {/* Footer */}
+        <div
+          className="flex items-center justify-evenly bg-transparent text-white"
+          style={mediumGeist.style}
+        >
+          <div className="flex items-center gap-1 text-xs ">
+            <a
+              href="https://cafecito.app/skoncito"
+              target="_blank"
+              className="hover:underline"
+            >
+              Apoyanos!
+            </a>
+            🎁
+          </div>
         </div>
       </div>
     </div>
   );
-
 }
