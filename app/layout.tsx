@@ -39,6 +39,7 @@ export default function RootLayout({
     <html lang="es">
       <head>
         {/* SEO extra tags */}
+        <meta name="google-site-verification" content="eF8UbK8ghA29zsWnzurWzjJgXzmLeucRd59QUDpdHTE" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#b91c1c" />
         <link rel="canonical" href="https://f1-websocket-telemetry.vercel.app/" /> 
