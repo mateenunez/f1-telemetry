@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: "F1 Telemetry",
-  description: "Telemetry Dashboard interactivo de Fórmula 1 con datos en tiempo real.",
+  description: "F1 Telemetry es un dashboard en tiempo real de Formula 1. Con datos de telemetría originales y un mapa del circuito en vivo.",
   keywords: "F1, Formula 1, dashboard, tiempo real, carreras, pilotos, telemetría, live timing, resultados, posiciones, clasificación, GP, Grand Prix, circuito, equipos, escuderías, estrategia, neumáticos, velocidad, sector, vuelta rápida, datos, streaming, análisis, estadísticas, OpenF1, telemetry dashboard, F1 live, F1 realtime, F1 data, F1 analytics, F1 telemetry dashboard, F1 streaming, F1 resultados en vivo, F1 posiciones en tiempo real, F1 análisis de carrera, F1 dashboard interactivo",
   authors: [
     {
@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "F1 Telemetry",
-    description: "Dashboard, telemetria y mapa en tiempo real de Formula 1. Circuito en tiempo real formula 1. Podes ver la carrera con datos en tiempo real de Formula 1.",
-    url: "https://f1-websocket-telemetry.vercel.app/", 
+    description: "F1 Telemetry es un dashboard en tiempo real de Formula 1. Con datos de telemetría originales y un mapa del circuito en vivo.",
+    url: "https://f1telemetry.vercel.app/", 
     siteName: "F1 Telemetry",
     locale: "es_ES",
     type: "website",
