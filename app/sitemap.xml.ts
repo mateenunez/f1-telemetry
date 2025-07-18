@@ -1,7 +1,7 @@
 import { type NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const baseUrl = "hhttps://f1telemetry.vercel.app/";
+  const baseUrl = "https://f1telemetry.vercel.app/";
   const urls = [
     "",
   ];
