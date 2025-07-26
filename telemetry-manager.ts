@@ -1,4 +1,4 @@
-import { WebSocketManager, type WebSocketData } from "./websocket/websocket-manager"
+import { WebSocketManager, type WebSocketData, type SignalRMessage } from "./websocket/websocket-manager"
 import { PositionProcessor, type ProcessedPosition } from "./processors/position-processor"
 import { TimingProcessor, type ProcessedTiming } from "./processors/timing-processor"
 import { WeatherProcessor, type ProcessedWeather } from "./processors/weather-processor"
@@ -21,6 +21,7 @@ export interface TelemetryData {
   carData: ProcessedCarData[]
   positionData: ProcessedPositionData[]
   driversWithDRS: number[]
+  lastUpdateTime: string
 }
 
 export class TelemetryManager {
@@ -59,70 +60,95 @@ export class TelemetryManager {
   }
 
   private processWebSocketData(data: WebSocketData) {
-    const R = data.R
-    if (!R) return
 
-    // Procesar CarData comprimido
-    if (R.CarData || R["CarData.z"]) {
-      this.carDataProcessor.processCarData(R.CarData, R["CarData.z"])
+    if (data.M) {
+      data.M.forEach((message: SignalRMessage, index: number) => {
+        if (message.H === "Streaming" && message.M === "feed" && message.A) {
+          const [dataType, messageData, timestamp] = message.A
+
+          this.processDataByType(dataType, messageData, timestamp)
+        }
+      })
     }
 
-    // Procesar Position comprimido
-    if (R.Position || R["Position.z"]) {
-      this.positionDataProcessor.processPositionData(R.Position, R["Position.z"])
-      this.positionProcessor.processPositionData(R.Position, R["Position.z"])
+    if (data.R) {
+      const R = data.R
+      Object.entries(R).forEach(([dataType, messageData]) => {
+        if (messageData !== undefined) {
+          this.processDataByType(dataType, messageData)
+        }
+      })
     }
 
-    // Procesar TopThree para posiciones
-    if (R.TopThree) {
-      this.positionProcessor.processTopThreeData(R.TopThree)
-    }
-
-    // Procesar TimingData para posiciones y timing
-    if (R.TimingData) {
-      this.positionProcessor.processTimingDataPositions(R.TimingData)
-      this.timingProcessor.processTimingData(R.TimingData)
-    }
-
-    if (R.WeatherData) {
-      this.weatherProcessor.processWeatherData(R.WeatherData)
-    }
-
-    if (R.DriverList) {
-      this.driverProcessor.processDriverList(R.DriverList)
-    }
-
-    if (R.RaceControlMessages) {
-      this.raceControlProcessor.processRaceControlMessages(R.RaceControlMessages)
-    }
-
-    if (R.PitStopSeries) {
-      this.pitProcessor.processPitStopSeries(R.PitStopSeries)
-    }
-
-    if (R.TyreStintSeries) {
-      this.pitProcessor.processTyreStintSeries(R.TyreStintSeries)
-    }
-
-    // Procesar TimingAppData para stints
-    if (R.TimingAppData) {
-      this.pitProcessor.processTimingAppData(R.TimingAppData)
-    }
-
-    if (R.SessionInfo) {
-      this.sessionProcessor.processSessionInfo(R.SessionInfo)
-    }
-
-    if (R.LapCount) {
-      this.sessionProcessor.processLapCount(R.LapCount)
-    }
-
-    if (R.TrackStatus) {
-      this.sessionProcessor.processTrackStatus(R.TrackStatus)
-    }
-
-    // Enviar datos actualizados al callback
     this.sendUpdate()
+  }
+
+  private processDataByType(dataType: string, messageData: any, timestamp?: string) {
+
+    switch (dataType) {
+      case "CarData":
+        this.carDataProcessor.processCarData(messageData)
+        break
+
+      case "CarData.z":
+        this.carDataProcessor.processCarData(null, messageData)
+        break
+
+      case "Position":
+        this.positionDataProcessor.processPositionData(messageData)
+        this.positionProcessor.processPositionData(messageData)
+        break
+
+      case "Position.z":
+        this.positionDataProcessor.processPositionData(null, messageData)
+        this.positionProcessor.processPositionData(null, messageData)
+        break
+
+      case "TopThree":
+        this.positionProcessor.processTopThreeData(messageData)
+        break
+
+      case "TimingData":
+        this.positionProcessor.processTimingDataPositions(messageData)
+        this.timingProcessor.processTimingData(messageData)
+        break
+
+      case "TimingAppData":
+        this.pitProcessor.processTimingAppData(messageData)
+        break
+
+      case "TyreStintSeries":
+        this.pitProcessor.processTyreStintSeries(messageData)
+        break
+
+      case "WeatherData":
+        this.weatherProcessor.processWeatherData(messageData)
+        break
+
+      case "DriverList":
+        this.driverProcessor.processDriverList(messageData)
+        break
+
+      case "RaceControlMessages":
+        this.raceControlProcessor.processRaceControlMessages(messageData)
+        break
+
+      case "PitStopSeries":
+        this.pitProcessor.processPitStopSeries(messageData)
+        break
+
+      case "SessionInfo":
+        this.sessionProcessor.processSessionInfo(messageData)
+        break
+
+      case "LapCount":
+        this.sessionProcessor.processLapCount(messageData)
+        break
+
+      case "TrackStatus":
+        this.sessionProcessor.processTrackStatus(messageData)
+        break
+    }
   }
 
   private sendUpdate() {
@@ -135,14 +161,27 @@ export class TelemetryManager {
       drivers: this.driverProcessor.getAllDrivers(),
       raceControl: this.raceControlProcessor.getLatestMessages(),
       pitStops: [],
-      stints: [],
+      stints: this.getAllStints(),
       session: this.sessionProcessor.getSessionInfo(),
       carData: this.carDataProcessor.getAllCarData(),
       positionData: this.positionDataProcessor.getAllPositions(),
       driversWithDRS: this.carDataProcessor.getDriversWithDRS(),
+      lastUpdateTime: new Date().toLocaleString()
     }
 
     this.onDataUpdateCallback(telemetryData)
+  }
+
+  private getAllStints(): ProcessedStint[] {
+    const allStints: ProcessedStint[] = []
+
+    // Obtener todos los stints de todos los pilotos
+    for (let i = 1; i <= 99; i++) {
+      const driverStints = this.pitProcessor.getDriverStints(i)
+      allStints.push(...driverStints)
+    }
+
+    return allStints
   }
 
   disconnect() {
@@ -168,6 +207,10 @@ export class TelemetryManager {
 
   getDriverCarData(driverNumber: number): ProcessedCarData | undefined {
     return this.carDataProcessor.getDriverCarData(driverNumber)
+  }
+
+  getDriverPositionData(driverNumber: number): ProcessedPositionData | undefined {
+    return this.positionDataProcessor.getDriverPosition(driverNumber)
   }
 
 

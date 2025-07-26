@@ -13,17 +13,20 @@ export class DriverProcessor {
   private drivers: Map<number, ProcessedDriver> = new Map()
 
   processDriverList(driverList: any): ProcessedDriver[] {
-    if (!driverList) {
+    if (!driverList || typeof driverList !== "object") {
       return []
     }
 
     const processedDrivers: ProcessedDriver[] = []
 
     Object.entries(driverList).forEach(([driverNumber, data]: [string, any]) => {
-      if (driverNumber === "_kf") return // Skip metadata
+      if (driverNumber === "_kf" || !data || typeof data !== "object") return 
+
+      const driverNum = Number.parseInt(driverNumber)
+      if (isNaN(driverNum)) return
 
       const processed: ProcessedDriver = {
-        driver_number: Number.parseInt(driverNumber),
+        driver_number: driverNum,
         name_acronym: data.Tla || "",
         full_name: data.FullName || "",
         team_name: data.TeamName || "",

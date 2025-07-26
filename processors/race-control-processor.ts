@@ -18,9 +18,11 @@ export class RaceControlProcessor {
     }
 
     const processedMessages: ProcessedRaceControl[] = []
+    var processed: ProcessedRaceControl
 
+    if (Array.isArray(raceControlData.Messages)){
     raceControlData.Messages.forEach((message: any) => {
-      const processed: ProcessedRaceControl = {
+       processed = {
         message: message.Message || "",
         category: message.Category || "",
         flag: message.Flag,
@@ -33,12 +35,13 @@ export class RaceControlProcessor {
 
       processedMessages.push(processed)
     })
-
+  }
     // Mantener solo los últimos 50 mensajes
     this.messages = [...this.messages, ...processedMessages].slice(-50)
 
     return processedMessages
-  }
+  
+}
 
   getLatestMessages(count = 5): ProcessedRaceControl[] {
     return this.messages.slice(-count).reverse()

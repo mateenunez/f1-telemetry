@@ -35,7 +35,6 @@ export default function F1Dashboard() {
     null
   );
   const [loading, setLoading] = useState(true);
-  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [pinnedDriver, setPinnedDriver] = useState<number | null>(null);
   const [telemetryManager] = useState(() => new TelemetryManager());
   const [mapFullscreen, setMapFullscreen] = useState(false);
@@ -48,8 +47,8 @@ export default function F1Dashboard() {
 
     const handleConnection = async () => {
       await telemetryManager.connect(wsUrl, (data: TelemetryData) => {
+        console.log(data)
         setTelemetryData(data);
-        setLastUpdate(new Date());
       });
     };
 
@@ -208,7 +207,7 @@ export default function F1Dashboard() {
                 <div className="text-right ">
                   <div className="flex items-center gap-1 text-red-100">
                     <Clock className="h-4 w-4" />
-                    {lastUpdate.toLocaleTimeString()}
+                    {telemetryData?.lastUpdateTime.slice(-11)}
                   </div>
                 </div>
               </div>

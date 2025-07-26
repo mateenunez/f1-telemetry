@@ -37,7 +37,7 @@ export class PositionProcessor {
 
     const processedPositions: ProcessedPosition[] = []
 
-    topThreeData.Lines.forEach((line: any) => {
+      Object.entries(topThreeData.Lines).forEach(([driverNumber, line]: [string, any]) => {
       if (line.RacingNumber && line.Position) {
         const processed: ProcessedPosition = {
           driver_number: Number.parseInt(line.RacingNumber),

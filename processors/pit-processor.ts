@@ -15,6 +15,7 @@ export interface ProcessedStint {
   lap_flags: number
   lap_time: string
   lap_number: number
+  stint_number: number
 }
 
 export class PitProcessor {
@@ -51,6 +52,7 @@ export class PitProcessor {
   }
 
   processTyreStintSeries(stintData: any): ProcessedStint[] {
+
     if (!stintData || !stintData.Stints) {
       return []
     }
@@ -58,32 +60,58 @@ export class PitProcessor {
     const allStints: ProcessedStint[] = []
 
     Object.entries(stintData.Stints).forEach(([driverNumber, stints]: [string, any]) => {
-      const driverStints: ProcessedStint[] = []
+      const driverNum = Number.parseInt(driverNumber)
 
-      stints.forEach((stint: any) => {
-        const processed: ProcessedStint = {
-          driver_number: Number.parseInt(driverNumber),
-          compound: stint.Compound || "UNKNOWN",
-          is_new: stint.New === "true",
-          total_laps: Number.parseInt(stint.TotalLaps) || 0,
-          start_laps: Number.parseInt(stint.StartLaps) || 0,
-          lap_flags: Number.parseInt(stint.LapFlags) || 0,
-          lap_time: stint.LapTime || "",
-          lap_number: Number.parseInt(stint.LapNumber) || 0,
+      // Obtener stints existentes o crear array vacío
+      const existingStints = this.stints.get(driverNum) || []
+
+      Object.entries(stints).forEach(([stintIndex, stint]: [string, any]) => {
+        const stintNum = Number.parseInt(stintIndex)
+
+        // Buscar stint existente o crear nuevo
+        let existingStint = existingStints.find((s) => s.stint_number === stintNum)
+
+        if (!existingStint) {
+          existingStint = {
+            driver_number: driverNum,
+            compound: "UNKNOWN",
+            is_new: false,
+            total_laps: 0,
+            start_laps: 0,
+            lap_flags: 0,
+            lap_time: "",
+            lap_number: 0,
+            stint_number: stintNum,
+          }
+          existingStints.push(existingStint)
         }
 
-        driverStints.push(processed)
-        allStints.push(processed)
+        // Actualizar solo los campos que vienen en los datos
+        const updated: ProcessedStint = {
+          ...existingStint,
+          compound: stint.Compound !== undefined ? stint.Compound : existingStint.compound,
+          is_new: stint.New !== undefined ? stint.New === "true" : existingStint.is_new,
+          total_laps: stint.TotalLaps !== undefined ? Number.parseInt(stint.TotalLaps) : existingStint.total_laps,
+          start_laps: stint.StartLaps !== undefined ? Number.parseInt(stint.StartLaps) : existingStint.start_laps,
+          lap_flags: stint.LapFlags !== undefined ? Number.parseInt(stint.LapFlags) : existingStint.lap_flags,
+          lap_time: stint.LapTime !== undefined ? stint.LapTime : existingStint.lap_time,
+          lap_number: stint.LapNumber !== undefined ? Number.parseInt(stint.LapNumber) : existingStint.lap_number,
+        }
+
+        // Actualizar en el array existente
+        const index = existingStints.findIndex((s) => s.stint_number === stintNum)
+        existingStints[index] = updated
+        allStints.push(updated)
       })
 
-      this.stints.set(Number.parseInt(driverNumber), driverStints)
+      this.stints.set(driverNum, existingStints)
     })
 
     return allStints
   }
 
-  // Nuevo método para procesar TimingAppData
   processTimingAppData(timingAppData: any): ProcessedStint[] {
+
     if (!timingAppData || !timingAppData.Lines) {
       return []
     }
@@ -91,29 +119,55 @@ export class PitProcessor {
     const allStints: ProcessedStint[] = []
 
     Object.entries(timingAppData.Lines).forEach(([driverNumber, data]: [string, any]) => {
-      if (data.Stints && Array.isArray(data.Stints)) {
-        const driverStints: ProcessedStint[] = []
+      const driverNum = Number.parseInt(driverNumber)
 
-        data.Stints.forEach((stint: any) => {
-          const processed: ProcessedStint = {
-            driver_number: Number.parseInt(data.RacingNumber),
-            compound: stint.Compound || "UNKNOWN",
-            is_new: stint.New === "true",
-            total_laps: Number.parseInt(stint.TotalLaps) || 0,
-            start_laps: Number.parseInt(stint.StartLaps) || 0,
-            lap_flags: Number.parseInt(stint.LapFlags) || 0,
-            lap_time: stint.LapTime || "",
-            lap_number: Number.parseInt(stint.LapNumber) || 0,
+      if (data.Stints) {
+        // Obtener stints existentes o crear array vacío
+        const existingStints = this.stints.get(driverNum) || []
+
+        Object.entries(data.Stints).forEach(([stintIndex, stint]: [string, any]) => {
+          const stintNum = Number.parseInt(stintIndex)
+
+          // Buscar stint existente o crear nuevo
+          let existingStint = existingStints.find((s) => s.stint_number === stintNum)
+
+          if (!existingStint) {
+            existingStint = {
+              driver_number: driverNum,
+              compound: "UNKNOWN",
+              is_new: false,
+              total_laps: 0,
+              start_laps: 0,
+              lap_flags: 0,
+              lap_time: "",
+              lap_number: 0,
+              stint_number: stintNum,
+            }
+            existingStints.push(existingStint)
           }
 
-          driverStints.push(processed)
-          allStints.push(processed)
+          // Actualizar solo los campos que vienen en los datos
+          const updated: ProcessedStint = {
+            ...existingStint,
+            compound: stint.Compound !== undefined ? stint.Compound : existingStint.compound,
+            is_new: stint.New !== undefined ? stint.New === "true" : existingStint.is_new,
+            total_laps: stint.TotalLaps !== undefined ? Number.parseInt(stint.TotalLaps) : existingStint.total_laps,
+            start_laps: stint.StartLaps !== undefined ? Number.parseInt(stint.StartLaps) : existingStint.start_laps,
+            lap_flags: stint.LapFlags !== undefined ? Number.parseInt(stint.LapFlags) : existingStint.lap_flags,
+            lap_time: stint.LapTime !== undefined ? stint.LapTime : existingStint.lap_time,
+            lap_number: stint.LapNumber !== undefined ? Number.parseInt(stint.LapNumber) : existingStint.lap_number,
+          }
+
+          // Actualizar en el array existente
+          const index = existingStints.findIndex((s) => s.stint_number === stintNum)
+          existingStints[index] = updated
+          allStints.push(updated)
+
         })
 
-        this.stints.set(Number.parseInt(data.RacingNumber), driverStints)
+        this.stints.set(driverNum, existingStints)
       }
     })
-
     return allStints
   }
 
