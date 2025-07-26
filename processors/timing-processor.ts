@@ -5,9 +5,9 @@ export interface ProcessedTiming {
   last_lap_time: string
   best_lap_time: string
   sector_times: {
-    sector1: { Value: number, OverallFastest: boolean, PersonalFastest: boolean }
-    sector2: { Value: number, OverallFastest: boolean, PersonalFastest: boolean }
-    sector3: { Value: number, OverallFastest: boolean, PersonalFastest: boolean }
+    sector1?: { Value: number, PreviousValue:number, OverallFastest: boolean, PersonalFastest: boolean }
+    sector2?: { Value: number, PreviousValue:number,  OverallFastest: boolean, PersonalFastest: boolean }
+    sector3?: { Value: number, PreviousValue:number,  OverallFastest: boolean, PersonalFastest: boolean }
   }
   sector_segments: {
     sector1: number[]
@@ -25,10 +25,19 @@ export interface ProcessedTiming {
   retired: boolean
   in_pit: boolean
   date: string
+  knockedOut: boolean
 }
+
+const getSectorValue = (sector: any) => {
+  if (sector?.Value && sector.Value !== "") return sector.Value;
+  if (sector?.PreviousValue && sector.PreviousValue !== "") return sector.PreviousValue;
+  return null;
+};
 
 export class TimingProcessor {
   private latestTiming: Map<number, ProcessedTiming> = new Map()
+
+  
 
   processTimingData(timingData: any): ProcessedTiming[] {
     if (!timingData || !timingData.Lines) {
@@ -55,6 +64,7 @@ export class TimingProcessor {
         retired: false,
         in_pit: false,
         date: new Date().toISOString(),
+        knockedOut: false
       }
 
       // Actualizar solo los campos que vienen en los datos
@@ -62,15 +72,15 @@ export class TimingProcessor {
         ...existing,
         gap_to_leader: data.GapToLeader !== undefined ? data.GapToLeader : existing.gap_to_leader,
         interval_to_ahead:
-          data.IntervalToPositionAhead?.Value !== undefined
-            ? data.IntervalToPositionAhead.Value
+          data.Stats.IntervalToPositionAhead !== undefined
+            ? data.Stats.IntervalToPositionAhead
             : existing.interval_to_ahead,
         last_lap_time: data.LastLapTime?.Value !== undefined ? data.LastLapTime.Value : existing.last_lap_time,
         best_lap_time: data.BestLapTime?.Value !== undefined ? data.BestLapTime.Value : existing.best_lap_time,
-        sector_times: {
-          sector1: Array.isArray(data.Sectors?.[0]?.Value) ? data.Sectors[0].Value : existing.sector_times.sector1,
-          sector2: data.Sectors?.[1]?.Value !== undefined ? data.Sectors[1].Value : existing.sector_times.sector2,
-          sector3: data.Sectors?.[2]?.Value !== undefined ? data.Sectors[2].Value : existing.sector_times.sector3,
+     sector_times: {
+          sector1: getSectorValue(data.Sectors?.[0]) || existing.sector_times.sector1,
+          sector2: getSectorValue(data.Sectors?.[1]) || existing.sector_times.sector2,
+          sector3: getSectorValue(data.Sectors?.[2]) || existing.sector_times.sector3,
         },
         sector_segments: {
           sector1: Array.isArray(data.Sectors?.[0]?.Segments)
@@ -95,6 +105,7 @@ export class TimingProcessor {
         retired: data.Retired !== undefined ? data.Retired : existing.retired,
         in_pit: data.InPit !== undefined ? data.InPit : existing.in_pit,
         date: new Date().toISOString(),
+        knockedOut: data.KnockedOut
       }
 
       this.latestTiming.set(driverNum, updated)

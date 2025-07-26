@@ -260,9 +260,8 @@ export default function F1Dashboard() {
                               : pos.driver_number
                           )
                         }
-                        style={{
-                          background: `linear-gradient(-90deg, #4b5563 92%, #${driver?.team_colour} 100%)`,
-                        }}
+                        style={timing?.knockedOut ? {opacity: 0.4, background: `linear-gradient(-90deg, #4b5563 92.7%, #${driver?.team_colour} 100%)` }: {opacity: 1, background: `linear-gradient(-90deg, #4b5563 92.7%, #${driver?.team_colour} 100%)`}}
+                        
                       >
                         {/* Posición */}
                         <Badge
@@ -390,7 +389,7 @@ export default function F1Dashboard() {
                                   key={sectorKey}
                                 >
                                   <span className={color}>
-                                    {sector?.Value ?? "--:--"}
+                                    {sector ? <>{sector}</> : <>"--:--"</>}
                                   </span>
                                 </div>
                               );
