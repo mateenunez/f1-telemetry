@@ -47,7 +47,6 @@ export default function F1Dashboard() {
 
     const handleConnection = async () => {
       await telemetryManager.connect(wsUrl, (data: TelemetryData) => {
-     
         setTelemetryData(data);
       });
     };
@@ -187,7 +186,10 @@ export default function F1Dashboard() {
                 className="flex items-center justify-between text-sm flex-col "
                 style={mediumGeist.style}
               ></div>
-              <div className="flex items-center gap-4 text-nowrap flex-col md:flex-row text-xs md:text-sm" style={mediumGeist.style}>
+              <div
+                className="flex items-center gap-4 text-nowrap flex-col md:flex-row text-xs md:text-sm"
+                style={mediumGeist.style}
+              >
                 {/* Weather Info */}
                 {weather && (
                   <div className="flex items-center gap-2 text-red-100">
@@ -205,9 +207,16 @@ export default function F1Dashboard() {
                   className="h-8 bg-red-400 hidden md:block"
                 />
                 <div className="text-right ">
-                  <div className="flex items-center gap-1 text-red-100">
+                  <div className="flex items-center gap-1 text-red-100 flex-row">
                     <Clock className="h-4 w-4" />
-                    {telemetryData?.lastUpdateTime.slice(-11)}
+                    <div className="flex flex-col">
+                      <span>
+                        {telemetryData?.lastUpdateTime.toLocaleDateString()}
+                      </span>
+                      <span>
+                        {telemetryData?.lastUpdateTime.toLocaleTimeString()}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -260,8 +269,17 @@ export default function F1Dashboard() {
                               : pos.driver_number
                           )
                         }
-                        style={timing?.knockedOut ? {opacity: 0.4, background: `linear-gradient(-90deg, #4b5563 92.7%, #${driver?.team_colour} 100%)` }: {opacity: 1, background: `linear-gradient(-90deg, #4b5563 92.7%, #${driver?.team_colour} 100%)`}}
-                        
+                        style={
+                          timing?.knockedOut
+                            ? {
+                                opacity: 0.4,
+                                background: `linear-gradient(-90deg, #4b5563 92.7%, #${driver?.team_colour} 100%)`,
+                              }
+                            : {
+                                opacity: 1,
+                                background: `linear-gradient(-90deg, #4b5563 92.7%, #${driver?.team_colour} 100%)`,
+                              }
+                        }
                       >
                         {/* Posición */}
                         <Badge

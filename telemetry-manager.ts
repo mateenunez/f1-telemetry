@@ -21,7 +21,7 @@ export interface TelemetryData {
   carData: ProcessedCarData[]
   positionData: ProcessedPositionData[]
   driversWithDRS: number[]
-  lastUpdateTime: string
+  lastUpdateTime: Date
 }
 
 export class TelemetryManager {
@@ -166,7 +166,7 @@ export class TelemetryManager {
       carData: this.carDataProcessor.getAllCarData(),
       positionData: this.positionDataProcessor.getAllPositions(),
       driversWithDRS: this.carDataProcessor.getDriversWithDRS(),
-      lastUpdateTime: new Date().toLocaleString()
+      lastUpdateTime: new Date()
     }
 
     this.onDataUpdateCallback(telemetryData)
