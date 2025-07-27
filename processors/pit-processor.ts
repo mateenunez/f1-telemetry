@@ -32,20 +32,23 @@ export class PitProcessor {
     Object.entries(pitStopData.PitTimes).forEach(([driverNumber, stops]: [string, any]) => {
       const driverStops: ProcessedPitStop[] = []
 
-      stops.forEach((stop: any) => {
-        const processed: ProcessedPitStop = {
-          driver_number: Number.parseInt(driverNumber),
-          pit_stop_time: Number.parseFloat(stop.PitStop.PitStopTime) || 0,
-          pit_lane_time: Number.parseFloat(stop.PitStop.PitLaneTime) || 0,
-          lap: Number.parseInt(stop.PitStop.Lap) || 0,
-          date: stop.Timestamp || new Date().toISOString(),
-        }
+      if (Array.isArray(stops)) {
+        stops.forEach((stop: any) => {
+          const processed: ProcessedPitStop = {
+            driver_number: Number.parseInt(driverNumber),
+            pit_stop_time: Number.parseFloat(stop.PitStop.PitStopTime) || 0,
+            pit_lane_time: Number.parseFloat(stop.PitStop.PitLaneTime) || 0,
+            lap: Number.parseInt(stop.PitStop.Lap) || 0,
+            date: stop.Timestamp || new Date().toISOString(),
+          }
 
-        driverStops.push(processed)
-        allPitStops.push(processed)
-      })
+          driverStops.push(processed)
+          allPitStops.push(processed)
+        })
 
-      this.pitStops.set(Number.parseInt(driverNumber), driverStops)
+        this.pitStops.set(Number.parseInt(driverNumber), driverStops)
+      }
+
     })
 
     return allPitStops

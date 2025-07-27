@@ -62,7 +62,6 @@ export class WebSocketManager {
         }
 
         if (this.onDataCallback) {
-          console.log("RAWDATA: ", rawData)
           this.onDataCallback(rawData)
         }
       } catch (error) {

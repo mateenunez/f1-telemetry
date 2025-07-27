@@ -47,7 +47,7 @@ export default function F1Dashboard() {
 
     const handleConnection = async () => {
       await telemetryManager.connect(wsUrl, (data: TelemetryData) => {
-        console.log(data)
+     
         setTelemetryData(data);
       });
     };

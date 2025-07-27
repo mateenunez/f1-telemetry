@@ -29,34 +29,29 @@ export interface ProcessedTiming {
 }
 
 const getSectorValue = (sector: any) => {
-  if (sector?.Value && sector.Value !== "") return sector.Value;
-  if (sector?.PreviousValue && sector.PreviousValue !== "") return sector.PreviousValue;
-  return null;
-};
+  if (!sector) return undefined
+  if (sector.Value !== undefined || sector.PreviousValue !== undefined) return sector
+  return undefined
+}
 
 export class TimingProcessor {
   private latestTiming: Map<number, ProcessedTiming> = new Map()
 
-  
-
   processTimingData(timingData: any): ProcessedTiming[] {
-    if (!timingData || !timingData.Lines) {
-      return []
-    }
+    if (!timingData || !timingData.Lines) return []
 
     const processedTiming: ProcessedTiming[] = []
 
     Object.entries(timingData.Lines).forEach(([driverNumber, data]: [string, any]) => {
       const driverNum = Number.parseInt(driverNumber)
 
-      // Obtener datos existentes o crear nuevos
       const existing = this.latestTiming.get(driverNum) || {
         driver_number: driverNum,
         gap_to_leader: "",
         interval_to_ahead: "",
         last_lap_time: "",
         best_lap_time: "",
-        sector_times: { sector1: "", sector2: "", sector3: "" },
+        sector_times: { sector1: undefined, sector2: undefined, sector3: undefined },
         sector_segments: { sector1: [], sector2: [], sector3: [] },
         speeds: { i1: "", i2: "", fl: "", st: "" },
         number_of_laps: 0,
@@ -67,45 +62,41 @@ export class TimingProcessor {
         knockedOut: false
       }
 
-      // Actualizar solo los campos que vienen en los datos
       const updated: ProcessedTiming = {
         ...existing,
-        gap_to_leader: data.GapToLeader !== undefined ? data.GapToLeader : existing.gap_to_leader,
+        gap_to_leader: data?.GapToLeader ?? existing.gap_to_leader,
         interval_to_ahead:
-          data.Stats.IntervalToPositionAhead !== undefined
-            ? data.Stats.IntervalToPositionAhead
-            : existing.interval_to_ahead,
-        last_lap_time: data.LastLapTime?.Value !== undefined ? data.LastLapTime.Value : existing.last_lap_time,
-        best_lap_time: data.BestLapTime?.Value !== undefined ? data.BestLapTime.Value : existing.best_lap_time,
-     sector_times: {
-          sector1: getSectorValue(data.Sectors?.[0]) || existing.sector_times.sector1,
-          sector2: getSectorValue(data.Sectors?.[1]) || existing.sector_times.sector2,
-          sector3: getSectorValue(data.Sectors?.[2]) || existing.sector_times.sector3,
+          data?.Stats?.IntervalToPositionAhead?.Value ?? existing.interval_to_ahead,
+        last_lap_time: data?.LastLapTime?.Value ?? existing.last_lap_time,
+        best_lap_time: data?.BestLapTime?.Value ?? existing.best_lap_time,
+        sector_times: {
+          sector1: getSectorValue(data?.Sectors?.[0]) ?? existing.sector_times.sector1,
+          sector2: getSectorValue(data?.Sectors?.[1]) ?? existing.sector_times.sector2,
+          sector3: getSectorValue(data?.Sectors?.[2]) ?? existing.sector_times.sector3,
         },
         sector_segments: {
-          sector1: Array.isArray(data.Sectors?.[0]?.Segments)
+          sector1: Array.isArray(data?.Sectors?.[0]?.Segments)
             ? data.Sectors[0].Segments.map((s: any) => s.Status)
             : existing.sector_segments.sector1,
-          sector2: Array.isArray(data.Sectors?.[1]?.Segments)
+          sector2: Array.isArray(data?.Sectors?.[1]?.Segments)
             ? data.Sectors[1].Segments.map((s: any) => s.Status)
             : existing.sector_segments.sector2,
-          sector3: Array.isArray(data.Sectors?.[2]?.Segments)
+          sector3: Array.isArray(data?.Sectors?.[2]?.Segments)
             ? data.Sectors[2].Segments.map((s: any) => s.Status)
             : existing.sector_segments.sector3,
-
         },
         speeds: {
-          i1: data.Speeds?.I1?.Value !== undefined ? data.Speeds.I1.Value : existing.speeds.i1,
-          i2: data.Speeds?.I2?.Value !== undefined ? data.Speeds.I2.Value : existing.speeds.i2,
-          fl: data.Speeds?.FL?.Value !== undefined ? data.Speeds.FL.Value : existing.speeds.fl,
-          st: data.Speeds?.ST?.Value !== undefined ? data.Speeds.ST.Value : existing.speeds.st,
+          i1: data?.Speeds?.I1?.Value ?? existing.speeds.i1,
+          i2: data?.Speeds?.I2?.Value ?? existing.speeds.i2,
+          fl: data?.Speeds?.FL?.Value ?? existing.speeds.fl,
+          st: data?.Speeds?.ST?.Value ?? existing.speeds.st,
         },
-        number_of_laps: data.NumberOfLaps !== undefined ? data.NumberOfLaps : existing.number_of_laps,
-        number_of_pit_stops: data.NumberOfPitStops !== undefined ? data.NumberOfPitStops : existing.number_of_pit_stops,
-        retired: data.Retired !== undefined ? data.Retired : existing.retired,
-        in_pit: data.InPit !== undefined ? data.InPit : existing.in_pit,
+        number_of_laps: data?.NumberOfLaps ?? existing.number_of_laps,
+        number_of_pit_stops: data?.NumberOfPitStops ?? existing.number_of_pit_stops,
+        retired: data?.Retired ?? existing.retired,
+        in_pit: data?.InPit ?? existing.in_pit,
         date: new Date().toISOString(),
-        knockedOut: data.KnockedOut
+        knockedOut: data?.KnockedOut ?? existing.knockedOut
       }
 
       this.latestTiming.set(driverNum, updated)
