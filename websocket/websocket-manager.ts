@@ -29,8 +29,8 @@ export interface WebSocketData {
   },
   M?: SignalRMessage[],
   C?: string,
-  signalRMessages?: SignalRMessage[]
-
+  H?: string,
+  A?: [string, any, string]
 }
 
 export class WebSocketManager {
@@ -50,16 +50,7 @@ export class WebSocketManager {
       try {
         const blob = event.data;
         const text = await blob.text()
-        const rawData = JSON.parse(text) as WebSocketData
-        const processedData: WebSocketData = {}
-
-        if (rawData.M && Array.isArray(rawData.M)) {
-          processedData.M = rawData.M as SignalRMessage[]
-        }
-
-        else if (rawData.R) {
-          processedData.R = rawData.R
-        }
+        const rawData = JSON.parse(text) as WebSocketData;
 
         if (this.onDataCallback) {
           this.onDataCallback(rawData)
