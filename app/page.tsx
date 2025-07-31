@@ -397,6 +397,7 @@ export default function F1Dashboard() {
                             (sectorKey, idx) => {
                               const sector = timing?.sector_times[sectorKey];
                               let color = "text-yellow-300";
+                              const displayValue = sector?.Value ?? sector?.PreviousValue ?? "--:--";
                               if (sector?.OverallFastest)
                                 color = "text-purple-500";
                               else if (sector?.PersonalFastest)
@@ -407,7 +408,7 @@ export default function F1Dashboard() {
                                   key={sectorKey}
                                 >
                                   <span className={color}>
-                                    {sector ? <>{sector}</> : <>"--:--"</>}
+                                    {sector && displayValue}
                                   </span>
                                 </div>
                               );
