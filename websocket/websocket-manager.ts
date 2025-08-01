@@ -51,9 +51,18 @@ export class WebSocketManager {
         const blob = event.data;
         const text = await blob.text()
         const rawData = JSON.parse(text) as WebSocketData;
+        const processedData: WebSocketData = {}
+
+        if (rawData.M && Array.isArray(rawData.M)) {
+          processedData.M = rawData.M as SignalRMessage[]
+        }
+
+        else if (rawData.R) {
+          processedData.R = rawData.R
+        }
 
         if (this.onDataCallback) {
-          this.onDataCallback(rawData)
+          this.onDataCallback(processedData)
         }
       } catch (error) {
         console.error("Error parsing WebSocket data:", error)
