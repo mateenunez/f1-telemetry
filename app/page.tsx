@@ -225,9 +225,9 @@ export default function F1Dashboard() {
         </Card>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 m-2">
+        <div className="grid grid-cols-1 lg:grid-cols-10 gap-2 m-2">
           {/* Posiciones Actuales */}
-          <Card className="lg:col-span-1 bg-gray-700 border-gray-900 max-h-screen">
+          <Card className="lg:col-span-7 bg-gray-700 border-gray-900 max-h-screen">
             <CardHeader className="pb-4">
               <CardTitle
                 className="flex items-center gap-2 text-white text-lg font-light "
@@ -294,10 +294,11 @@ export default function F1Dashboard() {
 
                         {/* Info del piloto */}
                         <div
-                          className="flex-1 justify-evenly"
+                          className="flex justify-evenly flex-row"
                           style={regularAnta.style}
                         >
-                          <div className="flex items-center gap-1">
+                        <div>
+                                                    <div className="flex items-center gap-1">
                             <span
                               className="text-xs text-white self-center opacity-80"
                               style={mediumGeist.style}
@@ -310,12 +311,31 @@ export default function F1Dashboard() {
                             >
                               {driver?.name_acronym}
                             </span>
+                             
                           </div>
                           <p className="text-xs text-gray-100 truncate">
                             {driver?.team_name}
                           </p>
                         </div>
+                        {driver?.headshot_url && (<img src={driver?.headshot_url} className="w-10"/>)}
+                        </div>
 
+                        <div className="flex flex-row items-center justify-around w-full">
+                        {/* En PIT */}
+                        <div>
+                          <span
+                            className="text-xs text-white self-center opacity-80 "
+                            style={regularAnta.style}
+                          >
+                            {!timing?.in_pit ? (
+                              <span className="border rounded-sm border-blue-700 px-2 py-1 text-blue-300 bg-blue-900">
+                                PIT {timing?.number_of_pit_stops}
+                              </span>
+                            ) : (
+                              <span className="border rounded-sm px-2 py-1 " >PIT {timing?.number_of_pit_stops}</span>
+                            )}
+                          </span>
+                        </div>
                         {/* DRS, RPM, Velocidad */}
                         <div>
                           <span
@@ -397,7 +417,10 @@ export default function F1Dashboard() {
                             (sectorKey, idx) => {
                               const sector = timing?.sector_times[sectorKey];
                               let color = "text-yellow-300";
-                              const displayValue = sector?.Value ?? sector?.PreviousValue ?? "--:--";
+                              const displayValue =
+                                sector?.Value ??
+                                sector?.PreviousValue ??
+                                "--:--";
                               if (sector?.OverallFastest)
                                 color = "text-purple-500";
                               else if (sector?.PersonalFastest)
@@ -421,8 +444,21 @@ export default function F1Dashboard() {
                           className="flex items-center flex-col text-xs text-white"
                           style={regularAnta.style}
                         >
-                          <span className="text-xxs text-gray-300">LAP</span>
+                          <span className="text-xxs text-gray-300">
+                            LAP {timing?.number_of_laps}
+                          </span>
                           <p>{timing?.last_lap_time || "---:---"}</p>
+                        </div>
+
+                        {/* Mejor tiempo de vuelta */}
+                        <div
+                          className="flex items-center flex-col text-xs text-white"
+                          style={regularAnta.style}
+                        >
+                          <span className="text-xxs text-gray-300">
+                            BEST LAP ({timing?.best_lap_time.Lap})
+                          </span>
+                          <p>{timing?.best_lap_time.Value || "---:---"}</p>
                         </div>
 
                         {/* Gap */}
@@ -431,7 +467,12 @@ export default function F1Dashboard() {
                           style={regularAnta.style}
                         >
                           <span className="text-xxs text-gray-300">GAP</span>
-                          <p>{timing?.gap_to_leader || ""}</p>
+                          <p>
+                            {timing?.gap_to_leader ||
+                              timing?.interval_to_ahead ||
+                              timing?.time_diff_to_fastest ||
+                              timing?.time_diff_to_ahead}
+                          </p>
                         </div>
 
                         {/* Neumático */}
@@ -445,6 +486,7 @@ export default function F1Dashboard() {
                             </div>
                           )}
                         </div>
+                        </div>
                       </div>
                     );
                   })}
@@ -454,7 +496,7 @@ export default function F1Dashboard() {
           </Card>
 
           {/* Mapa en tiempo real */}
-          <Card className="lg:col-span-1 bg-gray-700 border-gray-900 max-h-screen">
+          <Card className="lg:col-span-3 bg-gray-700 border-gray-900 max-h-screen">
             <CardHeader className="pb-3">
               <CardTitle
                 className="flex items-center gap-2 text-white text-lg"
@@ -469,7 +511,7 @@ export default function F1Dashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col justify-evenly max-h-[90vh] h-[90vh]">
-              <ScrollArea className="overflow-hidden">
+              <ScrollArea className="overflow-hidden h-full">
                 {telemetryData && telemetryData.session?.circuit_key && (
                   <div onDoubleClick={handleMapFullscreen}>
                     <Map
@@ -493,8 +535,8 @@ export default function F1Dashboard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="py-2">
-                  <ScrollArea className="md:h-28 h-80">
-                    <div className="space-y-1">
+                  <ScrollArea className="md:h-28 h-fit">
+                    <div className="space-y-1 ">
                       {telemetryData?.raceControl.map((control, index) => (
                         <div className="flex gap-3 flex-col" key={index}>
                           <div className="flex items-center gap-3 text-sm text-gray-100">

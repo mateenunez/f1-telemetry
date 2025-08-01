@@ -7,6 +7,7 @@ export interface ProcessedDriver {
   broadcast_name: string
   first_name: string
   last_name: string
+  headshot_url: string
 }
 
 export class DriverProcessor {
@@ -34,6 +35,7 @@ export class DriverProcessor {
         broadcast_name: data.BroadcastName || "",
         first_name: data.FirstName || "",
         last_name: data.LastName || "",
+        headshot_url: data.HeadshotUrl || ""
       }
 
       this.drivers.set(processed.driver_number, processed)
