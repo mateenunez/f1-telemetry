@@ -282,210 +282,216 @@ export default function F1Dashboard() {
                         }
                       >
                         {/* Posición */}
-                        <Badge
-                          className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
-                          style={{
-                            backgroundColor: `transparent`,
-                            fontFamily: regularAnta.style.fontFamily,
-                          }}
-                        >
-                          {pos.position}
-                        </Badge>
+                        <div className="flex flex-row gap-0 items-center">
+                          <Badge
+                            className="w-8 h-8 rounded-full flex items-center justify-center text-md font-bold"
+                            style={{
+                              backgroundColor: `transparent`,
+                              fontFamily: regularAnta.style.fontFamily,
+                            }}
+                          >
+                            {pos.position}
+                          </Badge>
+
+                          {driver?.headshot_url && (
+                            <img src={driver?.headshot_url} className="w-10" />
+                          )}
+                        </div>
 
                         {/* Info del piloto */}
                         <div
                           className="flex justify-evenly flex-row"
                           style={regularAnta.style}
                         >
-                        <div>
-                                                    <div className="flex items-center gap-1">
-                            <span
-                              className="text-xs text-white self-center opacity-80"
-                              style={mediumGeist.style}
-                            >
-                              #{pos.driver_number}
-                            </span>
-                            <span
-                              className="font-semibold text-sm text-white"
-                              style={mediumGeist.style}
-                            >
-                              {driver?.name_acronym}
-                            </span>
-                             
+                          <div>
+                            <div className="flex items-center gap-1">
+                              <span
+                                className="text-xs text-white self-center opacity-80"
+                                style={mediumGeist.style}
+                              >
+                                #{pos.driver_number}
+                              </span>
+                              <span
+                                className="font-semibold text-sm text-white"
+                                style={mediumGeist.style}
+                              >
+                                {driver?.name_acronym}
+                              </span>
+                            </div>
+                            <p className="text-xs text-gray-100 truncate">
+                              {driver?.team_name}
+                            </p>
                           </div>
-                          <p className="text-xs text-gray-100 truncate">
-                            {driver?.team_name}
-                          </p>
-                        </div>
-                        {driver?.headshot_url && (<img src={driver?.headshot_url} className="w-10"/>)}
                         </div>
 
                         <div className="flex flex-row items-center justify-around w-full">
-                        {/* En PIT */}
-                        <div>
-                          <span
-                            className="text-xs text-white self-center opacity-80 "
-                            style={regularAnta.style}
-                          >
-                            {!timing?.in_pit ? (
-                              <span className="border rounded-sm border-blue-700 px-2 py-1 text-blue-300 bg-blue-900">
-                                PIT {timing?.number_of_pit_stops}
-                              </span>
-                            ) : (
-                              <span className="border rounded-sm px-2 py-1 " >PIT {timing?.number_of_pit_stops}</span>
-                            )}
-                          </span>
-                        </div>
-                        {/* DRS, RPM, Velocidad */}
-                        <div>
-                          <span
-                            className="text-xs text-white self-center opacity-80 "
-                            style={regularAnta.style}
-                          >
-                            {carData?.drs ? (
-                              <span className="border rounded-sm border-green-500 p-0.5 text-green-300">
-                                DRS ON
-                              </span>
-                            ) : (
-                              <span>DRS OFF</span>
-                            )}
-                          </span>
-
-                          <p
-                            className="text-xs text-gray-300"
-                            style={regularAnta.style}
-                          >
-                            RPM: {carData?.rpm || "--"}{" "}
-                            <span className="text-red-400">
-                              {carData?.gear ? `G: ${carData.gear}` : ""}
+                          {/* En PIT */}
+                          <div>
+                            <span
+                              className="text-xs text-white self-center opacity-80 "
+                              style={regularAnta.style}
+                            >
+                              {!timing?.in_pit ? (
+                                <span className="border rounded-sm border-blue-700 px-2 py-1 text-blue-300 bg-blue-900">
+                                  PIT {timing?.number_of_pit_stops}
+                                </span>
+                              ) : (
+                                <span className="border rounded-sm px-2 py-1 ">
+                                  PIT {timing?.number_of_pit_stops}
+                                </span>
+                              )}
                             </span>
-                          </p>
-                        </div>
+                          </div>
+                          {/* DRS, RPM, Velocidad */}
+                          <div>
+                            <span
+                              className="text-xs text-white self-center opacity-80 "
+                              style={regularAnta.style}
+                            >
+                              {carData?.drs ? (
+                                <span className="border rounded-sm border-green-500 p-0.5 text-green-300">
+                                  DRS ON
+                                </span>
+                              ) : (
+                                <span>DRS OFF</span>
+                              )}
+                            </span>
 
-                        {/* Minisectores */}
-                        <div
-                          className="text-xs text-white"
-                          style={regularAnta.style}
-                        >
-                          {(["sector1", "sector2", "sector3"] as const).map(
-                            (sectorKey, sectorIdx) => {
-                              const minisectors =
-                                timing?.sector_segments[sectorKey] || [];
-                              return (
-                                <div
-                                  key={sectorKey}
-                                  className="flex gap-1 items-center text-xs text-gray-300"
-                                >
-                                  S{sectorIdx + 1}
-                                  {minisectors.map(
-                                    (s: number, sIdx: number) => {
-                                      let bg = "#cccccc";
-                                      if (s === 2048)
-                                        bg = "#ffe066"; // Amarillo
-                                      else if (s === 2049)
-                                        bg = "#51cf66"; // Verde
-                                      else if (s === 2051) bg = "#b197fc"; // Violeta
+                            <p
+                              className="text-xs text-gray-300"
+                              style={regularAnta.style}
+                            >
+                              RPM: {carData?.rpm || "--"}{" "}
+                              <span className="text-red-400">
+                                {carData?.gear ? `G: ${carData.gear}` : ""}
+                              </span>
+                            </p>
+                          </div>
 
-                                      return (
-                                        <span
-                                          key={`${sectorKey}-${sIdx}`}
-                                          style={{
-                                            backgroundColor: bg,
-                                            width: 10,
-                                            height: 6,
-                                            borderRadius: 2,
-                                            padding: 2,
-                                            display: "inline-block",
-                                            marginLeft: 2,
-                                          }}
-                                        ></span>
-                                      );
-                                    }
-                                  )}
-                                </div>
-                              );
-                            }
-                          )}
-                        </div>
+                          {/* Minisectores */}
+                          <div
+                            className="text-xs text-white"
+                            style={regularAnta.style}
+                          >
+                            {(["sector1", "sector2", "sector3"] as const).map(
+                              (sectorKey, sectorIdx) => {
+                                const minisectors =
+                                  timing?.sector_segments[sectorKey] || [];
+                                return (
+                                  <div
+                                    key={sectorKey}
+                                    className="flex gap-1 items-center text-xs text-gray-300"
+                                  >
+                                    S{sectorIdx + 1}
+                                    {minisectors.map(
+                                      (s: number, sIdx: number) => {
+                                        let bg = "#cccccc";
+                                        if (s === 2048)
+                                          bg = "#ffe066"; // Amarillo
+                                        else if (s === 2049)
+                                          bg = "#51cf66"; // Verde
+                                        else if (s === 2051) bg = "#b197fc"; // Violeta
 
-                        {/* Tiempos de sector */}
-                        <div
-                          className="flex items-center flex-col text-xs text-white"
-                          style={mediumGeist.style}
-                        >
-                          {(["sector1", "sector2", "sector3"] as const).map(
-                            (sectorKey, idx) => {
-                              const sector = timing?.sector_times[sectorKey];
-                              let color = "text-yellow-300";
-                              const displayValue =
-                                sector?.Value ??
-                                sector?.PreviousValue ??
-                                "--:--";
-                              if (sector?.OverallFastest)
-                                color = "text-purple-500";
-                              else if (sector?.PersonalFastest)
-                                color = "text-green-400";
-                              return (
-                                <div
-                                  className="flex flex-row gap-1"
-                                  key={sectorKey}
-                                >
-                                  <span className={color}>
-                                    {sector && displayValue}
-                                  </span>
-                                </div>
-                              );
-                            }
-                          )}
-                        </div>
+                                        return (
+                                          <span
+                                            key={`${sectorKey}-${sIdx}`}
+                                            style={{
+                                              backgroundColor: bg,
+                                              width: 10,
+                                              height: 6,
+                                              borderRadius: 2,
+                                              padding: 2,
+                                              display: "inline-block",
+                                              marginLeft: 2,
+                                            }}
+                                          ></span>
+                                        );
+                                      }
+                                    )}
+                                  </div>
+                                );
+                              }
+                            )}
+                          </div>
 
-                        {/* Tiempo de vuelta */}
-                        <div
-                          className="flex items-center flex-col text-xs text-white"
-                          style={regularAnta.style}
-                        >
-                          <span className="text-xxs text-gray-300">
-                            LAP {timing?.number_of_laps}
-                          </span>
-                          <p>{timing?.last_lap_time || "---:---"}</p>
-                        </div>
+                          {/* Tiempos de sector */}
+                          <div
+                            className="flex items-center flex-col text-xs text-white"
+                            style={mediumGeist.style}
+                          >
+                            {(["sector1", "sector2", "sector3"] as const).map(
+                              (sectorKey, idx) => {
+                                const sector = timing?.sector_times[sectorKey];
+                                let color = "text-yellow-300";
+                                const displayValue =
+                                  sector?.Value ??
+                                  sector?.PreviousValue ??
+                                  "--:--";
+                                if (sector?.OverallFastest)
+                                  color = "text-purple-500";
+                                else if (sector?.PersonalFastest)
+                                  color = "text-green-400";
+                                return (
+                                  <div
+                                    className="flex flex-row gap-1"
+                                    key={sectorKey}
+                                  >
+                                    <span className={color}>
+                                      {sector && displayValue}
+                                    </span>
+                                  </div>
+                                );
+                              }
+                            )}
+                          </div>
 
-                        {/* Mejor tiempo de vuelta */}
-                        <div
-                          className="flex items-center flex-col text-xs text-white"
-                          style={regularAnta.style}
-                        >
-                          <span className="text-xxs text-gray-300">
-                            BEST LAP ({timing?.best_lap_time.Lap})
-                          </span>
-                          <p>{timing?.best_lap_time.Value || "---:---"}</p>
-                        </div>
+                          {/* Tiempo de vuelta */}
+                          <div
+                            className="flex items-center flex-col text-xs text-white"
+                            style={regularAnta.style}
+                          >
+                            <span className="text-xxs text-gray-300">
+                              LAP {timing?.number_of_laps}
+                            </span>
+                            <p>{timing?.last_lap_time || "---:---"}</p>
+                          </div>
 
-                        {/* Gap */}
-                        <div
-                          className="flex items-center flex-col text-xs text-white"
-                          style={regularAnta.style}
-                        >
-                          <span className="text-xxs text-gray-300">GAP</span>
-                          <p>
-                            {timing?.gap_to_leader ||
-                              timing?.interval_to_ahead ||
-                              timing?.time_diff_to_fastest ||
-                              timing?.time_diff_to_ahead}
-                          </p>
-                        </div>
+                          {/* Mejor tiempo de vuelta */}
+                          <div
+                            className="flex items-center flex-col text-xs text-white"
+                            style={regularAnta.style}
+                          >
+                            <span className="text-xxs text-gray-300">
+                              BEST LAP ({timing?.best_lap_time.Lap})
+                            </span>
+                            <p>{timing?.best_lap_time.Value || "---:---"}</p>
+                          </div>
 
-                        {/* Neumático */}
-                        <div
-                          className="flex items-center flex-row text-xs gap-2"
-                          style={mediumGeist.style}
-                        >
-                          {currentStint && (
-                            <div>
-                              {getCompoundSvg(currentStint.compound, 30)}
-                            </div>
-                          )}
-                        </div>
+                          {/* Gap */}
+                          <div
+                            className="flex items-center flex-col text-xs text-white"
+                            style={regularAnta.style}
+                          >
+                            <span className="text-xxs text-gray-300">GAP</span>
+                            <p>
+                              {timing?.gap_to_leader ||
+                                timing?.interval_to_ahead ||
+                                timing?.time_diff_to_fastest ||
+                                timing?.time_diff_to_ahead}
+                            </p>
+                          </div>
+
+                          {/* Neumático */}
+                          <div
+                            className="flex items-center flex-row text-xs gap-2"
+                            style={mediumGeist.style}
+                          >
+                            {currentStint && (
+                              <div>
+                                {getCompoundSvg(currentStint.compound, 30)}
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     );

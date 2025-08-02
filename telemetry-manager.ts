@@ -61,17 +61,17 @@ export class TelemetryManager {
 
   private processWebSocketData(data: WebSocketData) {
 
-  if (data.M){
-        const latest = data.M[data.M.length-1];
-        if (latest.H && latest.A) {
-      if (latest.H === "Streaming"){
-        const dataType = latest.A[0];
-        const messageData = latest.A[1];
-        const timestamp = latest.A[2];
-        this.processDataByType(dataType, messageData, timestamp)
-      }
-    } 
-  }
+    if (Array.isArray(data.M)) {
+
+      data.M.forEach((message: SignalRMessage) => {
+        if (message.H && message.A) {
+          const dataType = message.A[0]
+          const messageData = message.A[1]
+          const timestamp = message.A[2]
+          this.processDataByType(dataType, messageData, timestamp)
+        }
+      })
+    }
 
     if (data.R) {
       const R = data.R

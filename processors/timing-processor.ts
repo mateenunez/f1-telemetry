@@ -5,11 +5,11 @@ export interface ProcessedTiming {
   time_diff_to_fastest: string
   time_diff_to_ahead: string
   last_lap_time: string
-  best_lap_time: { Value?: string, Lap?: number}
+  best_lap_time: { Value?: string, Lap?: number }
   sector_times: {
-    sector1?: { Value: number, PreviousValue:number, OverallFastest: boolean, PersonalFastest: boolean }
-    sector2?: { Value: number, PreviousValue:number,  OverallFastest: boolean, PersonalFastest: boolean }
-    sector3?: { Value: number, PreviousValue:number,  OverallFastest: boolean, PersonalFastest: boolean }
+    sector1?: { Value: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
+    sector2?: { Value: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
+    sector3?: { Value: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
   }
   sector_segments: {
     sector1: number[]
@@ -50,11 +50,11 @@ export class TimingProcessor {
       const existing = this.latestTiming.get(driverNum) || {
         driver_number: driverNum,
         gap_to_leader: "",
-        interval_to_ahead: "",  
+        interval_to_ahead: "",
         time_diff_to_ahead: "",
         time_diff_to_fastest: "",
         last_lap_time: "",
-        best_lap_time: {Value: "", Lap: null},
+        best_lap_time: { Value: "", Lap: null },
         sector_times: { sector1: undefined, sector2: undefined, sector3: undefined },
         sector_segments: { sector1: [], sector2: [], sector3: [] },
         speeds: { i1: "", i2: "", fl: "", st: "" },
@@ -74,8 +74,10 @@ export class TimingProcessor {
         time_diff_to_ahead: data?.TimeDiffToPositionAhead ?? existing.time_diff_to_ahead,
         time_diff_to_fastest: data?.TimeDiffToFastest ?? existing.time_diff_to_fastest,
         last_lap_time: data?.LastLapTime?.Value ?? existing.last_lap_time,
-        best_lap_time: {Value: data?.BestLapTime?.Value ?? existing.best_lap_time, Lap: data.BestLapTime.Lap ?? existing.best_lap_time.Lap},
-        sector_times: {
+        best_lap_time: {
+          Value: data?.BestLapTime?.Value ?? existing.best_lap_time.Value,
+          Lap: data?.BestLapTime?.Lap ?? existing.best_lap_time.Lap
+        }, sector_times: {
           sector1: getSectorValue(data?.Sectors?.[0]) ?? existing.sector_times.sector1,
           sector2: getSectorValue(data?.Sectors?.[1]) ?? existing.sector_times.sector2,
           sector3: getSectorValue(data?.Sectors?.[2]) ?? existing.sector_times.sector3,
