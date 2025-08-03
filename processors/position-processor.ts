@@ -37,7 +37,7 @@ export class PositionProcessor {
 
     const processedPositions: ProcessedPosition[] = []
 
-      Object.entries(topThreeData.Lines).forEach(([driverNumber, line]: [string, any]) => {
+    Object.entries(topThreeData.Lines).forEach(([driverNumber, line]: [string, any]) => {
       if (line.RacingNumber && line.Position) {
         const processed: ProcessedPosition = {
           driver_number: Number.parseInt(line.RacingNumber),
@@ -62,6 +62,18 @@ export class PositionProcessor {
 
     Object.entries(timingData.Lines).forEach(([driverNumber, data]: [string, any]) => {
       if (data.Position) {
+
+        for (const [otherDriver, posObj] of this.latestPositions.entries()) {
+          if (otherDriver !== Number.parseInt(driverNumber) && posObj.position === Number.parseInt(data.Position)) {
+
+            this.latestPositions.set(otherDriver, {
+              ...posObj,
+              position: posObj.position + 1,
+              date: new Date().toISOString(),
+            });
+          }
+        }
+
         const processed: ProcessedPosition = {
           driver_number: Number.parseInt(driverNumber),
           position: Number.parseInt(data.Position),
