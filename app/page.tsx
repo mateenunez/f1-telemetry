@@ -325,124 +325,112 @@ export default function F1Dashboard() {
                         </div>
 
                         <div className="flex flex-row items-center justify-around w-full">
-                          {/* En PIT */}
+                          {/* DRS, RPM, Velocidad */}
                           <div>
-                            <span
-                              className="text-xs text-white self-center opacity-80 "
+                            {/* En PIT */}
+                            <p
+                              className="text-xs text-white self-center m-0 p-0"
                               style={regularAnta.style}
                             >
                               {!timing?.in_pit ? (
-                                <span className="border rounded-sm border-blue-700 px-2 py-1 text-blue-300 bg-blue-900">
-                                  PIT {timing?.number_of_pit_stops}
-                                </span>
+                                <span className="text-blue-500 ">IN PIT</span>
                               ) : (
-                                <span className="border rounded-sm px-2 py-1 ">
-                                  PIT {timing?.number_of_pit_stops}
-                                </span>
+                                <span>PIT {timing?.number_of_pit_stops}</span>
                               )}
-                            </span>
-                          </div>
-                          {/* DRS, RPM, Velocidad */}
-                          <div>
+                            </p>
                             <span
                               className="text-xs text-white self-center opacity-80 "
-                              style={regularAnta.style}
+                              style={mediumGeist.style}
                             >
                               {carData?.drs ? (
-                                <span className="border rounded-sm border-green-500 p-0.5 text-green-300">
-                                  DRS ON
-                                </span>
+                                <p className=" text-green-300">DRS ON</p>
                               ) : (
-                                <span>DRS OFF</span>
+                                <p>DRS OFF</p>
                               )}
                             </span>
+                                                          <p style={mediumGeist.style} className="text-xs text-white">
+                                {timing?.speeds.st?.Value} km/h
+                              </p>
+                          </div>
 
-                            <p
-                              className="text-xs text-gray-300"
+                          <div className="flex flex-row gap-2 ">
+                            {/* Minisectores */}
+                            <div
+                              className="text-xs text-white"
                               style={regularAnta.style}
                             >
-                              RPM: {carData?.rpm || "--"}{" "}
-                              <span className="text-red-400">
-                                {carData?.gear ? `G: ${carData.gear}` : ""}
-                              </span>
-                            </p>
-                          </div>
+                              {(["sector1", "sector2", "sector3"] as const).map(
+                                (sectorKey, sectorIdx) => {
+                                  const minisectors =
+                                    timing?.sector_segments[sectorKey] || [];
+                                  return (
+                                    <div
+                                      key={sectorKey}
+                                      className="flex gap-1 items-center text-xs text-gray-300"
+                                    >
+                                      S{sectorIdx + 1}
+                                      {minisectors.map(
+                                        (s: number, sIdx: number) => {
+                                          let bg = "#cccccc";
+                                          if (s === 2048)
+                                            bg = "#ffe066"; // Amarillo
+                                          else if (s === 2049)
+                                            bg = "#51cf66"; // Verde
+                                          else if (s === 2051) bg = "#b197fc"; // Violeta
 
-                          {/* Minisectores */}
-                          <div
-                            className="text-xs text-white"
-                            style={regularAnta.style}
-                          >
-                            {(["sector1", "sector2", "sector3"] as const).map(
-                              (sectorKey, sectorIdx) => {
-                                const minisectors =
-                                  timing?.sector_segments[sectorKey] || [];
-                                return (
-                                  <div
-                                    key={sectorKey}
-                                    className="flex gap-1 items-center text-xs text-gray-300"
-                                  >
-                                    S{sectorIdx + 1}
-                                    {minisectors.map(
-                                      (s: number, sIdx: number) => {
-                                        let bg = "#cccccc";
-                                        if (s === 2048)
-                                          bg = "#ffe066"; // Amarillo
-                                        else if (s === 2049)
-                                          bg = "#51cf66"; // Verde
-                                        else if (s === 2051) bg = "#b197fc"; // Violeta
+                                          return (
+                                            <span
+                                              key={`${sectorKey}-${sIdx}`}
+                                              style={{
+                                                backgroundColor: bg,
+                                                width: 10,
+                                                height: 6,
+                                                borderRadius: 2,
+                                                padding: 2,
+                                                display: "inline-block",
+                                                marginLeft: 2,
+                                              }}
+                                            ></span>
+                                          );
+                                        }
+                                      )}
+                                    </div>
+                                  );
+                                }
+                              )}
+                            </div>
 
-                                        return (
-                                          <span
-                                            key={`${sectorKey}-${sIdx}`}
-                                            style={{
-                                              backgroundColor: bg,
-                                              width: 10,
-                                              height: 6,
-                                              borderRadius: 2,
-                                              padding: 2,
-                                              display: "inline-block",
-                                              marginLeft: 2,
-                                            }}
-                                          ></span>
-                                        );
-                                      }
-                                    )}
-                                  </div>
-                                );
-                              }
-                            )}
-                          </div>
-
-                          {/* Tiempos de sector */}
-                          <div
-                            className="flex items-center flex-col text-xs text-white"
-                            style={mediumGeist.style}
-                          >
-                            {(["sector1", "sector2", "sector3"] as const).map(
-                              (sectorKey, idx) => {
-                                const sector = timing?.sector_times[sectorKey];
-                                let color = "text-yellow-300";
-                                const displayValue =
-                                  sector?.Value ??
-                                  sector?.PreviousValue ??
-                                  "--:--";
-                                if (sector?.OverallFastest)
-                                  color = "text-purple-500";
-                                else if (sector?.PersonalFastest)
-                                  color = "text-green-400";
-                                return (
-                                  <div
-                                    className="flex flex-row gap-1"
-                                    key={sectorKey}
-                                  >
-                                    <span className={color}>
-                                      {sector && displayValue}
-                                    </span>
-                                  </div>
-                                );
-                              }
-                            )}
+                            {/* Tiempos de sector */}
+                            <div
+                              className="flex items-center flex-col text-xs text-white"
+                              style={mediumGeist.style}
+                            >
+                              {(["sector1", "sector2", "sector3"] as const).map(
+                                (sectorKey, idx) => {
+                                  const sector =
+                                    timing?.sector_times[sectorKey];
+                                  let color = "text-yellow-300";
+                                  const displayValue =
+                                    sector?.Value ??
+                                    sector?.PreviousValue ??
+                                    "--:--";
+                                  if (sector?.OverallFastest)
+                                    color = "text-purple-500";
+                                  else if (sector?.PersonalFastest)
+                                    color = "text-green-400";
+                                  return (
+                                    <div
+                                      className="flex flex-row gap-1"
+                                      key={sectorKey}
+                                    >
+                                      <span className={color}>
+                                        {sector && displayValue}
+                                      </span>
+                                    </div>
+                                  );
+                                }
+                              )}
+                            </div>
                           </div>
 
                           {/* Tiempo de vuelta */}
@@ -456,15 +444,20 @@ export default function F1Dashboard() {
                             <p>{timing?.last_lap_time || "---:---"}</p>
                           </div>
 
-                          {/* Mejor tiempo de vuelta */}
-                          <div
-                            className="flex items-center flex-col text-xs text-white"
-                            style={regularAnta.style}
-                          >
-                            <span className="text-xxs text-gray-300">
-                              BEST LAP ({timing?.best_lap_time.Lap})
-                            </span>
-                            <p>{timing?.best_lap_time.Value || "---:---"}</p>
+                          <div className="flex flex-row gap-2">
+                            {/* Mejor tiempo de vuelta */}
+                            <div
+                              className="flex items-center flex-col text-xs text-white"
+                              style={regularAnta.style}
+                            >
+                              <span className="text-xxs text-gray-300">
+                                LAP {timing?.best_lap_time.Lap}
+                              </span>
+                              <p style={{color: "#51cf66"}}>
+                                {timing?.best_lap_time.Value || "---:---"}
+                              </p>
+                            </div>
+                          
                           </div>
 
                           {/* Gap */}
@@ -502,7 +495,7 @@ export default function F1Dashboard() {
           </Card>
 
           {/* Mapa en tiempo real */}
-          <Card className="lg:col-span-3 bg-gray-700 border-gray-900 max-h-screen">
+          <Card className="lg:col-span-3 bg-gray-700 border-gray-900 max-h-screen flex flex-col">
             <CardHeader className="pb-3">
               <CardTitle
                 className="flex items-center gap-2 text-white text-lg"
@@ -541,8 +534,8 @@ export default function F1Dashboard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="py-2">
-                  <ScrollArea className="md:h-28 h-fit">
-                    <div className="space-y-1 ">
+                  <ScrollArea className="md:h-28 h-80">
+                    <div className="space-y-1 h-fit">
                       {telemetryData?.raceControl.map((control, index) => (
                         <div className="flex gap-3 flex-col" key={index}>
                           <div className="flex items-center gap-3 text-sm text-gray-100">

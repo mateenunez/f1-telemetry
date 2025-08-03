@@ -17,10 +17,10 @@ export interface ProcessedTiming {
     sector3: number[]
   }
   speeds: {
-    i1: string
-    i2: string
-    fl: string
-    st: string
+    i1?: {Value: number, Status: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
+    i2?: {Value: number, Status: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
+    fl?: {Value: number, Status: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
+    st?: {Value: number, Status: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
   }
   number_of_laps: number
   number_of_pit_stops: number
@@ -57,7 +57,7 @@ export class TimingProcessor {
         best_lap_time: { Value: "", Lap: null },
         sector_times: { sector1: undefined, sector2: undefined, sector3: undefined },
         sector_segments: { sector1: [], sector2: [], sector3: [] },
-        speeds: { i1: "", i2: "", fl: "", st: "" },
+        speeds: { i1: null, i2: null, fl: null, st: null },
         number_of_laps: 0,
         number_of_pit_stops: 0,
         retired: false,
@@ -94,10 +94,10 @@ export class TimingProcessor {
             : existing.sector_segments.sector3,
         },
         speeds: {
-          i1: data?.Speeds?.I1?.Value ?? existing.speeds.i1,
-          i2: data?.Speeds?.I2?.Value ?? existing.speeds.i2,
-          fl: data?.Speeds?.FL?.Value ?? existing.speeds.fl,
-          st: data?.Speeds?.ST?.Value ?? existing.speeds.st,
+          i1: data?.Speeds?.I1 ?? existing.speeds.i1,
+          i2: data?.Speeds?.I2 ?? existing.speeds.i2,
+          fl: data?.Speeds?.FL ?? existing.speeds.fl,
+          st: data?.Speeds?.ST ?? existing.speeds.st,
         },
         number_of_laps: data?.NumberOfLaps ?? existing.number_of_laps,
         number_of_pit_stops: data?.NumberOfPitStops ?? existing.number_of_pit_stops,
