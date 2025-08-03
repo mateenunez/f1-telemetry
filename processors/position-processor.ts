@@ -61,7 +61,7 @@ export class PositionProcessor {
     const processedPositions: ProcessedPosition[] = []
 
     Object.entries(timingData.Lines).forEach(([driverNumber, data]: [string, any]) => {
-      if (data.Position && data.ShowPosition) {
+      if (data.Position) {
         const processed: ProcessedPosition = {
           driver_number: Number.parseInt(driverNumber),
           position: Number.parseInt(data.Position),
