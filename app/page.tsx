@@ -332,7 +332,7 @@ export default function F1Dashboard() {
                               className="text-xs text-white self-center m-0 p-0"
                               style={regularAnta.style}
                             >
-                              {!timing?.in_pit ? (
+                              {timing?.in_pit ? (
                                 <span className="text-blue-500 ">IN PIT</span>
                               ) : (
                                 <span>PIT {timing?.number_of_pit_stops}</span>

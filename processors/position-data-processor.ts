@@ -66,10 +66,6 @@ export class PositionDataProcessor {
       });
     }
 
-    if (processedPositions.length > 0) {
-      console.log(`Processed ${processedPositions.length} position data entries`);
-    }
-
   }
     return processedPositions;
 

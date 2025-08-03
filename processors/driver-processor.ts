@@ -21,26 +21,28 @@ export class DriverProcessor {
     const processedDrivers: ProcessedDriver[] = []
 
     Object.entries(driverList).forEach(([driverNumber, data]: [string, any]) => {
-      if (driverNumber === "_kf" || !data || typeof data !== "object") return 
+      if (driverNumber === "_kf" || !data || typeof data !== "object") return;
 
-      const driverNum = Number.parseInt(driverNumber)
-      if (isNaN(driverNum)) return
+      const driverNum = Number.parseInt(driverNumber);
+      if (isNaN(driverNum)) return;
+
+      const existing = this.drivers.get(driverNum);
 
       const processed: ProcessedDriver = {
         driver_number: driverNum,
-        name_acronym: data.Tla || "",
-        full_name: data.FullName || "",
-        team_name: data.TeamName || "",
-        team_colour: data.TeamColour || "",
-        broadcast_name: data.BroadcastName || "",
-        first_name: data.FirstName || "",
-        last_name: data.LastName || "",
-        headshot_url: data.HeadshotUrl || ""
-      }
+        name_acronym: data.Tla || existing?.name_acronym || "",
+        full_name: data.FullName || existing?.full_name || "",
+        team_name: data.TeamName || existing?.team_name || "",
+        team_colour: data.TeamColour || existing?.team_colour || "",
+        broadcast_name: data.BroadcastName || existing?.broadcast_name || "",
+        first_name: data.FirstName || existing?.first_name || "",
+        last_name: data.LastName || existing?.last_name || "",
+        headshot_url: data.HeadshotUrl || existing?.headshot_url || ""
+      };
 
-      this.drivers.set(processed.driver_number, processed)
-      processedDrivers.push(processed)
-    })
+      this.drivers.set(processed.driver_number, processed);
+      processedDrivers.push(processed);
+    });
 
     return processedDrivers
   }
