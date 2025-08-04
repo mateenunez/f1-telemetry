@@ -8,8 +8,6 @@ export interface ProcessedCarData {
   throttle: number
   brake: number
   drs: boolean
-  ers_deploy: number
-  ers_harvest: number
   date: string
 }
 
@@ -44,14 +42,12 @@ export class CarDataProcessor {
         Object.entries(entry.Cars).forEach(([driverNumber, car]: [string, any]) => {
           const processed: ProcessedCarData = {
             driver_number: Number.parseInt(driverNumber),
-            rpm: car.Rpm || 0,
-            speed: car.Speed || 0,
-            gear: car.nGear || 0,
-            throttle: car.Throttle || 0,
-            brake: car.Brake || 0,
-            drs: car.DRS === 1 || car.DRS === true,
-            ers_deploy: car.ERS?.Deploy || 0,
-            ers_harvest: car.ERS?.Harvest || 0,
+            rpm: car.Channels[0] || 0,
+            speed: car.Channels[2] || 0,
+            gear: car.Channels[3] || 0,
+            throttle: car.Channels[4] || 0,
+            brake: car.Channels[5] || 0,
+            drs: car.Channels[45] !== 0,
             date: entry.Utc || new Date().toISOString(),
           }
 

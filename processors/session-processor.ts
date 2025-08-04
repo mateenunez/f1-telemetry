@@ -11,6 +11,7 @@ export interface ProcessedSession {
   total_laps: number
   track_status: string
   circuit_key:number
+  session_status: string
 }
 
 export class SessionProcessor {
@@ -35,7 +36,8 @@ export class SessionProcessor {
       current_lap: 0,
       total_laps: 0,
       track_status: "Unknown",
-      circuit_key: meeting.Circuit?.Key || ""
+      circuit_key: meeting.Circuit?.Key || "",
+      session_status: sessionData.SessionStatus || "",
     }
 
     this.sessionInfo = processed

@@ -68,6 +68,8 @@ const config: Config = {
             carbonBlack: "#232323",    // Carbon Black
             offWhite: "#F3F3F3",       // Off White
             highWhite: "#FFFFFF",      // High White
+			bestGreen: "#51cf66", 
+			raceControl: "#0b090a49",
 
           },
   		borderRadius: {

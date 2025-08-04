@@ -43,7 +43,7 @@ export class RaceControlProcessor {
   
 }
 
-  getLatestMessages(count = 5): ProcessedRaceControl[] {
+  getLatestMessages(count = 50): ProcessedRaceControl[] {
     return this.messages.slice(-count).reverse()
   }
 

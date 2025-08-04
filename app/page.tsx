@@ -26,6 +26,7 @@ import {
 import { Geist } from "next/font/google";
 import { Anta } from "next/font/google";
 import Map from "@/components/Map";
+import { ProcessedTimingStats } from "@/processors/timing-stats-processor";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const regularAnta = Anta({ subsets: ["latin"], weight: "400" });
@@ -92,6 +93,14 @@ export default function F1Dashboard() {
     driverNumber: number
   ): ProcessedCarData | undefined => {
     return telemetryData?.carData.find((c) => c.driver_number === driverNumber);
+  };
+
+  const getTimingStats = (
+    driverNumber: number
+  ): ProcessedTimingStats | undefined => {
+    return telemetryData?.timingStats.find(
+      (c) => c.driver_number === driverNumber
+    );
   };
 
   const getWeatherIcon = () => {
@@ -174,7 +183,8 @@ export default function F1Dashboard() {
                     className="text-xl sm:text-2xl"
                     style={regularAnta.style}
                   >
-                    {session?.session_type} - {session?.location}
+                    {session?.session_type} - {session?.location}:{" "}
+                    {session?.session_status}
                   </CardTitle>
                   <p className="text-red-100 text-sm" style={mediumGeist.style}>
                     {session?.circuit_short_name} • {session?.country_name} •{" "}
@@ -247,6 +257,7 @@ export default function F1Dashboard() {
                   {getCurrentPositions().map((pos) => {
                     const driver = getDriverInfo(pos.driver_number);
                     const timing = getDriverTiming(pos.driver_number);
+                    const timingStats = getTimingStats(pos.driver_number);
                     const carData = getDriverCarData(pos.driver_number);
                     const currentStint = telemetryManager.getCurrentStint(
                       pos.driver_number
@@ -255,7 +266,7 @@ export default function F1Dashboard() {
                     return (
                       <div
                         key={pos.driver_number}
-                        className={`flex items-center gap-5 p-1.5 rounded-lg bg-gradient-to-br from-gray-600 to-${
+                        className={`flex items-center gap-5 rounded-md bg-gradient-to-br from-gray-600 to-${
                           driver?.team_colour
                         } transition-opacity ${
                           pinnedDriver === pos.driver_number
@@ -294,7 +305,16 @@ export default function F1Dashboard() {
                           </Badge>
 
                           {driver?.headshot_url && (
-                            <img src={driver?.headshot_url} className="w-10" />
+                            <img
+                              src={driver?.headshot_url}
+                              className="obect-cover h-[60px]"
+                            />
+                          )}
+                          {driver?.driver_number === 43 && (
+                            <img
+                              src="/franco-colapinto.png"
+                              className="obect-cover h-[60px]"
+                            />
                           )}
                         </div>
 
@@ -324,8 +344,9 @@ export default function F1Dashboard() {
                           </div>
                         </div>
 
-                        <div className="flex flex-row items-center justify-around w-full">
-                          {/* DRS, RPM, Velocidad */}
+                        {/* Estadísticas */}
+                        <div className="flex flex-row items-center justify-around w-full py-1.5">
+                          {/* PITS, DRS y */}
                           <div>
                             {/* En PIT */}
                             <p
@@ -333,26 +354,49 @@ export default function F1Dashboard() {
                               style={regularAnta.style}
                             >
                               {timing?.in_pit ? (
-                                <span className="text-blue-500 ">IN PIT</span>
+                                <span
+                                  className="text-blue-500"
+                                  style={mediumGeist.style}
+                                >
+                                  IN PIT
+                                </span>
                               ) : (
-                                <span>PIT {timing?.number_of_pit_stops}</span>
+                                <span style={mediumGeist.style}>
+                                  {timing?.number_of_pit_stops} PIT
+                                </span>
                               )}
                             </p>
+                            {/* DRS */}
                             <span
-                              className="text-xs text-white self-center opacity-80 "
+                              className="text-xs text-white self-center"
                               style={mediumGeist.style}
                             >
                               {carData?.drs ? (
-                                <p className=" text-green-300">DRS ON</p>
+                                <p className=" text-green-400">DRS ON</p>
                               ) : (
-                                <p>DRS OFF</p>
+                                <p className="opacity-80">DRS OFF</p>
                               )}
                             </span>
-                                                          <p style={mediumGeist.style} className="text-xs text-white">
-                                {timing?.speeds.st?.Value} km/h
-                              </p>
+                            {/* Velocidad */}
+                            <p
+                              style={mediumGeist.style}
+                              className={`text-xs text-white ${
+                                carData?.speed !== undefined
+                                  ? carData.speed > 330
+                                    ? "text-red-500"
+                                    : carData.speed > 300
+                                    ? "text-yellow-300"
+                                    : ""
+                                  : ""
+                              }`}
+                            >
+                              {carData?.speed !== undefined
+                                ? `${carData.speed} km/h`
+                                : "-- km/h"}
+                            </p>
                           </div>
 
+                          {/* Minisectores y Tiempos de sector */}
                           <div className="flex flex-row gap-2 ">
                             {/* Minisectores */}
                             <div
@@ -431,47 +475,137 @@ export default function F1Dashboard() {
                                 }
                               )}
                             </div>
-                          </div>
 
-                          {/* Tiempo de vuelta */}
-                          <div
-                            className="flex items-center flex-col text-xs text-white"
-                            style={regularAnta.style}
-                          >
-                            <span className="text-xxs text-gray-300">
-                              LAP {timing?.number_of_laps}
-                            </span>
-                            <p>{timing?.last_lap_time || "---:---"}</p>
-                          </div>
-
-                          <div className="flex flex-row gap-2">
-                            {/* Mejor tiempo de vuelta */}
+                            {/* Mejores tiempos de sector */}
                             <div
                               className="flex items-center flex-col text-xs text-white"
+                              style={mediumGeist.style}
+                            >
+                              {timingStats?.best_sectors.map(
+                                (sectorKey, idx) => {
+                                  const sector = timingStats.best_sectors[idx];
+                                  let color = "text-yellow-300";
+                                  const displayValue = sector?.Value ?? "--:--";
+                                  if (sector?.Position === 1)
+                                    color = "text-purple-500";
+                                  else color = "text-green-400";
+                                  return (
+                                    <div
+                                      className="flex flex-row gap-1"
+                                      key={sectorKey.Value}
+                                    >
+                                      <span className={color}>
+                                        {sector && displayValue}
+                                      </span>
+                                    </div>
+                                  );
+                                }
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Tiempos de vuelta */}
+                          <div className="flex items-start flex-col text-white">
+                            {/* Último tiempo de vuelta */}
+                            <div
+                              className="flex items-center flex-row gap-2 text-xs text-white"
                               style={regularAnta.style}
                             >
                               <span className="text-xxs text-gray-300">
-                                LAP {timing?.best_lap_time.Lap}
+                                LAP {timing?.number_of_laps}
                               </span>
-                              <p style={{color: "#51cf66"}}>
-                                {timing?.best_lap_time.Value || "---:---"}
+                              <p style={mediumGeist.style}>
+                                {timing?.last_lap_time || "---:---"}
                               </p>
                             </div>
-                          
+
+                            {/* Mejor tiempo de vuelta */}
+                            <div className="flex flex-row gap-2">
+                              <div
+                                className="flex items-center flex-row gap-2 text-xs text-white"
+                                style={regularAnta.style}
+                              >
+                                <span className="text-xxs text-gray-300">
+                                  LAP {timingStats?.personal_best_lap_time.Lap}
+                                </span>
+                                <p
+                                  className={
+                                    timingStats?.personal_best_lap_time
+                                      .Position === 1
+                                      ? "text-purple-500"
+                                      : "text-green-400"
+                                  }
+                                  style={mediumGeist.style}
+                                >
+                                  {timingStats?.personal_best_lap_time.Value ||
+                                    "---:---"}
+                                </p>
+                              </div>
+                            </div>
                           </div>
 
-                          {/* Gap */}
-                          <div
-                            className="flex items-center flex-col text-xs text-white"
-                            style={regularAnta.style}
-                          >
-                            <span className="text-xxs text-gray-300">GAP</span>
-                            <p>
-                              {timing?.gap_to_leader ||
-                                timing?.interval_to_ahead ||
-                                timing?.time_diff_to_fastest ||
-                                timing?.time_diff_to_ahead}
-                            </p>
+                          {/* Gaps */}
+                          <div className="flex flex-col items-start">
+                            {timing?.gap_to_leader ? (
+                              <div
+                                className="flex items-center flex-row gap-2 text-xs text-white"
+                                style={regularAnta.style}
+                              >
+                                <span className="text-xxs text-gray-300">
+                                  GAP LEADER
+                                </span>
+                                <p style={mediumGeist.style}>
+                                  {timing?.gap_to_leader}
+                                </p>
+                              </div>
+                            ) : (
+                              <></>
+                            )}
+                            {timing?.interval_to_ahead ? (
+                              <div
+                                className="flex items-center flex-row gap-2 text-xs text-white"
+                                style={regularAnta.style}
+                              >
+                                <span className="text-xxs text-gray-300">
+                                  GAP AHEAD
+                                </span>
+                                <p style={mediumGeist.style}>
+                                  {timing?.interval_to_ahead}
+                                </p>
+                              </div>
+                            ) : (
+                              <></>
+                            )}
+                            {timing?.time_diff_to_ahead ? (
+                              <div
+                                className="flex items-center flex-row gap-2 text-xs text-white"
+                                style={regularAnta.style}
+                              >
+                                <span className="text-xxs text-gray-300">
+                                  TIME AHEAD
+                                </span>
+                                <p style={mediumGeist.style}>
+                                  {timing?.time_diff_to_ahead}
+                                </p>
+                              </div>
+                            ) : (
+                              <></>
+                            )}
+                            {timing?.time_diff_to_fastest ? (
+                              <div
+                                className="flex items-center flex-row gap-2 text-xs text-white"
+                                style={regularAnta.style}
+                              >
+                                <span className="text-xxs text-gray-300">
+                                  TIME FASTEST
+                                </span>
+                                <p style={mediumGeist.style}>
+                                  {timing?.time_diff_to_fastest}
+                                </p>
+                              </div>
+                            ) : (
+                              <></>
+                            )}
                           </div>
 
                           {/* Neumático */}
@@ -494,8 +628,8 @@ export default function F1Dashboard() {
             </CardContent>
           </Card>
 
-          {/* Mapa en tiempo real */}
-          <Card className="lg:col-span-3 bg-gray-700 border-gray-900 max-h-screen flex flex-col">
+          {/* Mapa en tiempo real y race control */}
+          <Card className="lg:col-span-3 bg-gray-700 border-gray-900 flex flex-col">
             <CardHeader className="pb-3">
               <CardTitle
                 className="flex items-center gap-2 text-white text-lg"
@@ -509,8 +643,9 @@ export default function F1Dashboard() {
                 </div>
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col justify-evenly max-h-[90vh] h-[90vh]">
-              <ScrollArea className="overflow-hidden h-full">
+            <CardContent className="flex flex-col justify-evenly ">
+              <div className="overflow-hidden h-fit">
+                {/*Mapa en tiempo real */}
                 {telemetryData && telemetryData.session?.circuit_key && (
                   <div onDoubleClick={handleMapFullscreen}>
                     <Map
@@ -521,25 +656,27 @@ export default function F1Dashboard() {
                     />
                   </div>
                 )}
-              </ScrollArea>
+              </div>
 
               {/* Race Control */}
-              <Card className="bg-gradient-to-r from-red-900 to-gray-900 text-white border-none">
+              <Card className="bg-raceControl border-none text-white min-h-80 md:min-h-40 lg:min-h-40">
                 <CardHeader className="pb-2">
                   <CardTitle
                     className="text-lg flex items-center gap-2 justify-center"
                     style={mediumGeist.style}
                   >
-                    <AlertTriangle className="h-5 w-5 text-red-500" />
+                    <AlertTriangle className="h-5 w-5 text-gray-300" />
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="py-2">
-                  <ScrollArea className="md:h-28 h-80">
-                    <div className="space-y-1 h-fit">
+                <CardContent className="py-2 h-full">
+                  <ScrollArea className="lg:max-h-[28vh] lg:h-40  h-80 max-h-80">
+                    <div className="space-y-1 h-full">
                       {telemetryData?.raceControl.map((control, index) => (
                         <div className="flex gap-3 flex-col" key={index}>
-                          <div className="flex items-center gap-3 text-sm text-gray-100">
-                            <Flag className="h-4 w-4 text-red-400" />
+                          <div
+                            className="flex items-center gap-3 text-sm text-gray-100 opacity-95"
+                            style={mediumGeist.style}
+                          >
                             <span className="flex-1">{control.message}</span>
                             <div className="flex flex-col items-center gap-1">
                               <span className="text-xs text-gray-400">
@@ -547,7 +684,7 @@ export default function F1Dashboard() {
                               </span>
                             </div>
                           </div>
-                          <Separator className="opacity-40 bg-red-400" />
+                          <Separator className="opacity-40 bg-gray-400" />
                         </div>
                       ))}
                     </div>
@@ -558,7 +695,7 @@ export default function F1Dashboard() {
           </Card>
         </div>
 
-        {/* Footer */}
+        {/* Footer
         <div
           className="flex items-center justify-evenly bg-transparent text-white"
           style={mediumGeist.style}
@@ -573,7 +710,7 @@ export default function F1Dashboard() {
             </a>
             🎁
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

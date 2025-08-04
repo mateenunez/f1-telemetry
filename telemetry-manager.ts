@@ -8,6 +8,7 @@ import { PitProcessor, type ProcessedPitStop, type ProcessedStint } from "./proc
 import { SessionProcessor, type ProcessedSession } from "./processors/session-processor"
 import { CarDataProcessor, type ProcessedCarData } from "./processors/car-data-processor"
 import { PositionDataProcessor, type ProcessedPositionData } from "./processors/position-data-processor"
+import { TimingStatsProcessor, type ProcessedTimingStats } from "./processors/timing-stats-processor"
 
 export interface TelemetryData {
   positions: ProcessedPosition[]
@@ -21,6 +22,7 @@ export interface TelemetryData {
   carData: ProcessedCarData[]
   positionData: ProcessedPositionData[]
   driversWithDRS: number[]
+  timingStats: ProcessedTimingStats[]
   lastUpdateTime: Date
 }
 
@@ -35,6 +37,7 @@ export class TelemetryManager {
   private sessionProcessor: SessionProcessor
   private carDataProcessor: CarDataProcessor
   private positionDataProcessor: PositionDataProcessor
+  private timingStatsProcessor: TimingStatsProcessor
 
   private onDataUpdateCallback: ((data: TelemetryData) => void) | null = null
 
@@ -49,6 +52,7 @@ export class TelemetryManager {
     this.sessionProcessor = new SessionProcessor()
     this.carDataProcessor = new CarDataProcessor()
     this.positionDataProcessor = new PositionDataProcessor()
+    this.timingStatsProcessor = new TimingStatsProcessor()
   }
 
   connect(url: string, onDataUpdate: (data: TelemetryData) => void) {
@@ -150,6 +154,10 @@ export class TelemetryManager {
       case "TrackStatus":
         this.sessionProcessor.processTrackStatus(messageData)
         break
+
+      case "TimingStats":
+        this.timingStatsProcessor.processTimingStats(messageData)
+        break
     }
   }
 
@@ -168,6 +176,7 @@ export class TelemetryManager {
       carData: this.carDataProcessor.getAllCarData(),
       positionData: this.positionDataProcessor.getAllPositions(),
       driversWithDRS: this.carDataProcessor.getDriversWithDRS(),
+      timingStats: this.timingStatsProcessor.getAllStats(),
       lastUpdateTime: new Date()
     }
 
