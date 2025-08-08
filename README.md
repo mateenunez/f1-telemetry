@@ -6,12 +6,42 @@
 
 La aplicación consume datos de telemetría en tiempo real, recibidos por WebSocket desde fuentes originales de F1. Los datos pueden estar comprimidos (gzip, zlib, brotli o base64) o sin comprimir, y se procesan automáticamente para extraer la información relevante.
 
-Entre los tipos de datos recibidos están:
-- **Posiciones** y cambios de posición de cada piloto.
-- **Tiempos de vuelta**, sectores, estadística de pits, neumáticos, DRS, etc.
-- **Datos de auto**: RPM, marchas, velocidad, DRS, temperaturas, etc.
-- **Mensajes de control de carrera**: banderas, avisos, sanciones.
-- **Datos de sesión**: vueltas, pista, condiciones climáticas y estado general.
+#### ¿Que información se recibe?
+
+Esto es un ejemplo de toda la información que Formula 1 nos da para consumirla:
+
+``` 	Heartbeat		{2}
+CarData.z	:	7ZTBCoMwDED/JWcdSdpq26vsD7bLxg4yhA2GB+dN/Pdp2WEwUTG3rZe0aB9pGvI62Ndtc6+e4M8dHNsreGBkk2KecnYg41F7NDs0jp3jEyRQlM1wugMaQ3Er67p6hA8IHhPgEFWIGjyhTsC8Vz1sbN+HH5tZs8DSDJsJ8hJOwESK1/IsST71YgqzZZwCLircTsBuPLIqN0vqZiWBcwGsptr9DWNA8RMUDYakXi0aq6W5mutxJrm2lTyY3djj4doDPqc8Jse5icaLxovGi8b7B+Op3LFBG5UXlReVF5X3I8q79C8=
+Position.z	:	7ZQ/b8IwEMW/y80J8p19/rczt1IZWqoOqGKIKqCCdEL57k3ilNoD16GrUYQSKT/dveeXd4XH06Xru9MR4usVNt1hf+l3h0+IQIq4Va4lu0GOyozXKtjA3tAWGlgf+3O3v0C8Ak5/T/2u/xof4eG4Oe/eP8ZXniG2Ght4gRh0aGAL0ajghgaMQJA1M4LzzS/DAhN8QhQWiL2PoJsJH/AHsCOAShiC42+GyJIqKBIoT2kSobX5bih5EFglSFtdQIKilpgX47hcz4vOJevIUDGJBE3o0gk57fI5pO8jRDQjdhqXTXGS35bsDGljit20cEqISY8LRRK0lFGkKZ2TCZ44V2QERS2qJajE5kbxREkna0LShFbfoDClW4o3MiVVmvzyHaFSU8CFBfWScKfzOV4yYlSyJMiE3AcvHhO6JeGOsjwMQ/NXn/CKKLAxrvZJ7ZPaJ7VP/t0nPDqmCGuf1D6pfVL7RO6Tt+Eb
+	ExtrapolatedClock		{4}
+	TopThree		{4}
+	TimingStats		{4}
+	TimingAppData		{2}
+	WeatherData		{8}
+	TrackStatus		{3}
+	DriverList		{21}
+	RaceControlMessages		{2}
+	SessionInfo		{11}
+	SessionData		{3}
+	TimingData		{7}
+	TyreStintSeries		{2}
+ ```
+
+Donde por ejemplo, para TimingStats obtenemos información para cada conductor:
+
+``` 
+	TimingStats		{4}
+Withheld	:	false
+	Lines		{20}
+	1		{5}
+Line	:	1
+RacingNumber	:	1
+	PersonalBestLapTime		{3}
+	BestSectors		[3]
+	BestSpeeds		{4}
+```
+
+Si bien las estructuras cambian en varios atributos del objeto general, se sigue una misma lógica.
 
 ## ¿Cómo trabaja el Telemetry Manager y los procesadores?
 
