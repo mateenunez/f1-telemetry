@@ -170,7 +170,7 @@ export default function F1Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-800 to-gray-900 p-2 sm:p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-800 to-gray-950 p-2 sm:p-4">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
         {/* Header */}
         <Card className="bg-gradient-to-r from-red-900 to-f1WarmRed text-white border-none mx-2">
@@ -237,7 +237,7 @@ export default function F1Dashboard() {
         {/* Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-10 gap-2 m-2">
           {/* Posiciones Actuales */}
-          <Card className="lg:col-span-7 bg-gray-700 border-gray-900 max-h-screen">
+          <Card className="lg:col-span-7 bg-gray-800 border-gray-900 max-h-screen">
             <CardHeader className="pb-4">
               <CardTitle
                 className="flex items-center gap-2 text-white text-lg font-light "
@@ -266,9 +266,7 @@ export default function F1Dashboard() {
                     return (
                       <div
                         key={pos.driver_number}
-                        className={`flex items-center gap-5 rounded-md bg-gradient-to-br from-gray-600 to-${
-                          driver?.team_colour
-                        } transition-opacity ${
+                        className={`flex items-center gap-5 rounded-md transition-opacity ${
                           pinnedDriver === pos.driver_number
                             ? `border-2 border-offWhite sticky top-0 z-10`
                             : ""
@@ -284,18 +282,18 @@ export default function F1Dashboard() {
                           timing?.knockedOut
                             ? {
                                 opacity: 0.4,
-                                background: `linear-gradient(-90deg, #4b5563 92.7%, #${driver?.team_colour} 100%)`,
+                                background: `linear-gradient(-90deg, #30363eff 94%, #${driver?.team_colour} 100%)`,
                               }
                             : {
                                 opacity: 1,
-                                background: `linear-gradient(-90deg, #4b5563 92.7%, #${driver?.team_colour} 100%)`,
+                                background: `linear-gradient(-90deg, #344052b9 94%, #${driver?.team_colour} 100%)`,
                               }
                         }
                       >
                         {/* Posición */}
-                        <div className="flex flex-row gap-0 items-center">
+                        <div className="flex flex-row items-center">
                           <Badge
-                            className="w-8 h-8 rounded-full flex items-center justify-center text-md font-bold"
+                            className="w-8 h-8 rounded-full flex items-center justify-center text-md font-bold pr-0"
                             style={{
                               backgroundColor: `transparent`,
                               fontFamily: regularAnta.style.fontFamily,
@@ -629,7 +627,7 @@ export default function F1Dashboard() {
           </Card>
 
           {/* Mapa en tiempo real y race control */}
-          <Card className="lg:col-span-3 bg-gray-700 border-gray-900 flex flex-col">
+          <Card className="lg:col-span-3 bg-gray-800 border-gray-900 flex flex-col">
             <CardHeader className="pb-3">
               <CardTitle
                 className="flex items-center gap-2 text-white text-lg"
@@ -643,7 +641,7 @@ export default function F1Dashboard() {
                 </div>
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col justify-evenly ">
+            <CardContent className="flex flex-col justify-center h-full">
               <div className="overflow-hidden h-fit">
                 {/*Mapa en tiempo real */}
                 {telemetryData && telemetryData.session?.circuit_key && (
@@ -659,58 +657,9 @@ export default function F1Dashboard() {
               </div>
 
               {/* Race Control */}
-              <Card className="bg-raceControl border-none text-white min-h-80 md:min-h-40 lg:min-h-40">
-                <CardHeader className="pb-2">
-                  <CardTitle
-                    className="text-lg flex items-center gap-2 justify-center"
-                    style={mediumGeist.style}
-                  >
-                    <AlertTriangle className="h-5 w-5 text-gray-300" />
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="py-2 h-full">
-                  <ScrollArea className="lg:max-h-[28vh] lg:h-40  h-80 max-h-80">
-                    <div className="space-y-1 h-full">
-                      {telemetryData?.raceControl.map((control, index) => (
-                        <div className="flex gap-3 flex-col" key={index}>
-                          <div
-                            className="flex items-center gap-3 text-sm text-gray-100 opacity-95"
-                            style={mediumGeist.style}
-                          >
-                            <span className="flex-1">{control.message}</span>
-                            <div className="flex flex-col items-center gap-1">
-                              <span className="text-xs text-gray-400">
-                                {new Date(control.date).toLocaleTimeString()}
-                              </span>
-                            </div>
-                          </div>
-                          <Separator className="opacity-40 bg-gray-400" />
-                        </div>
-                      ))}
-                    </div>
-                  </ScrollArea>
-                </CardContent>
-              </Card>
             </CardContent>
           </Card>
         </div>
-
-        {/* Footer
-        <div
-          className="flex items-center justify-evenly bg-transparent text-white"
-          style={mediumGeist.style}
-        >
-          <div className="flex items-center gap-1 text-xs ">
-            <a
-              href="https://cafecito.app/skoncito"
-              target="_blank"
-              className="hover:underline"
-            >
-              Apoyanos!
-            </a>
-            🎁
-          </div>
-        </div> */}
       </div>
     </div>
   );
