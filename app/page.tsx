@@ -628,7 +628,7 @@ export default function F1Dashboard() {
 
           {/* Mapa en tiempo real y race control */}
           <Card className="lg:col-span-3 bg-gray-800 border-gray-900 flex flex-col">
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-3 flex flex-col gap-6">
               <CardTitle
                 className="flex items-center gap-2 text-white text-lg"
                 style={mediumGeist.style}
@@ -640,6 +640,19 @@ export default function F1Dashboard() {
                   </span>
                 </div>
               </CardTitle>
+              <div className="flex flex-row gap-2 items-center justify-between">
+                <CardTitle
+                  className="text-lg font-thin text-white"
+                  style={mediumGeist.style}
+                >
+                </CardTitle>
+                <CardTitle
+                  className=" text-xlg font-bold text-white tracking-wider"
+                  style={regularAnta.style}
+                >
+                  {session?.current_lap}/{session?.total_laps}
+                </CardTitle>
+              </div>
             </CardHeader>
             <CardContent className="flex flex-col justify-center h-full">
               <div className="overflow-hidden h-fit">
