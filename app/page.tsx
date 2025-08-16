@@ -15,18 +15,16 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Clock,
   Flag,
-  Trophy,
-  AlertTriangle,
   CloudRain,
   Sun,
   Cloud,
-  MapPin,
   Info,
 } from "lucide-react";
 import { Geist } from "next/font/google";
 import { Anta } from "next/font/google";
 import Map from "@/components/Map";
 import { ProcessedTimingStats } from "@/processors/timing-stats-processor";
+import F1Calendar from "@/components/Calendar";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const regularAnta = Anta({ subsets: ["latin"], weight: "400" });
@@ -42,8 +40,6 @@ export default function F1Dashboard() {
 
   useEffect(() => {
     // Conectar al WebSocket de telemetría
-
-    // Reemplaza esta URL con tu WebSocket real
     const wsUrl = process.env.NEXT_PUBLIC_WS_URL || "";
 
     const handleConnection = async () => {
@@ -144,7 +140,7 @@ export default function F1Dashboard() {
             className="h-12 w-12 mx-auto flex align-center"
             loading="lazy"
           />
-          <p className="text-white">Cargando datos de F1...</p>
+          <p className="text-white" style={mediumGeist.style}>Cargando datos de F1...</p>
         </div>
       </div>
     );
@@ -173,7 +169,7 @@ export default function F1Dashboard() {
     <div className="min-h-screen bg-gradient-to-br from-gray-800 to-gray-950 p-2 sm:p-4">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
         {/* Header */}
-        <Card className="bg-gradient-to-r from-red-900 to-f1WarmRed text-white border-none mx-2">
+        <Card className="bg-gradient-to-r from-f1Red to-f1DarkerRed text-white border-none mx-2">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -200,7 +196,7 @@ export default function F1Dashboard() {
                 className="flex items-center gap-4 text-nowrap flex-col md:flex-row text-xs md:text-sm"
                 style={mediumGeist.style}
               >
-                {/* Weather Info */}
+                {session?.date_end && new Date(session?.date_end) < new Date() ? <F1Calendar/> : <>                {/* Weather Info */}
                 {weather && (
                   <div className="flex items-center gap-2 text-red-100">
                     {getWeatherIcon()}
@@ -221,14 +217,16 @@ export default function F1Dashboard() {
                     <Clock className="h-4 w-4" />
                     <div className="flex flex-col">
                       <span>
-                        {telemetryData?.lastUpdateTime.toLocaleDateString()}
-                      </span>
-                      <span>
                         {telemetryData?.lastUpdateTime.toLocaleTimeString()}
                       </span>
                     </div>
                   </div>
-                </div>
+                </div></>}
+
+
+
+                
+
               </div>
             </div>
           </CardHeader>

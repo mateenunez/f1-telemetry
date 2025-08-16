@@ -70,6 +70,8 @@ const config: Config = {
             highWhite: "#FFFFFF",      // High White
 			bestGreen: "#51cf66", 
 			raceControl: "#0b090a49",
+			f1Red: "#A6051A",
+			f1DarkerRed: "#a6051ae6"
 
           },
   		borderRadius: {
