@@ -126,7 +126,7 @@ export default function F1Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-4 flex items-center justify-center">
+      <div className="min-h-screen bg-warmBlack p-4 flex items-center justify-center">
         <div className="text-center">
           <img
             src="/logo-girando.gif"
@@ -287,6 +287,8 @@ export default function F1Dashboard() {
                               }
                         }
                       >
+                        {/* Posición e Info de Piloto */}
+                        <div className="flex flex-row items-center min-w-[11rem]">
                         {/* Posición */}
                         <div className="flex flex-row items-center">
                           <Badge
@@ -318,7 +320,7 @@ export default function F1Dashboard() {
                           className="flex justify-evenly flex-row"
                           style={regularAnta.style}
                         >
-                          <div>
+                          <div className="flex flex-col self-start">
                             <div className="flex items-center gap-1">
                               <span
                                 className="text-xs text-white self-center opacity-80"
@@ -337,6 +339,7 @@ export default function F1Dashboard() {
                               {driver?.team_name}
                             </p>
                           </div>
+                        </div>
                         </div>
 
                         {/* Estadísticas */}

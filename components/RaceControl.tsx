@@ -17,6 +17,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
   const [lastMessage, setLastMessage] = useState<ProcessedRaceControl | null>(
     null
   );
+  const [isAnimating, setIsAnimating] = useState(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const previousMessageCount = useRef<number>(0);
   const { playNotificationSound, timeUntilNextSound } = useRaceControlAudio({
@@ -33,6 +34,12 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
 
         if (isAudioEnabled && newMessage && newMessage !== lastMessage) {
           playNotificationSound();
+          setIsAnimating(true);
+          
+          // Detener la animación después de 2 segundos
+          setTimeout(() => {
+            setIsAnimating(false);
+          }, 2000);
         }
 
         setLastMessage(newMessage);
@@ -44,7 +51,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
 
   const getBorderColor = (flag?: string) => {
     if (!flag) return "border-carbonBlack";
-    
+
     const borderMap: Record<string, string> = {
       YELLOW: "border-f1Yellow",
       "DOUBLE YELLOW": "border-f1Yellow",
@@ -58,7 +65,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
       SC: "border-f1Yellow/90",
       VSC: "border-f1Yellow/75",
     };
-  
+
     return borderMap[flag.toUpperCase()] || "border-carbonBlack";
   };
 
@@ -76,11 +83,22 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
       <CardContent className="pt-0">
         {lastMessage && (
           <div
-            className={`mb-3 p-2 bg-warmBlack2 rounded text-f1Blue border-l-2 ${getBorderColor(lastMessage.flag)}`}
+            className={`mb-3 p-2 bg-warmBlack2 rounded text-f1Blue border-l-2 ${getBorderColor(
+              lastMessage.flag
+            )}`}
             style={mediumGeist.style}
           >
             <div className="flex items-start justify-between gap-2 mb-1">
               <div className="flex items-center gap-2">
+              <span 
+                  className={`text-red-500 transition-all duration-500 ease-in-out ${
+                    isAnimating 
+                      ? 'scale-150 animate-pulse' 
+                      : 'scale-100'
+                  }`}
+                >
+                  •
+                </span>
                 <span className="text-xs font-medium text-white">
                   {lastMessage.category} {lastMessage.scope}{" "}
                   {lastMessage.sector}
