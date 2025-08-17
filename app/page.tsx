@@ -12,19 +12,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Clock,
-  Flag,
-  CloudRain,
-  Sun,
-  Cloud,
-  Info,
-} from "lucide-react";
+import { Clock, Flag, CloudRain, Sun, Cloud, Info } from "lucide-react";
 import { Geist } from "next/font/google";
 import { Anta } from "next/font/google";
 import Map from "@/components/Map";
 import { ProcessedTimingStats } from "@/processors/timing-stats-processor";
 import F1Calendar from "@/components/Calendar";
+import RaceControl from "@/components/RaceControl";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const regularAnta = Anta({ subsets: ["latin"], weight: "400" });
@@ -140,7 +134,9 @@ export default function F1Dashboard() {
             className="h-12 w-12 mx-auto flex align-center"
             loading="lazy"
           />
-          <p className="text-white" style={mediumGeist.style}>Cargando datos de F1...</p>
+          <p className="text-white" style={mediumGeist.style}>
+            Cargando datos de F1...
+          </p>
         </div>
       </div>
     );
@@ -152,7 +148,7 @@ export default function F1Dashboard() {
   if (mapFullscreen && telemetryData && telemetryData.session?.circuit_key) {
     return (
       <div
-        className="fixed inset-0 bg-gradient-to-br from-gray-800 to-gray-900 z-50 bg-flex items-center justify-center"
+        className="fixed inset-0 bg-warmBlack z-50 bg-flex items-center justify-center"
         onDoubleClick={handleMapFullscreen}
       >
         <Map
@@ -166,14 +162,14 @@ export default function F1Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-800 to-gray-950 p-2 sm:p-4">
+    <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 p-2 sm:p-4">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
         {/* Header */}
-        <Card className="bg-gradient-to-r from-f1Red to-f1DarkerRed text-white border-none mx-2">
+        <Card className="bg-warmBlack1 text-white border-carbonBlack mx-2">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Flag className="h-6 w-6" />
+                <img className="h-8 w-8" src="/alangulotv.png" alt="AlAnguloTV"/>
                 <div>
                   <CardTitle
                     className="text-xl sm:text-2xl"
@@ -182,7 +178,7 @@ export default function F1Dashboard() {
                     {session?.session_type} - {session?.location}:{" "}
                     {session?.session_status}
                   </CardTitle>
-                  <p className="text-red-100 text-sm" style={mediumGeist.style}>
+                  <p className="text-gray-500 text-sm" style={mediumGeist.style}>
                     {session?.circuit_short_name} • {session?.country_name} •{" "}
                     {session?.year}
                   </p>
@@ -196,37 +192,40 @@ export default function F1Dashboard() {
                 className="flex items-center gap-4 text-nowrap flex-col md:flex-row text-xs md:text-sm"
                 style={mediumGeist.style}
               >
-                {session?.date_end && new Date(session?.date_end) < new Date() ? <F1Calendar/> : <>                {/* Weather Info */}
-                {weather && (
-                  <div className="flex items-center gap-2 text-red-100">
-                    {getWeatherIcon()}
-                    <div className="text-sm">
-                      <div>{Math.round(weather.air_temperature)}°C</div>
-                      <div className="text-xs">
-                        Pista: {Math.round(weather.track_temperature)}°C
+                {session?.date_end &&
+                new Date(session?.date_end) < new Date() ? (
+                  <F1Calendar />
+                ) : (
+                  <>
+                    {" "}
+                    {/* Weather Info */}
+                    {weather && (
+                      <div className="flex items-center gap-2 text-offWhite">
+                        {getWeatherIcon()}
+                        <div className="text-sm">
+                          <div>{Math.round(weather.air_temperature)}°C</div>
+                          <div className="text-xs">
+                            Pista: {Math.round(weather.track_temperature)}°C
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    <Separator
+                      orientation="vertical"
+                      className="h-8 bg-gray-600 hidden md:block"
+                    />
+                    <div className="text-right ">
+                      <div className="flex items-center gap-1 text-offWhite flex-row">
+                        <Clock className="h-4 w-4" />
+                        <div className="flex flex-col">
+                          <span>
+                            {telemetryData?.lastUpdateTime.toLocaleTimeString()}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </>
                 )}
-                <Separator
-                  orientation="vertical"
-                  className="h-8 bg-red-400 hidden md:block"
-                />
-                <div className="text-right ">
-                  <div className="flex items-center gap-1 text-red-100 flex-row">
-                    <Clock className="h-4 w-4" />
-                    <div className="flex flex-col">
-                      <span>
-                        {telemetryData?.lastUpdateTime.toLocaleTimeString()}
-                      </span>
-                    </div>
-                  </div>
-                </div></>}
-
-
-
-                
-
               </div>
             </div>
           </CardHeader>
@@ -235,7 +234,7 @@ export default function F1Dashboard() {
         {/* Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-10 gap-2 m-2">
           {/* Posiciones Actuales */}
-          <Card className="lg:col-span-7 bg-gray-800 border-gray-900 max-h-screen">
+          <Card className="lg:col-span-7 bg-warmBlack1 border-none max-h-screen">
             <CardHeader className="pb-4">
               <CardTitle
                 className="flex items-center gap-2 text-white text-lg font-light "
@@ -264,9 +263,9 @@ export default function F1Dashboard() {
                     return (
                       <div
                         key={pos.driver_number}
-                        className={`flex items-center gap-5 rounded-md transition-opacity ${
+                        className={`flex items-center gap-5 rounded-md transition-opacity border-2 border-darkBlue/50 ${
                           pinnedDriver === pos.driver_number
-                            ? `border-2 border-offWhite sticky top-0 z-10`
+                            ? `border-offWhite sticky top-0 z-10`
                             : ""
                         } max-w-full overflow-x-auto min-w-0 min-h-full cursor-pointer`}
                         onDoubleClick={() =>
@@ -280,11 +279,11 @@ export default function F1Dashboard() {
                           timing?.knockedOut
                             ? {
                                 opacity: 0.4,
-                                background: `linear-gradient(-90deg, #30363eff 94%, #${driver?.team_colour} 100%)`,
+                                background: `linear-gradient(-90deg, #111111 94%, #${driver?.team_colour} 100%)`,
                               }
                             : {
                                 opacity: 1,
-                                background: `linear-gradient(-90deg, #344052b9 94%, #${driver?.team_colour} 100%)`,
+                                background: `linear-gradient(-90deg, #111111 94%, #${driver?.team_colour}8D 100%)`,
                               }
                         }
                       >
@@ -351,7 +350,7 @@ export default function F1Dashboard() {
                             >
                               {timing?.in_pit ? (
                                 <span
-                                  className="text-blue-500"
+                                  className="text-f1Blue"
                                   style={mediumGeist.style}
                                 >
                                   IN PIT
@@ -429,6 +428,7 @@ export default function F1Dashboard() {
                                                 padding: 2,
                                                 display: "inline-block",
                                                 marginLeft: 2,
+                                                opacity: 1,
                                               }}
                                             ></span>
                                           );
@@ -449,15 +449,15 @@ export default function F1Dashboard() {
                                 (sectorKey, idx) => {
                                   const sector =
                                     timing?.sector_times[sectorKey];
-                                  let color = "text-yellow-300";
+                                  let color = "text-f1Yellow";
                                   const displayValue =
                                     sector?.Value ??
                                     sector?.PreviousValue ??
                                     "--:--";
                                   if (sector?.OverallFastest)
-                                    color = "text-purple-500";
+                                    color = "text-f1Purple";
                                   else if (sector?.PersonalFastest)
-                                    color = "text-green-400";
+                                    color = "text-f1Green";
                                   return (
                                     <div
                                       className="flex flex-row gap-1"
@@ -625,7 +625,7 @@ export default function F1Dashboard() {
           </Card>
 
           {/* Mapa en tiempo real y race control */}
-          <Card className="lg:col-span-3 bg-gray-800 border-gray-900 flex flex-col">
+          <Card className="lg:col-span-3 bg-warmBlack1 border-none border-2 flex flex-col">
             <CardHeader className="pb-3 flex flex-col gap-6">
               <CardTitle
                 className="flex items-center gap-2 text-white text-lg"
@@ -642,8 +642,7 @@ export default function F1Dashboard() {
                 <CardTitle
                   className="text-lg font-thin text-white"
                   style={mediumGeist.style}
-                >
-                </CardTitle>
+                ></CardTitle>
                 <CardTitle
                   className=" text-xlg font-bold text-white tracking-wider"
                   style={regularAnta.style}
@@ -668,6 +667,9 @@ export default function F1Dashboard() {
               </div>
 
               {/* Race Control */}
+              <div className="mt-3">
+                <RaceControl raceControl={telemetryData?.raceControl || []} />
+              </div>
             </CardContent>
           </Card>
         </div>

@@ -64,14 +64,22 @@ const config: Config = {
   				ring: 'hsl(var(--sidebar-ring))'
   			},
 			// Colores para la telemetría de F1
-			f1WarmRed: "#ff1e29ee",      // F1 Warm Red
-            carbonBlack: "#232323",    // Carbon Black
-            offWhite: "#F3F3F3",       // Off White
-            highWhite: "#FFFFFF",      // High White
-			bestGreen: "#51cf66", 
+			f1WarmRed: "#ff1e29ee",      
+            carbonBlack: "#232323",    
+            offWhite: "#F3F3F3",
+            highWhite: "#FFFFFF",
 			raceControl: "#0b090a49",
 			f1Red: "#A6051A",
-			f1DarkerRed: "#a6051ae6"
+			f1DarkerRed: "#a6051ae6",
+			f1Yellow: "#ffe066",
+			f1Purple: "#b197fc",      
+			f1Green: "#51cf66", 
+			f1Blue: "#3B82F6",
+			warmBlack: "#0a0a0a",
+			warmBlack2: "#111111",
+			warmBlack3: "#1a1a1a",
+			darkBlue: "#161b22",
+
 
           },
   		borderRadius: {

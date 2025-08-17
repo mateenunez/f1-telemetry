@@ -36,14 +36,14 @@ export class RaceControlProcessor {
       processedMessages.push(processed)
     })
   }
-    // Mantener solo los últimos 50 mensajes
-    this.messages = [...this.messages, ...processedMessages].slice(-50)
+    // Mantener solo los últimos 15 mensajes
+    this.messages = [...this.messages, ...processedMessages].slice(-15)
 
     return processedMessages
   
 }
 
-  getLatestMessages(count = 50): ProcessedRaceControl[] {
+  getLatestMessages(count = 10): ProcessedRaceControl[] {
     return this.messages.slice(-count).reverse()
   }
 

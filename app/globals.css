@@ -6,6 +6,33 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+* {
+  scroll-behavior: smooth;
+}
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+.scroll-smooth::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll-smooth::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.scroll-smooth::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.scroll-smooth::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
