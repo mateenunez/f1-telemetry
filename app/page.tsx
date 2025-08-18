@@ -165,11 +165,10 @@ export default function F1Dashboard() {
     <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 p-2 sm:p-4">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
         {/* Header */}
-        <Card className="bg-warmBlack1 text-white border-carbonBlack mx-2">
+        <Card className="bg-warmBlack1 text-white border-none mx-2">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <img className="h-8 w-8" src="/alangulotv.png" alt="AlAnguloTV"/>
                 <div>
                   <CardTitle
                     className="text-xl sm:text-2xl"
@@ -178,10 +177,10 @@ export default function F1Dashboard() {
                     {session?.session_type} - {session?.location}:{" "}
                     {session?.session_status}
                   </CardTitle>
-                  <p className="text-gray-500 text-sm" style={mediumGeist.style}>
-                    {session?.circuit_short_name} • {session?.country_name} •{" "}
-                    {session?.year}
-                  </p>
+                  <div className="text-gray-500 text-sm flex flex-col md:flex-row md:gap-1 lg:gap-1 lg:flex-row" style={mediumGeist.style}>
+                    <p>{session?.circuit_short_name} • </p>
+                    <p>{session?.country_name} • {session?.year}</p>
+                  </div>
                 </div>
               </div>
               <div
@@ -242,14 +241,14 @@ export default function F1Dashboard() {
               >
                 <div className="relative group flex items-center text-nowrap">
                   <Info className="h-4 w-4 text-offWhite cursor-pointer" />
-                  <span className="absolute left-6 top-1/2 -translate-y-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                  <span className="absolute left-6 top-1/2 -translate-y-1/2 bg-transparent text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
                     Doble click para fijar un piloto.
                   </span>
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full">
-              <ScrollArea className="overflow-x-auto min-w-max h-full">
+              <ScrollArea className="overflow-x-auto min-w-max h-full " type="scroll">
                 <div className="space-y-2">
                   {getCurrentPositions().map((pos) => {
                     const driver = getDriverInfo(pos.driver_number);
@@ -263,7 +262,7 @@ export default function F1Dashboard() {
                     return (
                       <div
                         key={pos.driver_number}
-                        className={`flex items-center gap-5 rounded-md transition-opacity border-2 border-darkBlue/50 ${
+                        className={`flex items-center gap-3 rounded-md transition-opacity border-2 border-darkBlue/50 ${
                           pinnedDriver === pos.driver_number
                             ? `border-offWhite sticky top-0 z-10`
                             : ""
@@ -288,11 +287,11 @@ export default function F1Dashboard() {
                         }
                       >
                         {/* Posición e Info de Piloto */}
-                        <div className="flex flex-row items-center min-w-[11rem]">
+                        <div className="flex flex-row items-center min-w-[11.5rem]">
                         {/* Posición */}
-                        <div className="flex flex-row items-center">
+                        <div className="flex flex-row items-center min-w-[5.75rem]">
                           <Badge
-                            className="w-8 h-8 rounded-full flex items-center justify-center text-md font-bold pr-0"
+                            className="w-8 h-8 rounded-full flex items-center justify-center text-md font-bold pr-0 min-w-[2rem]"
                             style={{
                               backgroundColor: `transparent`,
                               fontFamily: regularAnta.style.fontFamily,
@@ -317,7 +316,7 @@ export default function F1Dashboard() {
 
                         {/* Info del piloto */}
                         <div
-                          className="flex justify-evenly flex-row"
+                          className="flex justify-evenly flex-row "
                           style={regularAnta.style}
                         >
                           <div className="flex flex-col self-start">
@@ -343,7 +342,7 @@ export default function F1Dashboard() {
                         </div>
 
                         {/* Estadísticas */}
-                        <div className="flex flex-row items-center justify-around w-full py-1.5">
+                        <div className="flex flex-row items-center justify-around w-full py-1.5 gap-4 md:gap-2 lg:gap-2">
                           {/* PITS, DRS y */}
                           <div>
                             {/* En PIT */}
@@ -636,7 +635,7 @@ export default function F1Dashboard() {
               >
                 <div className="relative group flex items-center text-nowrap">
                   <Info className="h-4 w-4 text-offWhite cursor-pointer" />
-                  <span className="absolute left-6 top-1/2 -translate-y-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                  <span className="absolute left-6 top-1/2 -translate-y-1/2 bg-transparent text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
                     Doble click para pantalla completa.
                   </span>
                 </div>
