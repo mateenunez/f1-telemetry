@@ -6,8 +6,8 @@ interface UseRaceControlAudioOptions {
 }
 
 export function useRaceControlAudio(options: UseRaceControlAudioOptions = {}) {
-    // 2 minutos de cooldown
-  const { cooldownMs = 2 * 60 * 1000, audioSrc = '/race-control-notification.mp3' } = options;
+    // 30 segundos de cooldown
+  const { cooldownMs = 30 * 1000, audioSrc = '/race-control-notification.mp3' } = options;
   const lastPlayTime = useRef<number>(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 

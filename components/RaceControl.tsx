@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { ProcessedRaceControl } from "@/processors/race-control-processor";
 import { Geist } from "next/font/google";
 import { useRaceControlAudio } from "@/hooks/use-raceControl";
@@ -18,7 +17,6 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
     null
   );
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const previousMessageCount = useRef<number>(0);
   const { playNotificationSound, timeUntilNextSound } = useRaceControlAudio({
     cooldownMs: 2 * 60 * 1000, // 2 minutos
@@ -32,7 +30,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
       if (newMessageCount > previousMessageCount.current) {
         const newMessage = raceControl[0];
 
-        if (isAudioEnabled && newMessage && newMessage !== lastMessage) {
+        if ( newMessage && newMessage !== lastMessage) {
           playNotificationSound();
           setIsAnimating(true);
           
@@ -47,7 +45,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
 
       previousMessageCount.current = newMessageCount;
     }
-  }, [raceControl, isAudioEnabled, playNotificationSound, lastMessage]);
+  }, [raceControl, playNotificationSound, lastMessage]);
 
   const getBorderColor = (flag?: string) => {
     if (!flag) return "border-carbonBlack";
