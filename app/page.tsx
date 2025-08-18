@@ -543,7 +543,7 @@ export default function F1Dashboard() {
                           </div>
 
                           {/* Gaps */}
-                          <div className="flex flex-col items-start">
+                          <div className="flex flex-col items-start min-w-[8rem]">
                             {timing?.gap_to_leader ? (
                               <div
                                 className="flex items-center flex-row gap-2 text-xs text-white"
@@ -608,7 +608,7 @@ export default function F1Dashboard() {
 
                           {/* Neumático */}
                           <div
-                            className="flex items-center flex-row text-xs gap-2"
+                            className="flex items-center flex-row text-xs gap-2 p-2 md:p-0 lg:p-0"
                             style={mediumGeist.style}
                           >
                             {currentStint && (
