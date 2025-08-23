@@ -112,9 +112,6 @@ export default function F1Dashboard() {
             className="h-12 w-12 mx-auto flex align-center"
             loading="lazy"
           />
-          <p className="text-white" style={mediumGeist.style}>
-            Cargando datos de F1...
-          </p>
         </div>
       </div>
     );

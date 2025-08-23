@@ -2,10 +2,8 @@
 
 import { useState, useEffect } from "react";
 import {
-  extendedFormatTimeUntil,
   F1CalendarResponse,
   fetchCalendar,
-  formatEventDate,
   formatEventDateShort,
   getCountryCode,
 } from "@/utils/calendar";
@@ -38,7 +36,7 @@ export default function SchedulePage() {
 
   if (!calendar) {
     return (
-      <div className="min-h-screen bg-warmBlack p-4 flex items-center justify-center">
+      <div className="min-h-screen bg-warmBlack p-4 flex items-center justify-center" style={mediumGeist.style}>
         <div className="text-center">
           <img
             src="/logo-girando.gif"
@@ -46,9 +44,6 @@ export default function SchedulePage() {
             className="h-12 w-12 mx-auto flex align-center"
             loading="lazy"
           />
-          <p className="text-white" style={mediumGeist.style}>
-            Cargando datos de F1...
-          </p>
         </div>
       </div>
     );
@@ -56,9 +51,9 @@ export default function SchedulePage() {
 
   if (calendar)
     return (
-      <div className="min-h-screen bg-black text-white p-4">
+      <div className="min-h-screen  bg-gradient-to-br from-warmBlack to-warmBlack2 text-white p-4" style={mediumGeist.style}>
         <div className="max-w-6xl mx-auto my-12">
-          <div className="w-full flex flex-row justify-between">
+          <div className="w-full flex flex-row justify-between items-center">
             <h1 className="text-3xl font-regular mb-8 flex flex-row items-center gap-2">
               <img
                 src={`https://flagsapi.com/AR/flat/32.png`}
@@ -94,12 +89,12 @@ export default function SchedulePage() {
                     {calendar.upcomingEvents.slice(1).map((event, index) => (
                       <Card
                         key={index}
-                        className="md:w-[20vw] flex-shrink-0 bg-transparent border-none w-[50%] items-center"
+                        className="md:w-[18vw] flex-shrink-0 bg-transparent border-none w-[50%] items-center"
                       >
                         <CardHeader>
-                          <CardTitle className="text-sm text-center text-white text-wrap font-regular">
+                          <p className="text-sm text-center text-white text-wrap font-regular">
                             {event.summary.toUpperCase().slice(2)}
-                          </CardTitle>
+                          </p>
                         </CardHeader>
                         <CardContent className="space-y-2">
                           <div className="text-center">
