@@ -185,13 +185,11 @@ export class TelemetryManager {
 
   private getAllStints(): ProcessedStint[] {
     const allStints: ProcessedStint[] = []
-
-    // Obtener todos los stints de todos los pilotos
-    for (let i = 1; i <= 99; i++) {
-      const driverStints = this.pitProcessor.getDriverStints(i)
+    const drivers = this.driverProcessor.getAllDrivers()
+    for (const d of drivers) {
+      const driverStints = this.pitProcessor.getDriverStints(d.driver_number)
       allStints.push(...driverStints)
     }
-
     return allStints
   }
 

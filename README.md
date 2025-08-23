@@ -112,3 +112,17 @@ El núcleo del procesamiento lo maneja la clase `TelemetryManager`. Su flujo gen
 - **Salida:** Estadísticas por piloto.
 
 ---
+
+## ¿Cómo mostramos la información?
+
+La UI está compuesta por módulos reutilizables que mejoran la mantenibilidad y claridad del código. Cada tarjeta de piloto se arma combinando estos componentes:
+
+- **Header (`components/Header.tsx`)**: Muestra la cabecera de la vista con tipo de sesión, circuito y país. Incluye el estado del clima (Weather), el reloj de última actualización y, si la sesión terminó, el calendario `F1Calendar`.
+- **DriverPositionInfo (`components/DriverPositionInfo.tsx`)**: Presenta la posición, foto, número de piloto, acrónimo y escudería.
+- **PitsDrsSpeed (`components/PitsDrsSpeed.tsx`)**: Indica si está en PIT o cantidad de paradas, el estado del DRS y la velocidad actual con color de énfasis según el umbral.
+- **Minisectors (`components/Minisectors.tsx`)**: Muestra los minisectores por cada sector (S1, S2, S3), los tiempos por sector y los mejores sectores usando `TimingStats`.
+- **LapTimes (`components/LapTimes.tsx`)**: Último tiempo de vuelta y mejor tiempo personal del piloto, con color según si es el mejor absoluto o personal.
+- **DriverGaps (`components/DriverGaps.tsx`)**: Diferencias de tiempo: gap al líder, gap con el de adelante, diferencia al más rápido, etc.
+- **Tyres (`components/Tyres.tsx`)**: Visualiza el compuesto del stint actual mediante iconos (SOFT, MEDIUM, HARD).
+
+Cada módulo recibe únicamente las props necesarias (por ejemplo, `timing`, `timingStats`, `carData`, `currentStint`) y se compone dentro del map de `getCurrentPositions()` en `app/page.tsx`, favoreciendo la separación de responsabilidades y la reutilización.

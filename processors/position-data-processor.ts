@@ -27,10 +27,6 @@ export class PositionDataProcessor {
     if (compressedData) {
       try {
         data = decompressData(compressedData)
-        if (data) {
-        } else {
-          console.log("Position decompression returned null, using raw data if available")
-        }
       } catch (error) {
         console.error("Error decompressing position data:", error)
       }
@@ -39,7 +35,6 @@ export class PositionDataProcessor {
     // Si no se pudo descomprimir, usar datos normales
     if (!data && positionData) {
       data = positionData;
-      console.log("Using uncompressed Position data");
     }
 
     const processedPositions: ProcessedPositionData[] = []

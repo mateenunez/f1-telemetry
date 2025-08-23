@@ -1,51 +1,40 @@
 import pako from "pako";
 
+let cachedMethod: "gzip" | "zlib" | "raw" | null = null;
+const decoder = new TextDecoder();
+
+function b64ToUint8(arr: string): Uint8Array {
+  return Uint8Array.from(atob(arr), c => c.charCodeAt(0));
+}
+
+function detectMethod(bytes: Uint8Array): "gzip" | "zlib" | "raw" {
+  if (bytes.length >= 2 && bytes[0] === 0x1f && bytes[1] === 0x8b) return "gzip";
+  if (bytes.length >= 2 && bytes[0] === 0x78) return "zlib";
+  return "raw";
+}
+
 export function decompressData(compressedData: string): any {
-  // Intentar descompresión estándar
   try {
-    // Paso 1: Decodificar base64
-    let binaryData;
-    try {
-      binaryData = Uint8Array.from(atob(compressedData), c => c.charCodeAt(0));
-    } catch {
-      // Si falla, intentar tratar como string no codificado
-      binaryData = new TextEncoder().encode(compressedData);
+    const bytes = b64ToUint8(compressedData);
+
+    const method = cachedMethod ?? detectMethod(bytes);
+    let decompressed: Uint8Array;
+
+    switch (method) {
+      case "gzip":
+      case "zlib":
+        decompressed = pako.inflate(bytes);
+        break;
+      case "raw":
+        decompressed = pako.inflateRaw(bytes);
+        break;
     }
 
-    // Paso 2: Intentar diferentes métodos de descompresión
-    const methods = [
-      { name: "gzip", fn: (data: Uint8Array) => pako.inflate(data) },
-      { name: "zlib", fn: (data: Uint8Array) => pako.inflate(data) },  // pako maneja automáticamente
-      { name: "raw", fn: (data: Uint8Array) => pako.inflateRaw(data) },
-      { name: "brotli", fn: (data: Uint8Array) => {
-        // Solo si el navegador soporta Brotli
-        if (typeof window !== "undefined" && (window as any).BrotliDecode) {
-          return (window as any).BrotliDecode(data);
-        }
-        throw new Error("Brotli no soportado");
-      }}
-    ];
-
-    for (const method of methods) {
-      try {
-        const decompressed = method.fn(binaryData);
-        const text = new TextDecoder().decode(decompressed);
-        return JSON.parse(text);
-      } catch (error) {
-        // Continuar con el siguiente método
-      }
-    }
-
-    // Paso 3: Intentar parsear directamente como JSON
-    try {
-      const text = new TextDecoder().decode(binaryData);
-      return JSON.parse(text);
-    } catch {
-      // Último intento: tratar como string directo
-      return JSON.parse(compressedData);
-    }
-  } catch (finalError) {
-    console.error("Error en descompresión:", finalError);
+    cachedMethod = method;
+    const text = decoder.decode(decompressed);
+    return JSON.parse(text);
+  } catch (e) {
+    console.error("Error en descompresión:", e);
     return null;
   }
 }
