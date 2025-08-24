@@ -197,7 +197,6 @@ export function getRelativeDate(dateString: string): string {
     }
 }
 
-
 export function getCountryCode(location: string): string {
     const locationLower = location.toLowerCase();
 

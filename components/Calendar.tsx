@@ -7,7 +7,6 @@ import {
   getEventType,
 } from "@/utils/calendar";
 import { Geist, Anta } from "next/font/google";
-import { Link, SquareArrowUpRight } from "lucide-react";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const regularAnta = Anta({ subsets: ["latin"], weight: "400" });
@@ -43,7 +42,7 @@ export default function F1Calendar() {
         <p>{calendar?.nextEvent.location}</p>
         </div>
         <a style={regularAnta.style} className="flex flex-row gap-2 hover:underline hover:cursor-pointer underline-offset-4" href="/schedule">
-          {formatTimeUntil(calendar.timeUntilNext).toUpperCase()}{" "}<Link className="w-4"/>
+          {formatTimeUntil(calendar.timeUntilNext).toUpperCase()}{" "}
         </a>
       </div>
     );
