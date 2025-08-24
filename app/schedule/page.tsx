@@ -71,7 +71,7 @@ export default function SchedulePage() {
               Telemetry{" "}
             </a>
           </div>
-          <div className="flex flex-row my-4 w-screen">
+          <div className="flex flex-row my-4">
             <div className="flex flex-col mx-8">
               <h1 className="text-xl py-5"> Next session in</h1>
 
@@ -89,7 +89,7 @@ export default function SchedulePage() {
                     {calendar.upcomingEvents.slice(1).map((event, index) => (
                       <Card
                         key={index}
-                        className="md:w-[18vw] flex-shrink-0 bg-transparent border-none w-[50%] items-center"
+                        className="md:w-[20vw] flex-shrink-0 bg-transparent border-none w-[100%] items-center"
                       >
                         <CardHeader>
                           <p className="text-sm text-center text-white text-wrap font-regular">

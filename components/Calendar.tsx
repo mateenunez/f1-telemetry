@@ -41,7 +41,7 @@ export default function F1Calendar() {
         </p>
         <p>{calendar?.nextEvent.location}</p>
         </div>
-        <a style={regularAnta.style} className="flex flex-row gap-2 hover:cursor-pointer text-lg font-regular" href="/schedule">
+        <a style={regularAnta.style} className="flex flex-row gap-2 hover:cursor-pointer text-md font-regular" href="/schedule">
           {formatTimeUntil(calendar.timeUntilNext).toUpperCase()}{" "}
         </a>
       </div>
