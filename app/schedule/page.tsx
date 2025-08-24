@@ -71,7 +71,7 @@ export default function SchedulePage() {
               Telemetry{" "}
             </a>
           </div>
-          <div className="flex flex-row my-4">
+          <div className="flex flex-row my-4 w-screen">
             <div className="flex flex-col mx-8">
               <h1 className="text-xl py-5"> Next session in</h1>
 
@@ -83,9 +83,9 @@ export default function SchedulePage() {
 
               {/* Calendario completo */}
               <div>
-                <h2 className="text-xl ">Upcoming Events</h2>
-                <ScrollArea className="max-w-[80vw]">
-                  <div className="flex w-max space-x-4 p-4 4 md:flex-row flex-col md:space-x-4 md:space-y-0 space-y-4">
+                <h2 className="text-xl">Upcoming Events</h2>
+                <ScrollArea>
+                  <div className="flex w-full space-x-4 p-4 4 md:flex-row flex-col md:space-x-4 md:space-y-0 space-y-4 items-center mx-8mxa">
                     {calendar.upcomingEvents.slice(1).map((event, index) => (
                       <Card
                         key={index}
