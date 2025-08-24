@@ -19,7 +19,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
   const [isAnimating, setIsAnimating] = useState(false);
   const previousMessageCount = useRef<number>(0);
   const { playNotificationSound, timeUntilNextSound } = useRaceControlAudio({
-    cooldownMs: 2 * 60 * 1000, // 2 minutos
+    cooldownMs: 30 * 1000, // 30 segundos de cooldown
     audioSrc: "/race-control-notification.mp3", // Audio en /public
   });
 
@@ -30,14 +30,14 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
       if (newMessageCount > previousMessageCount.current) {
         const newMessage = raceControl[0];
 
-        if ( newMessage && newMessage !== lastMessage) {
+        if (newMessage && newMessage !== lastMessage) {
           playNotificationSound();
           setIsAnimating(true);
-          
-          // Detener la animación después de 2 segundos
+
+          // Detener la animación después de 5 segundos
           setTimeout(() => {
             setIsAnimating(false);
-          }, 2000);
+          }, 5000);
         }
 
         setLastMessage(newMessage);
@@ -47,21 +47,21 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
     }
   }, [raceControl, playNotificationSound, lastMessage]);
 
-  const getBorderColor = (flag?: string) => {
+  const getAlertColor = (flag?: string) => {
     if (!flag) return "border-carbonBlack";
 
     const borderMap: Record<string, string> = {
-      YELLOW: "border-f1Yellow",
-      "DOUBLE YELLOW": "border-f1Yellow",
-      RED: "border-f1Red",
-      BLUE: "border-f1Blue",
-      GREEN: "border-f1Green",
-      WHITE: "border-highWhite",
-      BLACK: "border-carbonBlack",
-      CLEAR: "border-highWhite",
-      CHEQUERED: "border-black",
-      SC: "border-f1Yellow/90",
-      VSC: "border-f1Yellow/75",
+      YELLOW: "text-f1Yellow",
+      "DOUBLE YELLOW": "text-f1Yellow",
+      RED: "text-f1Red",
+      BLUE: "text-f1Blue",
+      GREEN: "text-f1Green",
+      WHITE: "text-highWhite",
+      BLACK: "text-carbonBlack",
+      CLEAR: "text-highWhite",
+      CHEQUERED: "text-black",
+      SC: "text-f1Yellow/90",
+      VSC: "text-f1Yellow/75",
     };
 
     return borderMap[flag.toUpperCase()] || "border-carbonBlack";
@@ -81,27 +81,25 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
       <CardContent className="pt-0">
         {lastMessage && (
           <div
-            className={`mb-3 p-2 bg-warmBlack2 rounded text-f1Blue border-l-2 ${getBorderColor(
-              lastMessage.flag
-            )}`}
+            className={`mb-3 p-2 bg-warmBlack2 rounded text-f1Blue`}
             style={mediumGeist.style}
           >
-            <div className="flex items-start justify-between gap-2 mb-1">
-              <div className="flex items-center gap-2">
-              <span 
-                  className={`text-red-500 transition-all duration-500 ease-in-out ${
-                    isAnimating 
-                      ? 'scale-150 animate-pulse' 
-                      : 'scale-100'
-                  }`}
-                >
-                  •
-                </span>
+            <div className="flex items-center justify-between gap-2 mb-1">
+              <div className="flex gap-2">
                 <span className="text-xs font-medium text-white">
                   {lastMessage.category} {lastMessage.scope}{" "}
                   {lastMessage.sector}
                 </span>
               </div>
+              <span
+                className={`${getAlertColor(
+                  lastMessage.flag
+                )} transition-all duration-500 ease-in-out ${
+                  isAnimating ? "scale-150 animate-pulse" : "opacity-0"
+                }`}
+              >
+                •
+              </span>
             </div>
             <p className="text-xs text-gray-200 leading-tight">
               {lastMessage.message}

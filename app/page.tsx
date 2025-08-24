@@ -147,17 +147,6 @@ export default function F1Dashboard() {
           {/* Posiciones Actuales */}
           <Card className="lg:col-span-7 bg-warmBlack1 border-none max-h-screen">
             <CardHeader className="pb-4">
-              <CardTitle
-                className="flex items-center gap-2 text-white text-lg font-light "
-                style={mediumGeist.style}
-              >
-                <div className="relative group flex items-center text-nowrap">
-                  <Info className="h-4 w-4 text-offWhite cursor-pointer" />
-                  <span className="absolute left-6 top-1/2 -translate-y-1/2 bg-transparent text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                    Doble click para fijar un piloto.
-                  </span>
-                </div>
-              </CardTitle>
             </CardHeader>
             <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full">
               <ScrollArea
@@ -177,7 +166,7 @@ export default function F1Dashboard() {
                     return (
                       <div
                         key={pos.driver_number}
-                        className={`flex items-center gap-3 rounded-md transition-opacity border-2 border-darkBlue/50 ${
+                        className={`flex items-center gap-3 rounded-md transition-opacity ${
                           pinnedDriver === pos.driver_number
                             ? `border-offWhite sticky top-0 z-10`
                             : ""
@@ -249,18 +238,7 @@ export default function F1Dashboard() {
           {/* Mapa en tiempo real y race control */}
           <Card className="lg:col-span-3 bg-warmBlack1 border-none border-2 flex flex-col">
             <CardHeader className="pb-3 flex flex-col gap-6">
-              <CardTitle
-                className="flex items-center gap-2 text-white text-lg"
-                style={mediumGeist.style}
-              >
-                <div className="relative group flex items-center text-nowrap">
-                  <Info className="h-4 w-4 text-offWhite cursor-pointer" />
-                  <span className="absolute left-6 top-1/2 -translate-y-1/2 bg-transparent text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                    Doble click para pantalla completa.
-                  </span>
-                </div>
-              </CardTitle>
-              <div className="flex flex-row gap-2 items-center justify-between">
+              <div className="flex flex-row gap-2 pt-4 items-center justify-between">
                 <CardTitle
                   className="text-lg font-thin text-white"
                   style={mediumGeist.style}
