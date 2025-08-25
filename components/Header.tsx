@@ -3,13 +3,13 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Clock, CloudRain, Sun, Cloud } from "lucide-react";
-import { Geist } from "next/font/google";
-import { Anta } from "next/font/google";
+import { Geist, Orbitron } from "next/font/google";
 import F1Calendar from "@/components/Calendar";
 import type { TelemetryData } from "@/telemetry-manager";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const regularAnta = Anta({ subsets: ["latin"], weight: "400" });
+const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
+
 
 interface HeaderProps {
   telemetryData: TelemetryData | null;
@@ -34,7 +34,7 @@ export default function Header({ telemetryData }: HeaderProps) {
             <div>
               <CardTitle
                 className="text-xl sm:text-2xl"
-                style={regularAnta.style}
+                style={orbitron.style}
               >
                 {session?.session_type} - {session?.location}:{" "}
                 {session?.session_status}

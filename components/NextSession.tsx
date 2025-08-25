@@ -8,7 +8,7 @@ import {
   getRelativeDate,
   getTimeOnly,
 } from "@/utils/calendar";
-import { Anta, Geist } from "next/font/google";
+import { Orbitron, Geist } from "next/font/google";
 
 interface NextSessionProps {
   session: F1Event;

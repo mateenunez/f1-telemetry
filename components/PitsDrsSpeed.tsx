@@ -1,10 +1,10 @@
 "use client";
 
-import { Geist, Anta } from "next/font/google";
+import { Geist, Orbitron } from "next/font/google";
 import type { ProcessedTiming, ProcessedCarData } from "@/processors";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const regularAnta = Anta({ subsets: ["latin"], weight: "400" });
+const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 interface PitsDrsSpeedProps {
   timing: ProcessedTiming | undefined;
@@ -24,7 +24,7 @@ export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
       {/* En PIT */}
       <p
         className="text-xs text-white self-center m-0 p-0"
-        style={regularAnta.style}
+        style={orbitron.style}
       >
         {timing?.in_pit ? (
           <span
@@ -48,7 +48,7 @@ export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
         {carData?.drs ? (
           <p className="text-green-400">DRS ON</p>
         ) : (
-          <p className="opacity-80">DRS OFF</p>
+          <p className="text-gray-400">DRS OFF</p>
         )}
       </span>
       

@@ -10,9 +10,7 @@ import type {
 } from "../processors";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Info } from "lucide-react";
-import { Geist } from "next/font/google";
-import { Anta } from "next/font/google";
+import { Geist, Orbitron, Saira } from "next/font/google";
 import Map from "@/components/Map";
 import { ProcessedTimingStats } from "@/processors/timing-stats-processor";
 import RaceControl from "@/components/RaceControl";
@@ -25,7 +23,8 @@ import DriverGaps from "@/components/DriverGaps";
 import Tyres from "@/components/Tyres";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const regularAnta = Anta({ subsets: ["latin"], weight: "400" });
+const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
+const saira = Saira({ subsets: ["latin"], weight: "400" });
 
 export default function F1Dashboard() {
   const [telemetryData, setTelemetryData] = useState<TelemetryData | null>(
@@ -97,7 +96,6 @@ export default function F1Dashboard() {
     );
   };
 
-
   const handleMapFullscreen = () => {
     setMapFullscreen(!mapFullscreen);
   };
@@ -137,18 +135,17 @@ export default function F1Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 p-2 sm:p-4">
+    <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 px-2">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
         {/* Header */}
         <Header telemetryData={telemetryData} />
 
         {/* Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-10 gap-2 m-2">
+        <div className="grid grid-cols-1 lg:grid-cols-10 ">
           {/* Posiciones Actuales */}
-          <Card className="lg:col-span-7 bg-warmBlack1 border-none max-h-screen">
-            <CardHeader className="pb-4">
-            </CardHeader>
-            <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full">
+          <Card className="lg:col-span-6 bg-warmBlack1 border-none max-h-screen">
+            <CardHeader className="pb-4"></CardHeader>
+            <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
               <ScrollArea
                 className="overflow-x-auto min-w-max h-full "
                 type="scroll"
@@ -191,41 +188,27 @@ export default function F1Dashboard() {
                         }
                       >
                         {/* Posición y datos del Piloto */}
-                        <DriverPositionInfo 
-                          position={pos} 
-                          driver={driver} 
-                        />
+                        <DriverPositionInfo position={pos} driver={driver} />
 
                         {/* Estadísticas */}
                         <div className="flex flex-row items-center justify-around w-full py-1.5 gap-4 md:gap-2 lg:gap-2">
                           {/* PITS, DRS y Velocidad*/}
-                          <PitsDrsSpeed 
-                            timing={timing} 
-                            carData={carData} 
-                          />
+                          <PitsDrsSpeed timing={timing} carData={carData} />
 
                           {/* Minisectores y Tiempos de sector */}
-                          <Minisectors 
-                            timing={timing} 
-                            timingStats={timingStats} 
+                          <Minisectors
+                            timing={timing}
+                            timingStats={timingStats}
                           />
 
                           {/* Tiempos de vuelta */}
-                          <LapTimes 
-                            timing={timing} 
-                            timingStats={timingStats} 
-                          />
+                          <LapTimes timing={timing} timingStats={timingStats} />
 
                           {/* Gaps */}
-                          <DriverGaps 
-                            timing={timing} 
-                          />
+                          <DriverGaps timing={timing} />
 
                           {/* Neumático */}
-                          <Tyres 
-                            currentStint={currentStint} 
-                          />
-
+                          <Tyres currentStint={currentStint} />
                         </div>
                       </div>
                     );
@@ -236,16 +219,24 @@ export default function F1Dashboard() {
           </Card>
 
           {/* Mapa en tiempo real y race control */}
-          <Card className="lg:col-span-3 bg-warmBlack1 border-none border-2 flex flex-col">
+          <Card className="lg:col-span-4 bg-warmBlack1 border-none border-2 flex flex-col">
             <CardHeader className="pb-3 flex flex-col gap-6">
               <div className="flex flex-row gap-2 pt-4 items-center justify-between">
                 <CardTitle
                   className="text-lg font-thin text-white"
                   style={mediumGeist.style}
-                ></CardTitle>
+                >
+                  {" "}
+                  {/* Race Control */}
+                  <div className="mt-3 flex justify-center p-0">
+                    <RaceControl
+                      raceControl={telemetryData?.raceControl || []}
+                    />
+                  </div>
+                </CardTitle>
                 <CardTitle
                   className=" text-xlg font-bold text-white tracking-wider"
-                  style={regularAnta.style}
+                  style={saira.style}
                 >
                   {session?.current_lap}/{session?.total_laps}
                 </CardTitle>
@@ -264,11 +255,6 @@ export default function F1Dashboard() {
                     />
                   </div>
                 )}
-              </div>
-
-              {/* Race Control */}
-              <div className="mt-3">
-                <RaceControl raceControl={telemetryData?.raceControl || []} />
               </div>
             </CardContent>
           </Card>

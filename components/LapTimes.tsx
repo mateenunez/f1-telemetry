@@ -1,11 +1,12 @@
 "use client";
 
-import { Geist, Anta } from "next/font/google";
+import { Geist, Aldrich, Oxanium } from "next/font/google";
 import type { ProcessedTiming } from "@/processors";
 import { ProcessedTimingStats } from "@/processors/timing-stats-processor";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const regularAnta = Anta({ subsets: ["latin"], weight: "400" });
+const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
+const oxanium = Oxanium({subsets: ["latin"], weight:"400"})
 
 interface LapTimesProps {
   timing: ProcessedTiming | undefined;
@@ -17,13 +18,13 @@ export default function LapTimes({ timing, timingStats }: LapTimesProps) {
     <div className="flex items-start flex-col text-white">
       {/* Último tiempo de vuelta */}
       <div
-        className="flex items-center flex-row gap-2 text-xs text-white"
-        style={regularAnta.style}
+        className="flex items-center flex-row gap-2 text-md text-white"
+        style={aldrich.style}
       >
-        <span className="text-xxs text-gray-300">
+        <span className="text-xs text-gray-400">
           LAP {timing?.number_of_laps}
         </span>
-        <p style={mediumGeist.style}>
+        <p style={oxanium.style}>
           {timing?.last_lap_time || "---:---"}
         </p>
       </div>
@@ -31,10 +32,10 @@ export default function LapTimes({ timing, timingStats }: LapTimesProps) {
       {/* Mejor tiempo de vuelta */}
       <div className="flex flex-row gap-2">
         <div
-          className="flex items-center flex-row gap-2 text-xs text-white"
-          style={regularAnta.style}
+          className="flex items-center flex-row gap-2 text-md text-white"
+          style={aldrich.style}
         >
-          <span className="text-xxs text-gray-300">
+          <span className="text-xs text-gray-400">
             LAP {timingStats?.personal_best_lap_time.Lap}
           </span>
           <p
@@ -43,7 +44,7 @@ export default function LapTimes({ timing, timingStats }: LapTimesProps) {
                 ? "text-purple-500"
                 : "text-green-400"
             }
-            style={mediumGeist.style}
+            style={oxanium.style}
           >
             {timingStats?.personal_best_lap_time.Value || "---:---"}
           </p>

@@ -6,10 +6,10 @@ import {
   formatTimeUntil,
   getEventType,
 } from "@/utils/calendar";
-import { Geist, Anta } from "next/font/google";
+import { Geist, Orbitron } from "next/font/google";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const regularAnta = Anta({ subsets: ["latin"], weight: "400" });
+const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 export default function F1Calendar() {
   const [calendar, setCalendar] = useState<F1CalendarResponse | null>(null);
@@ -41,7 +41,7 @@ export default function F1Calendar() {
         </p>
         <p>{calendar?.nextEvent.location}</p>
         </div>
-        <a style={regularAnta.style} className="flex flex-row gap-2 hover:cursor-pointer text-md font-regular" href="/schedule">
+        <a style={orbitron.style} className="flex flex-row gap-2 hover:cursor-pointer text-md font-regular" href="/schedule">
           {formatTimeUntil(calendar.timeUntilNext).toUpperCase()}{" "}
         </a>
       </div>

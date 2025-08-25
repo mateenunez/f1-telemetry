@@ -1,11 +1,11 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Geist, Anta } from "next/font/google";
+import { Geist, Aldrich } from "next/font/google";
 import type { ProcessedPosition, ProcessedDriver } from "@/processors";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const regularAnta = Anta({ subsets: ["latin"], weight: "400" });
+const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
 
 interface DriverPositionInfoProps {
   position: ProcessedPosition;
@@ -21,7 +21,7 @@ export default function DriverPositionInfo({ position, driver }: DriverPositionI
           className="w-8 h-8 rounded-full flex items-center justify-center text-md font-bold pr-0 min-w-[2rem]"
           style={{
             backgroundColor: `transparent`,
-            fontFamily: regularAnta.style.fontFamily,
+            fontFamily: aldrich.style.fontFamily,
           }}
         >
           {position.position}
@@ -46,12 +46,12 @@ export default function DriverPositionInfo({ position, driver }: DriverPositionI
       {/* Info del piloto */}
       <div
         className="flex justify-evenly flex-row "
-        style={regularAnta.style}
+        style={aldrich.style}
       >
         <div className="flex flex-col self-start">
           <div className="flex items-center gap-1">
             <span
-              className="text-xs text-white self-center opacity-80"
+              className="text-xs text-gray-400 self-center"
               style={mediumGeist.style}
             >
               #{position.driver_number}

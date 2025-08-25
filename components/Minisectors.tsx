@@ -1,11 +1,12 @@
 "use client";
 
-import { Geist, Anta } from "next/font/google";
+import { Geist, Aldrich, Oxanium, Michroma } from "next/font/google";
 import type { ProcessedTiming } from "@/processors";
 import { ProcessedTimingStats } from "@/processors/timing-stats-processor";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const regularAnta = Anta({ subsets: ["latin"], weight: "400" });
+const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
+const oxanium = Oxanium({subsets: ["latin"], weight:"500"})
 
 interface MinisectorsProps {
   timing: ProcessedTiming | undefined;
@@ -22,7 +23,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
 
   const getSectorTimeColor = (sector: any) => {
     if (sector?.OverallFastest) return "text-f1Purple";
-    if (sector?.PersonalFastest) return "text-f1Green";
+    if (sector?.PersonalFastest) return "text-green-400";
     return "text-f1Yellow";
   };
 
@@ -36,7 +37,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
       {/* Minisectores */}
       <div
         className="text-xs text-white"
-        style={regularAnta.style}
+        style={aldrich.style}
       >
         {(["sector1", "sector2", "sector3"] as const).map(
           (sectorKey, sectorIdx) => {
@@ -45,7 +46,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
             return (
               <div
                 key={sectorKey}
-                className="flex gap-1 items-center text-xs text-gray-300"
+                className="flex gap-1 items-center text-xs text-gray-400"
               >
                 S{sectorIdx + 1}
                 {minisectors.map(
@@ -58,7 +59,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
                           backgroundColor: bg,
                           width: 10,
                           height: 6,
-                          borderRadius: 2,
+                          borderRadius: 1.4,
                           padding: 2,
                           display: "inline-block",
                           marginLeft: 2,
@@ -77,7 +78,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
       {/* Tiempos de sector */}
       <div
         className="flex items-center flex-col text-xs text-white"
-        style={mediumGeist.style}
+        style={oxanium.style}
       >
         {(["sector1", "sector2", "sector3"] as const).map(
           (sectorKey, idx) => {
@@ -90,7 +91,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
               "--:--";
             return (
               <div
-                className="flex flex-row gap-1"
+                className="flex flex-row gap-0"
                 key={sectorKey}
               >
                 <span className={color}>
@@ -105,7 +106,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
       {/* Mejores tiempos de sector */}
       <div
         className="flex items-center flex-col text-xs text-white"
-        style={mediumGeist.style}
+        style={oxanium.style}
       >
         {timingStats?.best_sectors.map(
           (sectorKey, idx) => {

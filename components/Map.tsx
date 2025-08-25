@@ -282,6 +282,9 @@ const CarDot = ({
         transform,
         ...(color && { fill: `#${color}` }),
         opacity: isRetired ? 0.4 : 1,
+        stroke: "white",
+        strokeWidth: "2",
+        filter: "drop-shadow(0 0 4px rgba(0,0,0,0.8))",
       }}
     >
       <circle id={`map.driver.circle`} r={120} />
