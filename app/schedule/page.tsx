@@ -60,14 +60,14 @@ export default function SchedulePage() {
       >
         <div className="max-w-6xl mx-auto my-12 px-4 md:px-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full gap-4">
-            <span className="text-3xl font-regular mb-4 md:mb-8 flex flex-row items-center gap-2">
+            <h1 className="text-3xl font-regular mb-4 md:mb-8 flex flex-row items-center gap-2">
               <img
                 src={`https://flagsapi.com/AR/flat/32.png`}
                 alt={`Flag of Argentina`}
                 className="w-10"
               />{" "}
               Schedule{" "}
-            </span>
+            </h1>
 
             <a
               className="text-xl font-regular mb-8 hover:cursor-pointer"
@@ -79,7 +79,7 @@ export default function SchedulePage() {
           </div>
           <div className="flex flex-row my-4">
             <div className="flex flex-col mx-0 md:mx-8 w-full">
-              <h1 className="text-xl py-5"> Next session in</h1>
+              <h2 className="text-xl py-5"> Next session in</h2>
 
               {/* Proxima sesion */}
               <NextSession

@@ -10,7 +10,7 @@ import type {
 } from "../processors";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Geist, Orbitron, Saira } from "next/font/google";
+import { Geist, Saira } from "next/font/google";
 import Map from "@/components/Map";
 import { ProcessedTimingStats } from "@/processors/timing-stats-processor";
 import RaceControl from "@/components/RaceControl";
@@ -23,7 +23,6 @@ import DriverGaps from "@/components/DriverGaps";
 import Tyres from "@/components/Tyres";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 const saira = Saira({ subsets: ["latin"], weight: "400" });
 
 export default function F1Dashboard() {
@@ -116,7 +115,6 @@ export default function F1Dashboard() {
   }
 
   const session = telemetryData?.session;
-  const weather = telemetryData?.weather;
 
   if (mapFullscreen && telemetryData && telemetryData.session?.circuit_key) {
     return (
