@@ -259,15 +259,6 @@ export default function Map({
 
       {sectors[sector1End] && (
         <g key="f1-sector-1">
-          <rect
-            x={sectors[sector1End].end.x - 40}
-            y={sectors[sector1End].end.y - 3}
-            width={80}
-            height={6}
-            fill="#ef4444"
-            stroke="#dc2626"
-            strokeWidth={3}
-          />
           <text
             x={sectors[sector1End].end.x}
             y={sectors[sector1End].end.y}
@@ -284,15 +275,6 @@ export default function Map({
 
       {sectors[sector2End] && (
         <g key="f1-sector-2">
-          <rect
-            x={sectors[sector2End].end.x}
-            y={sectors[sector2End].end.y}
-            width={80}
-            height={6}
-            fill="#f59e0b"
-            stroke="#d97706"
-            strokeWidth={3}
-          />
           <text
             x={sectors[sector2End].end.x}
             y={sectors[sector2End].end.y}
@@ -310,15 +292,6 @@ export default function Map({
       {/* Sector 3 End Marker */}
       {sectors[sector3End] && (
         <g key="f1-sector-3">
-          <rect
-            x={sectors[sector3End].end.x - 40}
-            y={sectors[sector3End].end.y - 3}
-            width={80}
-            height={6}
-            fill="#8b5cf6"
-            stroke="#7c3aed"
-            strokeWidth={3}
-          />
           <text
             x={sectors[sector3End].end.x}
             y={sectors[sector3End].end.y}
