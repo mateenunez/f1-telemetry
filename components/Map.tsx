@@ -2,34 +2,31 @@ import { useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 
 import {
-  PositionData,
   ProcessedDriver,
   ProcessedPositionData,
   ProcessedTiming,
 } from "@/processors";
-import {
-  TrackPosition,
-  CandidateLap,
-  MapSector,
-} from "@/processors/map-processor";
+import { TrackPosition, MapSector } from "@/processors/map-processor";
 import {
   fetchMap,
   createSectors,
   rotate,
   rad,
 } from "@/processors/map-processor";
-import { iMap } from "@/processors/map-processor";
+import { Oxanium } from "next/font/google";
 
 // This is basically fearlessly copied from
 // https://github.com/tdjsnelling/monaco
 
 const SPACE = 1000;
 const ROTATION_FIX = 90;
+const oxanium = Oxanium({ subsets: ["latin"], weight: "400" });
 
 type Corner = {
   number: number;
   pos: TrackPosition;
   labelPos: TrackPosition;
+  letter?: string;
 };
 
 type MapProps = {
@@ -55,6 +52,7 @@ export default function Map({
 
   const [points, setPoints] = useState<null | { x: number; y: number }[]>(null);
   const [sectors, setSectors] = useState<MapSector[]>([]);
+  const [corners, setCorners] = useState<Corner[]>([]);
   const [rotation, setRotation] = useState<number>(0);
   const [finishLine, setFinishLine] = useState<null | {
     x: number;
@@ -80,6 +78,25 @@ export default function Map({
         end: rotate(s.end.x, s.end.y, fixedRotation, centerX, centerY),
         points: s.points.map((p) =>
           rotate(p.x, p.y, fixedRotation, centerX, centerY)
+        ),
+      }));
+
+      const cornerPositions: Corner[] = mapJson.corners.map((corner) => ({
+        number: corner.number,
+        letter: corner.letter,
+        pos: rotate(
+          corner.trackPosition.x,
+          corner.trackPosition.y,
+          fixedRotation,
+          centerX,
+          centerY
+        ),
+        labelPos: rotate(
+          corner.trackPosition.x + 540 * Math.cos(rad(corner.angle)),
+          corner.trackPosition.y + 540 * Math.sin(rad(corner.angle)),
+          fixedRotation,
+          centerX,
+          centerY
         ),
       }));
 
@@ -112,6 +129,8 @@ export default function Map({
       setSectors(sectors);
       setPoints(rotatedPoints);
       setRotation(fixedRotation);
+      setCorners(cornerPositions);
+
       setFinishLine({
         x: rotatedFinishLine.x,
         y: rotatedFinishLine.y,
@@ -119,6 +138,11 @@ export default function Map({
       });
     })();
   }, [circuitKey]);
+
+  const totalSectors = sectors.length;
+  const sector1End = Math.floor(totalSectors / 3); // Sector 7 (0-7 = 8 sectores)
+  const sector2End = Math.floor((totalSectors * 2) / 3); // Sector 12 (8-12 = 5 sectores)
+  const sector3End = totalSectors - 1;
 
   const renderedSectors = useMemo(() => {
     return sectors.map((sector) => {
@@ -187,6 +211,137 @@ export default function Map({
         />
       )}
 
+      {sectors.map((sector) => {
+        const startDx = sector.points[1]?.x - sector.points[0]?.x || 0;
+        const startDy = sector.points[1]?.y - sector.points[0]?.y || 0;
+        const startAngle = Math.atan2(startDy, startDx) * (180 / Math.PI);
+
+        const endDx =
+          sector.points[sector.points.length - 1]?.x -
+            sector.points[sector.points.length - 2]?.x || 0;
+        const endDy =
+          sector.points[sector.points.length - 1]?.y -
+            sector.points[sector.points.length - 2]?.y || 0;
+        const endAngle = Math.atan2(endDy, endDx) * (180 / Math.PI);
+
+        return (
+          <g key={`sector-markers-${sector.number}`}>
+            {/* Start marker */}
+            <rect
+              x={sector.start.x - 30}
+              y={sector.start.y - 2}
+              width={60}
+              height={10}
+              fill="#3b82f6"
+              stroke="#1e40af"
+              strokeWidth={20}
+              transform={`rotate(${startAngle + 90}, ${sector.start.x}, ${
+                sector.start.y
+              })`}
+            />
+
+            {/* End marker */}
+            <rect
+              x={sector.end.x - 30}
+              y={sector.end.y - 2}
+              width={60}
+              height={4}
+              fill="#10b981"
+              stroke="#059669"
+              strokeWidth={2}
+              transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
+                sector.end.y
+              })`}
+            />
+          </g>
+        );
+      })}
+
+      {sectors[sector1End] && (
+        <g key="f1-sector-1">
+          <rect
+            x={sectors[sector1End].end.x - 40}
+            y={sectors[sector1End].end.y - 3}
+            width={80}
+            height={6}
+            fill="#ef4444"
+            stroke="#dc2626"
+            strokeWidth={3}
+          />
+          <text
+            x={sectors[sector1End].end.x}
+            y={sectors[sector1End].end.y}
+            className="fill-red-500"
+            fontSize={200}
+            fontWeight="bold"
+            textAnchor="middle"
+            opacity={0.7}
+          >
+            SECTOR 1
+          </text>
+        </g>
+      )}
+
+      {sectors[sector2End] && (
+        <g key="f1-sector-2">
+          <rect
+            x={sectors[sector2End].end.x}
+            y={sectors[sector2End].end.y}
+            width={80}
+            height={6}
+            fill="#f59e0b"
+            stroke="#d97706"
+            strokeWidth={3}
+          />
+          <text
+            x={sectors[sector2End].end.x}
+            y={sectors[sector2End].end.y}
+            className="fill-amber-500"
+            fontSize={200}
+            fontWeight="bold"
+            textAnchor="middle"
+            opacity={0.7}
+          >
+            SECTOR 2
+          </text>
+        </g>
+      )}
+
+      {/* Sector 3 End Marker */}
+      {sectors[sector3End] && (
+        <g key="f1-sector-3">
+          <rect
+            x={sectors[sector3End].end.x - 40}
+            y={sectors[sector3End].end.y - 3}
+            width={80}
+            height={6}
+            fill="#8b5cf6"
+            stroke="#7c3aed"
+            strokeWidth={3}
+          />
+          <text
+            x={sectors[sector3End].end.x}
+            y={sectors[sector3End].end.y}
+            className="fill-violet-500"
+            fontSize={200}
+            fontWeight="bold"
+            textAnchor="middle"
+            opacity={0.7}
+          >
+            SECTOR 3
+          </text>
+        </g>
+      )}
+
+      {corners.map((corner) => (
+        <CornerNumber
+          key={`corner.${corner.number}.${corner.letter && corner.letter}`}
+          number={corner.number}
+          x={corner.labelPos.x}
+          y={corner.labelPos.y}
+        />
+      ))}
+
       {centerX && centerY && positions && drivers && (
         <>
           {Object.values(drivers)
@@ -236,9 +391,10 @@ const CornerNumber: React.FC<CornerNumberProps> = ({ number, x, y }) => {
     <text
       x={x}
       y={y}
-      className="fill-zinc-700"
-      fontSize={300}
+      className="fill-gray-500"
+      fontSize={200}
       fontWeight="semibold"
+      style={oxanium.style}
     >
       {number}
     </text>

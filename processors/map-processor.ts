@@ -35,6 +35,7 @@ export interface Corner {
 	angle: number;
 	length: number;
 	number: number;
+	letter?:string;
 	trackPosition: TrackPosition;
 };
 
