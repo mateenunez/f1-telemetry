@@ -117,7 +117,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
             return (
               <div
                 className="flex flex-row gap-1"
-                key={sectorKey.Value}
+                key={idx}
               >
                 <span className={color}>
                   {sector && displayValue}

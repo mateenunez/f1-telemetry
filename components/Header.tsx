@@ -36,7 +36,7 @@ export default function Header({ telemetryData }: HeaderProps) {
                 className="text-xl sm:text-2xl"
                 style={orbitron.style}
               >
-                {session?.session_type} - {session?.location}:{" "}
+                {session?.session_name} - {session?.location}:{" "}
                 {session?.session_status}
               </CardTitle>
               <div className="text-gray-500 text-sm flex flex-col md:flex-row md:gap-1 lg:gap-1 lg:flex-row" style={mediumGeist.style}>
