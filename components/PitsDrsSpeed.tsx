@@ -59,7 +59,7 @@ export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
       >
         {carData?.speed !== undefined
           ? `${carData.speed} km/h`
-          : "-- km/h"}
+          : ""}
       </p>
     </div>
   );

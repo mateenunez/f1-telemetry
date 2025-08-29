@@ -65,7 +65,7 @@ export default function Header({ telemetryData }: HeaderProps) {
                     <div className="text-sm">
                       <div>{Math.round(weather.air_temperature)}°C</div>
                       <div className="text-xs">
-                        Pista: {Math.round(weather.track_temperature)}°C
+                        Track: {Math.round(weather.track_temperature)}°C
                       </div>
                     </div>
                   </div>

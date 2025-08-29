@@ -180,12 +180,12 @@ export function getRelativeDate(dateString: string): string {
             return 'Invalid date';
         }
 
-        const diffTime = date.getTime() - now.getTime();
+        const diffTime = date.getDay() - now.getTime();
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        if (diffDays === 0) {
+        if (date.getDay().toString() == now.getDay().toString()) {
             return '(Today)';
-        } else if (diffDays === 1) {
+        } else if (diffDays > 1) {
             return '(Tomorrow)';
         }
         else {

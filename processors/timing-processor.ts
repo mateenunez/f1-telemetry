@@ -26,6 +26,7 @@ export interface ProcessedTiming {
   number_of_pit_stops: number
   retired: boolean
   in_pit: boolean
+  stopped: boolean
   date: string
   knockedOut: boolean
 }
@@ -62,6 +63,7 @@ export class TimingProcessor {
         number_of_pit_stops: 0,
         retired: false,
         in_pit: false,
+        stopped: false,
         date: new Date().toISOString(),
         knockedOut: false
       }
@@ -103,6 +105,7 @@ export class TimingProcessor {
         number_of_pit_stops: data?.NumberOfPitStops ?? existing.number_of_pit_stops,
         retired: data?.Retired ?? existing.retired,
         in_pit: data?.InPit ?? existing.in_pit,
+        stopped: data.Stopped ?? existing.stopped,
         date: new Date().toISOString(),
         knockedOut: data?.KnockedOut ?? existing.knockedOut
       }

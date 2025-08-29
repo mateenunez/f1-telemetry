@@ -1,19 +1,20 @@
 "use client";
 
 import { Geist, Aldrich, Oxanium } from "next/font/google";
-import type { ProcessedTiming } from "@/processors";
+import type { ProcessedSession, ProcessedTiming } from "@/processors";
 
 const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
 const oxanium = Oxanium({subsets: ["latin"], weight:"400"})
 
 interface DriverGapsProps {
   timing: ProcessedTiming | undefined;
+  session: ProcessedSession | null | undefined;
 }
 
-export default function DriverGaps({ timing }: DriverGapsProps) {
+export default function DriverGaps({ timing, session }: DriverGapsProps) {
   return (
     <div className="flex flex-col items-start min-w-[8rem]">
-      {timing?.gap_to_leader ? (
+      {timing?.gap_to_leader && session?.session_type!="Practice" ? (
         <div
           className="flex items-center flex-row gap-2 text-md text-white"
           style={aldrich.style}
@@ -22,7 +23,7 @@ export default function DriverGaps({ timing }: DriverGapsProps) {
             GAP LEADER
           </span>
           <p style={oxanium.style}>
-            {timing?.gap_to_leader}
+            {timing?.gap_to_leader} 
           </p>
         </div>
       ) : (
@@ -43,7 +44,7 @@ export default function DriverGaps({ timing }: DriverGapsProps) {
       ) : (
         <></>
       )}
-      {timing?.time_diff_to_ahead ? (
+      {timing?.time_diff_to_ahead && session?.session_type=="Practice" ? (
         <div
           className="flex items-center flex-row gap-2 text-xs text-white"
           style={aldrich.style}
@@ -58,7 +59,7 @@ export default function DriverGaps({ timing }: DriverGapsProps) {
       ) : (
         <></>
       )}
-      {timing?.time_diff_to_fastest ? (
+      {timing?.time_diff_to_fastest && session?.session_type=="Practice" ? (
         <div
           className="flex items-center flex-row gap-2 text-xs text-white"
           style={aldrich.style}

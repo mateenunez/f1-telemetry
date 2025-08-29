@@ -139,7 +139,7 @@ export default function F1Dashboard() {
         <Header telemetryData={telemetryData} />
 
         {/* Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-10 ">
+        <div className="grid grid-cols-1 lg:grid-cols-10 pb-4">
           {/* Posiciones Actuales */}
           <Card className="lg:col-span-6 bg-warmBlack1 border-none max-h-screen">
             <CardHeader className="pb-4"></CardHeader>
@@ -174,7 +174,7 @@ export default function F1Dashboard() {
                           )
                         }
                         style={
-                          timing?.knockedOut
+                          timing?.knockedOut || timing?.retired || timing?.stopped
                             ? {
                                 opacity: 0.4,
                                 background: `linear-gradient(-90deg, #111111 94%, #${driver?.team_colour} 100%)`,
@@ -203,7 +203,7 @@ export default function F1Dashboard() {
                           <LapTimes timing={timing} timingStats={timingStats} />
 
                           {/* Gaps */}
-                          <DriverGaps timing={timing} />
+                          <DriverGaps timing={timing} session={session} />
 
                           {/* Neumático */}
                           <Tyres currentStint={currentStint} />
@@ -232,12 +232,14 @@ export default function F1Dashboard() {
                     />
                   </div>
                 </CardTitle>
-                <CardTitle
-                  className=" text-xlg font-bold text-white tracking-wider"
-                  style={saira.style}
-                >
-                  {session?.current_lap}/{session?.total_laps}
-                </CardTitle>
+                {session?.session_type != "Practice" && (
+                  <CardTitle
+                    className=" text-xlg font-bold text-white tracking-wider"
+                    style={saira.style}
+                  >
+                    {session?.current_lap}/{session?.total_laps}
+                  </CardTitle>
+                )}
               </div>
             </CardHeader>
             <CardContent className="flex flex-col justify-center h-full">

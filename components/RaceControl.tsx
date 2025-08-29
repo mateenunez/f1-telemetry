@@ -13,15 +13,33 @@ interface RaceControlProps {
 }
 
 export default function RaceControl({ raceControl }: RaceControlProps) {
-  const [lastMessage, setLastMessage] = useState<ProcessedRaceControl | null>(
-    null
-  );
+  const [lastMessage, setLastMessage] = useState<ProcessedRaceControl | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const previousMessageCount = useRef<number>(0);
-  const { playNotificationSound, timeUntilNextSound } = useRaceControlAudio({
-    cooldownMs: 30 * 1000, // 30 segundos de cooldown
-    audioSrc: "/race-control-notification.mp3", // Audio en /public
-  });
+
+  const { playNotificationSound, unlockAudio, isUnlocked, timeUntilNextSound } =
+    useRaceControlAudio({
+      cooldownMs: 10 * 1000, // 10 segundos de cooldown
+      audioSrc: "/race-control-notification.mp3", // Audio en /public
+    });
+
+  useEffect(() => {
+    if (isUnlocked) return;
+
+    const handler = async () => {
+      await unlockAudio();
+    };
+
+    document.addEventListener("pointerdown", handler, { once: true });
+    document.addEventListener("keydown", handler, { once: true });
+    document.addEventListener("touchstart", handler, { once: true });
+
+    return () => {
+      document.removeEventListener("pointerdown", handler as any);
+      document.removeEventListener("keydown", handler as any);
+      document.removeEventListener("touchstart", handler as any);
+    };
+  }, [unlockAudio, isUnlocked]);
 
   useEffect(() => {
     if (raceControl && raceControl.length > 0) {
@@ -34,7 +52,6 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
           playNotificationSound();
           setIsAnimating(true);
 
-          // Detener la animación después de 5 segundos
           setTimeout(() => {
             setIsAnimating(false);
           }, 5000);
@@ -73,6 +90,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
+      timeZone: "America/Argentina/Buenos_Aires",
     });
   };
 
@@ -87,18 +105,8 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
             <div className="flex items-center justify-between gap-2 mb-1">
               <div className="flex gap-2 flex-row items-center">
                 <span className="text-xs font-medium text-white">
-                  {lastMessage.category} {lastMessage.scope}{" "}
-                  {lastMessage.sector}
+                  {lastMessage.category} {lastMessage.scope} {lastMessage.sector}
                 </span>
-                {/* <span
-                  className={`${getAlertColor(
-                    "YELLOW"
-                  )} transition-all duration-500 ease-in-out ${
-                    isAnimating ? "scale-150 animate-pulse" : "opacity-0"
-                  }`}
-                >
-                  •
-                </span> */}
               </div>
             </div>
             <p className="text-xs text-gray-200 leading-tight">
