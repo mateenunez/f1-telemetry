@@ -31,11 +31,11 @@ export default function Header({ telemetryData }: HeaderProps) {
   useEffect(() => {
     if (!session?.date_start || !session?.date_end) return;
 
-    if (session?.date_end < new Date().toISOString()) return;
-
     const startTime = new Date(session.date_start).getTime();
     const endTime = new Date(session.date_end).getTime();
     const duration = endTime - startTime;
+
+    if (session?.date_end < new Date().toISOString()) {setSessionTime(duration); return};
 
     const interval = setInterval(() => {
       const now = Date.now();
