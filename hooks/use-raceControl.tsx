@@ -1,9 +1,52 @@
+import { ProcessedRaceControl } from '@/processors/race-control-processor';
 import { useRef, useCallback } from 'react';
+import { MapSector } from '@/processors/map-processor';
 
 interface UseRaceControlAudioOptions {
   cooldownMs?: number; 
   audioSrc?: string;
 }
+
+
+export const findYellowSectors = (messages: ProcessedRaceControl[] | undefined): Set<number> => {
+  const msgs = messages?.filter((msg) => {
+    return msg.flag === "YELLOW" || msg.flag === "DOUBLE YELLOW" || msg.flag === "CLEAR";
+  });
+
+  if (!msgs) {
+    return new Set();
+  }
+
+  const done: Set<number> = new Set();
+  const sectors: Set<number> = new Set();
+  for (let i = 0; i < msgs.length; i++) {
+    const msg = msgs[i];
+    if (msg.scope === "Track" && msg.flag !== "CLEAR") {
+      // Spam with sectors so all sectors are yellow no matter what
+      // number of sectors there really are
+      for (let j = 0; j < 100; j++) {
+        sectors.add(j);
+      }
+      return sectors;
+    }
+    if (msg.scope === "Sector") {
+      if (!msg.sector || done.has(msg.sector)) {
+        continue;
+      }
+      if (msg.flag === "CLEAR") {
+        done.add(msg.sector);
+      } else {
+        sectors.add(msg.sector);
+      }
+    }
+  }
+  return sectors;
+};
+
+export const getSectorColor = (
+	sector: MapSector,
+	yellowSectors: Set<number>,
+) => (yellowSectors.has(sector.number) ? "stroke-yellow-400" : "stroke-white");
 
 export function useRaceControlAudio(options: UseRaceControlAudioOptions = {}) {
   const { cooldownMs = 30 * 1000, audioSrc = '/race-control-notification.mp3' } = options;
@@ -72,6 +115,8 @@ export function useRaceControlAudio(options: UseRaceControlAudioOptions = {}) {
     return false;
   }, [cooldownMs, createAudio]);
 
+
+
   return {
     playNotificationSound,
     unlockAudio,
@@ -79,4 +124,6 @@ export function useRaceControlAudio(options: UseRaceControlAudioOptions = {}) {
     lastPlayTime: lastPlayTime.current,
     timeUntilNextSound: Math.max(0, cooldownMs - (Date.now() - lastPlayTime.current))
   };
+
+  
 }

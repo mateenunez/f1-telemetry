@@ -127,6 +127,7 @@ export default function F1Dashboard() {
           drivers={telemetryData.drivers}
           timing={telemetryData.timing}
           circuitKey={telemetryData.session.circuit_key}
+          raceControl={telemetryData.raceControl}
         />
       </div>
     );
@@ -252,6 +253,7 @@ export default function F1Dashboard() {
                       drivers={telemetryData.drivers}
                       timing={telemetryData.timing}
                       circuitKey={telemetryData.session.circuit_key}
+                      raceControl={telemetryData.raceControl}
                     />
                   </div>
                 )}

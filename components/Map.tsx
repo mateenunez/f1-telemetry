@@ -14,6 +14,8 @@ import {
   rad,
 } from "@/processors/map-processor";
 import { Oxanium } from "next/font/google";
+import { ProcessedRaceControl } from "@/processors/race-control-processor";
+import { findYellowSectors, getSectorColor } from "@/hooks/use-raceControl";
 
 // This is basically fearlessly copied from
 // https://github.com/tdjsnelling/monaco
@@ -34,6 +36,7 @@ type MapProps = {
   drivers: Record<number, ProcessedDriver>;
   timing: ProcessedTiming[];
   circuitKey: number;
+  raceControl: ProcessedRaceControl[];
 };
 
 export default function Map({
@@ -41,6 +44,7 @@ export default function Map({
   drivers,
   timing,
   circuitKey,
+  raceControl,
 }: MapProps) {
   const [[minX, minY, widthX, widthY], setBounds] = useState<(null | number)[]>(
     [null, null, null, null]
@@ -144,13 +148,19 @@ export default function Map({
   const sector2End = Math.floor((totalSectors * 2) / 3); // Sector 12 (8-12 = 5 sectores)
   const sector3End = totalSectors - 1;
 
+  const yellowSectors = useMemo(
+    () => findYellowSectors(raceControl),
+    [raceControl]
+  );
+
   const renderedSectors = useMemo(() => {
     return sectors.map((sector) => {
-      const color = "stroke-white";
+      const color = getSectorColor(sector, yellowSectors);
       return {
         color,
         number: sector.number,
-        strokeWidth: color === "stroke-white" ? 60 : 120,
+        strokeWidth:
+          color === "stroke-white" || color === "stroke-yellow-400" ? 60 : 120,
         d: `M${sector.points[0].x},${sector.points[0].y} ${sector.points
           .map((point) => `L${point.x},${point.y}`)
           .join(" ")}`,
@@ -198,20 +208,20 @@ export default function Map({
 
       {finishLine && (
         <rect
-          x={finishLine.x - 75}
+          x={finishLine.x - 150}
           y={finishLine.y}
-          width={240}
-          height={20}
-          fill="red"
-          stroke="red"
-          strokeWidth={70}
+          width={300}
+          height={50}
+          fill="white"
+          stroke="black"
+          strokeWidth={20}
           transform={`rotate(${finishLine.startAngle + 90}, ${
             finishLine.x + 25
           }, ${finishLine.y})`}
         />
       )}
 
-      {sectors.map((sector) => {
+      {sectors.map((sector, idx) => {
         const startDx = sector.points[1]?.x - sector.points[0]?.x || 0;
         const startDy = sector.points[1]?.y - sector.points[0]?.y || 0;
         const startAngle = Math.atan2(startDy, startDx) * (180 / Math.PI);
@@ -226,85 +236,62 @@ export default function Map({
 
         return (
           <g key={`sector-markers-${sector.number}`}>
-            {/* Start marker */}
-            <rect
-              x={sector.start.x - 30}
-              y={sector.start.y - 2}
-              width={60}
-              height={10}
-              fill="#3b82f6"
-              stroke="#1e40af"
-              strokeWidth={20}
-              transform={`rotate(${startAngle + 90}, ${sector.start.x}, ${
-                sector.start.y
-              })`}
-            />
+            {idx == sector1End && (
+              <g key={"sector-1"}>
+                <rect
+                  x={sector.end.x - 150}
+                  y={sector.end.y}
+                  width={300}
+                  height={40}
+                  fill="red"
+                  stroke="red"
+                  opacity={0.8}
+                  strokeWidth={20}
+                  transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
+                    sector.end.y
+                  })`}
+                />
+              </g>
+            )}
 
-            {/* End marker */}
-            <rect
-              x={sector.end.x - 30}
-              y={sector.end.y - 2}
-              width={60}
-              height={4}
-              fill="#10b981"
-              stroke="#059669"
-              strokeWidth={2}
-              transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
-                sector.end.y
-              })`}
-            />
+            {idx == sector2End && (
+              <g key={"sector-1"}>
+                <rect
+                  x={sector.end.x - 150}
+                  y={sector.end.y}
+                  width={300}
+                  height={40}
+                  fill="orange"
+                  stroke="orange"
+                  opacity={0.8}
+                  strokeWidth={20}
+                  transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
+                    sector.end.y
+                  })`}
+                />
+              </g>
+            )}
+
+            {idx == sector3End && (
+              <g key={"sector-1"}>
+                <rect
+                  x={sector.end.x - 150}
+                  y={sector.end.y}
+                  width={300}
+                  height={40}
+                  fill="purple"
+                  stroke="purple"
+                  opacity={0.8}
+                  strokeWidth={20}
+                  transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
+                    sector.end.y
+                  })`}
+                />
+              </g>
+            )}
           </g>
         );
       })}
-
-      {sectors[sector1End] && (
-        <g key="f1-sector-1">
-          <text
-            x={sectors[sector1End].end.x}
-            y={sectors[sector1End].end.y}
-            className="fill-red-500"
-            fontSize={200}
-            fontWeight="bold"
-            textAnchor="middle"
-            opacity={0.7}
-          >
-            SECTOR 1
-          </text>
-        </g>
-      )}
-
-      {sectors[sector2End] && (
-        <g key="f1-sector-2">
-          <text
-            x={sectors[sector2End].end.x}
-            y={sectors[sector2End].end.y}
-            className="fill-amber-500"
-            fontSize={200}
-            fontWeight="bold"
-            textAnchor="middle"
-            opacity={0.7}
-          >
-            SECTOR 2
-          </text>
-        </g>
-      )}
-
-      {/* Sector 3 End Marker */}
-      {sectors[sector3End] && (
-        <g key="f1-sector-3">
-          <text
-            x={sectors[sector3End].end.x}
-            y={sectors[sector3End].end.y}
-            className="fill-violet-500"
-            fontSize={200}
-            fontWeight="bold"
-            textAnchor="middle"
-            opacity={0.7}
-          >
-            SECTOR 3
-          </text>
-        </g>
-      )}
 
       {corners.map((corner) => (
         <CornerNumber
@@ -364,7 +351,7 @@ const CornerNumber: React.FC<CornerNumberProps> = ({ number, x, y }) => {
     <text
       x={x}
       y={y}
-      className="fill-gray-500"
+      className="fill-gray-800"
       fontSize={200}
       fontWeight="semibold"
       style={oxanium.style}
