@@ -37,6 +37,32 @@ const getSectorValue = (sector: any) => {
   return undefined
 }
 
+const mergeSegments = (existing: number[], incoming: any): number[] => {
+  const result = Array.isArray(existing) ? [...existing] : []
+  if (!incoming) return result
+
+  if (Array.isArray(incoming)) {
+    return incoming.map((s: any) => s?.Status ?? s).slice()
+  }
+
+  if (typeof incoming === 'object') {
+    Object.entries(incoming).forEach(([k, v]) => {
+      const idx = Number.parseInt(k)
+      if (Number.isFinite(idx)) {
+        const status = (v && typeof v === 'object') ? (v as any).Status : v
+        const neededLen = idx + 1
+        if (result.length < neededLen) {
+          result.length = neededLen
+        }
+        result[idx] = status ?? result[idx]
+      }
+    })
+    return result
+  }
+
+  return result
+}
+
 export class TimingProcessor {
   private latestTiming: Map<number, ProcessedTiming> = new Map()
 
@@ -85,15 +111,18 @@ export class TimingProcessor {
           sector3: getSectorValue(data?.Sectors?.[2]) ?? existing.sector_times.sector3,
         },
         sector_segments: {
-          sector1: Array.isArray(data?.Sectors?.[0]?.Segments)
-            ? data.Sectors[0].Segments.map((s: any) => s.Status)
-            : existing.sector_segments.sector1,
-          sector2: Array.isArray(data?.Sectors?.[1]?.Segments)
-            ? data.Sectors[1].Segments.map((s: any) => s.Status)
-            : existing.sector_segments.sector2,
-          sector3: Array.isArray(data?.Sectors?.[2]?.Segments)
-            ? data.Sectors[2].Segments.map((s: any) => s.Status)
-            : existing.sector_segments.sector3,
+          sector1: mergeSegments(
+            existing.sector_segments.sector1,
+            data?.Sectors?.[0]?.Segments
+          ),
+          sector2: mergeSegments(
+            existing.sector_segments.sector2,
+            data?.Sectors?.[1]?.Segments
+          ),
+          sector3: mergeSegments(
+            existing.sector_segments.sector3,
+            data?.Sectors?.[2]?.Segments
+          ),
         },
         speeds: {
           i1: data?.Speeds?.I1 ?? existing.speeds.i1,
