@@ -137,13 +137,12 @@ export default function F1Dashboard() {
     <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 px-2">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
         {/* Header */}
-        <Header telemetryData={telemetryData} />
+        <Header telemetryData={telemetryData}/>
 
         {/* Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-10 pb-4">
           {/* Posiciones Actuales */}
           <Card className="lg:col-span-6 bg-warmBlack1 border-none max-h-screen">
-            <CardHeader className="pb-4"></CardHeader>
             <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
               <ScrollArea
                 className="overflow-x-auto min-w-max h-full "
@@ -162,7 +161,7 @@ export default function F1Dashboard() {
                     return (
                       <div
                         key={pos.driver_number}
-                        className={`flex items-center gap-3 rounded-md transition-opacity ${
+                        className={`flex items-center gap-4 rounded-md transition-opacity ${
                           pinnedDriver === pos.driver_number
                             ? `border-offWhite sticky top-0 z-10`
                             : ""

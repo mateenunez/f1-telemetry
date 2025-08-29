@@ -19,7 +19,7 @@ export default function Tyres({ currentStint }: TyresProps) {
     const src = iconMap[key] || "/unknown.svg";
     return (
       <img
-        src={src || "/placeholder.svg"}
+        src={src}
         alt={key}
         width={iconSize}
         height={iconSize}

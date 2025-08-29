@@ -114,14 +114,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
             className={`mb-3 p-2 rounded text-f1Blue`}
             style={mediumGeist.style}
           >
-            <div className="flex items-center justify-between gap-2 mb-1">
-              <div className="flex gap-2 flex-row items-center">
-                <span className="text-xs font-medium text-white">
-                  {lastMessage.category} {lastMessage.scope}{" "}
-                  {lastMessage.sector}
-                </span>
-              </div>
-            </div>
+            
             <p className="text-xs text-gray-200 leading-tight">
               {lastMessage.message}
             </p>

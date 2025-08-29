@@ -4,7 +4,7 @@ import { Geist, Aldrich, Oxanium } from "next/font/google";
 import type { ProcessedSession, ProcessedTiming } from "@/processors";
 
 const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
-const oxanium = Oxanium({subsets: ["latin"], weight:"400"})
+const oxanium = Oxanium({subsets: ["latin"], weight:"500"})
 
 interface DriverGapsProps {
   timing: ProcessedTiming | undefined;
@@ -31,13 +31,13 @@ export default function DriverGaps({ timing, session }: DriverGapsProps) {
       )}
       {timing?.interval_to_ahead ? (
         <div
-          className="flex items-center flex-row gap-2 text-xs text-white"
+          className="flex items-center flex-row gap-2 text-xs text-white "
           style={aldrich.style}
         >
           <span className="text-[0.55rem] text-gray-400">
             GAP AHEAD
           </span>
-          <p style={oxanium.style}>
+          <p style={oxanium.style} >
             {timing?.interval_to_ahead} 
           </p>
         </div>

@@ -4,9 +4,8 @@ import { Geist, Aldrich, Oxanium } from "next/font/google";
 import type { ProcessedTiming } from "@/processors";
 import { ProcessedTimingStats } from "@/processors/timing-stats-processor";
 
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
-const oxanium = Oxanium({subsets: ["latin"], weight:"400"})
+const oxanium = Oxanium({subsets: ["latin"], weight:"500"})
 
 interface LapTimesProps {
   timing: ProcessedTiming | undefined;

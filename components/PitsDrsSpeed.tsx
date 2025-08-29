@@ -20,46 +20,45 @@ export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
   };
 
   return (
-    <div>
+    <div className="flex flex-row gap-4">
+      {/* DRS & Speed */}
+      <div className="flex flex-col">
+        <span
+          className="text-xs text-white self-center"
+          style={mediumGeist.style}
+        >
+          {carData?.drs ? (
+            <p className="text-green-400">DRS ON</p>
+          ) : (
+            <p className="text-gray-400">DRS OFF</p>
+          )}
+        </span>
+
+        {/* Velocidad */}
+        <p
+          style={mediumGeist.style}
+          className={`text-[0.6rem] text-white ${getSpeedColor(carData?.speed)}`}
+        >
+          {carData?.speed !== undefined ? `${carData.speed} km/h` : ""}
+        </p>
+      </div>
       {/* En PIT */}
       <p
         className="text-xs text-white self-center m-0 p-0"
         style={orbitron.style}
       >
         {timing?.in_pit ? (
-          <span
-            className="text-f1Blue"
-            style={mediumGeist.style}
-          >
+          <span className="text-f1Blue flex flex-col" style={mediumGeist.style}>
             IN PIT
+            <span style={mediumGeist.style} className="text-[0.6rem] text-white">
+            {timing?.number_of_pit_stops} PIT
+          </span>
           </span>
         ) : (
           <span style={mediumGeist.style}>
             {timing?.number_of_pit_stops} PIT
           </span>
         )}
-      </p>
-      
-      {/* DRS */}
-      <span
-        className="text-xs text-white self-center"
-        style={mediumGeist.style}
-      >
-        {carData?.drs ? (
-          <p className="text-green-400">DRS ON</p>
-        ) : (
-          <p className="text-gray-400">DRS OFF</p>
-        )}
-      </span>
-      
-      {/* Velocidad */}
-      <p
-        style={mediumGeist.style}
-        className={`text-xs text-white ${getSpeedColor(carData?.speed)}`}
-      >
-        {carData?.speed !== undefined
-          ? `${carData.speed} km/h`
-          : ""}
       </p>
     </div>
   );
