@@ -13,7 +13,9 @@ interface RaceControlProps {
 }
 
 export default function RaceControl({ raceControl }: RaceControlProps) {
-  const [lastMessage, setLastMessage] = useState<ProcessedRaceControl | null>(null);
+  const [lastMessage, setLastMessage] = useState<ProcessedRaceControl | null>(
+    null
+  );
   const [isAnimating, setIsAnimating] = useState(false);
   const previousMessageCount = useRef<number>(0);
 
@@ -42,27 +44,31 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
   }, [unlockAudio, isUnlocked]);
 
   useEffect(() => {
-    if (raceControl && raceControl.length > 0) {
-      const newMessageCount = raceControl.length;
+    if (!raceControl || raceControl.length === 0) return;
 
-      if (newMessageCount > previousMessageCount.current) {
-        const newMessage = raceControl[0];
+    const newest = raceControl[0];
 
-        if (newMessage && newMessage !== lastMessage) {
-          playNotificationSound();
-          setIsAnimating(true);
-
-          setTimeout(() => {
-            setIsAnimating(false);
-          }, 5000);
-        }
-
-        setLastMessage(newMessage);
-      }
-
-      previousMessageCount.current = newMessageCount;
+    if (!lastMessage) {
+      setLastMessage(newest);
+      return;
     }
-  }, [raceControl, playNotificationSound, lastMessage]);
+
+    const isNew =
+      newest.date !== lastMessage.date ||
+      newest.message !== lastMessage.message;
+
+    if (isNew) {
+      setLastMessage(newest);
+
+      if (isUnlocked) {
+        playNotificationSound();
+        setIsAnimating(true);
+        setTimeout(() => {
+          setIsAnimating(false);
+        }, 5000);
+      }
+    }
+  }, [raceControl]);
 
   const getAlertColor = (flag?: string) => {
     if (!flag) return "border-carbonBlack";
@@ -85,7 +91,13 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
   };
 
   const formatTime = (dateString: string) => {
-    const date = new Date(dateString);
+    const ensureUtc = (s: string) => {
+      if (!s) return s;
+      const hasTZ = /Z$|[+\-]\d\d:\d\d$/.test(s);
+      return hasTZ ? s : `${s}Z`;
+    };
+
+    const date = new Date(ensureUtc(dateString));
     return date.toLocaleTimeString("es-AR", {
       hour: "2-digit",
       minute: "2-digit",
@@ -105,7 +117,8 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
             <div className="flex items-center justify-between gap-2 mb-1">
               <div className="flex gap-2 flex-row items-center">
                 <span className="text-xs font-medium text-white">
-                  {lastMessage.category} {lastMessage.scope} {lastMessage.sector}
+                  {lastMessage.category} {lastMessage.scope}{" "}
+                  {lastMessage.sector}
                 </span>
               </div>
             </div>

@@ -17,31 +17,48 @@ export class RaceControlProcessor {
       return []
     }
 
-    const processedMessages: ProcessedRaceControl[] = []
-    var processed: ProcessedRaceControl
+    const toArray = (msgs: any): any[] => {
+      if (Array.isArray(msgs)) return msgs
+      if (typeof msgs === 'object' && msgs !== null) {
+        return Object.values(msgs)
+      }
+      return []
+    }
 
-    if (Array.isArray(raceControlData.Messages)){
-    raceControlData.Messages.forEach((message: any) => {
-       processed = {
-        message: message.Message || "",
-        category: message.Category || "",
-        flag: message.Flag,
-        scope: message.Scope,
-        sector: message.Sector,
-        racing_number: message.RacingNumber,
-        date: message.Utc || new Date().toISOString(),
-        lap: message.Lap || 0,
+    const incoming = toArray(raceControlData.Messages)
+    const processedBatch: ProcessedRaceControl[] = []
+
+    for (const msg of incoming) {
+      const utc: string = msg.Utc || msg.date || new Date().toISOString()
+
+      // buscar si ya existe el mensaje con misma Utc
+      const idx = this.messages.findIndex(m => m.date === utc)
+
+      const next: ProcessedRaceControl = {
+        message: msg.Message ?? this.messages[idx]?.message ?? "",
+        category: msg.Category ?? this.messages[idx]?.category ?? "",
+        flag: msg.Flag ?? this.messages[idx]?.flag,
+        scope: msg.Scope ?? this.messages[idx]?.scope,
+        sector: msg.Sector ?? this.messages[idx]?.sector,
+        racing_number: msg.RacingNumber ?? this.messages[idx]?.racing_number,
+        date: utc,
+        lap: msg.Lap ?? this.messages[idx]?.lap ?? 0,
       }
 
-      processedMessages.push(processed)
-    })
-  }
-    // Mantener solo los últimos 15 mensajes
-    this.messages = [...this.messages, ...processedMessages].slice(-15)
+      if (idx >= 0) {
+        this.messages[idx] = next
+        processedBatch.push(next)
+      } else {
+        this.messages.push(next)
+        processedBatch.push(next)
+      }
+    }
 
-    return processedMessages
-  
-}
+    // Mantener solo los últimos 15 (por fecha de llegada, y el getLatest revierte)
+    this.messages = this.messages.slice(-15)
+
+    return processedBatch
+  }
 
   getLatestMessages(count = 10): ProcessedRaceControl[] {
     return this.messages.slice(-count).reverse()
