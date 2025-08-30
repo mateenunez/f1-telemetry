@@ -28,35 +28,6 @@ export default function Header({ telemetryData }: HeaderProps) {
     return <Sun className="h-8 w-8 text-orange-300" />;
   };
 
-  useEffect(() => {
-    if (!session?.date_start || !session?.date_end) return;
-
-    const startTime = new Date(session.date_start).getTime();
-    const endTime = new Date(session.date_end).getTime();
-    const duration = endTime - startTime;
-
-    if (session?.date_end < new Date().toISOString() && session.session_status === "Finalised") {setSessionTime(duration); return};
-
-    const interval = setInterval(() => {
-      const now = Date.now();
-      const elapsed = Math.min(now - startTime, duration);
-      setSessionTime(elapsed);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [session?.date_start, session?.date_end]);
-
-  const formatTime = (ms: number) => {
-    const totalSeconds = Math.floor(ms / 1000);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-
-    return `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  };
-
   return (
     <Card className="bg-warmBlack1 text-white border-none mx-2 relative">
       <CardHeader>
@@ -90,28 +61,7 @@ export default function Header({ telemetryData }: HeaderProps) {
               <F1Calendar />
             ) : (
               <>
-                <div className="text-right ">
-                  <div className="flex items-center gap-1 text-offWhite flex-row">
-                    {/* Countdown */}
-                    <div className="text-right">
-                      <div className="flex items-center gap-1 text-offWhite flex-row">
-                        <div className="flex flex-col">
-                          <span
-                            className="text-sm font-mono"
-                            style={mediumGeist.style}
-                          >
-                            {formatTime(sessionTime)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
-                <Separator
-                  orientation="vertical"
-                  className="h-8 bg-gray-600 hidden md:block"
-                />
                 {/* Weather Info */}
                 {weather && (
                   <div className="flex items-center gap-3 text-offWhite">
