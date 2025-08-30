@@ -104,7 +104,7 @@ export default function F1Dashboard() {
       <div className="min-h-screen bg-black p-4 flex items-center justify-center">
         <div className="text-center">
           <img
-            src="logo.gif"
+            src="/logo.gif"
             alt="F1 Dashboard Telemetría Al Angulo TV"
             className="h-[5rem] w-[5rem] mx-auto flex align-center"
             loading="lazy"
