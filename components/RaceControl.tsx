@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ProcessedRaceControl } from "@/processors/race-control-processor";
 import { Geist } from "next/font/google";
 import { useRaceControlAudio } from "@/hooks/use-raceControl";
+import { ensureUtc } from "@/utils/calendar";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
@@ -16,8 +17,6 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
   const [lastMessage, setLastMessage] = useState<ProcessedRaceControl | null>(
     null
   );
-  const [isAnimating, setIsAnimating] = useState(false);
-  const previousMessageCount = useRef<number>(0);
 
   const { playNotificationSound, unlockAudio, isUnlocked, timeUntilNextSound } =
     useRaceControlAudio({
@@ -62,10 +61,6 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
 
       if (isUnlocked) {
         playNotificationSound();
-        setIsAnimating(true);
-        setTimeout(() => {
-          setIsAnimating(false);
-        }, 5000);
       }
     }
   }, [raceControl]);
@@ -91,12 +86,6 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
   };
 
   const formatTime = (dateString: string) => {
-    const ensureUtc = (s: string) => {
-      if (!s) return s;
-      const hasTZ = /Z$|[+\-]\d\d:\d\d$/.test(s);
-      return hasTZ ? s : `${s}Z`;
-    };
-
     const date = new Date(ensureUtc(dateString));
     return date.toLocaleTimeString("es-AR", {
       hour: "2-digit",
@@ -114,7 +103,6 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
             className={`mb-3 p-2 rounded text-f1Blue`}
             style={mediumGeist.style}
           >
-            
             <p className="text-xs text-gray-200 leading-tight">
               {lastMessage.message}
             </p>

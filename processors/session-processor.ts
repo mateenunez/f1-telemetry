@@ -7,6 +7,7 @@ export interface ProcessedSession {
   year: number
   date_start: string
   date_end: string
+  gmt_offset: string
   current_lap: number
   total_laps: number
   track_status: string
@@ -33,6 +34,7 @@ export class SessionProcessor {
       year: new Date(sessionData.StartDate).getFullYear() || new Date().getFullYear(),
       date_start: sessionData.StartDate || "",
       date_end: sessionData.EndDate || "",
+      gmt_offset: sessionData.GmtOffset || "",
       current_lap: 0,
       total_laps: 0,
       track_status: "Unknown",

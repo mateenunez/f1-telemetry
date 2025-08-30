@@ -101,12 +101,12 @@ export default function F1Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-warmBlack p-4 flex items-center justify-center">
+      <div className="min-h-screen bg-black p-4 flex items-center justify-center">
         <div className="text-center">
           <img
-            src="/logo-girando.gif"
+            src="logo.gif"
             alt="F1 Dashboard Telemetría Al Angulo TV"
-            className="h-12 w-12 mx-auto flex align-center"
+            className="h-[5rem] w-[5rem] mx-auto flex align-center"
             loading="lazy"
           />
         </div>
@@ -232,7 +232,7 @@ export default function F1Dashboard() {
                     />
                   </div>
                 </CardTitle>
-                {session?.session_type != "Practice" && (
+                {session?.session_type == "Race" && (
                   <CardTitle
                     className=" text-xlg font-bold text-white tracking-wider"
                     style={saira.style}

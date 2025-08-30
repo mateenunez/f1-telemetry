@@ -141,7 +141,7 @@ export default function Map({
         startAngle,
       });
     })();
-  }, [circuitKey]);
+  }, [circuitKey, raceControl]);
 
   const totalSectors = sectors.length;
   const sector1End = Math.floor(totalSectors / 3); // Sector 7 (0-7 = 8 sectores)
