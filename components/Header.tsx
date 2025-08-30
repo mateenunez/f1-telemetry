@@ -35,7 +35,7 @@ export default function Header({ telemetryData }: HeaderProps) {
     const endTime = new Date(session.date_end).getTime();
     const duration = endTime - startTime;
 
-    if (session?.date_end < new Date().toISOString()) {setSessionTime(duration); return};
+    if (session?.date_end < new Date().toISOString() && session.session_status === "Finalised") {setSessionTime(duration); return};
 
     const interval = setInterval(() => {
       const now = Date.now();
