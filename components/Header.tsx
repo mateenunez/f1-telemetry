@@ -30,27 +30,30 @@ export default function Header({ telemetryData }: HeaderProps) {
     return <Sun className="h-8 w-8 text-orange-300" />;
   };
 
-  useEffect(() => {
-    if (!session?.date_start || !session?.date_end) return;
 
-    const offset = parseTimeOffset(session.gmt_offset);
-    const startTime = new Date(ensureUtc(session.date_start)).getTime() - offset;
-    const endTime = new Date(ensureUtc(session.date_end)).getTime() - offset;
-    setEndTime(endTime);
-    const duration = endTime - startTime;
+useEffect(() => {
+  if (!session?.date_start || !session?.date_end) return;
 
-    const now = Date.now();
+  const offset = parseTimeOffset(session.gmt_offset);
+  const startTime = new Date(ensureUtc(session.date_start)).getTime() - offset;
+  const endTime = new Date(ensureUtc(session.date_end)).getTime() - offset;
+  setEndTime(endTime);
+  const duration = endTime - startTime;
 
-    if (now < startTime) return;
-    if (now > endTime) return setSessionTime(duration);
+  const now = Date.now();
 
-    const interval = setInterval(() => {
-      const elapsed = Math.min(now - startTime);
-      setSessionTime(elapsed);
-    }, 1000);
+  if (now < startTime) return;
+  if (now > endTime) return setSessionTime(duration);
 
-    return () => clearInterval(interval);
-  }, [session?.date_start, session?.date_end]);
+  const interval = setInterval(() => {
+    const currentTime = Date.now();
+    const elapsed = Math.min(currentTime - startTime, duration);
+    setSessionTime(elapsed);
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, [session?.date_start, session?.date_end]);
+
 
   return (
     <Card className="bg-warmBlack1 text-white border-none mx-2 relative">
