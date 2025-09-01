@@ -5,10 +5,16 @@ export interface ProcessedTimingStats {
     Lap?: number
     Position?: number
   }
-  best_sectors: {
+  best_sectors: [{
     Value?: string
     Position?: number
-  }[]
+  }, {
+    Value?: string
+    Position?: number
+  }, {
+    Value?: string
+    Position?: number
+  }]
   best_speeds: {
     i1?: { Value?: string; Position?: number }
     i2?: { Value?: string; Position?: number }

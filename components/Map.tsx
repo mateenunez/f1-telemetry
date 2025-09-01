@@ -14,8 +14,10 @@ import {
   rad,
 } from "@/processors/map-processor";
 import { Oxanium } from "next/font/google";
-import { ProcessedRaceControl } from "@/processors/race-control-processor";
-import { findYellowSectors, getSectorColor } from "@/hooks/use-raceControl";
+import {getSectorColor } from "@/hooks/use-raceControl";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { Card, CardContent } from "./ui/card";
 
 // This is basically fearlessly copied from
 // https://github.com/tdjsnelling/monaco
@@ -36,7 +38,7 @@ type MapProps = {
   drivers: Record<number, ProcessedDriver>;
   timing: ProcessedTiming[];
   circuitKey: number;
-  raceControl: ProcessedRaceControl[];
+  yellowSectors: Set<number>
 };
 
 export default function Map({
@@ -44,7 +46,7 @@ export default function Map({
   drivers,
   timing,
   circuitKey,
-  raceControl,
+  yellowSectors
 }: MapProps) {
   const [[minX, minY, widthX, widthY], setBounds] = useState<(null | number)[]>(
     [null, null, null, null]
@@ -148,11 +150,6 @@ export default function Map({
   const sector2End = Math.floor((totalSectors * 2) / 3); // Sector 12 (8-12 = 5 sectores)
   const sector3End = totalSectors - 1;
 
-  const yellowSectors = useMemo(
-    () => findYellowSectors(raceControl),
-    [raceControl]
-  );
-
   const renderedSectors = useMemo(() => {
     return sectors.map((sector) => {
       const color = getSectorColor(sector, yellowSectors);
@@ -170,9 +167,15 @@ export default function Map({
 
   if (!points || !minX || !minY || !widthX || !widthY) {
     return (
-      <div className="h-full w-full p-2" style={{ minHeight: "35rem" }}>
-        <div className="h-full w-full animate-pulse rounded-lg bg-zinc-800" />
-      </div>
+      <SkeletonTheme baseColor="#151515ff" highlightColor="#444"> 
+         <Card className="lg:col-span-4 bg-warmBlack1 border-none border-2 flex flex-col mt-8">
+                <CardContent className="flex flex-col justify-center h-full">
+                  <div className="overflow-hidden h-fit">
+                    <Skeleton height={400} width="100%" />
+                  </div>
+                </CardContent>
+              </Card>
+      </SkeletonTheme>
     );
   }
 
@@ -351,7 +354,7 @@ const CornerNumber: React.FC<CornerNumberProps> = ({ number, x, y }) => {
     <text
       x={x}
       y={y}
-      className="fill-gray-800"
+      className="fill-gray-600"
       fontSize={200}
       fontWeight="semibold"
       style={oxanium.style}

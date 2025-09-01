@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProcessedRaceControl } from "@/processors/race-control-processor";
 import { Geist } from "next/font/google";
-import { useRaceControlAudio } from "@/hooks/use-raceControl";
 import { ensureUtc } from "@/utils/calendar";
+import { useTelemetryAudio } from "@/hooks/use-raceControl";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
@@ -19,7 +19,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
   );
 
   const { playNotificationSound, unlockAudio, isUnlocked, timeUntilNextSound } =
-    useRaceControlAudio({
+  useTelemetryAudio({
       cooldownMs: 10 * 1000, // 10 segundos de cooldown
       audioSrc: "/race-control-notification.mp3", // Audio en /public
     });
@@ -58,32 +58,31 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
 
     if (isNew) {
       setLastMessage(newest);
-
       if (isUnlocked) {
         playNotificationSound();
       }
     }
   }, [raceControl]);
 
-  const getAlertColor = (flag?: string) => {
-    if (!flag) return "border-carbonBlack";
+  // const getAlertColor = (flag?: string) => {
+  //   if (!flag) return "border-carbonBlack";
 
-    const borderMap: Record<string, string> = {
-      YELLOW: "text-f1Yellow",
-      "DOUBLE YELLOW": "text-f1Yellow",
-      RED: "text-f1Red",
-      BLUE: "text-f1Blue",
-      GREEN: "text-f1Green",
-      WHITE: "text-highWhite",
-      BLACK: "text-carbonBlack",
-      CLEAR: "text-highWhite",
-      CHEQUERED: "text-black",
-      SC: "text-f1Yellow/90",
-      VSC: "text-f1Yellow/75",
-    };
+  //   const borderMap: Record<string, string> = {
+  //     YELLOW: "text-f1Yellow",
+  //     "DOUBLE YELLOW": "text-f1Yellow",
+  //     RED: "text-f1Red",
+  //     BLUE: "text-f1Blue",
+  //     GREEN: "text-f1Green",
+  //     WHITE: "text-highWhite",
+  //     BLACK: "text-carbonBlack",
+  //     CLEAR: "text-highWhite",
+  //     CHEQUERED: "text-black",
+  //     SC: "text-f1Yellow/90",
+  //     VSC: "text-f1Yellow/75",
+  //   };
 
-    return borderMap[flag.toUpperCase()] || "border-carbonBlack";
-  };
+  //   return borderMap[flag.toUpperCase()] || "border-carbonBlack";
+  // };
 
   const formatTime = (dateString: string) => {
     const date = new Date(ensureUtc(dateString));

@@ -1,16 +1,22 @@
-import { ProcessedRaceControl } from '@/processors/race-control-processor';
-import { useRef, useCallback } from 'react';
-import { MapSector } from '@/processors/map-processor';
+import { ProcessedRaceControl } from "@/processors/race-control-processor";
+import { useRef, useCallback, useState } from "react";
+import { MapSector } from "@/processors/map-processor";
+import { set } from "react-hook-form";
 
 interface UseRaceControlAudioOptions {
-  cooldownMs?: number; 
+  cooldownMs?: number;
   audioSrc?: string;
 }
 
-
-export const findYellowSectors = (messages: ProcessedRaceControl[] | undefined): Set<number> => {
+export const findYellowSectors = (
+  messages: ProcessedRaceControl[] | undefined
+): Set<number> => {
   const msgs = messages?.filter((msg) => {
-    return msg.flag === "YELLOW" || msg.flag === "DOUBLE YELLOW" || msg.flag === "CLEAR";
+    return (
+      msg.flag === "YELLOW" ||
+      msg.flag === "DOUBLE YELLOW" ||
+      msg.flag === "CLEAR"
+    );
   });
 
   if (!msgs) {
@@ -43,25 +49,31 @@ export const findYellowSectors = (messages: ProcessedRaceControl[] | undefined):
   return sectors;
 };
 
-export const getSectorColor = (
-	sector: MapSector,
-	yellowSectors: Set<number>,
-) => (yellowSectors.has(sector.number) ? "stroke-yellow-400" : "stroke-white");
+export const audioUrl = "https://livetiming.formula1.com/static/";
 
-export function useRaceControlAudio(options: UseRaceControlAudioOptions = {}) {
-  const { cooldownMs = 30 * 1000, audioSrc = '/race-control-notification.mp3' } = options;
+export const getSectorColor = (sector: MapSector, yellowSectors: Set<number>) =>
+  yellowSectors.has(sector.number) ? "stroke-yellow-400" : "stroke-white";
+
+export function useTelemetryAudio(options: UseRaceControlAudioOptions = {}) {
+  const [audioElement, setAudioElement] = useState(null);
+  const { cooldownMs = 0, audioSrc = "/race-control-notification.mp3" } =
+    options;
   const lastPlayTime = useRef<number>(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const radioAudioRef = useRef<HTMLAudioElement | null>(null);
   const isUnlockedRef = useRef<boolean>(false);
 
-  const createAudio = useCallback(() => {
-    if (typeof window === 'undefined') return null;
-    const audio = new Audio(audioSrc);
-    audio.volume = 1;
-    audio.preload = 'auto';
-    audio.loop = false;
-    return audio;
-  }, [audioSrc]);
+  const createAudio = useCallback(
+    (volumen = 1) => {
+      if (typeof window === "undefined") return null;
+      const audio = new Audio(audioSrc);
+      audio.volume = volumen;
+      audio.preload = "auto";
+      audio.loop = false;
+      return audio;
+    },
+    [audioSrc]
+  );
 
   const unlockAudio = useCallback(async () => {
     try {
@@ -101,29 +113,57 @@ export function useRaceControlAudio(options: UseRaceControlAudioOptions = {}) {
 
       if (audioRef.current) {
         audioRef.current.currentTime = 0;
-        audioRef.current.play().then(() => {
-          lastPlayTime.current = now;
-        }).catch((error) => {
-          console.error('Error reproduciendo audio:', error);
-        });
+        audioRef.current
+          .play()
+          .then(() => {
+            lastPlayTime.current = now;
+          })
+          .catch((error) => {
+            console.error("Error reproduciendo audio:", error);
+          });
         return true;
       }
     } catch (error) {
-      console.error('Error con el audio:', error);
+      console.error("Error con el audio:", error);
     }
 
     return false;
   }, [cooldownMs, createAudio]);
 
+  const playTeamRadioSound = useCallback(() => {
+    try {
+      if (!radioAudioRef.current) {
+        radioAudioRef.current = createAudio(0.5);
+      }
 
+      // Si no está desbloqueado, no intentamos reproducir (navegadores bloquean)
+      if (!isUnlockedRef.current) {
+        return false;
+      }
+
+      if (radioAudioRef.current) {
+        radioAudioRef.current.play().catch((error) => {
+          console.error("Error reproduciendo audio:", error);
+        });
+        return true;
+      }
+    } catch (error) {
+      console.error("Error con el audio:", error);
+    }
+
+    return false;
+  }, [createAudio]);
 
   return {
     playNotificationSound,
+    playTeamRadioSound,
     unlockAudio,
     isUnlocked: isUnlockedRef.current,
     lastPlayTime: lastPlayTime.current,
-    timeUntilNextSound: Math.max(0, cooldownMs - (Date.now() - lastPlayTime.current))
+    timeUntilNextSound: Math.max(
+      0,
+      cooldownMs - (Date.now() - lastPlayTime.current)
+    ),
+    radioAudioRef,
   };
-
-  
 }

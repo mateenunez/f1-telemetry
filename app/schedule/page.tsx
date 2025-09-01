@@ -9,8 +9,10 @@ import {
 } from "@/utils/calendar";
 import NextSession from "@/components/NextSession";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Geist } from "next/font/google";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
@@ -36,14 +38,29 @@ export default function SchedulePage() {
 
   if (!calendar) {
     return (
-      <div className="min-h-screen bg-black p-4 flex items-center justify-center">
-        <div className="text-center">
-          <img
-            src="/logo.GIF"
-            alt="F1 Dashboard Telemetría Al Angulo TV"
-            className="h-[5rem] w-[5rem] mx-auto flex align-center"
-            loading="lazy"
-          />
+      <div className="min-h-screen bg-black p-4 flex items-start pt-8 justify-center gap-4 overflow-hidden">
+        <div className="max-w-6xl w-full mx-auto px-4 md:px-8">
+          <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
+            {/* Header Skeleton */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full gap-4 mb-8">
+              <div className="flex flex-row items-center gap-4">
+                <Skeleton height={36} width={180} />
+              </div>
+              <Skeleton height={32} width={120} />
+            </div>
+            {/* Next session skeleton */}
+            <div className="flex flex-col mx-0 md:mx-8 w-full gap-8" >
+              <Skeleton height={32} width={180} style={{ marginBottom: 16 }} />
+              <Skeleton height={80} width="100%" style={{ marginBottom: 32 }} />
+              {/* Upcoming Events Skeleton */}
+              <Skeleton height={32} width={180} style={{ marginBottom: 16 }} />
+              <div className="flex gap-4 pb-4 flex-col md:flex-row lg:flex-row over">
+                {Array.from({ length: 3 }).map((_, idx) => (
+                  <Skeleton width={300} height={160} key={idx} />
+                ))}
+              </div>
+            </div>
+          </SkeletonTheme>
         </div>
       </div>
     );

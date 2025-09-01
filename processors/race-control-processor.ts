@@ -7,6 +7,8 @@ export interface ProcessedRaceControl {
   racing_number?: string
   date: string
   lap: number
+  status: string
+  mode: string
 }
 
 export class RaceControlProcessor {
@@ -43,6 +45,8 @@ export class RaceControlProcessor {
         racing_number: msg.RacingNumber ?? this.messages[idx]?.racing_number,
         date: utc,
         lap: msg.Lap ?? this.messages[idx]?.lap ?? 0,
+        status: msg.Status ?? this.messages[idx]?.status ?? "",
+        mode: msg.Mode ?? this.messages[idx]?.mode ?? "",
       }
 
       if (idx >= 0) {

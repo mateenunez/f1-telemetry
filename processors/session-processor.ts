@@ -13,6 +13,7 @@ export interface ProcessedSession {
   track_status: string
   circuit_key:number
   session_status: string
+  path: string
 }
 
 export class SessionProcessor {
@@ -24,22 +25,40 @@ export class SessionProcessor {
     }
 
     const meeting = sessionData.Meeting || {}
-
-    const processed: ProcessedSession = {
-      session_name: sessionData.Name || "",
-      session_type: sessionData.Type || "",
-      location: meeting.Location || "",
-      country_name: meeting.Country?.Name || "",
-      circuit_short_name: meeting.Circuit?.ShortName || "",
-      year: new Date(sessionData.StartDate).getFullYear() || new Date().getFullYear(),
-      date_start: sessionData.StartDate || "",
-      date_end: sessionData.EndDate || "",
-      gmt_offset: sessionData.GmtOffset || "",
+    const existing = this.sessionInfo || {
+      session_name: "",
+      session_type: "",
+      location: "",
+      country_name: "",
+      circuit_short_name: "",
+      year: new Date().getFullYear(),
+      date_start: "",
+      date_end: "",
+      gmt_offset: "",
       current_lap: 0,
       total_laps: 0,
       track_status: "Unknown",
-      circuit_key: meeting.Circuit?.Key || "",
-      session_status: sessionData.SessionStatus || "",
+      circuit_key: "",
+      session_status: "",
+      path: ""
+    }
+
+    const processed: ProcessedSession = {
+      session_name: sessionData.Name ?? existing.session_name,
+      session_type: sessionData.Type ?? existing.session_type,
+      location: meeting.Location ?? existing.location,
+      country_name: meeting.Country?.Name ?? existing.country_name,
+      circuit_short_name: meeting.Circuit?.ShortName ?? existing.circuit_short_name,
+      year: sessionData.StartDate ? new Date(sessionData.StartDate).getFullYear() : existing.year,
+      date_start: sessionData.StartDate ?? existing.date_start,
+      date_end: sessionData.EndDate ?? existing.date_end,
+      gmt_offset: sessionData.GmtOffset ?? existing.gmt_offset,
+      current_lap: existing.current_lap,
+      total_laps: existing.total_laps,
+      track_status: existing.track_status,
+      circuit_key: meeting.Circuit?.Key ?? existing.circuit_key,
+      session_status: sessionData.SessionStatus ?? existing.session_status,
+      path : sessionData.Path ?? existing.path
     }
 
     this.sessionInfo = processed
@@ -47,15 +66,25 @@ export class SessionProcessor {
   }
 
   processLapCount(lapCountData: any): void {
-    if (lapCountData && this.sessionInfo) {
-      this.sessionInfo.current_lap = lapCountData.CurrentLap || 0
-      this.sessionInfo.total_laps = lapCountData.TotalLaps || 0
+    if (!lapCountData || !this.sessionInfo) return
+
+    const existing = this.sessionInfo
+
+    this.sessionInfo = {
+      ...existing,
+      current_lap: lapCountData.CurrentLap ?? existing.current_lap,
+      total_laps: lapCountData.TotalLaps ?? existing.total_laps,
     }
   }
 
   processTrackStatus(trackStatusData: any): void {
-    if (trackStatusData && this.sessionInfo) {
-      this.sessionInfo.track_status = trackStatusData.Message || trackStatusData.Status || "Unknown"
+    if (!trackStatusData || !this.sessionInfo) return
+
+    const existing = this.sessionInfo
+
+    this.sessionInfo = {
+      ...existing,
+      track_status: trackStatusData.Message ?? trackStatusData.Status ?? existing.track_status,
     }
   }
 

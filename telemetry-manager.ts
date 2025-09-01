@@ -9,6 +9,7 @@ import { SessionProcessor, type ProcessedSession } from "./processors/session-pr
 import { CarDataProcessor, type ProcessedCarData } from "./processors/car-data-processor"
 import { PositionDataProcessor, type ProcessedPositionData } from "./processors/position-data-processor"
 import { TimingStatsProcessor, type ProcessedTimingStats } from "./processors/timing-stats-processor"
+import { ProcessedCapture, ProcessedTeamRadio, TeamRadioProcessor } from "./processors/team-radio-processor"
 
 export interface TelemetryData {
   positions: ProcessedPosition[]
@@ -23,6 +24,7 @@ export interface TelemetryData {
   positionData: ProcessedPositionData[]
   driversWithDRS: number[]
   timingStats: ProcessedTimingStats[]
+  teamRadio: ProcessedTeamRadio
   lastUpdateTime: Date
 }
 
@@ -38,6 +40,7 @@ export class TelemetryManager {
   private carDataProcessor: CarDataProcessor
   private positionDataProcessor: PositionDataProcessor
   private timingStatsProcessor: TimingStatsProcessor
+  private teamRadioProcessor: TeamRadioProcessor
 
   private onDataUpdateCallback: ((data: TelemetryData) => void) | null = null
 
@@ -53,6 +56,7 @@ export class TelemetryManager {
     this.carDataProcessor = new CarDataProcessor()
     this.positionDataProcessor = new PositionDataProcessor()
     this.timingStatsProcessor = new TimingStatsProcessor()
+    this.teamRadioProcessor = new TeamRadioProcessor()
   }
 
   connect(url: string, onDataUpdate: (data: TelemetryData) => void) {
@@ -158,6 +162,10 @@ export class TelemetryManager {
       case "TimingStats":
         this.timingStatsProcessor.processTimingStats(messageData)
         break
+
+      case "TeamRadio":
+        this.teamRadioProcessor.processTeamRadio(messageData)
+        break
     }
   }
 
@@ -177,6 +185,7 @@ export class TelemetryManager {
       positionData: this.positionDataProcessor.getAllPositions(),
       driversWithDRS: this.carDataProcessor.getDriversWithDRS(),
       timingStats: this.timingStatsProcessor.getAllStats(),
+      teamRadio: this.teamRadioProcessor.getTeamRadio(),
       lastUpdateTime: new Date()
     }
 
@@ -220,6 +229,12 @@ export class TelemetryManager {
 
   getDriverPositionData(driverNumber: number): ProcessedPositionData | undefined {
     return this.positionDataProcessor.getDriverPosition(driverNumber)
+  }
+
+  getLastCapture(): ProcessedCapture | undefined {
+    const teamRadio = this.teamRadioProcessor.getTeamRadio();
+    if (teamRadio) return teamRadio.captures[0];
+    return undefined;
   }
 
 

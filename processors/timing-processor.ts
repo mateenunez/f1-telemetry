@@ -98,7 +98,7 @@ export class TimingProcessor {
         ...existing,
         gap_to_leader: data?.GapToLeader ?? existing.gap_to_leader,
         interval_to_ahead:
-          data?.Stats?.IntervalToPositionAhead?.Value ?? existing.interval_to_ahead,
+          data?.IntervalToPositionAhead?.Value ?? existing.interval_to_ahead,
         time_diff_to_ahead: data?.TimeDiffToPositionAhead ?? existing.time_diff_to_ahead,
         time_diff_to_fastest: data?.TimeDiffToFastest ?? existing.time_diff_to_fastest,
         last_lap_time: data?.LastLapTime?.Value ?? existing.last_lap_time,

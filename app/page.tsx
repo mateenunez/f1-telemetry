@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { TelemetryManager, type TelemetryData } from "../telemetry-manager";
 import type {
   ProcessedDriver,
@@ -10,7 +10,7 @@ import type {
 } from "../processors";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Geist, Saira } from "next/font/google";
+import { Geist, Oxanium, Saira } from "next/font/google";
 import Map from "@/components/Map";
 import { ProcessedTimingStats } from "@/processors/timing-stats-processor";
 import RaceControl from "@/components/RaceControl";
@@ -21,6 +21,9 @@ import Minisectors from "@/components/Minisectors";
 import LapTimes from "@/components/LapTimes";
 import DriverGaps from "@/components/DriverGaps";
 import Tyres from "@/components/Tyres";
+import { findYellowSectors } from "@/hooks/use-raceControl";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const saira = Saira({ subsets: ["latin"], weight: "400" });
@@ -99,16 +102,58 @@ export default function F1Dashboard() {
     setMapFullscreen(!mapFullscreen);
   };
 
+  const yellowSectors = useMemo(
+    () => findYellowSectors(telemetryData?.raceControl),
+    [telemetryData?.raceControl]
+  );
+
+  const safetyCarActive = useMemo(() => {
+    const latestMessage = telemetryData?.raceControl?.[0];
+    if (!latestMessage) return null;
+    if (
+      latestMessage.category === "Safety Car" &&
+      latestMessage.status === "Deployed"
+    ) {
+      if (latestMessage.mode === "VIRTUAL SAFETY CAR") return "VSC";
+      else return "SC";
+    } else return null;
+  }, [telemetryData?.raceControl]);
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-black p-4 flex items-center justify-center">
-        <div className="text-center">
-          <img
-            src="/logo.GIF"
-            alt="F1 Dashboard Telemetría Al Angulo TV"
-            className="h-[5rem] w-[5rem] mx-auto flex align-center"
-            loading="lazy"
-          />
+      <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 px-2">
+        <div className="max-w-8xl mx-auto space-y-4 h-full">
+          <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
+            {/* Header Skeleton */}
+            <div className="m-4">
+              <Skeleton height={60} width="100%" />
+            </div>
+            {/* Cards Skeleton */}
+            <div className="grid grid-cols-1 lg:grid-cols-10 gap-4 pb-4">
+              {/* Posiciones Skeleton */}
+              <Card className="lg:col-span-6 bg-warmBlack1 border-none max-h-screen px-2">
+                <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
+                  <div className="space-y-2">
+                    {Array.from({ length: 20 }).map((_, idx) => (
+                      <Skeleton key={idx} height={60} width="100%" />
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+              {/* Mapa y Race Control Skeleton */}
+              <Card className="lg:col-span-4 bg-warmBlack1 border-none border-2 flex flex-col mt-8">
+                <CardHeader className="pb-3 flex flex-row items-center justify-between ml-4">
+                  <Skeleton height={32} width={180} />
+                  <Skeleton height={32} width={120} />
+                </CardHeader>
+                <CardContent className="flex flex-col justify-center h-full">
+                  <div className="overflow-hidden h-fit">
+                    <Skeleton height={400} width="100%" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </SkeletonTheme>
         </div>
       </div>
     );
@@ -127,7 +172,7 @@ export default function F1Dashboard() {
           drivers={telemetryData.drivers}
           timing={telemetryData.timing}
           circuitKey={telemetryData.session.circuit_key}
-          raceControl={telemetryData.raceControl}
+          yellowSectors={yellowSectors}
         />
       </div>
     );
@@ -137,10 +182,20 @@ export default function F1Dashboard() {
     <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 px-2">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
         {/* Header */}
-        <Header telemetryData={telemetryData}/>
-
+        <Header telemetryData={telemetryData} />
+        {/* Safety Car */}
+        <div
+          className="text-f1Yellow text-sm trasition-all flex h-4 justify-center duration-500 text-center"
+          style={mediumGeist.style}
+        >
+          {safetyCarActive}
+        </div>
         {/* Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-10 pb-4">
+        <div
+          className={`!mt-0 grid grid-cols-1 lg:grid-cols-10 pb-4 border-2 rounded-lg transition-all duration-500 ease-in-out ${
+            safetyCarActive ? "border-f1Yellow" : "border-transparent"
+          }`}
+        >
           {/* Posiciones Actuales */}
           <Card className="lg:col-span-6 bg-warmBlack1 border-none max-h-screen">
             <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
@@ -157,7 +212,7 @@ export default function F1Dashboard() {
                     const currentStint = telemetryManager.getCurrentStint(
                       pos.driver_number
                     );
-
+                    const lastCapture = telemetryManager.getLastCapture();
                     return (
                       <div
                         key={pos.driver_number}
@@ -174,7 +229,9 @@ export default function F1Dashboard() {
                           )
                         }
                         style={
-                          timing?.knockedOut || timing?.retired || timing?.stopped
+                          timing?.knockedOut ||
+                          timing?.retired ||
+                          timing?.stopped
                             ? {
                                 opacity: 0.4,
                                 background: `linear-gradient(-90deg, #111111 94%, #${driver?.team_colour} 100%)`,
@@ -186,7 +243,12 @@ export default function F1Dashboard() {
                         }
                       >
                         {/* Posición y datos del Piloto */}
-                        <DriverPositionInfo position={pos} driver={driver} />
+                        <DriverPositionInfo
+                          position={pos}
+                          driver={driver}
+                          lastCapture={lastCapture}
+                          sessionPath={session?.path}
+                        />
 
                         {/* Estadísticas */}
                         <div className="flex flex-row items-center justify-around w-full py-1.5 gap-4 md:gap-2 lg:gap-2">
@@ -232,12 +294,20 @@ export default function F1Dashboard() {
                     />
                   </div>
                 </CardTitle>
-                {session?.session_type == "Race" && (
+                {session?.session_type === "Race" && (
                   <CardTitle
                     className=" text-xlg font-bold text-white tracking-wider"
                     style={saira.style}
                   >
-                    {session?.current_lap}/{session?.total_laps}
+                    {session.session_status === "Finalised" ? (
+                      <>
+                        {session?.total_laps}/{session?.total_laps}
+                      </>
+                    ) : (
+                      <>
+                        {session?.current_lap}/{session?.total_laps}
+                      </>
+                    )}
                   </CardTitle>
                 )}
               </div>
@@ -252,7 +322,7 @@ export default function F1Dashboard() {
                       drivers={telemetryData.drivers}
                       timing={telemetryData.timing}
                       circuitKey={telemetryData.session.circuit_key}
-                      raceControl={telemetryData.raceControl}
+                      yellowSectors={yellowSectors}
                     />
                   </div>
                 )}

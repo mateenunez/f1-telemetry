@@ -16,7 +16,7 @@ export default function DriverGaps({ timing, session }: DriverGapsProps) {
     <div className="flex flex-col items-start min-w-[8rem]">
       {timing?.gap_to_leader && session?.session_type!="Practice" ? (
         <div
-          className="flex items-center flex-row gap-2 text-md text-white"
+          className="flex items-center flex-row gap-2 text-xs text-white"
           style={aldrich.style}
         >
           <span className="text-[0.7rem] text-gray-400">

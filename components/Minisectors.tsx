@@ -23,12 +23,14 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
   };
 
   const getSectorTimeColor = (sector: any) => {
+    if (!sector) return "text-white";
     if (sector?.OverallFastest) return "text-f1Purple";
     if (sector?.PersonalFastest) return "text-green-400";
     return "text-f1Yellow";
   };
 
   const getBestSectorColor = (sector: any) => {
+    if (!sector.Position) return "text-white";
     if (sector?.Position === 1) return "text-purple-500";
     return "text-green-400";
   };
