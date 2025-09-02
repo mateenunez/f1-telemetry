@@ -2,13 +2,12 @@
 
 import {
   F1Event,
-  formatEventDate,
   getCountryCode,
   getDayOfWeek,
   getRelativeDate,
   getTimeOnly,
 } from "@/utils/calendar";
-import { Orbitron, Geist } from "next/font/google";
+import { Geist } from "next/font/google";
 
 interface NextSessionProps {
   session: F1Event;
@@ -19,17 +18,19 @@ interface NextSessionProps {
   };
 }
 
-
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
 export default function NextSession({ session, timeUntil }: NextSessionProps) {
   if (!session) return null;
 
   return (
-    <div className="flex md:flex-col py-4" style={mediumGeist.style}>
-      <div className="flex md:flex-row flex-col w-[75vw] justify-between items-center">
+    <div
+      className="flex md:flex-col py-4 max-w-full justify-center"
+      style={mediumGeist.style}
+    >
+      <div className="flex md:flex-row flex-col max-w-[75vw] justify-between items-center">
         {/* Countdown Timer */}
-        <div className="gap-4 tracking-widest flex md:flex-row ">
+        <div className="gap-4 tracking-widest flex md:flex-row">
           <TimeUnit
             value={timeUntil.days}
             label={timeUntil.days > 1 ? "days" : "day"}
@@ -53,7 +54,9 @@ export default function NextSession({ session, timeUntil }: NextSessionProps) {
           <div className="flex md:flex-row flex-col justify-around">
             {/* Time Information */}
             <div className="flex flex-col items-center">
-              <p className="text-xl">{getDayOfWeek(session.start)} {getRelativeDate(session.start)}</p>
+              <p className="text-xl">
+                {getDayOfWeek(session.start)} {getRelativeDate(session.start)}
+              </p>
               <div className="items-center text-gray-300">
                 {getTimeOnly(session.start)} - {getTimeOnly(session.end)}
               </div>
