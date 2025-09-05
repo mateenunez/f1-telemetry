@@ -158,98 +158,96 @@ export default function SchedulePage() {
     );
   }
 
-  if (calendar && driverStandings && constructorStandings) return (
-    <div
-      className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 text-white overflow-hidden"
-      style={mediumGeist.style}
-    >
-      <div className="max-w-6xl mx-auto my-12 px-4 md:px-8">
-        <div className="flex flex-row justify-between items-center w-full gap-4 mb-8">
-          <h1 className="text-3xl font-regular flex flex-row gap-2">
-            <img
-              src={`https://flagsapi.com/AR/flat/32.png`}
-              alt={`Flag of Argentina`}
-              className="w-10"
-            />{" "}
-            Schedule
-          </h1>
+  if (calendar && driverStandings && constructorStandings)
+    return (
+      <div
+        className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 text-white overflow-hidden"
+        style={mediumGeist.style}
+      >
+        <div className="max-w-6xl mx-auto my-12 px-4 md:px-8">
+          <div className="flex flex-row justify-between items-center w-full gap-4 mb-8">
+            <h1 className="text-3xl font-regular flex flex-row gap-2">
+              <img
+                src={`https://flagsapi.com/AR/flat/32.png`}
+                alt={`Flag of Argentina`}
+                className="w-10"
+              />{" "}
+              Schedule
+            </h1>
 
-          <a
-            className="text-xl font-regular hover:cursor-pointer"
-            href="/"
-          >
-            Telemetry
-          </a>
-        </div>
-        <div className="flex flex-row my-4">
-          <div className="flex flex-col mx-0 md:mx-8 w-full gap-6">
-            <h2 className="text-xl py-5"> Next session in</h2>
+            <a className="text-xl font-regular hover:cursor-pointer" href="/">
+              Telemetry
+            </a>
+          </div>
+          <div className="flex flex-row my-4">
+            <div className="flex flex-col mx-0 md:mx-8 w-full gap-6">
+              <h2 className="text-xl py-5"> Next session in</h2>
 
-            {/* Proxima sesion */}
-            <NextSession
-              session={calendar.nextEvent}
-              timeUntil={calendar.timeUntilNext}
-            />
+              {/* Proxima sesion */}
+              <NextSession
+                session={calendar.nextEvent}
+                timeUntil={calendar.timeUntilNext}
+              />
 
-            {/* Calendario completo */}
-            <div className="flex flex-col w-full">
-              <h2 className="text-xl mb-4">Upcoming Events</h2>
-              <ScrollArea className="w-full">
-                <div className="flex gap-4 pb-4 flex-row">
-                  {calendar.upcomingEvents.slice(1).map((event, index) => (
-                    <Card
-                      key={index}
-                      className="min-w-[20rem] max-w-[320px] flex-shrink-0 bg-transparent border-none"
-                    >
-                      <CardHeader>
-                        <p className="text-sm text-start text-white text-wrap font-regular">
-                          {event.summary.toUpperCase().slice(2)}
-                        </p>
-                      </CardHeader>
-                      <CardContent className="space-y-2">
-                        <div className="text-start">
-                          <div className="text-sm text-gray-300 mb-2">
-                            {formatEventDateShort(event.start)}
+              {/* Calendario completo */}
+              <div className="flex flex-col w-full">
+                <h2 className="text-xl mb-4">Upcoming Events</h2>
+                <ScrollArea className="w-full">
+                  <div className="flex gap-4 pb-4 flex-row">
+                    {calendar.upcomingEvents.slice(1).map((event, index) => (
+                      <Card
+                        key={index}
+                        className="min-w-[20rem] max-w-[320px] flex-shrink-0 bg-transparent border-none"
+                      >
+                        <CardHeader>
+                          <p className="text-sm text-start text-white text-wrap font-regular">
+                            {event.summary.toUpperCase().slice(2)}
+                          </p>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                          <div className="text-start">
+                            <div className="text-sm text-gray-300 mb-2">
+                              {formatEventDateShort(event.start)}
+                            </div>
+                            <div className="flex items-center justify-start gap-2 mb-2">
+                              <span className="text-sm text-gray-400">
+                                {event.location}
+                              </span>
+                              <img
+                                src={`https://flagsapi.com/${getCountryCode(
+                                  event.location
+                                )}/flat/24.png`}
+                                alt={`Flag of ${event.location}`}
+                                className="w-6 h-4"
+                              />
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              Status: {event.status}
+                            </div>
                           </div>
-                          <div className="flex items-center justify-start gap-2 mb-2">
-                            <span className="text-sm text-gray-400">
-                              {event.location}
-                            </span>
-                            <img
-                              src={`https://flagsapi.com/${getCountryCode(
-                                event.location
-                              )}/flat/24.png`}
-                              alt={`Flag of ${event.location}`}
-                              className="w-6 h-4"
-                            />
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            Status: {event.status}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                  <ScrollBar
+                    orientation="horizontal"
+                    className="bg-gray-700 hidden md:block"
+                  />
+                </ScrollArea>
+              </div>
+
+              {/* Standings */}
+              <div className="flex w-full flex-col">
+                <h2 className="text-xl mb-4">Standings</h2>
+                <div className="flex flex-col md:flex-row lg:flex-row justify-around gap-4 mt-4">
+                  <Standings standingsResponse={driverStandings} />
+                  <Standings standingsResponse={constructorStandings} />
                 </div>
-                <ScrollBar
-                  orientation="horizontal"
-                  className="bg-gray-700 hidden md:block"
-                />
-              </ScrollArea>
-            </div>
-
-            {/* Standings */}
-            <div className="flex w-full flex-col">
-              <h2 className="text-xl mb-4">Standings</h2>
-              <div className="flex flex-col md:flex-row lg:flex-row justify-around gap-4 mt-4">
-                <Standings standingsResponse={driverStandings} />
-                <Standings standingsResponse={constructorStandings} />
               </div>
             </div>
           </div>
+          <Footer />
         </div>
       </div>
-      <Footer/>
-    </div>
-  );
+    );
 }
