@@ -12,14 +12,6 @@ export default function Standings({ standingsResponse }: StandingsProps) {
     standingsResponse?.MRData.StandingsTable.StandingsLists[0]
       .ConstructorStandings || null;
 
-  if (!driverStandings && !constructorStandings) {
-    return (
-      <div className="w-full flex justify-center items-center py-8">
-        <span className="text-gray-400 text-lg">No standings available</span>
-      </div>
-    );
-  }
-
   return (
     <div className="overflow-x-auto grid cols-2">
       <table className="min-w-full bg-warmBlack1 rounded-lg border border-gray-800">
@@ -45,7 +37,7 @@ export default function Standings({ standingsResponse }: StandingsProps) {
               >
                 <td className="py-2 px-4 text-white">{standing.position}</td>
                 <td className="py-2 px-4 text-white">
-                                      <span className="flex flex-row gap-2 align-center">
+                  <span className="flex flex-row gap-2 align-center items-center">
                     {" "}
                     <img
                       src={
@@ -57,9 +49,8 @@ export default function Standings({ standingsResponse }: StandingsProps) {
                           ? "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2025/astonmartin/2025astonmartinlogowhite.webp"
                           : `https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2025/${standing.Constructors[0].constructorId}/2025${standing.Constructors[0].constructorId}logowhite.webp`
                       }
-                      width={30}
                     />
-                  {standing.Driver.givenName} {standing.Driver.familyName}
+                    {standing.Driver.givenName} {standing.Driver.familyName}
                   </span>
                   {/* {standing.Constructors.map((c) => c.name).join(", ")} */}
                 </td>
@@ -76,7 +67,7 @@ export default function Standings({ standingsResponse }: StandingsProps) {
               >
                 <td className="py-2 px-4 text-white">{standing.position}</td>
                 <td className="py-2 px-4 text-white ">
-                  <span className="flex flex-row gap-2 align-center">
+                  <span className="flex flex-row gap-2 align-center items-center">
                     {" "}
                     <img
                       src={

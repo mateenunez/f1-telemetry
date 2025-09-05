@@ -1,8 +1,7 @@
 "use client";
 
-import { Geist, Aldrich, Oxanium } from "next/font/google";
-import type { ProcessedTiming } from "@/processors";
-import { ProcessedTimingStats } from "@/processors/timing-stats-processor";
+import { Aldrich, Oxanium } from "next/font/google";
+import type { ProcessedTiming, ProcessedTimingStats } from "@/processors";
 
 const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
 const oxanium = Oxanium({subsets: ["latin"], weight:"500"})

@@ -1,10 +1,13 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { AudioLines, Volume, Volume1, Volume2 } from "lucide-react";
+import { Volume2 } from "lucide-react";
 import { Geist, Aldrich } from "next/font/google";
-import type { ProcessedPosition, ProcessedDriver } from "@/processors";
-import { ProcessedCapture } from "@/processors/team-radio-processor";
+import type {
+  ProcessedPosition,
+  ProcessedDriver,
+  ProcessedCapture,
+} from "@/processors";
 import { audioUrl, useTelemetryAudio } from "@/hooks/use-raceControl";
 import { useEffect, useRef, useState } from "react";
 
@@ -60,8 +63,9 @@ export default function DriverPositionInfo({
   useEffect(() => {
     if (!lastCapture) return;
     if (driver?.driver_number !== lastCapture.racingNumber) return;
+    if (new Date(lastCapture.utc).getDay() !== new Date().getDay()) return;
     // Solo reproducir si el utc es diferente al último reproducido
-    if (lastPlayedUtcRef.current === lastCapture.utc) {
+    if (lastPlayedUtcRef.current !== lastCapture.utc) {
       playNotificationSound();
       playTeamRadioSound();
       lastPlayedUtcRef.current = lastCapture.utc;
@@ -73,16 +77,13 @@ export default function DriverPositionInfo({
 
     const handlePlay = () => setIsPlayingAudio(true);
     const handleEnded = () => setIsPlayingAudio(false);
-    const handlePause = () => setIsPlayingAudio(false);
 
     radioAudioRef.current.addEventListener("play", handlePlay);
     radioAudioRef.current.addEventListener("ended", handleEnded);
-    radioAudioRef.current.addEventListener("pause", handlePause);
 
     return () => {
       radioAudioRef.current?.removeEventListener("play", handlePlay);
       radioAudioRef.current?.removeEventListener("ended", handleEnded);
-      radioAudioRef.current?.removeEventListener("pause", handlePause);
     };
   }, [radioAudioRef.current]);
 

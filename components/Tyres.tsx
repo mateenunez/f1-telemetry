@@ -1,6 +1,6 @@
 "use client";
 
-import { ProcessedStint } from "@/processors/pit-processor";
+import { ProcessedStint } from "@/processors";
 import { Geist } from "next/font/google";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
@@ -37,7 +37,7 @@ export default function Tyres({ currentStint }: TyresProps) {
       {currentStint && (
         <div className="flex flex-col items-center justify-center text-gray-400">
           {getCompoundSvg(currentStint.compound, 30)}
-        <p>{currentStint.total_laps} L</p>
+          <p>{currentStint.total_laps} L</p>
         </div>
       )}
     </div>

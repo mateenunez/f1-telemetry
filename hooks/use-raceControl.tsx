@@ -1,12 +1,11 @@
-import { ProcessedRaceControl } from "@/processors/race-control-processor";
-import { useRef, useCallback, useState } from "react";
-import { MapSector } from "@/processors/map-processor";
-import { set } from "react-hook-form";
+import { useRef, useCallback } from "react";
+import { MapSector, ProcessedRaceControl } from "@/processors";
 
 interface UseRaceControlAudioOptions {
   cooldownMs?: number;
   audioSrc?: string;
 }
+export const audioUrl = "https://livetiming.formula1.com/static/";
 
 export const findYellowSectors = (
   messages: ProcessedRaceControl[] | undefined
@@ -48,14 +47,10 @@ export const findYellowSectors = (
   }
   return sectors;
 };
-
-export const audioUrl = "https://livetiming.formula1.com/static/";
-
 export const getSectorColor = (sector: MapSector, yellowSectors: Set<number>) =>
   yellowSectors.has(sector.number) ? "stroke-yellow-400" : "stroke-white";
 
 export function useTelemetryAudio(options: UseRaceControlAudioOptions = {}) {
-  const [audioElement, setAudioElement] = useState(null);
   const { cooldownMs = 0, audioSrc = "/race-control-notification.mp3" } =
     options;
   const lastPlayTime = useRef<number>(0);

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect,} from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ProcessedRaceControl } from "@/processors/race-control-processor";
+import { ProcessedRaceControl } from "@/processors";
 import { Geist } from "next/font/google";
 import { ensureUtc } from "@/utils/calendar";
 import { useTelemetryAudio } from "@/hooks/use-raceControl";
@@ -19,7 +19,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
   );
 
   const { playNotificationSound, unlockAudio, isUnlocked, timeUntilNextSound } =
-  useTelemetryAudio({
+    useTelemetryAudio({
       cooldownMs: 10 * 1000, // 10 segundos de cooldown
       audioSrc: "/race-control-notification.mp3", // Audio en /public
     });

@@ -1,15 +1,30 @@
-import { WebSocketManager, type WebSocketData, type SignalRMessage } from "./websocket/websocket-manager"
-import { PositionProcessor, type ProcessedPosition } from "./processors/position-processor"
-import { TimingProcessor, type ProcessedTiming } from "./processors/timing-processor"
-import { WeatherProcessor, type ProcessedWeather } from "./processors/weather-processor"
-import { DriverProcessor, type ProcessedDriver } from "./processors/driver-processor"
-import { RaceControlProcessor, type ProcessedRaceControl } from "./processors/race-control-processor"
-import { PitProcessor, type ProcessedPitStop, type ProcessedStint } from "./processors/pit-processor"
-import { SessionProcessor, type ProcessedSession } from "./processors/session-processor"
-import { CarDataProcessor, type ProcessedCarData } from "./processors/car-data-processor"
-import { PositionDataProcessor, type ProcessedPositionData } from "./processors/position-data-processor"
-import { TimingStatsProcessor, type ProcessedTimingStats } from "./processors/timing-stats-processor"
-import { ProcessedCapture, ProcessedTeamRadio, TeamRadioProcessor } from "./processors/team-radio-processor"
+import {
+  PositionProcessor,
+  type ProcessedPosition,
+  TimingProcessor,
+  type ProcessedTiming,
+  WeatherProcessor,
+  type ProcessedWeather,
+  DriverProcessor,
+  type ProcessedDriver,
+  RaceControlProcessor,
+  type ProcessedRaceControl,
+  PitProcessor,
+  type ProcessedPitStop,
+  type ProcessedStint,
+  SessionProcessor,
+  type ProcessedSession,
+  CarDataProcessor,
+  type ProcessedCarData,
+  PositionDataProcessor,
+  type ProcessedPositionData,
+  TimingStatsProcessor,
+  type ProcessedTimingStats,
+  ProcessedCapture,
+  ProcessedTeamRadio,
+  TeamRadioProcessor,
+} from "@/processors"
+import { WebSocketManager, type WebSocketData, type SignalRMessage } from "@/websocket/websocket-manager"
 
 export interface TelemetryData {
   positions: ProcessedPosition[]

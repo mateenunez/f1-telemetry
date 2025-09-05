@@ -1,0 +1,21 @@
+import { Github, Linkedin } from "lucide-react";
+
+export default function Footer() {
+  return (
+    <div className="w-full flex flex-row justify-start py-4 px-4 bg-transparent gap-4">
+      <div className="text-xs text-gray-500">
+        <p>
+          * DRS, Speeds and Drivers in map are currently a paid functionality
+        </p>
+      </div>
+      <div className="flex flex-row gap-2 text-gray-500">
+        <a href="https://github.com/mateenunez/f1-telemetry" className="decoration-none">
+          <Github size={16} />
+        </a>
+        <a href="https://www.linkedin.com/in/mateenunez/" className="decoration-none">
+          <Linkedin size={16} />
+        </a>
+      </div>
+    </div>
+  );
+}

@@ -2,7 +2,7 @@
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Clock, CloudRain, Sun, Cloud } from "lucide-react";
+import { CloudRain, Sun, Cloud } from "lucide-react";
 import { Geist, Orbitron } from "next/font/google";
 import F1Calendar from "@/components/Calendar";
 import type { TelemetryData } from "@/telemetry-manager";
@@ -20,7 +20,7 @@ export default function Header({ telemetryData }: HeaderProps) {
   const session = telemetryData?.session;
   const weather = telemetryData?.weather;
   const [sessionTime, setSessionTime] = useState(0);
-  const [endTime, setEndTime] = useState(0)
+  const [endTime, setEndTime] = useState(0);
 
   const getWeatherIcon = () => {
     if (!weather) return <Sun className="h-8 w-8 text-orange-300" />;
@@ -30,30 +30,28 @@ export default function Header({ telemetryData }: HeaderProps) {
     return <Sun className="h-8 w-8 text-orange-300" />;
   };
 
+  useEffect(() => {
+    if (!session?.date_start || !session?.date_end) return;
+    if (session.session_status === "Finalised") return;
 
-useEffect(() => {
-  if (!session?.date_start || !session?.date_end) return;
+    const offset = parseTimeOffset(session.gmt_offset);
+    const startTime =
+      new Date(ensureUtc(session.date_start)).getTime() - offset;
+    const endTime = new Date(ensureUtc(session.date_end)).getTime() - offset;
+    setEndTime(endTime);
 
-  const offset = parseTimeOffset(session.gmt_offset);
-  const startTime = new Date(ensureUtc(session.date_start)).getTime() - offset;
-  const endTime = new Date(ensureUtc(session.date_end)).getTime() - offset;
-  setEndTime(endTime);
-  const duration = endTime - startTime;
+    const now = Date.now();
 
-  const now = Date.now();
+    if (now < startTime) return;  
 
-  if (now < startTime) return;
-  if (now > endTime) return setSessionTime(duration);
+    const interval = setInterval(() => {
+      const currentTime = Date.now();
+      const elapsed = Math.min(currentTime - startTime);
+      setSessionTime(elapsed);
+    }, 1000);
 
-  const interval = setInterval(() => {
-    const currentTime = Date.now();
-    const elapsed = Math.min(currentTime - startTime, duration);
-    setSessionTime(elapsed);
-  }, 1000);
-
-  return () => clearInterval(interval);
-}, [session?.date_start, session?.date_end]);
-
+    return () => clearInterval(interval);
+  }, [session?.date_start, session?.date_end]);
 
   return (
     <Card className="bg-warmBlack1 text-white border-none mx-2 relative">
@@ -84,7 +82,7 @@ useEffect(() => {
             className="flex items-center gap-4 text-nowrap flex-col md:flex-row text-xs md:text-sm"
             style={mediumGeist.style}
           >
-            {endTime && endTime < new Date().getTime() ? (
+            {(endTime && endTime < new Date().getTime()) && session?.session_status === "Finalised" ? (
               <F1Calendar />
             ) : (
               <>
@@ -151,7 +149,7 @@ useEffect(() => {
                                 Math.min(
                                   100,
                                   ((weather.track_temperature - 15) /
-                                    (40 - 15)) *
+                                    (60 - 15)) *
                                     100
                                 )
                               )}%`,

@@ -37,7 +37,9 @@ export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
         {/* Velocidad */}
         <p
           style={mediumGeist.style}
-          className={`text-[0.6rem] text-white ${getSpeedColor(carData?.speed)}`}
+          className={`text-[0.6rem] text-white ${getSpeedColor(
+            carData?.speed
+          )}`}
         >
           {carData?.speed !== undefined ? `${carData.speed} km/h` : ""}
         </p>
@@ -50,9 +52,12 @@ export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
         {timing?.in_pit ? (
           <span className="text-f1Blue flex flex-col" style={mediumGeist.style}>
             IN PIT
-            <span style={mediumGeist.style} className="text-[0.6rem] text-white">
-            {timing?.number_of_pit_stops} PIT
-          </span>
+            <span
+              style={mediumGeist.style}
+              className="text-[0.6rem] text-white"
+            >
+              {timing?.number_of_pit_stops} PIT
+            </span>
           </span>
         ) : (
           <span style={mediumGeist.style}>

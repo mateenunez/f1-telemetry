@@ -58,13 +58,13 @@ export class RaceControlProcessor {
       }
     }
 
-    // Mantener solo los últimos 30 (por fecha de llegada, y el getLatest revierte)
-    this.messages = this.messages.slice(-30)
+    // Mantener solo los últimos 60 (por fecha de llegada, y el getLatest revierte)
+    this.messages = this.messages.slice(-60)
 
     return processedBatch
   }
 
-  getLatestMessages(count = 20): ProcessedRaceControl[] {
+  getLatestMessages(count = 60): ProcessedRaceControl[] {
     return this.messages.slice(-count).reverse()
   }
 

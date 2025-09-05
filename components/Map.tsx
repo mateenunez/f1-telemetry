@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
-
 import {
   ProcessedDriver,
   ProcessedPositionData,
   ProcessedTiming,
+  TrackPosition,
+  MapSector,
 } from "@/processors";
-import { TrackPosition, MapSector } from "@/processors/map-processor";
 import {
   fetchMap,
   createSectors,
@@ -14,7 +14,7 @@ import {
   rad,
 } from "@/processors/map-processor";
 import { Oxanium } from "next/font/google";
-import {getSectorColor } from "@/hooks/use-raceControl";
+import { getSectorColor } from "@/hooks/use-raceControl";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Card, CardContent } from "./ui/card";
@@ -38,7 +38,7 @@ type MapProps = {
   drivers: Record<number, ProcessedDriver>;
   timing: ProcessedTiming[];
   circuitKey: number;
-  yellowSectors: Set<number>
+  yellowSectors: Set<number>;
 };
 
 export default function Map({
@@ -46,7 +46,7 @@ export default function Map({
   drivers,
   timing,
   circuitKey,
-  yellowSectors
+  yellowSectors,
 }: MapProps) {
   const [[minX, minY, widthX, widthY], setBounds] = useState<(null | number)[]>(
     [null, null, null, null]
@@ -163,18 +163,18 @@ export default function Map({
           .join(" ")}`,
       };
     });
-  }, [sectors]);
+  }, [sectors, yellowSectors]);
 
   if (!points || !minX || !minY || !widthX || !widthY) {
     return (
-      <SkeletonTheme baseColor="#151515ff" highlightColor="#444"> 
-         <Card className="lg:col-span-4 bg-warmBlack1 border-none border-2 flex flex-col mt-8">
-                <CardContent className="flex flex-col justify-center h-full">
-                  <div className="overflow-hidden h-fit">
-                    <Skeleton height={400} width="100%" />
-                  </div>
-                </CardContent>
-              </Card>
+      <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
+        <Card className="lg:col-span-4 bg-warmBlack1 border-none border-2 flex flex-col mt-8">
+          <CardContent className="flex flex-col justify-center h-full">
+            <div className="overflow-hidden h-fit">
+              <Skeleton height={400} width="100%" />
+            </div>
+          </CardContent>
+        </Card>
       </SkeletonTheme>
     );
   }
