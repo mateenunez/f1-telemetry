@@ -38,9 +38,9 @@ export default function F1Dashboard() {
         <div className="max-w-8xl mx-auto space-y-4 h-full">
           <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
             {/* Header Skeleton */}
-            <div className="flex flex-row w-full justify-between items-center gap-3 px-6">
-              <Skeleton height={60} width={450} />
-              <Skeleton height={60} width={400} />
+            <div className="flex flex-row justify-between items-center w-full px-6 py-4 mb-4">
+              <Skeleton height={60} width="40vw" />
+              <Skeleton height={60} width="25vw" />
             </div>
             {/* Cards Skeleton */}
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-4 pb-4">

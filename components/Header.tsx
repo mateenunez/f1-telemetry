@@ -32,7 +32,6 @@ export default function Header({ telemetryData }: HeaderProps) {
 
   useEffect(() => {
     if (!session?.date_start || !session?.date_end) return;
-    if (session.session_status === "Finalised") return;
 
     const offset = parseTimeOffset(session.gmt_offset);
     const startTime =
@@ -40,9 +39,11 @@ export default function Header({ telemetryData }: HeaderProps) {
     const endTime = new Date(ensureUtc(session.date_end)).getTime() - offset;
     setEndTime(endTime);
 
+    if (session.session_status === "Finalised") return;
+
     const now = Date.now();
 
-    if (now < startTime) return;  
+    if (now < startTime) return;
 
     const interval = setInterval(() => {
       const currentTime = Date.now();
@@ -82,7 +83,9 @@ export default function Header({ telemetryData }: HeaderProps) {
             className="flex items-center gap-4 text-nowrap flex-col md:flex-row text-xs md:text-sm"
             style={mediumGeist.style}
           >
-            {(endTime && endTime < new Date().getTime()) && session?.session_status === "Finalised" ? (
+            {endTime &&
+            endTime < new Date().getTime() &&
+            session?.session_status == "Finalised" ? (
               <F1Calendar />
             ) : (
               <>
