@@ -26,8 +26,8 @@ export default function F1Calendar() {
 
     loadCalendar();
 
-    // Actualizar cada 5 minutos
-    const interval = setInterval(loadCalendar, 5 * 60 * 1000);
+    // Actualizar cada 1 minuto
+    const interval = setInterval(loadCalendar, 1 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 
