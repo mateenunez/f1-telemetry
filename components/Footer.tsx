@@ -2,11 +2,8 @@ import { Github, Linkedin } from "lucide-react";
 
 export default function Footer() {
   return (
-    <div className="w-full flex flex-row justify-start py-4 px-4 bg-transparent gap-4">
+    <div className="w-full flex flex-row justify-center py-4 px-4 bg-transparent gap-4">
       <div className="text-xs text-gray-500">
-        <p>
-          * DRS, Speeds and Drivers in map are currently a paid functionality
-        </p>
       </div>
       <div className="flex flex-row gap-2 text-gray-500">
         <a

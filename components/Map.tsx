@@ -401,18 +401,25 @@ const CarDot = ({
         transform,
         ...(color && { fill: `#${color}` }),
         opacity: isRetired ? 0.4 : 1,
-        stroke: "white",
+        stroke: "black",
         strokeWidth: "2",
         filter: "drop-shadow(0 0 4px rgba(0,0,0,0.8))",
       }}
     >
+      {" "}
+      <circle r={140} fill={color ? `#${color}44` : "#fff2"} stroke="none" />
       <circle id={`map.driver.circle`} r={120} />
+      <circle r={90} fill="#0002" stroke="none" />
       <text
         id={`map.driver.text`}
         fontWeight="bold"
         fontSize={120 * 3}
+        strokeWidth={0}
         style={{
-          transform: "translateX(150px) translateY(-120px)",
+          fontFamily: "Arial, sans-serif",
+          transform: "translateX(100px) translateY(-160px)",
+          textAnchor: "middle",
+          dominantBaseline: "middle",
         }}
       >
         {name}
