@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: 'https://f1telemetry.vercel.app/schedule',
       lastModified: new Date(),
       changeFrequency: 'daily',
-      priority: 1,
+      priority: 2,
     }
   ]
 }
