@@ -23,11 +23,11 @@ export default function Header({ telemetryData }: HeaderProps) {
   const [endTime, setEndTime] = useState(0);
 
   const getWeatherIcon = () => {
-    if (!weather) return <Sun className="h-8 w-8 text-orange-300" />;
+    if (!weather) return <Sun className="h-7 w-7 text-orange-300" />;
     if (weather.rainfall > 0)
-      return <CloudRain className="h-8 w-8 text-f1Blue" />;
-    if (weather.humidity > 80) return <Cloud className="h-8 w-8 text-f1Blue" />;
-    return <Sun className="h-8 w-8 text-orange-300" />;
+      return <CloudRain className="h-7 w-7 text-f1Blue" />;
+    if (weather.humidity > 80) return <Cloud className="h-7 w-7 text-f1Blue" />;
+    return <Sun className="h-7 w-7 text-orange-300" />;
   };
 
   useEffect(() => {
@@ -118,10 +118,10 @@ export default function Header({ telemetryData }: HeaderProps) {
                     <div className="flex flex-col md:flex-row gap-2">
                       {/* Air Temperature Bar */}
                       <div className="flex flex-col items-center">
-                        <span className="text-sm">
+                        <span className="text-xs">
                           Air {Math.round(weather.air_temperature)}°C
                         </span>
-                        <div className="relative w-[5rem] h-2 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 rounded-full">
+                        <div className="relative w-[4rem] h-2 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 rounded-full">
                           <div
                             className="absolute top-0 w-0.5 h-2 bg-white rounded-full shadow-sm"
                             style={{
@@ -140,10 +140,10 @@ export default function Header({ telemetryData }: HeaderProps) {
 
                       {/* Track Temperature Bar */}
                       <div className="flex flex-col items-center">
-                        <span className="text-sm">
+                        <span className="text-xs">
                           Track {Math.round(weather.track_temperature)}°C
                         </span>
-                        <div className="relative w-[5rem] h-2 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 rounded-full">
+                        <div className="relative w-[4rem] h-2 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 rounded-full">
                           <div
                             className="absolute top-0 w-0.5 h-2 bg-white rounded-full shadow-sm"
                             style={{

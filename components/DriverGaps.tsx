@@ -15,7 +15,7 @@ export default function DriverGaps({ timing, session }: DriverGapsProps) {
   const lastGap = timing?.stats?.findLast(stat => stat);
   return (
     <div className="flex flex-col items-start min-w-[8rem]">
-      {(timing?.gap_to_leader || lastGap?.GapToLeader != '') ? (
+      {(timing?.gap_to_leader || (lastGap?.GapToLeader && lastGap?.GapToLeader !== '')) ? (
         <div
           className="flex items-center flex-row gap-2 text-xs text-white"
           style={aldrich.style}
@@ -26,7 +26,7 @@ export default function DriverGaps({ timing, session }: DriverGapsProps) {
       ) : (
         <></>
       )}
-      {(timing?.interval_to_ahead || lastGap?.IntervalToPositionAhead != '') ? (
+      {(timing?.interval_to_ahead || (lastGap?.IntervalToPositionAhead && lastGap?.IntervalToPositionAhead !== '')) ? (
         <div
           className="flex items-center flex-row gap-2 text-xs text-white "
           style={aldrich.style}
@@ -37,7 +37,7 @@ export default function DriverGaps({ timing, session }: DriverGapsProps) {
       ) : (
         <></>
       )}
-      {(timing?.time_diff_to_ahead || lastGap?.TimeDiffToPositionAhead != '') ? (
+      {(timing?.time_diff_to_ahead || (lastGap?.TimeDiffToPositionAhead && lastGap?.TimeDiffToPositionAhead !== '')) ? (
         <div
           className="flex items-center flex-row gap-2 text-xs text-white"
           style={aldrich.style}
@@ -48,7 +48,7 @@ export default function DriverGaps({ timing, session }: DriverGapsProps) {
       ) : (
         <></>
       )}
-      {(timing?.time_diff_to_fastest || lastGap?.TimeDiffToFastest != '') ? (
+      {(timing?.time_diff_to_fastest || (lastGap?.TimeDiffToFastest && lastGap?.TimeDiffToFastest !== '')) ? (
         <div
           className="flex items-center flex-row gap-2 text-xs text-white"
           style={aldrich.style}

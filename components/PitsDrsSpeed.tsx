@@ -30,7 +30,7 @@ export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
           {carData?.drs ? (
             <p className="text-green-400">DRS</p>
           ) : (
-            <p className="text-gray-400">DRSF</p>
+            <p className="text-gray-400">DRS</p>
           )}
         </span>
 
