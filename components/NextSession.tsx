@@ -6,42 +6,71 @@ import {
   getDayOfWeek,
   getRelativeDate,
   getTimeOnly,
+  TimeUntilNext,
 } from "@/utils/calendar";
+import { time } from "console";
 import { Geist } from "next/font/google";
+import { useEffect, useState } from "react";
 
 interface NextSessionProps {
   session: F1Event;
-  timeUntil: {
-    days: number;
-    hours: number;
-    minutes: number;
-  };
+  timeUntil: TimeUntilNext;
 }
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
 export default function NextSession({ session, timeUntil }: NextSessionProps) {
+  const [time, setTime] = useState<TimeUntilNext>(timeUntil);
   if (!session) return null;
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime((prev) => {
+        let { days, hours, minutes, seconds, totalHours, totalMinutes } = prev;
+        if (seconds > 0) {
+          seconds -= 1;
+        } else {
+          seconds = 59;
+          if (minutes > 0) {
+            minutes -= 1;
+          } else {
+            minutes = 59;
+            if (hours > 0) {
+              hours -= 1;
+            } else {
+              hours = 23;
+              if (days > 0) {
+                days -= 1;
+              }
+            }
+          }
+        }
+        return { days, hours, minutes, seconds, totalHours, totalMinutes };
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div
       className="flex md:flex-col py-4 max-w-full justify-center"
       style={mediumGeist.style}
     >
-      <div className="flex md:flex-row flex-col max-w-[75vw] justify-between items-center">
+      <div className="flex md:flex-row flex-col max-w-[75vw] justify-between items-center text-center">
         {/* Countdown Timer */}
         <div className="gap-4 tracking-widest flex md:flex-row">
+          <TimeUnit value={time.days} label={time.days > 1 ? "days" : "day"} />
           <TimeUnit
-            value={timeUntil.days}
-            label={timeUntil.days > 1 ? "days" : "day"}
+            value={time.hours}
+            label={time.hours > 1 ? "hours" : "hour"}
           />
           <TimeUnit
-            value={timeUntil.hours}
-            label={timeUntil.hours > 1 ? "hours" : "hour"}
+            value={time.minutes}
+            label={time.minutes > 1 ? "minutes" : "minute"}
           />
           <TimeUnit
-            value={timeUntil.minutes}
-            label={timeUntil.minutes > 1 ? "minutes" : "minute"}
+            value={time.seconds}
+            label={time.seconds > 1 ? "seconds" : "second"}
           />
         </div>
 

@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import {
-  F1CalendarResponse,
-  fetchCalendar,
+  F1UpcomingResponse,
+  fetchUpcoming,
   formatTimeUntil,
   getEventType,
 } from "@/utils/calendar";
@@ -12,15 +12,15 @@ const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 export default function F1Calendar() {
-  const [calendar, setCalendar] = useState<F1CalendarResponse | null>(null);
+  const [upcoming, setUpcoming] = useState<F1UpcomingResponse | null>(null);
 
   useEffect(() => {
     const loadCalendar = async () => {
       try {
-        const calendarData = await fetchCalendar();
-        setCalendar(calendarData);
+        const calendarData = await fetchUpcoming();
+        setUpcoming(calendarData);
       } catch (err) {
-        console.error("Error loading calendar:", err);
+        console.error("Error loading upcoming:", err);
       }
     };
 
@@ -31,18 +31,18 @@ export default function F1Calendar() {
     return () => clearInterval(interval);
   }, []);
 
-  if (calendar) {
+  if (upcoming) {
     return (
       <div className="flex flex-col gap-0 items-center text-offWhite">
         <div className="flex flex-col md:flex-row lg:flex-row text-xs md:text-sm lg:text-sm text-gray-500 md:gap-1 lg:gap-1" style={mediumGeist.style}>
         <p>Upcoming: {" "}</p>
         <p>
-          {getEventType(calendar?.nextEvent.summary)} - 
+          {getEventType(upcoming?.nextEvent.summary)} - 
         </p>
-        <p>{calendar?.nextEvent.location}</p>
+        <p>{upcoming?.nextEvent.location}</p>
         </div>
         <a style={orbitron.style} className="flex flex-row gap-2 hover:cursor-pointer text-md font-regular" href="/schedule">
-          {formatTimeUntil(calendar.timeUntilNext).toUpperCase()}{" "}
+          {formatTimeUntil(upcoming.timeUntilNext).toUpperCase()}{" "}
         </a>
       </div>
     );

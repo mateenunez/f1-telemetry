@@ -28,9 +28,9 @@ export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
           style={mediumGeist.style}
         >
           {carData?.drs ? (
-            <p className="text-green-400">DRS ON</p>
+            <p className="text-green-400">DRS</p>
           ) : (
-            <p className="text-gray-400">DRS OFF</p>
+            <p className="text-gray-400">DRSF</p>
           )}
         </span>
 

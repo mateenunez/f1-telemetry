@@ -43,9 +43,6 @@ export default function SchedulePage() {
     };
 
     loadCalendar();
-
-    const interval = setInterval(loadCalendar, 60 * 1000);
-    return () => clearInterval(interval);
   }, []);
 
   if (!calendar || !driverStandings || !constructorStandings) {
@@ -70,86 +67,6 @@ export default function SchedulePage() {
                 {Array.from({ length: 3 }).map((_, idx) => (
                   <Skeleton width={300} height={160} key={idx} />
                 ))}
-              </div>
-              {/* Standings Skeleton */}
-              <div className="flex w-full flex-col mt-8 ">
-                <Skeleton
-                  height={30}
-                  width={100}
-                  style={{ marginBottom: 16 }}
-                />
-                <div className="flex flex-col md:flex-row lg:flex-row justify-around gap-4 mt-4">
-                  {/* Tabla de Driver Standings Skeleton */}
-                  <div className="overflow-x-auto w-full">
-                    <table className="min-w-full bg-warmBlack1 rounded-lg w-[5rem] border border-gray-800">
-                      <thead>
-                        <tr className="bg-warmBlack2 text-white text-sm font-regular">
-                          <th className="py-2 px-4 text-left">
-                            <Skeleton width={10} />
-                          </th>
-                          <th className="py-2 px-4 text-left">
-                            <Skeleton width={10} />
-                          </th>
-                          <th className="py-2 px-4 text-right">
-                            <Skeleton width={10} />
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {Array.from({ length: 8 }).map((_, idx) => (
-                          <tr key={idx} className="border-b border-gray-700">
-                            <td className="py-2 px-4">
-                              <Skeleton width={10} />
-                            </td>
-                            <td className="py-2 px-4">
-                              <div className="flex flex-row gap-2 align-center">
-                                <Skeleton width={10} />
-                              </div>
-                            </td>
-                            <td className="py-2 px-4 text-right">
-                              <Skeleton width={10} />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                  {/* Tabla de Constructor Standings Skeleton */}
-                  <div className="overflow-x-auto min-w-[20rem] w-full">
-                    <table className="min-w-full bg-warmBlack1 rounded-lg border border-gray-800">
-                      <thead>
-                        <tr className="bg-warmBlack2 text-white text-sm font-regular">
-                          <th className="py-2 px-4 text-left">
-                            <Skeleton width={10} />
-                          </th>
-                          <th className="py-2 px-4 text-left">
-                            <Skeleton width={10} />
-                          </th>
-                          <th className="py-2 px-4 text-right">
-                            <Skeleton width={10} />
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {Array.from({ length: 8 }).map((_, idx) => (
-                          <tr key={idx} className="border-b border-gray-700">
-                            <td className="py-2 px-4">
-                              <Skeleton width={10} />
-                            </td>
-                            <td className="py-2 px-4">
-                              <div className="flex flex-row gap-2 align-center">
-                                <Skeleton width={10} />
-                              </div>
-                            </td>
-                            <td className="py-2 px-4 text-right">
-                              <Skeleton width={10} />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
               </div>
             </div>
           </SkeletonTheme>
@@ -237,13 +154,13 @@ export default function SchedulePage() {
               </div>
 
               {/* Standings */}
-              <div className="flex w-full flex-col">
+              {/* <div className="flex w-full flex-col">
                 <h2 className="text-xl mb-4">Standings</h2>
                 <div className="flex flex-col md:flex-row lg:flex-row justify-around gap-4 mt-4">
                   <Standings standingsResponse={driverStandings} />
                   <Standings standingsResponse={constructorStandings} />
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <Footer />

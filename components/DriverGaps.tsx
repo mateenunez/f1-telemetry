@@ -12,48 +12,49 @@ interface DriverGapsProps {
 }
 
 export default function DriverGaps({ timing, session }: DriverGapsProps) {
+  const lastGap = timing?.stats?.findLast(stat => stat);
   return (
     <div className="flex flex-col items-start min-w-[8rem]">
-      {timing?.gap_to_leader && session?.session_type != "Practice" ? (
+      {(timing?.gap_to_leader || lastGap?.GapToLeader != '') ? (
         <div
           className="flex items-center flex-row gap-2 text-xs text-white"
           style={aldrich.style}
         >
           <span className="text-[0.7rem] text-gray-400">GAP LEADER</span>
-          <p style={oxanium.style}>{timing?.gap_to_leader}</p>
+          <p style={oxanium.style}>{timing?.gap_to_leader || lastGap?.GapToLeader}</p>
         </div>
       ) : (
         <></>
       )}
-      {timing?.interval_to_ahead ? (
+      {(timing?.interval_to_ahead || lastGap?.IntervalToPositionAhead != '') ? (
         <div
           className="flex items-center flex-row gap-2 text-xs text-white "
           style={aldrich.style}
         >
           <span className="text-[0.55rem] text-gray-400">GAP AHEAD</span>
-          <p style={oxanium.style}>{timing?.interval_to_ahead}</p>
+          <p style={oxanium.style}>{timing?.interval_to_ahead || lastGap?.IntervalToPositionAhead}</p>
         </div>
       ) : (
         <></>
       )}
-      {timing?.time_diff_to_ahead && session?.session_type == "Practice" ? (
+      {(timing?.time_diff_to_ahead || lastGap?.TimeDiffToPositionAhead != '') ? (
         <div
           className="flex items-center flex-row gap-2 text-xs text-white"
           style={aldrich.style}
         >
-          <span className="text-[0.55rem] text-gray-400">TIME AHEAD</span>
-          <p style={oxanium.style}>{timing?.time_diff_to_ahead}</p>
+          <span className="text-[0.55rem] text-gray-400">DIFF AHEAD</span>
+          <p style={oxanium.style}>{timing?.time_diff_to_ahead || lastGap?.TimeDiffToPositionAhead}</p>
         </div>
       ) : (
         <></>
       )}
-      {timing?.time_diff_to_fastest && session?.session_type == "Practice" ? (
+      {(timing?.time_diff_to_fastest || lastGap?.TimeDiffToFastest != '') ? (
         <div
           className="flex items-center flex-row gap-2 text-xs text-white"
           style={aldrich.style}
         >
-          <span className="text-[0.55rem] text-gray-400">TIME FASTEST</span>
-          <p style={oxanium.style}>{timing?.time_diff_to_fastest}</p>
+          <span className="text-[0.55rem] text-gray-400">GAP FASTEST</span>
+          <p style={oxanium.style}>{timing?.time_diff_to_fastest || lastGap?.TimeDiffToFastest}</p>
         </div>
       ) : (
         <></>

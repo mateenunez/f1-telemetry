@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import DriverPositionInfo from "@/components/DriverPositionInfo";
 import PitsDrsSpeed from "@/components/PitsDrsSpeed";
@@ -17,6 +17,7 @@ import {
   ProcessedSession,
 } from "@/processors";
 import { memo } from "react";
+import { Orbitron } from "next/font/google";
 
 interface DriverPositionsProps {
   positions: ProcessedPosition[];
@@ -30,6 +31,9 @@ interface DriverPositionsProps {
   handlePinnedDriver: (driverNumber: number) => void;
   session: ProcessedSession | null | undefined;
 }
+
+
+const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 const DriverPositions = memo(function DriverPositions({
   positions,
@@ -45,6 +49,22 @@ const DriverPositions = memo(function DriverPositions({
 }: DriverPositionsProps) {
   return (
     <Card className="lg:col-span-6 bg-warmBlack1 border-none max-h-screen">
+      <div style={orbitron.style}>
+        <div className="py-1.5 text-[0.6rem] text-gray-400/20 text-center">
+          <div className="flex flex-row gap-6">
+            <div className="min-w-[11.5rem]">DRIVER</div>
+            <div className="flex flex-row items-center justify-between w-full gap-4 " >
+              <div className="min-w-[2.8rem]">DRS</div>
+              <div className="min-w-[2rem]">PIT</div>
+              <div className="min-w-[10rem]">MINISECTORS</div>
+              <div className="min-w-[4.3rem]">SECTOR TIMES</div>
+              <div className="min-w-[7rem]">LAP TIMES</div>
+              <div className="min-w-[8rem]">GAPS</div>
+              <div className="min-w-[2rem]">TYRES</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
         <ScrollArea className="overflow-x-auto min-w-max h-full" type="scroll">
           <div className="space-y-2">
@@ -55,7 +75,7 @@ const DriverPositions = memo(function DriverPositions({
               const carData = driverCarData[idx];
               const currentStint = driverStints[idx];
               const lastCapture = lastCaptures[idx];
-             
+
               return (
                 <div
                   key={pos.driver_number}

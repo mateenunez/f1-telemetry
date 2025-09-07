@@ -1,9 +1,17 @@
+export interface TimingStat {
+  TimeDiffToFastest?: string;
+  TimeDiffToPositionAhead?: string;
+  GapToLeader?: string;
+  IntervalToPositionAhead?: string;
+}
+
 export interface ProcessedTiming {
   driver_number: number
-  gap_to_leader: string
-  interval_to_ahead: string
-  time_diff_to_fastest: string
-  time_diff_to_ahead: string
+  gap_to_leader?: string
+  interval_to_ahead?: string
+  time_diff_to_fastest?: string
+  time_diff_to_ahead?: string
+  stats?: TimingStat[]
   last_lap_time: string
   best_lap_time: { Value?: string, Lap?: number }
   sector_times: {
@@ -17,10 +25,10 @@ export interface ProcessedTiming {
     sector3: number[]
   }
   speeds: {
-    i1?: {Value: number, Status: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
-    i2?: {Value: number, Status: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
-    fl?: {Value: number, Status: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
-    st?: {Value: number, Status: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
+    i1?: { Value: number, Status: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
+    i2?: { Value: number, Status: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
+    fl?: { Value: number, Status: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
+    st?: { Value: number, Status: number, PreviousValue: number, OverallFastest: boolean, PersonalFastest: boolean }
   }
   number_of_laps: number
   number_of_pit_stops: number
@@ -80,6 +88,7 @@ export class TimingProcessor {
         interval_to_ahead: "",
         time_diff_to_ahead: "",
         time_diff_to_fastest: "",
+        stats: [],
         last_lap_time: "",
         best_lap_time: { Value: "", Lap: null },
         sector_times: { sector1: undefined, sector2: undefined, sector3: undefined },
@@ -94,6 +103,16 @@ export class TimingProcessor {
         knockedOut: false
       }
 
+      // Extraer stats del array
+      const statsArray: TimingStat[] = Array.isArray(data?.Stats)
+        ? data.Stats.map((statObj: any) => ({
+          TimeDiffToFastest: statObj?.TimeDiffToFastest ?? "",
+          TimeDiffToPositionAhead: statObj?.TimeDiffToPositionAhead ?? "",
+          GapToLeader: statObj?.GapToLeader ?? "",
+          IntervalToPositionAhead: statObj?.IntervalToPositionAhead ?? "",
+        }))
+        : [];
+
       const updated: ProcessedTiming = {
         ...existing,
         gap_to_leader: data?.GapToLeader ?? existing.gap_to_leader,
@@ -101,6 +120,7 @@ export class TimingProcessor {
           data?.IntervalToPositionAhead?.Value ?? existing.interval_to_ahead,
         time_diff_to_ahead: data?.TimeDiffToPositionAhead ?? existing.time_diff_to_ahead,
         time_diff_to_fastest: data?.TimeDiffToFastest ?? existing.time_diff_to_fastest,
+        stats: statsArray,
         last_lap_time: data?.LastLapTime?.Value ?? existing.last_lap_time,
         best_lap_time: {
           Value: data?.BestLapTime?.Value ?? existing.best_lap_time.Value,

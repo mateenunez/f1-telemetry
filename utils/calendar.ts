@@ -11,6 +11,7 @@ export interface TimeUntilNext {
     days: number;
     hours: number;
     minutes: number;
+    seconds: number;
     totalMinutes: number;
     totalHours: number;
 }
@@ -21,6 +22,13 @@ export interface F1CalendarResponse {
     timeUntilNext: TimeUntilNext;
     totalEvents: number;
     upcomingEvents: F1Event[];
+    lastUpdated: string;
+}
+
+export interface F1UpcomingResponse {
+    success: boolean;
+    nextEvent: F1Event;
+    timeUntilNext: TimeUntilNext;
     lastUpdated: string;
 }
 
@@ -92,7 +100,29 @@ export interface StandingsResponse {
 }
 
 
+export async function fetchUpcoming(): Promise<F1UpcomingResponse> {
+    try {
 
+        const upcomingUrl = process.env.NEXT_PUBLIC_UPCOMING_URL || "";
+        const response = await fetch(upcomingUrl);
+
+        if (!response.ok) {
+            throw new Error(`Error al obtener el evento siguiente: ${response.status}`);
+        }
+
+        const data: F1UpcomingResponse = await response.json();
+
+        if (!data.success) {
+            throw new Error('Error en la respuesta de la API');
+        }
+
+        return data;
+
+    } catch (error) {
+        console.error('Error al obtener el calendario:', error);
+        throw error;
+    }
+}
 
 export async function fetchCalendar(): Promise<F1CalendarResponse> {
     try {
