@@ -16,8 +16,9 @@ import {
   ProcessedCapture,
   ProcessedSession,
 } from "@/processors";
-import { memo } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { Orbitron } from "next/font/google";
+import { audioUrl, useTelemetryAudio } from "@/hooks/use-raceControl";
 
 interface DriverPositionsProps {
   positions: ProcessedPosition[];
@@ -26,7 +27,7 @@ interface DriverPositionsProps {
   driverTimingStats: (ProcessedTimingStats | undefined)[];
   driverCarData: (ProcessedCarData | undefined)[];
   driverStints: (ProcessedStint | undefined)[];
-  lastCaptures: (ProcessedCapture | undefined)[];
+  lastCapture: ProcessedCapture | undefined;
   pinnedDriver: number | null;
   handlePinnedDriver: (driverNumber: number) => void;
   session: ProcessedSession | null | undefined;
@@ -41,11 +42,43 @@ const DriverPositions = memo(function DriverPositions({
   driverTimingStats,
   driverCarData,
   driverStints,
-  lastCaptures,
+  lastCapture,
   pinnedDriver,
   handlePinnedDriver,
   session,
 }: DriverPositionsProps) {
+  const [isPlayingAudio, setIsPlayingAudio] = useState<number | undefined>();
+  const lastPlayedUtcRef = useRef<string | undefined>(undefined);
+  const { playNotificationSound } = useTelemetryAudio();
+  const { playTeamRadioSound, radioAudioRef } = useTelemetryAudio();
+
+  useEffect(() => {
+    if (!lastCapture) return;
+    if (new Date(lastCapture.utc).getDay() !== new Date().getDay()) return;
+    // Solo reproducir si el utc es diferente al último reproducido
+    if (lastPlayedUtcRef.current !== lastCapture.utc) {
+      const url = audioUrl + session?.path + lastCapture.path;
+      lastPlayedUtcRef.current = lastCapture.utc;
+      playNotificationSound();
+      playTeamRadioSound(url);
+    }
+  }, [lastCapture]);
+
+  useEffect(() => {
+    if (!radioAudioRef.current || !lastCapture) return;
+
+    const handlePlay = () => setIsPlayingAudio(lastCapture.racingNumber);
+    const handleEnded = () => setIsPlayingAudio(undefined);
+
+    radioAudioRef.current.addEventListener("play", handlePlay);
+    radioAudioRef.current.addEventListener("ended", handleEnded);
+
+    return () => {
+      radioAudioRef.current?.removeEventListener("play", handlePlay);
+      radioAudioRef.current?.removeEventListener("ended", handleEnded);
+    };
+  }, [radioAudioRef.current]);
+
   return (
     <Card className="lg:col-span-6 bg-warmBlack1 border-none max-h-screen">
       <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
@@ -54,9 +87,11 @@ const DriverPositions = memo(function DriverPositions({
             <div className="py-1.5 text-[0.6rem] text-gray-400/20 text-center">
               <div className="flex flex-row gap-6">
                 <div className="min-w-[11.5rem]">DRIVER</div>
-                <div className="flex flex-row items-center justify-between w-full gap-4 ">
-                  <div className="min-w-[2.8rem]">DRS</div>
-                  <div className="min-w-[2rem]">PIT</div>
+                <div className="flex flex-row items-start justify-between w-full">
+                  <div className="flex flex-row gap-2">
+                    <div className="min-w-[2rem]">DRS</div>
+                    <div className="min-w-[2rem]">PIT</div>
+                  </div>
                   <div className="min-w-[10rem]">MINISECTORS</div>
                   <div className="min-w-[4.3rem]">SECTOR TIMES</div>
                   <div className="min-w-[7rem]">LAP TIMES</div>
@@ -73,7 +108,6 @@ const DriverPositions = memo(function DriverPositions({
               const timingStats = driverTimingStats[idx];
               const carData = driverCarData[idx];
               const currentStint = driverStints[idx];
-              const lastCapture = lastCaptures[idx];
 
               return (
                 <div
@@ -88,11 +122,11 @@ const DriverPositions = memo(function DriverPositions({
                     timing?.knockedOut || timing?.retired || timing?.stopped
                       ? {
                           opacity: 0.4,
-                          background: `linear-gradient(-90deg, #111111 94%, #${driver?.team_colour} 100%)`,
+                          background: `linear-gradient(-90deg, #0d0d0d 94%, #${driver?.team_colour} 100%)`,
                         }
                       : {
                           opacity: 1,
-                          background: `linear-gradient(-90deg, #111111 94%, #${driver?.team_colour}8D 100%)`,
+                          background: `linear-gradient(-90deg, #0d0d0d 94%, #${driver?.team_colour}8D 100%)`,
                         }
                   }
                 >
@@ -100,8 +134,7 @@ const DriverPositions = memo(function DriverPositions({
                   <DriverPositionInfo
                     position={pos}
                     driver={driver}
-                    lastCapture={lastCapture}
-                    sessionPath={session?.path}
+                    isPlaying={isPlayingAudio}
                   />
 
                   {/* Estadísticas */}

@@ -22,7 +22,7 @@ export default function F1Dashboard() {
     driverTimings,
     driverStints,
     driverTimingStats,
-    lastCaptures,
+    lastCapture,
     currentPositions,
     yellowSectors,
     pinnedDriver,
@@ -122,7 +122,7 @@ export default function F1Dashboard() {
             driverTimingStats={driverTimingStats}
             driverCarData={driverCarData}
             driverStints={driverStints}
-            lastCaptures={lastCaptures}
+            lastCapture={lastCapture}
             pinnedDriver={pinnedDriver}
             handlePinnedDriver={handlePinnedDriver}
             session={session}

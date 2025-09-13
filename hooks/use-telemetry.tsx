@@ -1,11 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { TelemetryManager, type TelemetryData } from "../telemetry-manager";
-import type {
-  ProcessedDriver,
-  ProcessedTiming,
-  ProcessedCarData,
-} from "../processors";
-import { ProcessedTimingStats } from "../processors/timing-stats-processor";
 import { findYellowSectors } from "@/hooks/use-raceControl";
 
 export function useTelemetryManager() {
@@ -105,8 +99,8 @@ export function useTelemetryManager() {
     [currentPositions, telemetryManager]
   );
 
-  const lastCaptures = useMemo(
-    () => currentPositions.map(() => telemetryManager.getLastCapture()),
+  const lastCapture = useMemo(
+    () => telemetryManager.getLastCapture(),
     [currentPositions, telemetryManager]
   );
 
@@ -135,7 +129,7 @@ export function useTelemetryManager() {
     driverTimings,
     driverStints,
     driverTimingStats,
-    lastCaptures,
+    lastCapture,
     currentPositions,
     yellowSectors,
     pinnedDriver,

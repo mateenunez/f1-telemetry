@@ -35,7 +35,7 @@ export default function Tyres({ currentStint }: TyresProps) {
       style={mediumGeist.style}
     >
       {currentStint && (
-        <div className="flex flex-col items-center justify-center text-gray-400">
+        <div className="flex flex-col items-center justify-center text-gray-500">
           {getCompoundSvg(currentStint.compound, 30)}
           <p>{currentStint.total_laps} L</p>
         </div>

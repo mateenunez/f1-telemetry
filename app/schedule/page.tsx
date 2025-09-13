@@ -16,7 +16,6 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Geist } from "next/font/google";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import Standings from "@/components/Standings";
 import Footer from "@/components/Footer";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
@@ -63,7 +62,7 @@ export default function SchedulePage() {
               <Skeleton height={80} width="100%" style={{ marginBottom: 32 }} />
               {/* Upcoming Events Skeleton */}
               <Skeleton height={32} width={180} style={{ marginBottom: 16 }} />
-              <div className="flex gap-4 pb-4 flex-col md:flex-row lg:flex-row over">
+              <div className="flex gap-4 pb-4 flex-row md:flex-row lg:flex-row over">
                 {Array.from({ length: 3 }).map((_, idx) => (
                   <Skeleton width={300} height={160} key={idx} />
                 ))}
@@ -83,12 +82,12 @@ export default function SchedulePage() {
       >
         <div className="max-w-6xl mx-auto my-12 px-4 md:px-8">
           <div className="flex flex-row justify-between items-center w-full gap-4 mb-8">
-            <h1 className="text-3xl font-regular flex flex-row gap-2">
+            <h1 className="text-2xl font-regular flex flex-row gap-2">
               <img
                 src={`https://flagsapi.com/AR/flat/32.png`}
                 alt={`Flag of Argentina`}
-                className="w-10"
-              />{" "}
+                className="w-6 h-6 self-center"
+              />
               Schedule
             </h1>
 
@@ -114,15 +113,15 @@ export default function SchedulePage() {
                     {calendar.upcomingEvents.slice(1).map((event, index) => (
                       <Card
                         key={index}
-                        className="min-w-[20rem] max-w-[320px] flex-shrink-0 bg-transparent border-none"
+                        className="min-w-[20rem] max-w-[320px] flex-shrink-0 flex flex-col justify-between bg-transparent border-none"
                       >
                         <CardHeader>
                           <p className="text-sm text-start text-white text-wrap font-regular">
                             {event.summary.toUpperCase().slice(2)}
                           </p>
                         </CardHeader>
-                        <CardContent className="space-y-2">
-                          <div className="text-start">
+                        <CardContent className="space-y-2 flex flex-row gap-2">
+                          <div className="text-start flex flex-col justify-between">
                             <div className="text-sm text-gray-300 mb-2">
                               {formatEventDateShort(event.start)}
                             </div>
@@ -138,8 +137,20 @@ export default function SchedulePage() {
                                 className="w-6 h-4"
                               />
                             </div>
-                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-600">
                               Status: {event.status}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="flex items-center">
+                              <img
+                                alt={event.location}
+                                src={`https://res.cloudinary.com/dvukvnmqt/image/upload/v1757271442/${event.location.replaceAll(
+                                  " ",
+                                  ""
+                                )}.png`}
+                                width={100}
+                              />
                             </div>
                           </div>
                         </CardContent>

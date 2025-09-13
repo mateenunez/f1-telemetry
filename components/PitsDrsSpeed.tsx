@@ -30,7 +30,7 @@ export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
           {carData?.drs ? (
             <p className="text-green-400">DRS</p>
           ) : (
-            <p className="text-gray-400">DRS</p>
+            <p className="text-gray-500">DRS</p>
           )}
         </span>
 
@@ -41,7 +41,7 @@ export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
             carData?.speed
           )}`}
         >
-          {carData?.speed !== undefined ? `${carData.speed} km/h` : ""}
+          {(carData?.speed !== undefined && carData.speed !== 0) ? `${carData.speed} km/h` : ""}
         </p>
       </div>
       {/* En PIT */}
@@ -54,7 +54,7 @@ export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
             IN PIT
             <span
               style={mediumGeist.style}
-              className="text-[0.6rem] text-white"
+              className="text-[0.6rem] text-white text-center"
             >
               {timing?.number_of_pit_stops} PIT
             </span>

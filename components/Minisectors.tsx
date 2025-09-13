@@ -49,7 +49,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
             return (
               <div
                 key={sectorKey}
-                className="flex gap-1 items-center text-xs text-gray-400 "
+                className="flex gap-1 items-center text-xs text-gray-500 "
               >
                 S{sectorIdx + 1}
                 {minisectors.map((s: number, sIdx: number) => {

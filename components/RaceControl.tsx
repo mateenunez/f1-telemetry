@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect,} from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProcessedRaceControl } from "@/processors";
 import { Geist } from "next/font/google";
@@ -18,29 +18,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
     null
   );
 
-  const { playNotificationSound, unlockAudio, isUnlocked, timeUntilNextSound } =
-    useTelemetryAudio({
-      cooldownMs: 10 * 1000, // 10 segundos de cooldown
-      audioSrc: "/race-control-notification.mp3", // Audio en /public
-    });
-
-  useEffect(() => {
-    if (isUnlocked) return;
-
-    const handler = async () => {
-      await unlockAudio();
-    };
-
-    document.addEventListener("pointerdown", handler, { once: true });
-    document.addEventListener("keydown", handler, { once: true });
-    document.addEventListener("touchstart", handler, { once: true });
-
-    return () => {
-      document.removeEventListener("pointerdown", handler as any);
-      document.removeEventListener("keydown", handler as any);
-      document.removeEventListener("touchstart", handler as any);
-    };
-  }, [unlockAudio, isUnlocked]);
+  const { playNotificationSound } = useTelemetryAudio();
 
   useEffect(() => {
     if (!raceControl || raceControl.length === 0) return;
@@ -58,31 +36,9 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
 
     if (isNew) {
       setLastMessage(newest);
-      if (isUnlocked) {
-        playNotificationSound();
-      }
+      playNotificationSound();
     }
   }, [raceControl]);
-
-  // const getAlertColor = (flag?: string) => {
-  //   if (!flag) return "border-carbonBlack";
-
-  //   const borderMap: Record<string, string> = {
-  //     YELLOW: "text-f1Yellow",
-  //     "DOUBLE YELLOW": "text-f1Yellow",
-  //     RED: "text-f1Red",
-  //     BLUE: "text-f1Blue",
-  //     GREEN: "text-f1Green",
-  //     WHITE: "text-highWhite",
-  //     BLACK: "text-carbonBlack",
-  //     CLEAR: "text-highWhite",
-  //     CHEQUERED: "text-black",
-  //     SC: "text-f1Yellow/90",
-  //     VSC: "text-f1Yellow/75",
-  //   };
-
-  //   return borderMap[flag.toUpperCase()] || "border-carbonBlack";
-  // };
 
   const formatTime = (dateString: string) => {
     const date = new Date(ensureUtc(dateString));
@@ -96,10 +52,10 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
 
   return (
     <Card className="bg-transparent border-none p-0">
-      <CardContent className="pt-0">
+      <CardContent className="align-center">
         {lastMessage && (
           <div
-            className={`mb-3 p-2 rounded text-f1Blue`}
+            className={`px-2 rounded text-f1Blue py-0`}
             style={mediumGeist.style}
           >
             <p className="text-xs text-gray-200 leading-tight">

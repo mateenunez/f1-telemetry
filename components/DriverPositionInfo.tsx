@@ -6,10 +6,8 @@ import { Geist, Aldrich } from "next/font/google";
 import type {
   ProcessedPosition,
   ProcessedDriver,
-  ProcessedCapture,
 } from "@/processors";
-import { audioUrl, useTelemetryAudio } from "@/hooks/use-raceControl";
-import { useEffect, useRef, useState } from "react";
+
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
@@ -17,75 +15,14 @@ const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
 interface DriverPositionInfoProps {
   position: ProcessedPosition;
   driver: ProcessedDriver | undefined;
-  lastCapture: ProcessedCapture | undefined;
-  sessionPath: string | undefined;
+  isPlaying: number | undefined;
 }
 
 export default function DriverPositionInfo({
   position,
   driver,
-  lastCapture,
-  sessionPath,
+  isPlaying
 }: DriverPositionInfoProps) {
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-  const lastPlayedUtcRef = useRef<string | undefined>(undefined);
-  const { playNotificationSound, unlockAudio, isUnlocked } = useTelemetryAudio({
-    cooldownMs: 0,
-    audioSrc: "/race-control-notification.mp3",
-  });
-
-  const { playTeamRadioSound, radioAudioRef } = useTelemetryAudio({
-    cooldownMs: 5 * 1000,
-    audioSrc:
-      sessionPath && lastCapture
-        ? audioUrl + sessionPath + lastCapture?.path
-        : "",
-  });
-
-  useEffect(() => {
-    if (isUnlocked) return;
-
-    const handler = async () => {
-      await unlockAudio();
-    };
-
-    document.addEventListener("pointerdown", handler, { once: true });
-    document.addEventListener("keydown", handler, { once: true });
-    document.addEventListener("touchstart", handler, { once: true });
-
-    return () => {
-      document.removeEventListener("pointerdown", handler as any);
-      document.removeEventListener("keydown", handler as any);
-      document.removeEventListener("touchstart", handler as any);
-    };
-  }, [unlockAudio, isUnlocked]);
-
-  useEffect(() => {
-    if (!lastCapture) return;
-    if (driver?.driver_number !== lastCapture.racingNumber) return;
-    if (new Date(lastCapture.utc).getDay() !== new Date().getDay()) return;
-    // Solo reproducir si el utc es diferente al último reproducido
-    if (lastPlayedUtcRef.current !== lastCapture.utc) {
-      playNotificationSound();
-      playTeamRadioSound();
-      lastPlayedUtcRef.current = lastCapture.utc;
-    }
-  }, [lastCapture]);
-
-  useEffect(() => {
-    if (!radioAudioRef.current) return;
-
-    const handlePlay = () => setIsPlayingAudio(true);
-    const handleEnded = () => setIsPlayingAudio(false);
-
-    radioAudioRef.current.addEventListener("play", handlePlay);
-    radioAudioRef.current.addEventListener("ended", handleEnded);
-
-    return () => {
-      radioAudioRef.current?.removeEventListener("play", handlePlay);
-      radioAudioRef.current?.removeEventListener("ended", handleEnded);
-    };
-  }, [radioAudioRef.current]);
 
   return (
     <div className="flex flex-row items-center min-w-[11.5rem]">
@@ -132,7 +69,7 @@ export default function DriverPositionInfo({
               style={mediumGeist.style}
             >
               {driver?.name_acronym}{" "}
-              {isPlayingAudio && (
+              {isPlaying === driver?.driver_number && (
                 <span
                   className="ml-2"
                   style={{ color: "#" + driver?.team_colour }}

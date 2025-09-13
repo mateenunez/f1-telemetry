@@ -85,7 +85,7 @@ export default function Header({ telemetryData }: HeaderProps) {
           >
             {endTime &&
             endTime < new Date().getTime() &&
-            session?.session_status == "Finalised" ? (
+            session?.session_status === "Finalised" ? (
               <F1Calendar />
             ) : (
               <>

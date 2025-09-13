@@ -21,16 +21,16 @@ const MapAndMessages = memo(function MapAndMessages({
 }: MapAndMessagesProps) {
   return (
     <Card className="lg:col-span-4 bg-warmBlack1 border-none border-2 flex flex-col">
-      <CardHeader className="pb-3 flex flex-col gap-6">
+      <CardHeader className="flex flex-col">
         <div className="flex flex-row gap-2 pt-4 items-center justify-between">
           <CardTitle className="text-lg font-thin text-white">
-            <div className="mt-3 flex justify-center p-0">
+            <div className="flex justify-center">
               <RaceControl raceControl={telemetryData?.raceControl || []} />
             </div>
           </CardTitle>
           {session?.session_type === "Race" && (
             <CardTitle
-              className=" text-xlg font-bold text-white tracking-wider"
+              className="text-xlg font-bold text-white tracking-wider mb-0"
               style={saira.style}
             >
               {session.session_status === "Finalised" ? (
