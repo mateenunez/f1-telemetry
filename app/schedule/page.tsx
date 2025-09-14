@@ -82,14 +82,14 @@ export default function SchedulePage() {
       >
         <div className="max-w-6xl mx-auto my-12 px-4 md:px-8">
           <div className="flex flex-row justify-between items-center w-full gap-4 mb-8">
-            <h1 className="text-2xl font-regular flex flex-row gap-2">
+            <span className="text-2xl font-regular flex flex-row gap-2">
               <img
                 src={`https://flagsapi.com/AR/flat/32.png`}
                 alt={`Flag of Argentina`}
                 className="w-6 h-6 self-center"
               />
               Schedule
-            </h1>
+            </span>
 
             <a className="text-xl font-regular hover:cursor-pointer" href="/">
               Telemetry
@@ -97,7 +97,7 @@ export default function SchedulePage() {
           </div>
           <div className="flex flex-row my-4">
             <div className="flex flex-col mx-0 md:mx-8 w-full gap-6">
-              <h2 className="text-xl py-5"> Next session in</h2>
+              <span className="text-xl py-5"> Next session in</span>
 
               {/* Proxima sesion */}
               <NextSession
@@ -107,7 +107,7 @@ export default function SchedulePage() {
 
               {/* Calendario completo */}
               <div className="flex flex-col w-full">
-                <h2 className="text-xl mb-4">Upcoming Events</h2>
+                <span className="text-xl mb-4">Upcoming Events</span>
                 <ScrollArea className="w-full">
                   <div className="flex gap-4 pb-4 flex-row">
                     {calendar.upcomingEvents.slice(1).map((event, index) => (
@@ -166,7 +166,7 @@ export default function SchedulePage() {
 
               {/* Standings */}
               {/* <div className="flex w-full flex-col">
-                <h2 className="text-xl mb-4">Standings</h2>
+                <span className="text-xl mb-4">Standings</span>
                 <div className="flex flex-col md:flex-row lg:flex-row justify-around gap-4 mt-4">
                   <Standings standingsResponse={driverStandings} />
                   <Standings standingsResponse={constructorStandings} />

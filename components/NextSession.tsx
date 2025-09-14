@@ -76,9 +76,9 @@ export default function NextSession({ session, timeUntil }: NextSessionProps) {
 
         {/* Session Details */}
         <div className="my-4 mx-8 flex flex-col">
-          <h1 className="font-semibol text-xl tracking-wide mb-4">
+          <span className="font-semibol text-xl tracking-wide mb-4">
             {session.summary.toUpperCase().slice(2)}
-          </h1>
+          </span>
 
           <div className="flex md:flex-row flex-col justify-around">
             {/* Time Information */}
@@ -106,7 +106,7 @@ export default function NextSession({ session, timeUntil }: NextSessionProps) {
 function TimeUnit({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col">
-      <h2 className="text-4xl">{value}</h2>
+      <span className="text-4xl">{value}</span>
       <p className="text-lg text-gray-500">{label}</p>
     </div>
   );
