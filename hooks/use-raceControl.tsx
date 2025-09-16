@@ -44,8 +44,27 @@ export const findYellowSectors = (
   }
   return sectors;
 };
-export const getSectorColor = (sector: MapSector, yellowSectors: Set<number>) =>
-  yellowSectors.has(sector.number) ? "stroke-yellow-400" : "stroke-white";
+export const getSectorColor = (
+  sector: MapSector,
+  yellowSectors: Set<number>,
+  sector1End: number,
+  sector2End: number,
+  idx: number,
+  sectorsCookie: boolean
+) => {
+  if (yellowSectors.has(sector.number)) {
+    return "stroke-yellow-400";
+  }
+
+  if (sectorsCookie){
+    if (idx <= sector1End) return "stroke-red-500";
+    if (idx <= sector2End) return "stroke-blue-300";
+    return "stroke-orange-300";
+  }
+
+  return "stroke-white"
+
+};
 
 export function useTelemetryAudio() {
   const lastPlayTime = useRef<number>(0);
@@ -90,7 +109,7 @@ export function useTelemetryAudio() {
         audioRef.current = createAudio(1);
       }
 
-      if ( !cookieAudio) {
+      if (!cookieAudio) {
         return false;
       }
 

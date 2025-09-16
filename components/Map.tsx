@@ -18,6 +18,7 @@ import { getSectorColor } from "@/hooks/use-raceControl";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Card, CardContent } from "./ui/card";
+import { useCorners, useSectors } from "@/hooks/use-mapPreferences";
 
 // This is basically fearlessly copied from
 // https://github.com/tdjsnelling/monaco
@@ -65,6 +66,9 @@ export default function Map({
     y: number;
     startAngle: number;
   }>(null);
+
+  const {corners: cornersCookie} = useCorners()
+  const {sectors: sectorsCookie} = useSectors()
 
   useEffect(() => {
     (async () => {
@@ -148,22 +152,21 @@ export default function Map({
   const totalSectors = sectors.length;
   const sector1End = Math.floor(totalSectors / 3); // Sector 7 (0-7 = 8 sectores)
   const sector2End = Math.floor((totalSectors * 2) / 3); // Sector 12 (8-12 = 5 sectores)
-  const sector3End = totalSectors - 1;
+  const sector3End = totalSectors-1;
 
   const renderedSectors = useMemo(() => {
-    return sectors.map((sector) => {
-      const color = getSectorColor(sector, yellowSectors);
+    return sectors.map((sector, idx) => {
+      const color = getSectorColor(sector, yellowSectors, sector1End, sector2End, idx, sectorsCookie);
       return {
         color,
         number: sector.number,
-        strokeWidth:
-          color === "stroke-white" || color === "stroke-yellow-400" ? 60 : 120,
+        strokeWidth: color == "stroke-yellow-400" || "stroke-red-500" || "stroke-blue-300" || "stroke-orange-300" || "stroke-white" ? 60 : 120,
         d: `M${sector.points[0].x},${sector.points[0].y} ${sector.points
           .map((point) => `L${point.x},${point.y}`)
           .join(" ")}`,
       };
     });
-  }, [sectors, yellowSectors]);
+  }, [sectors, yellowSectors, sectorsCookie]);
 
   if (!points || !minX || !minY || !widthX || !widthY) {
     return (
@@ -224,7 +227,7 @@ export default function Map({
         />
       )}
 
-      {sectors.map((sector, idx) => {
+      {!sectorsCookie && sectors.map((sector, idx) => {
         const startDx = sector.points[1]?.x - sector.points[0]?.x || 0;
         const startDy = sector.points[1]?.y - sector.points[0]?.y || 0;
         const startAngle = Math.atan2(startDy, startDx) * (180 / Math.PI);
@@ -264,8 +267,8 @@ export default function Map({
                   y={sector.end.y}
                   width={300}
                   height={40}
-                  fill="orange"
-                  stroke="orange"
+                  fill="blue"
+                  stroke="blue"
                   opacity={0.8}
                   strokeWidth={20}
                   transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
@@ -282,8 +285,8 @@ export default function Map({
                   y={sector.end.y}
                   width={300}
                   height={40}
-                  fill="purple"
-                  stroke="purple"
+                  fill="orange"
+                  stroke="orange"
                   opacity={0.8}
                   strokeWidth={20}
                   transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
@@ -296,7 +299,7 @@ export default function Map({
         );
       })}
 
-      {corners.map((corner) => (
+      {cornersCookie && corners.map((corner) => (
         <CornerNumber
           key={`corner.${corner.number}.${corner.letter && corner.letter}`}
           number={corner.number}
