@@ -19,6 +19,7 @@ import {
 import { memo, useEffect, useRef, useState } from "react";
 import { Orbitron } from "next/font/google";
 import { audioUrl, useTelemetryAudio } from "@/hooks/use-raceControl";
+import { useHeadshot } from "@/hooks/use-headshot";
 
 interface DriverPositionsProps {
   positions: ProcessedPosition[];
@@ -51,6 +52,7 @@ const DriverPositions = memo(function DriverPositions({
   const lastPlayedUtcRef = useRef<string | undefined>(undefined);
   const { playNotificationSound } = useTelemetryAudio();
   const { playTeamRadioSound, radioAudioRef } = useTelemetryAudio();
+  const { headshot } = useHeadshot();
 
   useEffect(() => {
     if (!lastCapture) return;
@@ -84,19 +86,27 @@ const DriverPositions = memo(function DriverPositions({
       <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
         <ScrollArea className="overflow-x-auto min-w-max h-full" type="scroll">
           <div style={orbitron.style}>
-            <div className="py-1.5 text-[0.6rem] text-gray-400/20 text-center">
-              <div className="flex flex-row gap-6">
-                <div className="min-w-[11.5rem]">DRIVER</div>
+            <div className="py-1.5 text-[0.6rem] text-gray-400/50 text-center">
+              <div className="flex flex-row gap-3">
+                <div className={`min-w-[${headshot ? "11.5rem" : "9rem"}]`}></div>
                 <div className="flex flex-row items-start justify-between w-full">
-                  <div className="flex flex-row gap-2">
+                  <div className={`flex flex-row ${headshot ? "gap-2" : "gap-4"}`}>
+                    <div className="min-w-[2.8rem]">TYRES</div>
                     <div className="min-w-[2rem]">DRS</div>
-                    <div className="min-w-[2rem]">PIT</div>
+                    <div className="min-w-[2rem]">PITS</div>
                   </div>
-                  <div className="min-w-[10rem]">MINISECTORS</div>
-                  <div className="min-w-[4.3rem]">SECTOR TIMES</div>
-                  <div className="min-w-[7rem]">LAP TIMES</div>
-                  <div className="min-w-[8rem]">GAPS</div>
-                  <div className="min-w-[2rem]">TYRES</div>
+                  <div className="min-w-[4rem] flex flex-row items-start gap-5 justify-center">
+                    <div>
+                      {session?.session_type === "Race" ? "LEADER" : "FASTEST"}
+                    </div>
+                    <div>
+                      {session?.session_type === "Race"
+                        ? "POS AHEAD"
+                        : "INT AHEAD"}
+                    </div>
+                  </div>
+                  <div className="min-w-[5rem] text-start">LAP TIMES</div>
+                  <div className="min-w-[14rem]">MINISECTORS & TIMES</div>
                 </div>
               </div>
             </div>
@@ -112,7 +122,7 @@ const DriverPositions = memo(function DriverPositions({
               return (
                 <div
                   key={pos.driver_number}
-                  className={`flex items-center gap-4 rounded-md transition-opacity ${
+                  className={`flex items-center gap-2 rounded-md transition-opacity ${
                     pinnedDriver === pos.driver_number
                       ? `border-offWhite sticky top-0 z-10`
                       : ""
@@ -122,11 +132,15 @@ const DriverPositions = memo(function DriverPositions({
                     timing?.knockedOut || timing?.retired || timing?.stopped
                       ? {
                           opacity: 0.4,
-                          background: `linear-gradient(-90deg, #0d0d0d 94%, #${driver?.team_colour} 100%)`,
+                          background: `linear-gradient(-90deg, #0d0d0d ${
+                            headshot ? "90%" : "100%"
+                          }, #${driver?.team_colour} 100%)`,
                         }
                       : {
                           opacity: 1,
-                          background: `linear-gradient(-90deg, #0d0d0d 94%, #${driver?.team_colour}8D 100%)`,
+                          background: `linear-gradient(-90deg, #0d0d0d ${
+                            headshot ? "90%" : "100%"
+                          }, #${driver?.team_colour} 100%)`,
                         }
                   }
                 >
@@ -138,12 +152,12 @@ const DriverPositions = memo(function DriverPositions({
                   />
 
                   {/* Estadísticas */}
-                  <div className="flex flex-row items-center justify-around w-full py-1.5 gap-4 md:gap-2 lg:gap-2">
-                    <PitsDrsSpeed timing={timing} carData={carData} />
-                    <Minisectors timing={timing} timingStats={timingStats} />
-                    <LapTimes timing={timing} timingStats={timingStats} />
-                    <DriverGaps timing={timing} session={session} />
+                  <div className="flex flex-row items-center justify-around w-full py-1.5 gap-2">
                     <Tyres currentStint={currentStint} />
+                    <PitsDrsSpeed timing={timing} carData={carData} />
+                    <DriverGaps timing={timing} session={session} />
+                    <LapTimes timing={timing} timingStats={timingStats} />
+                    <Minisectors timing={timing} timingStats={timingStats} />
                   </div>
                 </div>
               );

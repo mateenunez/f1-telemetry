@@ -1,18 +1,50 @@
+import { useHeadshot} from "@/hooks/use-headshot";
 import { useTelemetryAudio } from "@/hooks/use-raceControl";
 import { Github, Linkedin } from "lucide-react";
 
 export default function Footer() {
-
-  const {cookieAudio, toggleAudio} = useTelemetryAudio()
+  const { cookieAudio, toggleAudio } = useTelemetryAudio();
+  const { headshot, set } = useHeadshot();
 
   return (
-    <div className="w-full flex flex-row justify-center py-4 px-4 bg-transparent gap-4">
+    <div className="w-full flex flex-row justify-center py-4 px-4 bg-transparent gap-4 flex-wrap">
       <div className="text-xs text-gray-500">
-        <select className="bg-transparent border-none focus:outline-none" value={cookieAudio.toString()} onChange={toggleAudio} onLoadStart={toggleAudio}>
-          <option value="true" className="bg-black text-gray-500 border-none focus:outline-none appearance-none">
+        <select
+          className="bg-transparent border-none focus:outline-none"
+          value={headshot.toString()}
+          onChange={(e) => set(e.target.value === "true")}
+        >
+          <option
+            value="true"
+            className="bg-black text-gray-500 border-none focus:outline-none appearance-none"
+          >
+            Show driver headshot
+          </option>
+          <option
+            value="false"
+            className="bg-black border-black focus:outline-none border-0 appearance-none"
+          >
+            Hide driver headshot
+          </option>
+        </select>
+      </div>
+      <div className="text-xs text-gray-500">
+        <select
+          className="bg-transparent border-none focus:outline-none"
+          value={cookieAudio.toString()}
+          onChange={toggleAudio}
+          onLoadStart={toggleAudio}
+        >
+          <option
+            value="true"
+            className="bg-black text-gray-500 border-none focus:outline-none appearance-none"
+          >
             Audio enabled
           </option>
-          <option value="false" className="bg-black border-black focus:outline-none border-0 appearance-none">
+          <option
+            value="false"
+            className="bg-black border-black focus:outline-none border-0 appearance-none"
+          >
             Audio disabled
           </option>
         </select>

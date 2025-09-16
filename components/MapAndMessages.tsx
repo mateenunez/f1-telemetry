@@ -20,7 +20,7 @@ const MapAndMessages = memo(function MapAndMessages({
   handleMapFullscreen,
 }: MapAndMessagesProps) {
   return (
-    <Card className="lg:col-span-4 bg-warmBlack1 border-none border-2 flex flex-col">
+    <Card className="lg:col-span-5 bg-warmBlack1 border-none border-2 flex flex-col">
       <CardHeader className="flex flex-col">
         <div className="flex flex-row gap-2 pt-4 items-center justify-between">
           <CardTitle className="text-lg font-thin text-white">
@@ -46,7 +46,7 @@ const MapAndMessages = memo(function MapAndMessages({
           )}
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col justify-center h-full">
+      <CardContent className="flex flex-col justify-center h-full p-0">
         <div className="overflow-hidden h-fit">
           {telemetryData && telemetryData.session?.circuit_key && (
             <div onDoubleClick={handleMapFullscreen}>

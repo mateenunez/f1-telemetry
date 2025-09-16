@@ -19,7 +19,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
       segment === 2052 ||
       segment === 2068
     )
-      return "#ffe066"; // Amarillo
+      return "#ffdd54ff"; // Amarillo
     if (segment === 2049) return "#51cf66"; // Verde
     if (segment === 2051) return "#b197fc"; // Violeta
     if (segment === 2064) return "#2b7fff"; // Azul
@@ -49,9 +49,8 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
             return (
               <div
                 key={sectorKey}
-                className="flex gap-1 items-center text-xs text-gray-500 "
+                className="flex gap-1 items-center text-xs text-gray-500 h-[1rem]"
               >
-                S{sectorIdx + 1}
                 {minisectors.map((s: number, sIdx: number) => {
                   const bg = getMinisectorColor(s);
                   return (

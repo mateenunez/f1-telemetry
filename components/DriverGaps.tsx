@@ -12,49 +12,59 @@ interface DriverGapsProps {
 }
 
 export default function DriverGaps({ timing, session }: DriverGapsProps) {
-  const lastGap = timing?.stats?.findLast(stat => stat);
+  const lastGap = timing?.stats?.findLast((stat) => stat);
   return (
-    <div className="flex flex-col min-w-[8rem] items-center">
-      {(timing?.gap_to_leader || (lastGap?.GapToLeader && lastGap?.GapToLeader !== '')) ? (
+    <div className="flex flex-row justify-between min-w-[8rem] items-center">
+      {timing?.gap_to_leader ||
+      (lastGap?.GapToLeader && lastGap?.GapToLeader !== "") ? (
         <div
-          className="flex items-center flex-row gap-2 text-xs text-white"
+          className="flex items-center flex-row gap-2 text-sm text-white"
           style={aldrich.style}
         >
-          <span className="text-[0.7rem] text-gray-500">LEADER</span>
-          <p style={oxanium.style}>{timing?.gap_to_leader || lastGap?.GapToLeader}</p>
+          <p style={oxanium.style}>
+            {timing?.gap_to_leader || lastGap?.GapToLeader}
+          </p>
         </div>
       ) : (
         <></>
       )}
-      {(timing?.interval_to_ahead || (lastGap?.IntervalToPositionAhead && lastGap?.IntervalToPositionAhead !== '')) ? (
+      {timing?.time_diff_to_fastest ||
+      (lastGap?.TimeDiffToFastest && lastGap?.TimeDiffToFastest !== "") ? (
         <div
-          className="flex items-center flex-row gap-2 text-xs text-white "
+          className="flex items-center flex-row gap-2 text-sm text-white"
           style={aldrich.style}
         >
-          <span className="text-[0.55rem] text-gray-500">POS AHEAD</span>
-          <p style={oxanium.style}>{timing?.interval_to_ahead || lastGap?.IntervalToPositionAhead}</p>
+          <p style={oxanium.style}>
+            {timing?.time_diff_to_fastest || lastGap?.TimeDiffToFastest}
+          </p>
         </div>
       ) : (
         <></>
       )}
-      {(timing?.time_diff_to_ahead || (lastGap?.TimeDiffToPositionAhead && lastGap?.TimeDiffToPositionAhead !== '')) ? (
+      {timing?.interval_to_ahead ||
+      (lastGap?.IntervalToPositionAhead &&
+        lastGap?.IntervalToPositionAhead !== "") ? (
         <div
-          className="flex items-center flex-row gap-2 text-xs text-white"
+          className="flex items-center flex-row gap-2 text-sm text-white "
           style={aldrich.style}
         >
-          <span className="text-[0.55rem] text-gray-500">POS AHEAD</span>
-          <p style={oxanium.style}>{timing?.time_diff_to_ahead || lastGap?.TimeDiffToPositionAhead}</p>
+          <p style={oxanium.style}>
+            {timing?.interval_to_ahead || lastGap?.IntervalToPositionAhead}
+          </p>
         </div>
       ) : (
         <></>
       )}
-      {(timing?.time_diff_to_fastest || (lastGap?.TimeDiffToFastest && lastGap?.TimeDiffToFastest !== '')) ? (
+      {timing?.time_diff_to_ahead ||
+      (lastGap?.TimeDiffToPositionAhead &&
+        lastGap?.TimeDiffToPositionAhead !== "") ? (
         <div
-          className="flex items-center flex-row gap-2 text-xs text-white"
+          className="flex items-center flex-row gap-2 text-sm text-white"
           style={aldrich.style}
         >
-          <span className="text-[0.55rem] text-gray-500">FASTEST</span>
-          <p style={oxanium.style}>{timing?.time_diff_to_fastest || lastGap?.TimeDiffToFastest}</p>
+          <p style={oxanium.style}>
+            {timing?.time_diff_to_ahead || lastGap?.TimeDiffToPositionAhead}
+          </p>
         </div>
       ) : (
         <></>

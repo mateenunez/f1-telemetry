@@ -110,7 +110,7 @@ export default function F1Dashboard() {
         </div>
         {/* Cards */}
         <div
-          className={`!mt-0 grid grid-cols-1 lg:grid-cols-10 pb-4 border-2 rounded-lg transition-all duration-500 ease-in-out ${
+          className={`!mt-0 grid grid-cols-1 lg:grid-cols-11 pb-4 border-2 rounded-lg transition-all duration-500 ease-in-out ${
             safetyCarActive ? "border-f1Yellow" : "border-transparent"
           }`}
         >

@@ -62,7 +62,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
               {lastMessage.message}
             </p>
             <div className="flex items-center justify-between mt-1">
-              <span className="text-xs text-gray-400">
+              <span className="text-xs text-gray-500">
                 {formatTime(lastMessage.date)}
               </span>
               {lastMessage.racing_number && (

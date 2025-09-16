@@ -36,7 +36,7 @@ body {
 
 /* Estilo para las barras de scroll en Webkit (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-  width: 8px;  /* Ancho de la barra vertical */
+  width: 8px; /* Ancho de la barra vertical */
   height: 8px; /* Alto de la barra horizontal */
 }
 
@@ -143,7 +143,6 @@ body {
   }
 }
 
-
 @layer base {
   * {
     @apply border-border;
@@ -151,4 +150,71 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.Sound {
+  width:1rem;
+  height:0.5rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  cursor:pointer;
+  padding: 2px;
+}
+.Sound span {
+  display:block;
+  width:2px;
+  margin-right:1px;
+  background-color:#ffffff;
+  animation:sound 0ms -.8s linear infinite alternate;
+  transition:height .8s, background .3s;
+}
+.Sound span:nth-child(1) {
+  height:1px;
+  animation-duration:474ms;
+}
+.Sound span:nth-child(2) {
+  height:3px;
+  animation-duration:433ms;
+}
+.Sound span:nth-child(3) {
+  height:4px;
+  animation-duration:407ms;
+}
+.Sound span:nth-child(4) {
+  height:6px;
+  animation-duration:458ms;
+}
+.Sound span:nth-child(5) {
+  height:7px;
+  animation-duration:.4s;
+}
+
+.Sound.off span {
+  animation:none;
+}
+.Sound.off span:nth-child(1) {
+  height:7px;
+  animation-duration:474ms;
+}
+.Sound.off span:nth-child(2) {
+  height:2px;
+  animation-duration:433ms;
+}
+.Sound.off span:nth-child(3) {
+  height:4px;
+  animation-duration:407ms;
+}
+.Sound.off span:nth-child(4) {
+  height:3px;
+  animation-duration:458ms;
+}
+.Sound.off span:nth-child(5) {
+  height:7px;
+  animation-duration:.4s;
+}
+
+@keyframes sound {
+  0% {opacity:.35;height:6px}
+  100% {opacity:1;height:20px}
 }
