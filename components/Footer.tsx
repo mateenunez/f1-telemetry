@@ -6,8 +6,8 @@ import { Github, Linkedin } from "lucide-react";
 export default function Footer() {
   const { cookieAudio, toggleAudio } = useTelemetryAudio();
   const { headshot, set: setHeadshot } = useHeadshot();
-  const {corners, set: setCorners } = useCorners();
-  const {sectors, set: setSectors} = useSectors();
+  const { corners, set: setCorners } = useCorners();
+  const { sectors, set: setSectors } = useSectors();
 
   return (
     <div className="w-full flex flex-row justify-center py-4 px-4 bg-transparent gap-4 flex-wrap">
@@ -92,7 +92,7 @@ export default function Footer() {
           </option>
         </select>
       </div>
-      <div className="flex flex-row gap-2 text-gray-500">
+      <div className="flex flex-row gap-2 text-gray-500 text-bottom align-bottom">
         <a
           href="https://github.com/mateenunez/f1-telemetry"
           target="_blank"
@@ -106,6 +106,17 @@ export default function Footer() {
           className="decoration-none"
         >
           <Linkedin size={16} />
+        </a>
+        <a
+          href="https://discord.com/invite/AgTNUW4A"
+          target="_blank"
+          className="text-xs text-gray-500 inline-block align-bottom text-bottom h-full align-text-bottom"
+        >
+          <img
+            src="https://res.cloudinary.com/dvukvnmqt/image/upload/v1758219358/discord_1_rxede6.svg"
+            width={15}
+            className="h-full"
+          />
         </a>
       </div>
     </div>
