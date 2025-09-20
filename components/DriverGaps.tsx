@@ -2,6 +2,7 @@
 
 import { Aldrich, Oxanium } from "next/font/google";
 import type { ProcessedSession, ProcessedTiming } from "@/processors";
+import { useRef } from "react";
 
 const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
 const oxanium = Oxanium({ subsets: ["latin"], weight: "500" });
@@ -12,7 +13,33 @@ interface DriverGapsProps {
 }
 
 export default function DriverGaps({ timing, session }: DriverGapsProps) {
-  const lastGap = timing?.stats?.findLast((stat) => stat);
+  const lastValidGapRef = useRef<any>(null);
+
+  let lastGap;
+  const qualifyingPartIndex = session?.series?.findLast(
+    (q) => q
+  )?.QualifyingPart;
+
+  if (
+    timing?.stats &&
+    timing?.stats.length > 0 &&
+    qualifyingPartIndex !== undefined
+  ) {
+    lastGap = timing.stats[qualifyingPartIndex - 1];
+
+    if (
+      lastGap &&
+      (lastGap.TimeDiffToFastest !== "" ||
+        lastGap.TimeDiffToPositionAhead !== "" ||
+        lastGap.GapToLeader !== "" ||
+        lastGap.IntervalToPositionAhead !== "")
+    ) {
+      lastValidGapRef.current = lastGap;
+    }
+  } else {
+    lastGap = lastValidGapRef.current;
+  }
+
   return (
     <div className="flex flex-row justify-between min-w-[8rem] items-center">
       {timing?.gap_to_leader ||
@@ -22,7 +49,7 @@ export default function DriverGaps({ timing, session }: DriverGapsProps) {
           style={aldrich.style}
         >
           <p style={oxanium.style}>
-            {timing?.gap_to_leader || lastGap?.GapToLeader}
+            {timing?.gap_to_leader || lastGap?.GapToLeader || "-.---"}
           </p>
         </div>
       ) : (

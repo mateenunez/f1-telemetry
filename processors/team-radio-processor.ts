@@ -17,16 +17,13 @@ export class TeamRadioProcessor {
             return this.teamRadio;
         }
 
-        const lastCapture = teamRadioData.Captures[teamRadioData.Captures.length - 1];
-        if (lastCapture) {
-            this.teamRadio.captures = [{
-                utc: lastCapture.Utc,
-                path: lastCapture.Path,
-                racingNumber:Number(lastCapture.RacingNumber)
-            }];
-        } else {
-            this.teamRadio.captures = [];
-        }
+        const newCaptures = teamRadioData.Captures.map((capture: any) => ({
+            utc: capture.Utc,
+            racingNumber: Number(capture.RacingNumber),
+            path: capture.Path
+        }));
+
+        this.teamRadio.captures.push(...newCaptures);
 
         return this.teamRadio;
     }

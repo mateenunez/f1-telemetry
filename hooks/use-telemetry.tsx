@@ -99,8 +99,8 @@ export function useTelemetryManager() {
     [currentPositions, telemetryManager]
   );
 
-  const lastCapture = useMemo(
-    () => telemetryManager.getLastCapture(),
+  const teamRadioCaptures = useMemo(
+    () => telemetryManager.getTeamRadioCaptures(),
     [currentPositions, telemetryManager]
   );
 
@@ -129,7 +129,7 @@ export function useTelemetryManager() {
     driverTimings,
     driverStints,
     driverTimingStats,
-    lastCapture,
+    teamRadioCaptures,
     currentPositions,
     yellowSectors,
     pinnedDriver,

@@ -120,7 +120,7 @@ export class TimingProcessor {
           data?.IntervalToPositionAhead?.Value ?? existing.interval_to_ahead,
         time_diff_to_ahead: data?.TimeDiffToPositionAhead ?? existing.time_diff_to_ahead,
         time_diff_to_fastest: data?.TimeDiffToFastest ?? existing.time_diff_to_fastest,
-        stats: statsArray,
+        stats: statsArray ?? existing.stats,
         last_lap_time: data?.LastLapTime?.Value ?? existing.last_lap_time,
         best_lap_time: {
           Value: data?.BestLapTime?.Value ?? existing.best_lap_time.Value,

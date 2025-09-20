@@ -1,3 +1,8 @@
+interface QualifyingParts{
+  utc: string
+  QualifyingPart: number
+}
+
 export interface ProcessedSession {
   session_name: string
   session_type: string
@@ -14,6 +19,7 @@ export interface ProcessedSession {
   circuit_key:number
   session_status: string
   path: string
+  series: QualifyingParts[]
 }
 
 export class SessionProcessor {
@@ -40,7 +46,8 @@ export class SessionProcessor {
       track_status: "Unknown",
       circuit_key: "",
       session_status: "",
-      path: ""
+      path: "",
+      series: []
     }
 
     const processed: ProcessedSession = {
@@ -58,7 +65,8 @@ export class SessionProcessor {
       track_status: existing.track_status,
       circuit_key: meeting.Circuit?.Key ?? existing.circuit_key,
       session_status: sessionData.SessionStatus ?? existing.session_status,
-      path : sessionData.Path ?? existing.path
+      path : sessionData.Path ?? existing.path,
+      series: sessionData.Series
     }
 
     this.sessionInfo = processed

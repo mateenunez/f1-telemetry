@@ -56,14 +56,11 @@ const DriverPositions = memo(function DriverPositions({
 
   useEffect(() => {
     if (!lastCapture) return;
-    if (new Date(lastCapture.utc).getDay() !== new Date().getDay()) return;
-    // Solo reproducir si el utc es diferente al último reproducido
-    if (lastPlayedUtcRef.current !== lastCapture.utc) {
-      const url = audioUrl + session?.path + lastCapture.path;
-      lastPlayedUtcRef.current = lastCapture.utc;
-      playNotificationSound();
-      playTeamRadioSound(url);
-    }
+    if (session?.session_status === "Finalised") return;
+    const url = audioUrl + session?.path + lastCapture.path;
+    lastPlayedUtcRef.current = lastCapture.utc;
+    playNotificationSound();
+    playTeamRadioSound(url);
   }, [lastCapture]);
 
   useEffect(() => {
@@ -79,7 +76,7 @@ const DriverPositions = memo(function DriverPositions({
       radioAudioRef.current?.removeEventListener("play", handlePlay);
       radioAudioRef.current?.removeEventListener("ended", handleEnded);
     };
-  }, [radioAudioRef.current]);
+  }, [radioAudioRef.current, lastCapture]);
 
   return (
     <Card className="lg:col-span-6 bg-warmBlack1 border-none max-h-screen">
@@ -88,9 +85,13 @@ const DriverPositions = memo(function DriverPositions({
           <div style={orbitron.style}>
             <div className="py-1.5 text-[0.6rem] text-gray-400/50 text-center">
               <div className="flex flex-row gap-3">
-                <div className={`min-w-[${headshot ? "11.5rem" : "9rem"}]`}></div>
+                <div
+                  className={`min-w-[${headshot ? "11.5rem" : "9rem"}]`}
+                ></div>
                 <div className="flex flex-row items-start justify-between w-full">
-                  <div className={`flex flex-row ${headshot ? "gap-2" : "gap-4"}`}>
+                  <div
+                    className={`flex flex-row ${headshot ? "gap-2" : "gap-4"}`}
+                  >
                     <div className="min-w-[2.8rem]">TYRES</div>
                     <div className="min-w-[2rem]">DRS</div>
                     <div className="min-w-[2rem]">PITS</div>

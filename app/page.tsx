@@ -22,7 +22,7 @@ export default function F1Dashboard() {
     driverTimings,
     driverStints,
     driverTimingStats,
-    lastCapture,
+    teamRadioCaptures,
     currentPositions,
     yellowSectors,
     pinnedDriver,
@@ -122,7 +122,7 @@ export default function F1Dashboard() {
             driverTimingStats={driverTimingStats}
             driverCarData={driverCarData}
             driverStints={driverStints}
-            lastCapture={lastCapture}
+            lastCapture={teamRadioCaptures?.captures.findLast(c => c)}
             pinnedDriver={pinnedDriver}
             handlePinnedDriver={handlePinnedDriver}
             session={session}

@@ -166,6 +166,10 @@ export class TelemetryManager {
         this.sessionProcessor.processSessionInfo(messageData)
         break
 
+      case "SessionData":
+        this.sessionProcessor.processSessionInfo(messageData)
+        break
+
       case "LapCount":
         this.sessionProcessor.processLapCount(messageData)
         break
@@ -246,12 +250,8 @@ export class TelemetryManager {
     return this.positionDataProcessor.getDriverPosition(driverNumber)
   }
 
-  getLastCapture(): ProcessedCapture | undefined {
-    const teamRadio = this.teamRadioProcessor.getTeamRadio();
-    if (teamRadio) return teamRadio.captures[0];
-    return undefined;
+  getTeamRadioCaptures(): ProcessedTeamRadio | undefined {
+    return this.teamRadioProcessor.getTeamRadio()
   }
-
-
 
 }

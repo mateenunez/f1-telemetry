@@ -70,7 +70,7 @@ export function useTelemetryAudio() {
   const lastPlayTime = useRef<number>(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const radioAudioRef = useRef<HTMLAudioElement | null>(null);
-  const [cookieAudio, setAudio] = useState<boolean>(false);
+  const [cookieAudio, setAudio] = useState<boolean>(true);
 
   useEffect(() => {
     const cookieAudio = Cookies.get("audio");

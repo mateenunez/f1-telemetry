@@ -15,6 +15,8 @@ export default function Tyres({ currentStint }: TyresProps) {
       SOFT: "/soft.svg",
       MEDIUM: "/medium.svg",
       HARD: "/hard.svg",
+      INTERMEDIATE: "/intermediate.svg",
+      WET: "/wet.svg"
     };
     const key = (compound || "").toUpperCase();
     const src = iconMap[key] || "/unknown.svg";
