@@ -1,4 +1,4 @@
-interface QualifyingParts{
+interface QualifyingParts {
   utc: string
   QualifyingPart: number
 }
@@ -16,7 +16,7 @@ export interface ProcessedSession {
   current_lap: number
   total_laps: number
   track_status: string
-  circuit_key:number
+  circuit_key: number
   session_status: string
   path: string
   series: QualifyingParts[]
@@ -47,7 +47,16 @@ export class SessionProcessor {
       circuit_key: "",
       session_status: "",
       path: "",
-      series: []
+      series: [] as QualifyingParts[]
+    }
+
+    let series = existing.series;
+
+    if (Array.isArray(sessionData.Series)) {
+      series = sessionData.Series;
+    } else {
+      // updates during the race contain a single object that must be appended to the existing array.
+      series.push(sessionData.Series)
     }
 
     const processed: ProcessedSession = {
@@ -65,8 +74,8 @@ export class SessionProcessor {
       track_status: existing.track_status,
       circuit_key: meeting.Circuit?.Key ?? existing.circuit_key,
       session_status: sessionData.SessionStatus ?? existing.session_status,
-      path : sessionData.Path ?? existing.path,
-      series: sessionData.Series
+      path: sessionData.Path ?? existing.path,
+      series
     }
 
     this.sessionInfo = processed
