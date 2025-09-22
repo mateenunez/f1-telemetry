@@ -6,7 +6,7 @@ import type {
   ProcessedCarData,
   ProcessedStint,
 } from "@/processors";
-import { useMemo } from "react";
+import { JSX, useMemo } from "react";
 import { getCompoundSvg } from "@/hooks/use-telemetry";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
@@ -23,10 +23,14 @@ export default function PitsDrsSpeed({
   carData,
   driverStints,
 }: PitsDrsSpeedProps) {
-  const currentStint = useMemo(() => {
-    if (driverStints) {
-      return driverStints[driverStints.length - 1];
+  const previousStintCompounds = useMemo(() => {
+    const arr: JSX.Element[] = [];
+    if (!driverStints || driverStints.length < 2) return arr;
+    for (let i = 0; i <= driverStints.length - 2; i++) {
+      const stint = driverStints[i];
+      arr.push(getCompoundSvg(stint.compound, i, 13));
     }
+    return arr;
   }, [driverStints]);
 
   const getSpeedColor = (speed: number | undefined) => {
@@ -80,11 +84,9 @@ export default function PitsDrsSpeed({
           </span>
         ) : (
           <span style={mediumGeist.style}>
-            {currentStint && (
+            {driverStints && (
               <div className="flex flex-row gap-0 flex-wrap justify-center">
-                {driverStints
-                  ?.slice(-1)
-                  .map((stint, idx) => getCompoundSvg(stint.compound, idx, 13))}
+                {previousStintCompounds}
               </div>
             )}
             {timing?.number_of_pit_stops} PIT
