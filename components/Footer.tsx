@@ -3,6 +3,11 @@ import { useCorners, useSectors } from "@/hooks/use-mapPreferences";
 import { useTelemetryAudio } from "@/hooks/use-raceControl";
 import { Github, Linkedin } from "lucide-react";
 
+const GITHUB_URL = process.env.NEXT_PUBLIC_GITHUB_URL || "https://github.com/mateenunez/f1-telemetry";
+const LINKEDIN_URL = process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/in/mateenunez/";
+const DISCORD_INVITE_URL = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || "";
+const DISCORD_ICON_URL = process.env.NEXT_PUBLIC_DISCORD_ICON_URL || "https://res.cloudinary.com/dvukvnmqt/image/upload/v1758219358/discord_1_rxede6.svg";
+
 export default function Footer() {
   const { cookieAudio, toggleAudio } = useTelemetryAudio();
   const { headshot, set: setHeadshot } = useHeadshot();
@@ -95,26 +100,26 @@ export default function Footer() {
         </div>
         <div className="flex flex-row gap-2 text-gray-500 text-bottom align-bottom">
           <a
-            href="https://github.com/mateenunez/f1-telemetry"
+            href={GITHUB_URL}
             target="_blank"
             className="decoration-none"
           >
             <Github size={16} />
           </a>
           <a
-            href="https://www.linkedin.com/in/mateenunez/"
+            href={LINKEDIN_URL}
             target="_blank"
             className="decoration-none"
           >
             <Linkedin size={16} />
           </a>
           <a
-            href="https://discord.com/invite/AgTNUW4A"
+            href={DISCORD_INVITE_URL}
             target="_blank"
             className="text-xs text-gray-500 inline-block align-bottom text-bottom h-full align-text-bottom"
           >
             <img
-              src="https://res.cloudinary.com/dvukvnmqt/image/upload/v1758219358/discord_1_rxede6.svg"
+              src={DISCORD_ICON_URL}
               width={15}
               className="h-full"
             />
