@@ -27,7 +27,7 @@ interface DriverPositionsProps {
   driverTimings: (ProcessedTiming | undefined)[];
   driverTimingStats: (ProcessedTimingStats | undefined)[];
   driverCarData: (ProcessedCarData | undefined)[];
-  driverStints: (ProcessedStint | undefined)[];
+  driverStints: (ProcessedStint[] | undefined)[];
   lastCapture: ProcessedCapture | undefined;
   pinnedDriver: number | null;
   handlePinnedDriver: (driverNumber: number) => void;
@@ -88,26 +88,24 @@ const DriverPositions = memo(function DriverPositions({
                 <div
                   className={`min-w-[${headshot ? "11.5rem" : "9rem"}]`}
                 ></div>
-                <div className="flex flex-row items-start justify-between w-full">
+                <div className="flex flex-row items-start justify-around w-full gap-2">
+                  <div className="min-w-[3rem]">TYRES</div>
                   <div
                     className={`flex flex-row ${headshot ? "gap-2" : "gap-4"}`}
                   >
-                    <div className="min-w-[2.8rem]">TYRES</div>
-                    <div className="min-w-[2rem]">DRS</div>
+                    <div className="min-w-[2rem]">SPEED</div>
                     <div className="min-w-[2rem]">PITS</div>
                   </div>
-                  <div className="min-w-[4rem] flex flex-row items-start gap-5 justify-center">
-                    <div>
+                  <div className="w-[8rem] flex flex-row items-center align-text-top gap-6 justify-center">
+                    <div className="text-center">
                       {session?.session_type === "Race" ? "LEADER" : "FASTEST"}
                     </div>
-                    <div>
-                      {session?.session_type === "Race"
-                        ? "POS AHEAD"
-                        : "INT AHEAD"}
+                    <div className="text-center">
+                      {session?.session_type === "Race" ? "POS" : "INT"}
                     </div>
                   </div>
-                  <div className="min-w-[5rem] text-start">LAP TIMES</div>
-                  <div className="min-w-[14rem]">MINISECTORS & TIMES</div>
+                  <div className="min-w-[4.5rem] text-center">LAP TIMES</div>
+                  <div className="min-w-[16rem]">MINISECTORS & TIMES</div>
                 </div>
               </div>
             </div>
@@ -118,7 +116,7 @@ const DriverPositions = memo(function DriverPositions({
               const timing = driverTimings[idx];
               const timingStats = driverTimingStats[idx];
               const carData = driverCarData[idx];
-              const currentStint = driverStints[idx];
+              const currentStints = driverStints[idx];
 
               return (
                 <div
@@ -154,8 +152,12 @@ const DriverPositions = memo(function DriverPositions({
 
                   {/* Estadísticas */}
                   <div className="flex flex-row items-center justify-around w-full py-1.5 gap-2">
-                    <Tyres currentStint={currentStint} />
-                    <PitsDrsSpeed timing={timing} carData={carData} />
+                    <Tyres driverStints={currentStints} />
+                    <PitsDrsSpeed
+                      timing={timing}
+                      carData={carData}
+                      driverStints={currentStints}
+                    />
                     <DriverGaps timing={timing} session={session} />
                     <LapTimes timing={timing} timingStats={timingStats} />
                     <Minisectors timing={timing} timingStats={timingStats} />

@@ -13,13 +13,13 @@ interface LapTimesProps {
 
 export default function LapTimes({ timing, timingStats }: LapTimesProps) {
   return (
-    <div className="flex items-center flex-col text-white">
+    <div className="flex items-center flex-col text-white w-[4.5rem]">
       {/* Último tiempo de vuelta */}
       <div
         className="flex items-center flex-row gap-1 text-md text-white"
         style={aldrich.style}
       >
-        <p style={oxanium.style}>{timing?.last_lap_time || "---:---"}</p>
+        <p style={oxanium.style}>{timing?.last_lap_time || ""}</p>
       </div>
 
       {/* Mejor tiempo de vuelta */}
@@ -40,7 +40,7 @@ export default function LapTimes({ timing, timingStats }: LapTimesProps) {
             }
             style={oxanium.style}
           >
-            {timingStats?.personal_best_lap_time.Value || "---:---"}
+            {timingStats?.personal_best_lap_time.Value || ""}
           </p>
         </div>
       </div>

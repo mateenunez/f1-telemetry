@@ -29,7 +29,7 @@ function deleteCookie(name: string) {
 	document.cookie = `${name}=; Max-Age=0; Path=/; SameSite=Lax`;
 }
 
-export function useHeadshot(defaultValue: CookieBool = true) {
+export function useHeadshot(defaultValue: CookieBool = false) {
 	const [value, setValue] = useState<CookieBool>(defaultValue);
 	const [ready, setReady] = useState(false);
 

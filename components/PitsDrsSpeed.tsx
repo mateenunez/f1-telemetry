@@ -1,7 +1,13 @@
 "use client";
 
 import { Geist, Orbitron } from "next/font/google";
-import type { ProcessedTiming, ProcessedCarData } from "@/processors";
+import type {
+  ProcessedTiming,
+  ProcessedCarData,
+  ProcessedStint,
+} from "@/processors";
+import { useMemo } from "react";
+import { getCompoundSvg } from "@/hooks/use-telemetry";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
@@ -9,9 +15,20 @@ const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 interface PitsDrsSpeedProps {
   timing: ProcessedTiming | undefined;
   carData: ProcessedCarData | undefined;
+  driverStints: ProcessedStint[] | undefined;
 }
 
-export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
+export default function PitsDrsSpeed({
+  timing,
+  carData,
+  driverStints,
+}: PitsDrsSpeedProps) {
+  const currentStint = useMemo(() => {
+    if (driverStints) {
+      return driverStints[driverStints.length - 1];
+    }
+  }, [driverStints]);
+
   const getSpeedColor = (speed: number | undefined) => {
     if (speed === undefined) return "";
     if (speed > 330) return "text-red-500";
@@ -22,7 +39,7 @@ export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
   return (
     <div className="flex flex-row gap-4">
       {/* DRS & Speed */}
-      <div className="flex flex-col">
+      <div className="flex flex-col min-w-[2rem]">
         <span
           className="text-xs text-white self-center"
           style={mediumGeist.style}
@@ -41,12 +58,14 @@ export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
             carData?.speed
           )}`}
         >
-          {(carData?.speed !== undefined && carData.speed !== 0) ? `${carData.speed} km/h` : ""}
+          {carData?.speed !== undefined && carData.speed !== 0
+            ? `${carData.speed} km/h`
+            : "0 km/h"}
         </p>
       </div>
       {/* En PIT */}
-      <p
-        className="text-xs text-white self-center m-0 p-0"
+      <div
+        className="text-xs text-white self-center m-0 p-0 min-w-[2rem]"
         style={orbitron.style}
       >
         {timing?.in_pit ? (
@@ -61,10 +80,17 @@ export default function PitsDrsSpeed({ timing, carData }: PitsDrsSpeedProps) {
           </span>
         ) : (
           <span style={mediumGeist.style}>
+            {currentStint && (
+              <div className="flex flex-row gap-0 flex-wrap justify-center">
+                {driverStints
+                  ?.slice(-1)
+                  .map((stint, idx) => getCompoundSvg(stint.compound, idx, 13))}
+              </div>
+            )}
             {timing?.number_of_pit_stops} PIT
           </span>
         )}
-      </p>
+      </div>
     </div>
   );
 }
