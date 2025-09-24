@@ -56,14 +56,13 @@ export const getSectorColor = (
     return "stroke-yellow-400";
   }
 
-  if (sectorsCookie){
+  if (sectorsCookie) {
     if (idx <= sector1End) return "stroke-red-500";
     if (idx <= sector2End) return "stroke-blue-300";
     return "stroke-orange-300";
   }
 
-  return "stroke-white"
-
+  return "stroke-white";
 };
 
 export function useTelemetryAudio() {
@@ -130,15 +129,25 @@ export function useTelemetryAudio() {
   const playTeamRadioSound = useCallback(
     (audioSrc: string) => {
       try {
-        if (!radioAudioRef.current) {
-          radioAudioRef.current = createAudio(1, audioSrc);
-        }
-
         if (!cookieAudio) {
           return false;
         }
 
+        if (!radioAudioRef.current) {
+          radioAudioRef.current = createAudio(1, audioSrc);
+        }
+
         if (radioAudioRef.current) {
+          if (radioAudioRef.current.src !== audioSrc){
+            radioAudioRef.current.pause();
+            radioAudioRef.current.src = audioSrc;
+            radioAudioRef.current.load();
+          }
+
+          radioAudioRef.current.onended = () => {
+            radioAudioRef.current = null;
+          };
+
           radioAudioRef.current.play().catch((error) => {
             console.error("Error reproduciendo audio:", error);
           });
@@ -153,6 +162,19 @@ export function useTelemetryAudio() {
     [createAudio]
   );
 
+  const stopTeamRadioSound = useCallback(() => {
+    try {
+      if (radioAudioRef.current) {
+        radioAudioRef.current.onended = null;
+        radioAudioRef.current.pause();
+        // radioAudioRef.current.src = "";
+        // radioAudioRef.current.load();
+      }
+    } finally {
+      //radioAudioRef.current = null;
+    }
+  }, []);
+
   return {
     cookieAudio,
     updateAudio,
@@ -161,5 +183,6 @@ export function useTelemetryAudio() {
     playTeamRadioSound,
     lastPlayTime: lastPlayTime.current,
     radioAudioRef,
+    stopTeamRadioSound,
   };
 }

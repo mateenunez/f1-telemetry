@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProcessedRaceControl } from "@/processors";
 import { Geist } from "next/font/google";
-import { ensureUtc } from "@/utils/calendar";
+import { toLocaleTime } from "@/utils/calendar";
 import { useTelemetryAudio } from "@/hooks/use-raceControl";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
@@ -40,16 +40,6 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
     }
   }, [raceControl]);
 
-  const formatTime = (dateString: string) => {
-    const date = new Date(ensureUtc(dateString));
-    return date.toLocaleTimeString("es-AR", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      timeZone: "America/Argentina/Buenos_Aires",
-    });
-  };
-
   return (
     <Card className="bg-transparent border-none p-0">
       <CardContent className="align-center">
@@ -63,7 +53,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
             </p>
             <div className="flex items-center justify-between mt-1">
               <span className="text-xs text-gray-500">
-                {formatTime(lastMessage.date)}
+                {toLocaleTime(lastMessage.date)}
               </span>
               {lastMessage.racing_number && (
                 <span className="text-xs text-gray-400">

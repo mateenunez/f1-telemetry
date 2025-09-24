@@ -30,18 +30,10 @@ const MapAndMessages = memo(function MapAndMessages({
           </CardTitle>
           {session?.session_type === "Race" && (
             <CardTitle
-              className="text-xlg font-bold text-white tracking-wider mb-0"
+              className="text-xlg font-bold text-white tracking-wider mb-[2rem]"
               style={saira.style}
             >
-              {session.session_status === "Finalised" ? (
-                <>
-                  {session?.total_laps}/{session?.total_laps}
-                </>
-              ) : (
-                <>
-                  {session?.current_lap}/{session?.total_laps}
-                </>
-              )}
+              {session?.current_lap}/{session?.total_laps}
             </CardTitle>
           )}
         </div>

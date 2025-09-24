@@ -49,14 +49,14 @@ export default function DriverPositionInfo({
             {driver?.headshot_url && (
               <img
                 src={driver?.headshot_url}
-                className="obect-cover h-[60px]"
+                className="object-cover h-[60px]"
                 alt={`${driver.name_acronym} headshot f1 telemetry`}
               />
             )}
             {driver?.driver_number === 43 && (
               <img
                 src="/franco-colapinto.png"
-                className="obect-cover h-[60px]"
+                className="object-cover h-[60px]"
                 alt="Franco Colapinto headshot f1 telemetry"
               />
             )}
@@ -81,7 +81,7 @@ export default function DriverPositionInfo({
               {driver?.name_acronym}{" "}
               {isPlaying === driver?.driver_number && (
                 <span className="ml-2">
-                  <SoundWave teamColor={driver?.team_colour} />
+                  <SoundWave teamColor={driver?.team_colour} width={undefined}/>
                 </span>
               )}
             </span>
