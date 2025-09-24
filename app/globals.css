@@ -152,8 +152,10 @@ body {
   }
 }
 
+
+
 .Sound {
-  width:1rem;
+  width:var(--width, 1rem);
   height:0.5rem;
   display:flex;
   align-items:center;
@@ -189,6 +191,26 @@ body {
   height:7px;
   animation-duration:.4s;
 }
+.Sound span:nth-child(6) {
+  height:8px;
+  animation-duration:510ms;
+}
+.Sound span:nth-child(7) {
+  height:6px;
+  animation-duration:540ms;
+}
+.Sound span:nth-child(8) {
+  height:4px;
+  animation-duration:570ms;
+}
+.Sound span:nth-child(9) {
+  height:3px;
+  animation-duration:600ms;
+}
+.Sound span:nth-child(10) {
+  height:2px;
+  animation-duration:630ms;
+}
 
 .Sound.off span {
   animation:none;
@@ -212,6 +234,26 @@ body {
 .Sound.off span:nth-child(5) {
   height:7px;
   animation-duration:.4s;
+}
+.Sound.off span:nth-child(6) {
+  height:5px;
+  animation-duration:510ms;
+}
+.Sound.off span:nth-child(7) {
+  height:4px;
+  animation-duration:540ms;
+}
+.Sound.off span:nth-child(8) {
+  height:3px;
+  animation-duration:570ms;
+}
+.Sound.off span:nth-child(9) {
+  height:2px;
+  animation-duration:600ms;
+}
+.Sound.off span:nth-child(10) {
+  height:1px;
+  animation-duration:630ms;
 }
 
 @keyframes sound {

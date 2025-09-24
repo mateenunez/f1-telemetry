@@ -10,6 +10,8 @@ import DriverPositions from "@/components/DriverPositions";
 import MapAndMessages from "@/components/MapAndMessages";
 import { useTelemetryManager } from "@/hooks/use-telemetry";
 import Footer from "@/components/Footer";
+import SessionAudios from "@/components/SessionAudios";
+import RaceControlList from "@/components/RaceControlList";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
@@ -103,7 +105,7 @@ export default function F1Dashboard() {
         <Header telemetryData={telemetryData} />
         {/* Safety Car Alert*/}
         <div
-          className="text-f1Yellow text-sm trasition-all flex h-4 justify-center duration-500 text-center"
+          className="text-f1Yellow text-sm transition-all flex justify-center duration-500 text-center"
           style={mediumGeist.style}
         >
           {safetyCarActive}
@@ -135,6 +137,10 @@ export default function F1Dashboard() {
             yellowSectors={yellowSectors}
             handleMapFullscreen={handleMapFullscreen}
           />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-11 items-center gap-4 md:gap-0 lg:gap-0 ml-5 md:ml-10 lg:ml-10">
+          <SessionAudios teamRadio={teamRadioCaptures} drivers={driverInfos} session={session}/>
+          <RaceControlList raceControl={telemetryData?.raceControl}/>
         </div>
         {/* Footer */}
         <Footer />

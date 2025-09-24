@@ -546,6 +546,16 @@ export function formatTime(ms: number) {
         .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 };
 
+export const toLocaleTime = (dateString: string) => {
+    const date = new Date(ensureUtc(dateString));
+    return date.toLocaleTimeString("es-AR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZone: "America/Argentina/Buenos_Aires",
+    });
+};
+
 export const parseTimeOffset = (timeString: string) => {
     const [hours, minutes, seconds] = timeString.split(':').map(Number);
     return (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
