@@ -34,7 +34,7 @@ export default function F1Calendar() {
   if (upcoming) {
     return (
       <div className="flex flex-col gap-0 items-center text-offWhite">
-        <div className="flex flex-col md:flex-row lg:flex-row text-xs md:text-sm lg:text-sm text-gray-500 md:gap-1 lg:gap-1" style={mediumGeist.style}>
+        <div className="flex flex-row text-xs md:text-sm lg:text-sm text-gray-500 gap-1" style={mediumGeist.style}>
         <p>Upcoming: {" "}</p>
         <p>
           {getEventType(upcoming?.nextEvent.summary)} - 
