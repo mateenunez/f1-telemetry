@@ -102,7 +102,7 @@ export default function Header({ telemetryData }: HeaderProps) {
             className="flex items-center text-nowrap flex-col md:flex-row text-xs md:text-sm"
             style={mediumGeist.style}
           >
-            {session?.session_status !== "Finalised" ? (
+            {session?.session_status === "Finalised" ? (
               <F1Calendar />
             ) : (
               <>
