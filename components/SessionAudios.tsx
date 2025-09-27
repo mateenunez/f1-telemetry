@@ -99,7 +99,7 @@ export default function SessionAudios({
 
   if (teamRadio && orderedCaptures)
     return (
-      <Card className="col-span-3 gap-6 bg-transparent border-none p-0">
+      <Card className="col-span-3 gap-6 bg-transparent border-none md:p-0">
         <CardContent className="overflow-x-auto flex-1 max-h-[40vh] p-0">
           <ScrollArea
             className="overflow-x-auto h-full p-0 min-w-max"

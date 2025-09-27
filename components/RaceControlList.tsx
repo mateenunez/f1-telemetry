@@ -14,7 +14,7 @@ export default function RaceControlList({ raceControl }: RaceControlListProps) {
   if (!raceControl || raceControl.length === 0) return null;
 
   return (
-    <Card className="col-span-3 gap-6 bg-transparent border-none p-0">
+    <Card className="col-span-3 gap-6 bg-transparent border-none md:p-0 py-[2rem]">
       <CardContent className="overflow-x-auto flex-1 max-h-[40vh] p-0">
         <ScrollArea className="overflow-x-auto h-full p-0" type="scroll">
           <div className="space-y-2">

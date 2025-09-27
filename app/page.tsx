@@ -12,6 +12,7 @@ import { useTelemetryManager } from "@/hooks/use-telemetry";
 import Footer from "@/components/Footer";
 import SessionAudios from "@/components/SessionAudios";
 import RaceControlList from "@/components/RaceControlList";
+import CircleOfDoom from "@/components/CircleOfDoom";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
@@ -69,6 +70,19 @@ export default function F1Dashboard() {
                 </CardContent>
               </Card>
             </div>
+            <div className="flex flex-row gap-8 py-[2rem] mx-[1rem] justify-between">
+              <div className="flex flex-row gap-8 justify-around">
+                {Array.from({ length: 2 }).map((_, idx) => (
+                  <Skeleton
+                    key={idx}
+                    className="gap-2"
+                    width={400}
+                    height={250}
+                  />
+                ))}
+              </div>
+              <Skeleton className="ml-2" width={550} height={250} />
+            </div>
           </SkeletonTheme>
         </div>
       </div>
@@ -124,8 +138,7 @@ export default function F1Dashboard() {
             driverTimingStats={driverTimingStats}
             driverCarData={driverCarData}
             driverStints={driverStints}
-            lastCapture={teamRadioCaptures?.captures.findLast(c => c)}
-            pinnedDriver={pinnedDriver}
+            lastCapture={teamRadioCaptures?.captures.findLast((c) => c)}
             handlePinnedDriver={handlePinnedDriver}
             session={session}
           />
@@ -138,9 +151,20 @@ export default function F1Dashboard() {
             handleMapFullscreen={handleMapFullscreen}
           />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-11 items-center gap-4 md:gap-0 lg:gap-0 ml-5 md:ml-10 lg:ml-10">
-          <SessionAudios teamRadio={teamRadioCaptures} drivers={driverInfos} session={session}/>
-          <RaceControlList raceControl={telemetryData?.raceControl}/>
+        <div className="md:grid md:grid-cols-11 items-center gap-4 py-[2rem] md:gap-0 lg:gap-0 ml-5 md:ml-10 lg:ml-10">
+            <SessionAudios
+              teamRadio={teamRadioCaptures}
+              drivers={driverInfos}
+              session={session}
+            />
+            <RaceControlList raceControl={telemetryData?.raceControl} />
+          <CircleOfDoom
+            currentLap={session?.current_lap}
+            driverInfos={driverInfos}
+            timings={driverTimings}
+            currentPositions={currentPositions}
+            refDriver={pinnedDriver}
+          />
         </div>
         {/* Footer */}
         <Footer />

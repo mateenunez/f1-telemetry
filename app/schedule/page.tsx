@@ -32,10 +32,10 @@ export default function SchedulePage() {
       try {
         const calendarData = await fetchCalendar();
         setCalendar(calendarData);
-        const driverStandings = await fetchDriverStandings();
-        setDriverStandings(driverStandings);
-        const constructorStandings = await fetchConstructorStandings();
-        setConstructorStandings(constructorStandings);
+        // const driverStandings = await fetchDriverStandings();
+        // setDriverStandings(driverStandings);
+        // const constructorStandings = await fetchConstructorStandings();
+        // setConstructorStandings(constructorStandings);
       } catch (err) {
         console.error("Error loading calendar:", err);
       }
@@ -44,7 +44,7 @@ export default function SchedulePage() {
     loadCalendar();
   }, []);
 
-  if (!calendar || !driverStandings || !constructorStandings) {
+  if (!calendar) {
     return (
       <div className="min-h-screen bg-black p-4 flex items-start justify-center gap-4 overflow-hidden">
         <div className="max-w-6xl w-full mx-auto px-4 md:px-8">
@@ -74,7 +74,7 @@ export default function SchedulePage() {
     );
   }
 
-  if (calendar && driverStandings && constructorStandings)
+  if (calendar)
     return (
       <div
         className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 text-white overflow-hidden"
