@@ -8,7 +8,6 @@ import {
   getTimeOnly,
   TimeUntilNext,
 } from "@/utils/calendar";
-import { time } from "console";
 import { Geist } from "next/font/google";
 import { useEffect, useState } from "react";
 
@@ -56,9 +55,9 @@ export default function NextSession({ session, timeUntil }: NextSessionProps) {
       className="flex md:flex-col py-4 max-w-full justify-center"
       style={mediumGeist.style}
     >
-      <div className="flex md:flex-row flex-col max-w-[75vw] justify-between items-center text-center">
+      <div className="flex flex-col max-w-full justify-between items-center text-center">
         {/* Countdown Timer */}
-        <div className="gap-4 tracking-widest flex md:flex-row">
+        <div className="gap-4 tracking-wide md:tracking-widest flex md:flex-row text-[5rem]">
           <TimeUnit value={time.days} label={time.days > 1 ? "days" : "day"} />
           <TimeUnit
             value={time.hours}
@@ -76,8 +75,8 @@ export default function NextSession({ session, timeUntil }: NextSessionProps) {
 
         {/* Session Details */}
         <div className="my-4 mx-8 flex flex-col">
-          <span className="font-semibol text-xl tracking-wide mb-4">
-            {session.summary.toUpperCase().slice(2)}
+          <span className="font-semibol text-xl tracking-wide mb-4 w-full">
+            {session.location.toUpperCase() + " GRAND PRIX"}
           </span>
 
           <div className="flex md:flex-row flex-col justify-around">
@@ -106,8 +105,8 @@ export default function NextSession({ session, timeUntil }: NextSessionProps) {
 function TimeUnit({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col">
-      <span className="text-4xl">{value}</span>
-      <p className="text-lg text-gray-500">{label}</p>
+      <span className="text-[3rem] md:text-[4rem]">{value}</span>
+      <p className="text-[1rem] text-gray-600">{label}</p>
     </div>
   );
 }

@@ -2,13 +2,10 @@
 
 import { useState, useEffect } from "react";
 import {
-  StandingsResponse,
   F1CalendarResponse,
   fetchCalendar,
-  fetchDriverStandings,
   formatEventDateShort,
   getCountryCode,
-  fetchConstructorStandings,
 } from "@/utils/calendar";
 import NextSession from "@/components/NextSession";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -22,20 +19,12 @@ const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
 export default function SchedulePage() {
   const [calendar, setCalendar] = useState<F1CalendarResponse | null>(null);
-  const [driverStandings, setDriverStandings] =
-    useState<StandingsResponse | null>(null);
-  const [constructorStandings, setConstructorStandings] =
-    useState<StandingsResponse | null>(null);
 
   useEffect(() => {
     const loadCalendar = async () => {
       try {
         const calendarData = await fetchCalendar();
         setCalendar(calendarData);
-        // const driverStandings = await fetchDriverStandings();
-        // setDriverStandings(driverStandings);
-        // const constructorStandings = await fetchConstructorStandings();
-        // setConstructorStandings(constructorStandings);
       } catch (err) {
         console.error("Error loading calendar:", err);
       }
@@ -83,11 +72,6 @@ export default function SchedulePage() {
         <div className="max-w-6xl mx-auto my-12 px-4 md:px-8">
           <div className="flex flex-row justify-between items-center w-full gap-4 mb-8">
             <span className="text-2xl font-regular flex flex-row gap-2">
-              <img
-                src={`https://flagsapi.com/AR/flat/32.png`}
-                alt={`Flag of Argentina`}
-                className="w-6 h-6 self-center"
-              />
               Schedule
             </span>
 
@@ -96,9 +80,7 @@ export default function SchedulePage() {
             </a>
           </div>
           <div className="flex flex-row my-4">
-            <div className="flex flex-col mx-0 md:mx-8 w-full gap-6">
-              <span className="text-xl py-5"> Next session in</span>
-
+            <div className="flex flex-col md:mx-8 w-full gap-6">
               {/* Proxima sesion */}
               <NextSession
                 session={calendar.nextEvent}
