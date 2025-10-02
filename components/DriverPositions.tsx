@@ -19,7 +19,7 @@ import {
 import { memo, useEffect, useRef, useState } from "react";
 import { Orbitron } from "next/font/google";
 import { audioUrl, useTelemetryAudio } from "@/hooks/use-raceControl";
-import { useHeadshot } from "@/hooks/use-headshot";
+import { useHeadshot } from "@/hooks/use-cookies";
 
 interface DriverPositionsProps {
   positions: ProcessedPosition[];

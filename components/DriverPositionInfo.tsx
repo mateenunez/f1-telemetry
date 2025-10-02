@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Volume2 } from "lucide-react";
 import { Geist, Aldrich } from "next/font/google";
 import type { ProcessedPosition, ProcessedDriver } from "@/processors";
-import { useHeadshot } from "@/hooks/use-headshot";
+import { useHeadshot } from "@/hooks/use-cookies";
 import SoundWave from "./SoundWave";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });

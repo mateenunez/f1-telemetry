@@ -14,6 +14,7 @@ import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { useTelemetryAudio, audioUrl } from "@/hooks/use-raceControl";
 import path from "path";
+import { useAudioLog, useCircleOfDoom } from "@/hooks/use-cookies";
 
 interface SessionAudiosProps {
   teamRadio: ProcessedTeamRadio | undefined;
@@ -36,6 +37,8 @@ export default function SessionAudios({
   >();
   const { playTeamRadioSound, radioAudioRef, stopTeamRadioSound } =
     useTelemetryAudio();
+
+  const {audioLog} = useAudioLog();
 
   const getDriverInfo = (driverNumber: number) => {
     const driver = drivers.find((d) => d?.driver_number === driverNumber);
@@ -97,16 +100,16 @@ export default function SessionAudios({
     };
   }, [radioAudioRef.current, playingAudio]);
 
-  if (teamRadio && orderedCaptures)
-    return (
-      <Card className="col-span-3 gap-6 bg-transparent border-none md:p-0">
-        <CardContent className="overflow-x-auto flex-1 max-h-[40vh] p-0">
-          <ScrollArea
-            className="overflow-x-auto h-full p-0 min-w-max"
-            type="scroll"
-          >
-            <div className="space-y-2">
-              {orderedCaptures.map((capture, idx) => {
+  return (
+    <Card className="col-span-3 gap-6 bg-transparent border-none md:p-0">
+      <CardContent className="overflow-x-auto flex-1 max-h-[40vh] p-0">
+        <ScrollArea
+          className="overflow-x-auto h-full p-0 min-w-max"
+          type="scroll"
+        >
+        { audioLog &&           <div className="space-y-2">
+            {orderedCaptures && teamRadio ? (
+              orderedCaptures.map((capture, idx) => {
                 const driverInfo = getDriverInfo(capture.racingNumber);
                 const progress = progressMap?.get(idx) ?? 80;
                 return (
@@ -188,10 +191,18 @@ export default function SessionAudios({
                     </span>
                   </div>
                 );
-              })}
-            </div>
-          </ScrollArea>
-        </CardContent>
-      </Card>
-    );
+              })
+            ) : (
+              <div
+                className="min-h-screen items-start justify-center py-8 flex"
+                style={mediumGeist.style}
+              >
+                <p className="text-xs text-gray-400">No race audios.</p>
+              </div>
+            )}
+          </div>}
+        </ScrollArea>
+      </CardContent>
+    </Card>
+  );
 }

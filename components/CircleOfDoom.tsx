@@ -1,3 +1,4 @@
+import { useCircleOfDoom } from "@/hooks/use-cookies";
 import {
   ProcessedDriver,
   ProcessedPosition,
@@ -120,112 +121,118 @@ export default function CircleOfDoom({
     return map;
   }, [cleanTimings, refDriver]);
 
+  const {circleOfDoom} = useCircleOfDoom();
+
   return (
     <div
       className={`col-span-5 max-h-[40vh] items-center flex justify-center w-full`}
     >
-      <div className="w-[50%] flex justify-center aspect-square">
-        <svg
-          viewBox="0 0 100 100"
-          className="w-full h-full"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <circle
-            cx={50}
-            cy={50}
-            r={50 - strokeWidth / 2}
-            fill={"transparent"}
-            stroke={"#4a4a4ad1"}
-            strokeWidth={strokeWidth}
-          />
+      {circleOfDoom && (
+        <div className="w-[50%] flex justify-center aspect-square">
+          <svg
+            viewBox="0 0 100 100"
+            className="w-full h-full"
+            preserveAspectRatio="xMidYMid meet"
+          >
+            <circle
+              cx={50}
+              cy={50}
+              r={50 - strokeWidth / 2}
+              fill={"transparent"}
+              stroke={"#4a4a4ad1"}
+              strokeWidth={strokeWidth}
+            />
 
-          <g transform={`translate(${50}, ${50})`}>
-            {currentLap && (
+            <g transform={`translate(${50}, ${50})`}>
+              {currentLap && (
+                <text
+                  x={0}
+                  y={-2} // pequeño ajuste vertical
+                  fontSize={8} // más grande
+                  fill="#e5e7eb" // gray-200
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  style={mediumGeist.style}
+                >
+                  LAP {currentLap}
+                </text>
+              )}
               <text
                 x={0}
-                y={-2} // pequeño ajuste vertical
-                fontSize={8} // más grande
-                fill="#e5e7eb" // gray-200
+                y={8} // debajo de "LAP"
+                fontSize={3} // más pequeño
+                fill="#9ca3af" // gray-400
                 textAnchor="middle"
                 dominantBaseline="middle"
                 style={mediumGeist.style}
               >
-                LAP {currentLap}
+                LAST LAP TIME
               </text>
-            )}
-            <text
-              x={0}
-              y={8} // debajo de "LAP"
-              fontSize={3} // más pequeño
-              fill="#9ca3af" // gray-400
-              textAnchor="middle"
-              dominantBaseline="middle"
-              style={mediumGeist.style}
-            >
-              LAST LAP TIME
-            </text>
-            <text
-              x={0}
-              y={12} // debajo de "LAST LAP TIME"
-              fontSize={4} // más pequeño
-              fill="#e5e7eb"
-              textAnchor="middle"
-              dominantBaseline="middle"
-              style={mediumGeist.style}
-            >
-              {pilotRef?.last_lap_time}
-            </text>
-            <text
-              x={0}
-              y={18} // debajo de laptime
-              fontSize={4} // más pequeño
-              fill={"#" + (pilotRef?.team_colour || "e5e7eb")}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              style={mediumGeist.style}
-            >
-              {pilotRef?.name_acronym ? pilotRef.name_acronym : "Pick a Driver"}
-            </text>
-          </g>
+              <text
+                x={0}
+                y={12} // debajo de "LAST LAP TIME"
+                fontSize={4} // más pequeño
+                fill="#e5e7eb"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                style={mediumGeist.style}
+              >
+                {pilotRef?.last_lap_time}
+              </text>
+              <text
+                x={0}
+                y={18} // debajo de laptime
+                fontSize={4} // más pequeño
+                fill={"#" + (pilotRef?.team_colour || "e5e7eb")}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                style={mediumGeist.style}
+              >
+                {pilotRef?.name_acronym
+                  ? pilotRef.name_acronym
+                  : "Pick a Driver"}
+              </text>
+            </g>
 
-          {currentPositions.map((dri, i) => {
-            if (!dri) return;
-            const deg = markersDeg?.get(dri?.driver_number);
-            const driverInfo = driverInfos.find(
-              (driver) => driver?.driver_number === dri.driver_number
-            );
-            if (deg === undefined) return;
-            const outer = polarToCartesian(adjusted(deg), r);
-            const inner = polarToCartesian(adjusted(deg), r - tickLength);
-            const labelPos = polar(adjusted(deg), r - 10);
+            {currentPositions.map((dri, i) => {
+              if (!dri) return;
+              const deg = markersDeg?.get(dri?.driver_number);
+              const driverInfo = driverInfos.find(
+                (driver) => driver?.driver_number === dri.driver_number
+              );
+              if (deg === undefined) return;
+              const outer = polarToCartesian(adjusted(deg), r);
+              const inner = polarToCartesian(adjusted(deg), r - tickLength);
+              const labelPos = polar(adjusted(deg), r - 10);
 
-            return (
-              <g key={i}>
-                <line
-                  x1={inner.x}
-                  y1={inner.y}
-                  x2={outer.x}
-                  y2={outer.y}
-                  stroke={"#" + driverInfo?.team_colour}
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                />
-                <text
-                  x={labelPos.x}
-                  y={labelPos.y}
-                  fontSize={4}
-                  fill={"#" + driverInfo?.team_colour}
-                  textAnchor="middle" // centra horizontalmente
-                  dominantBaseline="middle" // centra verticalmente
-                  style={mediumGeist.style}
-                >
-                  {driverInfo?.name_acronym}
-                </text>
-              </g>
-            );
-          })}
-        </svg>
-      </div>
+              return (
+                <g key={i}>
+                  <line
+                    x1={inner.x}
+                    y1={inner.y}
+                    x2={outer.x}
+                    y2={outer.y}
+                    stroke={"#" + driverInfo?.team_colour}
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                  />
+                  <text
+                    x={labelPos.x}
+                    y={labelPos.y}
+                    fontSize={4}
+                    fill={"#" + driverInfo?.team_colour}
+                    textAnchor="middle" // centra horizontalmente
+                    dominantBaseline="middle" // centra verticalmente
+                    style={mediumGeist.style}
+                  >
+                    {driverInfo?.name_acronym}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+      )}
     </div>
   );
 }

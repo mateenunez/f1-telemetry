@@ -1,6 +1,6 @@
 {
-  "name": "f1-websocket-telemetry",
-  "version": "0.4.2",
+  "name": "f1telemetry",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "build": "next build",

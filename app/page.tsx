@@ -41,9 +41,13 @@ export default function F1Dashboard() {
         <div className="max-w-8xl mx-auto space-y-4 h-full">
           <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
             {/* Header Skeleton */}
-            <div className="flex flex-row justify-between items-center w-full px-6 py-4 mb-4">
-              <Skeleton height={60} width="40vw" />
-              <Skeleton height={60} width="25vw" />
+            <div className="flex flex-col md:flex-row gap-4 md:gap-0 justify-between items-center w-full px-6 py-4 mb-4">
+              <Skeleton
+                height={60}
+                width="20rem"
+                className="w-[40vw] md:w-[20vw]"
+              />
+              <Skeleton height={60} width="15rem" />
             </div>
             {/* Cards Skeleton */}
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-4 pb-4">
@@ -58,8 +62,8 @@ export default function F1Dashboard() {
                 </CardContent>
               </Card>
               {/* Mapa y Race Control Skeleton */}
-              <Card className="lg:col-span-4 bg-warmBlack1 border-none border-2 flex flex-col mt-8">
-                <CardHeader className="pb-3 flex flex-row items-center justify-between ml-4">
+              <Card className="lg:col-span-4 bg-warmBlack1 border-none border-2 flex flex-col md:mt-8 p-0 m-0">
+                <CardHeader className="pb-3 flex flex-row items-center justify-between">
                   <Skeleton height={32} width={180} />
                   <Skeleton height={32} width={120} />
                 </CardHeader>
@@ -70,8 +74,8 @@ export default function F1Dashboard() {
                 </CardContent>
               </Card>
             </div>
-            <div className="flex flex-row gap-8 py-[2rem] mx-[1rem] justify-between">
-              <div className="flex flex-row gap-8 justify-around">
+            <div className="flex flex-col md:flex-row gap-8 md:px-0 py-[2rem] md:mx-[1rem] justify-between md:mr-[6rem]">
+              <div className="flex flex-col md:flex-row gap-8 justify-around">
                 {Array.from({ length: 2 }).map((_, idx) => (
                   <Skeleton
                     key={idx}
@@ -81,7 +85,7 @@ export default function F1Dashboard() {
                   />
                 ))}
               </div>
-              <Skeleton className="ml-2" width={550} height={250} />
+              <Skeleton className="md:ml-2" height={250} width={400} />
             </div>
           </SkeletonTheme>
         </div>
@@ -152,12 +156,12 @@ export default function F1Dashboard() {
           />
         </div>
         <div className="md:grid md:grid-cols-11 items-center gap-4 py-[2rem] md:gap-0 lg:gap-0 ml-5 md:ml-10 lg:ml-10">
-            <SessionAudios
-              teamRadio={teamRadioCaptures}
-              drivers={driverInfos}
-              session={session}
-            />
-            <RaceControlList raceControl={telemetryData?.raceControl} />
+          <SessionAudios
+            teamRadio={teamRadioCaptures}
+            drivers={driverInfos}
+            session={session}
+          />
+          <RaceControlList raceControl={telemetryData?.raceControl} />
           <CircleOfDoom
             currentLap={session?.current_lap}
             driverInfos={driverInfos}
@@ -167,7 +171,7 @@ export default function F1Dashboard() {
           />
         </div>
         {/* Footer */}
-        <Footer />
+        <Footer isDashboard={true} />
       </div>
     </div>
   );
