@@ -13,6 +13,7 @@ import Footer from "@/components/Footer";
 import SessionAudios from "@/components/SessionAudios";
 import RaceControlList from "@/components/RaceControlList";
 import CircleOfDoom from "@/components/CircleOfDoom";
+import { useAudioLog, useRaceControlLog } from "@/hooks/use-cookies";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
@@ -34,6 +35,9 @@ export default function F1Dashboard() {
     handleMapFullscreen,
     safetyCarActive,
   } = useTelemetryManager();
+
+  const { audioLog } = useAudioLog();
+  const { raceControlLog } = useRaceControlLog();
 
   if (loading) {
     return (
@@ -155,13 +159,17 @@ export default function F1Dashboard() {
             handleMapFullscreen={handleMapFullscreen}
           />
         </div>
-        <div className="md:grid md:grid-cols-11 items-center gap-4 py-[2rem] md:gap-0 lg:gap-0 ml-5 md:ml-10 lg:ml-10">
-          <SessionAudios
-            teamRadio={teamRadioCaptures}
-            drivers={driverInfos}
-            session={session}
-          />
-          <RaceControlList raceControl={telemetryData?.raceControl} />
+        <div className="flex flex-col-reverse md:flex-row items-center justify-evenly md:py-[2rem] gap-4 w-full">
+          { (audioLog || raceControlLog) &&
+            <div className="flex flex-col md:flex-row justify-center md:justify-evenly items-center w-full">
+              <SessionAudios
+                teamRadio={teamRadioCaptures}
+                drivers={driverInfos}
+                session={session}
+              />
+              <RaceControlList raceControl={telemetryData?.raceControl} />
+            </div>
+          }
           <CircleOfDoom
             currentLap={session?.current_lap}
             driverInfos={driverInfos}

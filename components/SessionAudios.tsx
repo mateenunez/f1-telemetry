@@ -7,7 +7,13 @@ import {
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "./ui/card";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
-import { DownloadIcon, PauseIcon, PlayIcon } from "lucide-react";
+import {
+  DownloadIcon,
+  PauseIcon,
+  PlayIcon,
+  CirclePlayIcon,
+  CirclePauseIcon,
+} from "lucide-react";
 import { toLocaleTime } from "@/utils/calendar";
 import SoundWave from "./SoundWave";
 import { Geist } from "next/font/google";
@@ -38,7 +44,7 @@ export default function SessionAudios({
   const { playTeamRadioSound, radioAudioRef, stopTeamRadioSound } =
     useTelemetryAudio();
 
-  const {audioLog} = useAudioLog();
+  const { audioLog } = useAudioLog();
 
   const getDriverInfo = (driverNumber: number) => {
     const driver = drivers.find((d) => d?.driver_number === driverNumber);
@@ -101,106 +107,114 @@ export default function SessionAudios({
   }, [radioAudioRef.current, playingAudio]);
 
   return (
-    <Card className="col-span-3 gap-6 bg-transparent border-none md:p-0">
+    <Card className="flex w-[20rem] gap-6 bg-transparent border-none md:p-0">
       <CardContent className="overflow-x-auto flex-1 max-h-[40vh] p-0">
         <ScrollArea
           className="overflow-x-auto h-full p-0 min-w-max"
           type="scroll"
         >
-        { audioLog &&           <div className="space-y-2">
-            {orderedCaptures && teamRadio ? (
-              orderedCaptures.map((capture, idx) => {
-                const driverInfo = getDriverInfo(capture.racingNumber);
-                const progress = progressMap?.get(idx) ?? 80;
-                return (
-                  <div
-                    key={idx}
-                    className="border-none flex flex-col w-full p-0"
-                  >
-                    <div className="flex flex-row gap-2 rounded">
-                      <img
-                        src={driverInfo.headshot_url}
-                        className="object-cover h-[3.5rem] "
-                      />
-                      <div
-                        className="relative w-full my-2 text-gray-400 border-none items-center border-[2px] rounded border-gray-400 flex justify-start overflow-hidden"
-                        onClick={() => handleAudioPlay(idx, capture.path)}
-                      >
+          {audioLog && (
+            <div className="space-y-2">
+              {orderedCaptures && teamRadio ? (
+                orderedCaptures.map((capture, idx) => {
+                  const driverInfo = getDriverInfo(capture.racingNumber);
+                  const progress = progressMap?.get(idx) ?? 80;
+                  return (
+                    <div
+                      key={idx}
+                      className="border-none flex flex-col w-full p-0"
+                    >
+                      <div className="flex flex-row gap-2 rounded">
+                        <img
+                          src={driverInfo.headshot_url}
+                          className="object-cover h-[3.5rem] "
+                        />
                         <div
-                          className={cn(
-                            "absolute inset-0 flex flex-row w-full items-center px-0",
-                            playingAudio === idx
-                              ? "opacity-100 translate-y-0"
-                              : "opacity-0 -translate-y-2"
-                          )}
+                          className="relative w-full my-2 text-gray-400 border-none items-center border-[2px] rounded border-gray-400 flex justify-start overflow-hidden"
+                          onClick={() => handleAudioPlay(idx, capture.path)}
                         >
-                          <PauseIcon className="mx-1 hover:cursor-pointer transition" />
-                          <div className="flex flex-col gap-4 w-full">
-                            <div className="w-full h-[2px] mx-1 rounded overflow-hidden opacity-80">
-                              <div
-                                className="h-full max-w-[90%] transition-[width] duration-150 ease-linear"
-                                style={{
-                                  width: `${progress}%`,
-                                  background: "#" + driverInfo.team_color,
-                                }}
-                              />
+                          <div
+                            className={cn(
+                              "absolute inset-0 flex flex-row w-full items-center px-0",
+                              playingAudio === idx
+                                ? "opacity-100 translate-y-0"
+                                : "opacity-0 -translate-y-2"
+                            )}
+                          >
+                            <PauseIcon
+                              className="mx-1 hover:cursor-pointer transition"
+                              width={15}
+                            />
+                            <div className="flex flex-col gap-4 w-full">
+                              <div className="w-full h-[2px] mx-1 rounded overflow-hidden opacity-80">
+                                <div
+                                  className="h-full max-w-[90%] transition-[width] duration-150 ease-linear"
+                                  style={{
+                                    width: `${progress}%`,
+                                    background: "#" + driverInfo.team_color,
+                                  }}
+                                />
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        <div
-                          className={cn(
-                            "absolute inset-0 flex flex-row w-full items-center px-0 transition-all duration-300 ease-out",
-                            playingAudio === idx ? "opacity-0" : "opacity-100"
-                          )}
-                        >
-                          <PlayIcon className="mx-1 hover:cursor-pointer" />
                           <div
-                            className="w-[80%] h-[2px] mx-1 rounded opacity-60"
-                            style={{
-                              width: `${progress}%`,
-                              background: "#" + driverInfo.team_color,
-                            }}
-                          ></div>
+                            className={cn(
+                              "absolute inset-0 flex flex-row w-full items-center px-0 transition-all duration-300 ease-out",
+                              playingAudio === idx ? "opacity-0" : "opacity-100"
+                            )}
+                          >
+                            <PlayIcon
+                              className="mx-1 hover:cursor-pointer"
+                              width={15}
+                            />
+                            <div
+                              className="w-[80%] h-[2px] mx-1 rounded opacity-60"
+                              style={{
+                                width: `${progress}%`,
+                                background: "#" + driverInfo.team_color,
+                              }}
+                            ></div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <span
-                      className="text-xs flex flex-row gap-2 items-center text-gray-500 mx-[4.5rem]"
-                      style={mediumGeist.style}
-                    >
-                      {toLocaleTime(capture.utc)}
+                      <span
+                        className="text-xs flex flex-row gap-2 items-center text-gray-500 mx-[4.5rem]"
+                        style={mediumGeist.style}
+                      >
+                        {toLocaleTime(capture.utc)}
 
-                      {AUDIO_DOWNLOAD_URL ? (
-                        <a
-                          href={
-                            AUDIO_DOWNLOAD_URL +
-                            "?url=" +
-                            audioUrl +
-                            session?.path +
-                            capture.path +
-                            "&idx=" +
-                            idx
-                          }
-                        >
+                        {AUDIO_DOWNLOAD_URL ? (
+                          <a
+                            href={
+                              AUDIO_DOWNLOAD_URL +
+                              "?url=" +
+                              audioUrl +
+                              session?.path +
+                              capture.path +
+                              "&idx=" +
+                              idx
+                            }
+                          >
+                            <DownloadIcon width={15} />
+                          </a>
+                        ) : (
                           <DownloadIcon width={15} />
-                        </a>
-                      ) : (
-                        <DownloadIcon width={15} />
-                      )}
-                    </span>
-                  </div>
-                );
-              })
-            ) : (
-              <div
-                className="min-h-screen items-start justify-center py-8 flex"
-                style={mediumGeist.style}
-              >
-                <p className="text-xs text-gray-400">No race audios.</p>
-              </div>
-            )}
-          </div>}
+                        )}
+                      </span>
+                    </div>
+                  );
+                })
+              ) : (
+                <div
+                  className="min-h-screen items-start justify-center py-8 flex"
+                  style={mediumGeist.style}
+                >
+                  <p className="text-xs text-gray-400">No race audios.</p>
+                </div>
+              )}
+            </div>
+          )}
         </ScrollArea>
       </CardContent>
     </Card>

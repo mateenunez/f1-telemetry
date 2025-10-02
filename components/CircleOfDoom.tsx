@@ -125,7 +125,7 @@ export default function CircleOfDoom({
 
   return (
     <div
-      className={`col-span-5 max-h-[40vh] items-center flex justify-center w-full`}
+      className={`flex items-center flex justify-center w-full md:max-w-[55%]`}
     >
       {circleOfDoom && (
         <div className="w-[50%] flex justify-center aspect-square">

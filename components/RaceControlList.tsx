@@ -14,7 +14,7 @@ interface RaceControlListProps {
 export default function RaceControlList({ raceControl }: RaceControlListProps) {
   const { raceControlLog } = useRaceControlLog();
   return (
-    <Card className="col-span-3 gap-6 bg-transparent border-none md:p-0 py-[2rem]">
+    <Card className="flex max-w-[20rem] gap-6 bg-transparent border-none md:p-0 py-[2rem]">
       <CardContent className="overflow-x-auto flex-1 max-h-[40vh] p-0">
         <ScrollArea className="overflow-x-auto h-full p-0" type="scroll">
           {raceControlLog && (
