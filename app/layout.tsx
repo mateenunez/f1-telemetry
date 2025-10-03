@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: "F1 Telemetry",
     description:
       "F1 Telemetry es un dashboard en tiempo real de Formula 1 con datos de telemetría originales, un mapa del circuito en vivo y audios en tiempo real para vivir una experiencia inmersiva de Formula 1.",
-    url: "https://f1telemetry.com/",
+    url: "https://www.f1telemetry.com/",
     siteName: "F1 Telemetry",
     locale: "es_ES",
     type: "website",
@@ -48,7 +48,7 @@ export default function RootLayout({
           />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="theme-color" content="#b91c1c" />
-          <link rel="canonical" href="https://f1telemetry.com/" />
+          <link rel="canonical" href="https://www.f1telemetry.com/" />
         </head>
         <body>{children}</body>
         <Analytics />
