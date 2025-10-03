@@ -8,7 +8,6 @@ import {
   getTimeOnly,
   TimeUntilNext,
 } from "@/utils/calendar";
-import { time } from "console";
 import { Geist } from "next/font/google";
 import { useEffect, useState } from "react";
 
@@ -53,12 +52,12 @@ export default function NextSession({ session, timeUntil }: NextSessionProps) {
 
   return (
     <div
-      className="flex md:flex-col py-4 max-w-full justify-center"
+      className="flex md:flex-col py-4 max-w-fulljustify-center"
       style={mediumGeist.style}
     >
-      <div className="flex md:flex-row flex-col max-w-[75vw] justify-between items-center text-center">
+      <div className="flex flex-col max-w-full justify-between items-center text-center">
         {/* Countdown Timer */}
-        <div className="gap-4 tracking-widest flex md:flex-row">
+        <div className="gap-4 tracking-wide md:tracking-widest flex md:flex-row text-[5rem]">
           <TimeUnit value={time.days} label={time.days > 1 ? "days" : "day"} />
           <TimeUnit
             value={time.hours}
@@ -75,25 +74,27 @@ export default function NextSession({ session, timeUntil }: NextSessionProps) {
         </div>
 
         {/* Session Details */}
-        <div className="my-4 mx-8 flex flex-col">
-          <span className="font-semibol text-xl tracking-wide mb-4">
-            {session.summary.toUpperCase().slice(2)}
+        <div className="my-8 mx-8 flex flex-col">
+          <span className="font-semibol text-xl tracking-wide mb-4 w-full">
+            {session.track + " " + session.type.toUpperCase()}
           </span>
 
-          <div className="flex md:flex-row flex-col justify-around">
+          <div className="flex md:flex-row justify-center gap-4">
+            {/* Location and Status */}
+            <div>
+              <InfoRowWithFlag
+                label="session.location"
+                value={session.location}
+              />
+            </div>
             {/* Time Information */}
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col text-left gap-0">
               <p className="text-xl">
                 {getDayOfWeek(session.start)} {getRelativeDate(session.start)}
               </p>
               <div className="items-center text-gray-300">
-                {getTimeOnly(session.start)} - {getTimeOnly(session.end)}
+                {getTimeOnly(session.start)} - {getTimeOnly(session.end || "")}
               </div>
-            </div>
-
-            {/* Location and Status */}
-            <div>
-              <InfoRowWithFlag label="" value={session.location} />
             </div>
           </div>
         </div>
@@ -106,8 +107,8 @@ export default function NextSession({ session, timeUntil }: NextSessionProps) {
 function TimeUnit({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col">
-      <span className="text-4xl">{value}</span>
-      <p className="text-lg text-gray-500">{label}</p>
+      <span className="text-[3rem] md:text-[4rem]">{value}</span>
+      <p className="text-[1rem] text-gray-600">{label}</p>
     </div>
   );
 }
@@ -115,11 +116,11 @@ function TimeUnit({ value, label }: { value: number; label: string }) {
 // Componente para filas de información con bandera
 function InfoRowWithFlag({ label, value }: { label: string; value: string }) {
   return (
-    <span className="text-gray-500 flex flex-col gap-0 items-center">
-      {label} <p className="text-gray-200 text-lg">{value}</p>{" "}
+    <span className="text-gray-200 flex flex-col gap-0 items-center">
       <img
         src={`https://flagsapi.com/${getCountryCode(value)}/flat/32.png`}
         alt={`Flag of ${value}`}
+        className="w-12 h-12"
       />
     </span>
   );

@@ -4,17 +4,26 @@ import { useCallback, useEffect, useState } from 'react';
 
 type CookieBool = boolean;
 
-type CookieName = 'corners' | 'sectors';
+type CookieName = 'corners' | 'sectors' | 'headshot' | 'audioLog' | 'raceControlLog' | 'circleOfDoom';
 
 const COOKIE_NAMES = {
     corners: 'corners',
     sectors: 'sectors',
+    headshot: 'headshot',
+    audioLog: 'audioLog',
+    raceControlLog: 'raceControlLog',
+    circleOfDoom: 'circleOfDoom'
+
 } as const;
 
 // Bus de suscriptores por cookie para sincronizar instancias de cada hook
 const subscribersMap: Record<CookieName, Set<(v: boolean) => void>> = {
     corners: new Set(),
     sectors: new Set(),
+    headshot: new Set(),
+    audioLog: new Set(),
+    raceControlLog: new Set(),
+    circleOfDoom: new Set()
 };
 
 function notifyAll(cookie: CookieName, v: boolean) {
@@ -108,4 +117,28 @@ export function useSectors(defaultValue: CookieBool = true) {
     const { value: sectors, ready, set, toggle, enable, disable, clear, cookieName } =
         useBooleanCookie(COOKIE_NAMES.sectors, defaultValue);
     return { sectors, ready, set, toggle, enable, disable, clear, cookieName };
+}
+
+export function useHeadshot(defaultValue: CookieBool = true) {
+    const { value: headshot, ready, set, toggle, enable, disable, clear, cookieName } =
+        useBooleanCookie(COOKIE_NAMES.headshot, defaultValue);
+    return { headshot, ready, set, toggle, enable, disable, clear, cookieName };
+}
+
+export function useAudioLog(defaultValue: CookieBool = true) {
+    const { value: audioLog, ready, set, toggle, enable, disable, clear, cookieName } =
+        useBooleanCookie(COOKIE_NAMES.audioLog, defaultValue);
+    return { audioLog, ready, set, toggle, enable, disable, clear, cookieName };
+}
+
+export function useRaceControlLog(defaultValue: CookieBool = true) {
+    const { value: raceControlLog, ready, set, toggle, enable, disable, clear, cookieName } =
+        useBooleanCookie(COOKIE_NAMES.raceControlLog, defaultValue);
+    return { raceControlLog, ready, set, toggle, enable, disable, clear, cookieName };
+}
+
+export function useCircleOfDoom(defaultValue: CookieBool = true) {
+    const { value: circleOfDoom, ready, set, toggle, enable, disable, clear, cookieName } =
+        useBooleanCookie(COOKIE_NAMES.circleOfDoom, defaultValue);
+    return { circleOfDoom, ready, set, toggle, enable, disable, clear, cookieName };
 }

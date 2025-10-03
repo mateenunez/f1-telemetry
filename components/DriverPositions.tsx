@@ -19,7 +19,7 @@ import {
 import { memo, useEffect, useRef, useState } from "react";
 import { Orbitron } from "next/font/google";
 import { audioUrl, useTelemetryAudio } from "@/hooks/use-raceControl";
-import { useHeadshot } from "@/hooks/use-headshot";
+import { useHeadshot } from "@/hooks/use-cookies";
 
 interface DriverPositionsProps {
   positions: ProcessedPosition[];
@@ -29,7 +29,6 @@ interface DriverPositionsProps {
   driverCarData: (ProcessedCarData | undefined)[];
   driverStints: (ProcessedStint[] | undefined)[];
   lastCapture: ProcessedCapture | undefined;
-  pinnedDriver: number | null;
   handlePinnedDriver: (driverNumber: number) => void;
   session: ProcessedSession | null | undefined;
 }
@@ -44,7 +43,6 @@ const DriverPositions = memo(function DriverPositions({
   driverCarData,
   driverStints,
   lastCapture,
-  pinnedDriver,
   handlePinnedDriver,
   session,
 }: DriverPositionsProps) {
@@ -96,11 +94,11 @@ const DriverPositions = memo(function DriverPositions({
                     <div className="min-w-[2rem]">SPEED</div>
                     <div className="min-w-[2rem]">PITS</div>
                   </div>
-                  <div className="w-[8rem] flex flex-row items-center align-text-top gap-6 justify-center">
-                    <div className="text-center">
+                  <div className="w-[8.5rem] flex flex-row items-center align-text-top gap-6 justify-center">
+                    <div className="text-center min-w-[2.5rem]">
                       {session?.session_type === "Race" ? "LEADER" : "FASTEST"}
                     </div>
-                    <div className="text-center">
+                    <div className="text-center min-w-[2.5rem]">
                       {session?.session_type === "Race" ? "POS" : "INT"}
                     </div>
                   </div>
@@ -121,11 +119,7 @@ const DriverPositions = memo(function DriverPositions({
               return (
                 <div
                   key={pos.driver_number}
-                  className={`flex items-center gap-2 rounded-md transition-opacity ${
-                    pinnedDriver === pos.driver_number
-                      ? `border-offWhite sticky top-0 z-10`
-                      : ""
-                  } max-w-full overflow-x-auto min-w-0 min-h-full cursor-pointer`}
+                  className={`flex items-center gap-2 rounded-md transition-opacity max-w-full overflow-x-auto min-w-0 min-h-full cursor-pointer`}
                   onDoubleClick={() => handlePinnedDriver(pos.driver_number)}
                   style={
                     timing?.knockedOut || timing?.retired || timing?.stopped

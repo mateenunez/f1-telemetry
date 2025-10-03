@@ -18,7 +18,7 @@ import { getSectorColor } from "@/hooks/use-raceControl";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Card, CardContent } from "./ui/card";
-import { useCorners, useSectors } from "@/hooks/use-mapPreferences";
+import { useCorners, useSectors } from "@/hooks/use-cookies";
 
 // This is basically fearlessly copied from
 // https://github.com/tdjsnelling/monaco
@@ -67,8 +67,8 @@ export default function Map({
     startAngle: number;
   }>(null);
 
-  const {corners: cornersCookie} = useCorners()
-  const {sectors: sectorsCookie} = useSectors()
+  const { corners: cornersCookie } = useCorners();
+  const { sectors: sectorsCookie } = useSectors();
 
   useEffect(() => {
     (async () => {
@@ -152,15 +152,29 @@ export default function Map({
   const totalSectors = sectors.length;
   const sector1End = Math.floor(totalSectors / 3); // Sector 7 (0-7 = 8 sectores)
   const sector2End = Math.floor((totalSectors * 2) / 3); // Sector 12 (8-12 = 5 sectores)
-  const sector3End = totalSectors-1;
+  const sector3End = totalSectors - 1;
 
   const renderedSectors = useMemo(() => {
     return sectors.map((sector, idx) => {
-      const color = getSectorColor(sector, yellowSectors, sector1End, sector2End, idx, sectorsCookie);
+      const color = getSectorColor(
+        sector,
+        yellowSectors,
+        sector1End,
+        sector2End,
+        idx,
+        sectorsCookie
+      );
       return {
         color,
         number: sector.number,
-        strokeWidth: color == "stroke-yellow-400" || "stroke-red-500" || "stroke-blue-300" || "stroke-orange-300" || "stroke-white" ? 60 : 120,
+        strokeWidth:
+          color == "stroke-yellow-400" ||
+          "stroke-red-500" ||
+          "stroke-blue-300" ||
+          "stroke-orange-300" ||
+          "stroke-white"
+            ? 60
+            : 120,
         d: `M${sector.points[0].x},${sector.points[0].y} ${sector.points
           .map((point) => `L${point.x},${point.y}`)
           .join(" ")}`,
@@ -227,86 +241,88 @@ export default function Map({
         />
       )}
 
-      {!sectorsCookie && sectors.map((sector, idx) => {
-        const startDx = sector.points[1]?.x - sector.points[0]?.x || 0;
-        const startDy = sector.points[1]?.y - sector.points[0]?.y || 0;
-        const startAngle = Math.atan2(startDy, startDx) * (180 / Math.PI);
+      {!sectorsCookie &&
+        sectors.map((sector, idx) => {
+          const startDx = sector.points[1]?.x - sector.points[0]?.x || 0;
+          const startDy = sector.points[1]?.y - sector.points[0]?.y || 0;
+          const startAngle = Math.atan2(startDy, startDx) * (180 / Math.PI);
 
-        const endDx =
-          sector.points[sector.points.length - 1]?.x -
-            sector.points[sector.points.length - 2]?.x || 0;
-        const endDy =
-          sector.points[sector.points.length - 1]?.y -
-            sector.points[sector.points.length - 2]?.y || 0;
-        const endAngle = Math.atan2(endDy, endDx) * (180 / Math.PI);
+          const endDx =
+            sector.points[sector.points.length - 1]?.x -
+              sector.points[sector.points.length - 2]?.x || 0;
+          const endDy =
+            sector.points[sector.points.length - 1]?.y -
+              sector.points[sector.points.length - 2]?.y || 0;
+          const endAngle = Math.atan2(endDy, endDx) * (180 / Math.PI);
 
-        return (
-          <g key={`sector-markers-${sector.number}`}>
-            {idx == sector1End && (
-              <g key={"sector-1"}>
-                <rect
-                  x={sector.end.x - 150}
-                  y={sector.end.y}
-                  width={300}
-                  height={40}
-                  fill="red"
-                  stroke="red"
-                  opacity={0.8}
-                  strokeWidth={20}
-                  transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
-                    sector.end.y
-                  })`}
-                />
-              </g>
-            )}
+          return (
+            <g key={`sector-markers-${sector.number}`}>
+              {idx == sector1End && (
+                <g key={"sector-1"}>
+                  <rect
+                    x={sector.end.x - 150}
+                    y={sector.end.y}
+                    width={300}
+                    height={40}
+                    fill="red"
+                    stroke="red"
+                    opacity={0.8}
+                    strokeWidth={20}
+                    transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
+                      sector.end.y
+                    })`}
+                  />
+                </g>
+              )}
 
-            {idx == sector2End && (
-              <g key={"sector-1"}>
-                <rect
-                  x={sector.end.x - 150}
-                  y={sector.end.y}
-                  width={300}
-                  height={40}
-                  fill="blue"
-                  stroke="blue"
-                  opacity={0.8}
-                  strokeWidth={20}
-                  transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
-                    sector.end.y
-                  })`}
-                />
-              </g>
-            )}
+              {idx == sector2End && (
+                <g key={"sector-1"}>
+                  <rect
+                    x={sector.end.x - 150}
+                    y={sector.end.y}
+                    width={300}
+                    height={40}
+                    fill="blue"
+                    stroke="blue"
+                    opacity={0.8}
+                    strokeWidth={20}
+                    transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
+                      sector.end.y
+                    })`}
+                  />
+                </g>
+              )}
 
-            {idx == sector3End && (
-              <g key={"sector-1"}>
-                <rect
-                  x={sector.end.x - 150}
-                  y={sector.end.y}
-                  width={300}
-                  height={40}
-                  fill="orange"
-                  stroke="orange"
-                  opacity={0.8}
-                  strokeWidth={20}
-                  transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
-                    sector.end.y
-                  })`}
-                />
-              </g>
-            )}
-          </g>
-        );
-      })}
+              {idx == sector3End && (
+                <g key={"sector-1"}>
+                  <rect
+                    x={sector.end.x - 150}
+                    y={sector.end.y}
+                    width={300}
+                    height={40}
+                    fill="orange"
+                    stroke="orange"
+                    opacity={0.8}
+                    strokeWidth={20}
+                    transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
+                      sector.end.y
+                    })`}
+                  />
+                </g>
+              )}
+            </g>
+          );
+        })}
 
-      {cornersCookie && corners.map((corner) => (
-        <CornerNumber
-          key={`corner.${corner.number}.${corner.letter && corner.letter}`}
-          number={corner.number}
-          x={corner.labelPos.x}
-          y={corner.labelPos.y}
-        />
-      ))}
+      {cornersCookie &&
+        corners.map((corner) => (
+          <CornerNumber
+            key={`corner.${corner.number}.${corner.letter && corner.letter}`}
+            number={corner.number}
+            x={corner.labelPos.x}
+            y={corner.labelPos.y}
+          />
+        ))}
 
       {centerX && centerY && positions && drivers && (
         <>

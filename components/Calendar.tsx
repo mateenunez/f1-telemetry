@@ -4,7 +4,6 @@ import {
   F1UpcomingResponse,
   fetchUpcoming,
   formatTimeUntil,
-  getEventType,
 } from "@/utils/calendar";
 import { Geist, Orbitron } from "next/font/google";
 
@@ -34,14 +33,19 @@ export default function F1Calendar() {
   if (upcoming) {
     return (
       <div className="flex flex-col gap-0 items-center text-offWhite">
-        <div className="flex flex-row text-xs md:text-sm lg:text-sm text-gray-500 gap-1" style={mediumGeist.style}>
-        <p>Upcoming: {" "}</p>
-        <p>
-          {getEventType(upcoming?.nextEvent.summary)} - 
-        </p>
-        <p>{upcoming?.nextEvent.location}</p>
+        <div
+          className="flex flex-col md:flex-row lg:flex-row text-xs md:text-sm lg:text-sm text-gray-500 md:gap-1 lg:gap-1"
+          style={mediumGeist.style}
+        >
+          <p>Next: </p>
+          <p>{upcoming?.nextEvent.location} - </p>
+          <p>{upcoming?.nextEvent.type}</p>
         </div>
-        <a style={orbitron.style} className="flex flex-row gap-2 hover:cursor-pointer text-md font-regular" href="/schedule">
+        <a
+          style={orbitron.style}
+          className="flex flex-row gap-2 hover:cursor-pointer text-md font-regular"
+          href="/schedule"
+        >
           {formatTimeUntil(upcoming.timeUntilNext).toUpperCase()}{" "}
         </a>
       </div>

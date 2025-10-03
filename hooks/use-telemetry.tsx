@@ -53,10 +53,6 @@ export function useTelemetryManager() {
     return telemetryData.positions
       .filter((p) => p.position >= 1 && p.position <= 20)
       .sort((a, b) => {
-        if (pinnedDriver !== null) {
-          if (a.driver_number === pinnedDriver) return -1;
-          if (b.driver_number === pinnedDriver) return 1;
-        }
         return a.position - b.position;
       });
   }, [telemetryData?.positions, pinnedDriver]);

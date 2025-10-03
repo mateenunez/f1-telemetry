@@ -1,10 +1,10 @@
 export interface F1Event {
     id: string;
-    summary: string;
+    type: string;
+    track: string;
     start: string;
-    end: string;
+    end?: string,
     location: string;
-    status: string;
 }
 
 export interface TimeUntilNext {
@@ -16,12 +16,25 @@ export interface TimeUntilNext {
     totalHours: number;
 }
 
+export interface GroupByLocation {
+    track: string;
+    location: string;
+    p1?: F1Event;
+    p2?: F1Event;
+    p3?: F1Event;
+    q?: F1Event;
+    r?: F1Event;
+    sq?: F1Event;
+    sr?: F1Event;
+    start: Date;
+}
+
 export interface F1CalendarResponse {
     success: boolean;
     nextEvent: F1Event;
     timeUntilNext: TimeUntilNext;
     totalEvents: number;
-    upcomingEvents: F1Event[];
+    groupsByLocation: GroupByLocation[];
     lastUpdated: string;
 }
 
@@ -31,74 +44,6 @@ export interface F1UpcomingResponse {
     timeUntilNext: TimeUntilNext;
     lastUpdated: string;
 }
-
-export interface Constructor {
-    constructorId: string;
-    url: string;
-    name: string;
-    nationality: string;
-}
-
-export interface Driver {
-    driverId: string;
-    permanentNumber: string;
-    code: string;
-    url: string;
-    givenName: string;
-    familyName: string;
-    dateOfBirth: string;
-    nationality: string;
-}
-
-export interface DriverStanding {
-    position: string;
-    positionText: string;
-    points: string;
-    wins: string;
-    Driver: Driver;
-    Constructors: Constructor[];
-}
-
-export interface ConstructorStanding {
-    position: string;
-    positionText: string;
-    points: string;
-    wins: string;
-    Constructor: {
-        constructorId: string;
-        url: string;
-        name: string;
-        nationality: string;
-    };
-}
-
-export interface StandingsList {
-    season: string;
-    round: string;
-    DriverStandings?: DriverStanding[];
-    ConstructorStandings?: ConstructorStanding[];
-}
-
-export interface StandingsTable {
-    season: string;
-    round: string;
-    StandingsLists: StandingsList[];
-}
-
-export interface MRData {
-    xmlns: string;
-    series: string;
-    url: string;
-    limit: string;
-    offset: string;
-    total: string;
-    StandingsTable: StandingsTable;
-}
-
-export interface StandingsResponse {
-    MRData: MRData;
-}
-
 
 export async function fetchUpcoming(): Promise<F1UpcomingResponse> {
     try {
@@ -146,56 +91,6 @@ export async function fetchCalendar(): Promise<F1CalendarResponse> {
         console.error('Error al obtener el calendario:', error);
         throw error;
     }
-}
-
-export async function fetchDriverStandings(): Promise<StandingsResponse> {
-    try {
-        const fetchUrl = process.env.NEXT_PUBLIC_DRIVER_STANDINGS_URL || "";
-        const response = await fetch(fetchUrl);
-        if (!response.ok) {
-            throw new Error(`Error fetching driver standings: ${response.status}`);
-        }
-        const data: StandingsResponse = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error al obtener driver standings:', error);
-        throw error;
-    }
-}
-
-export async function fetchConstructorStandings(): Promise<StandingsResponse> {
-    try {
-        const fetchUrl = process.env.NEXT_PUBLIC_CONSTRUCTOR_STANDINGS_URL || "";
-        const response = await fetch(fetchUrl);
-        if (!response.ok) {
-            throw new Error(`Error fetching constructor standings: ${response.status}`);
-        }
-        const data: StandingsResponse = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error al obtener constructor standings:', error);
-        throw error;
-    }
-}
-
-export function getEventType(summary: string): 'Practice 1' | 'Practice 2' | 'Practice 3' | 'Qualifying' | 'Sprint' | 'Race' | 'Other' {
-    const summaryLower = summary.toLowerCase();
-
-    if (summaryLower.includes('practice 1')) {
-        return 'Practice 1';
-    } else if (summaryLower.includes('practice 2')) {
-        return 'Practice 2';
-    } else if (summaryLower.includes('practice 3')) {
-        return 'Practice 3';
-    } else if (summaryLower.includes('qualifying') || summaryLower.includes('⏱️')) {
-        return 'Qualifying';
-    } else if (summaryLower.includes('sprint')) {
-        return 'Sprint';
-    } else if (summaryLower.includes('race') || summaryLower.includes('🏁')) {
-        return 'Race';
-    }
-
-    return 'Other';
 }
 
 export function formatTimeUntil(timeUntil: TimeUntilNext): string {
@@ -265,7 +160,6 @@ export function formatEventDateShort(dateString: string): string {
         const dateOptions: Intl.DateTimeFormatOptions = {
             month: 'short',
             day: 'numeric',
-            year: 'numeric'
         };
 
         const formattedDate = date.toLocaleDateString('en-US', dateOptions);
@@ -544,6 +438,16 @@ export function formatTime(ms: number) {
     return `${hours.toString().padStart(2, "0")}:${minutes
         .toString()
         .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+};
+
+export const toLocaleTime = (dateString: string) => {
+    const date = new Date(ensureUtc(dateString));
+    return date.toLocaleTimeString("es-AR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZone: "America/Argentina/Buenos_Aires",
+    });
 };
 
 export const parseTimeOffset = (timeString: string) => {
