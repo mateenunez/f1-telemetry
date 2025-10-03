@@ -10,10 +10,10 @@ import { Github, Linkedin } from "lucide-react";
 
 const GITHUB_URL =
   process.env.NEXT_PUBLIC_GITHUB_URL ||
-  "https://github.com/mateenunez/f1-telemetry";
+  "";
 const LINKEDIN_URL =
   process.env.NEXT_PUBLIC_LINKEDIN_URL ||
-  "https://www.linkedin.com/in/mateenunez/";
+  "teenunez/";
 const DISCORD_INVITE_URL = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || "";
 const DISCORD_ICON_URL =
   process.env.NEXT_PUBLIC_DISCORD_ICON_URL ||
