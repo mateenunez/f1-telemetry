@@ -20,7 +20,7 @@ import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { useTelemetryAudio, audioUrl } from "@/hooks/use-raceControl";
 import path from "path";
-import { useAudioLog, useCircleOfDoom } from "@/hooks/use-cookies";
+import { useAudioLog, useCircleOfDoom, useHeadshot } from "@/hooks/use-cookies";
 
 interface SessionAudiosProps {
   teamRadio: ProcessedTeamRadio | undefined;
@@ -43,7 +43,7 @@ export default function SessionAudios({
   >();
   const { playTeamRadioSound, radioAudioRef, stopTeamRadioSound } =
     useTelemetryAudio();
-
+  const { headshot } = useHeadshot();
   const { audioLog } = useAudioLog();
 
   const getDriverInfo = (driverNumber: number) => {
@@ -51,6 +51,7 @@ export default function SessionAudios({
     return {
       headshot_url: driver?.headshot_url,
       team_color: driver?.team_colour,
+      name_acronym: driver?.name_acronym,
     };
   };
 
@@ -108,113 +109,125 @@ export default function SessionAudios({
 
   return (
     <Card className="flex w-[20rem] gap-6 bg-transparent border-none md:p-0">
-      <CardContent className="overflow-x-auto flex-1 max-h-[40vh] p-0">
+      <CardContent className="overflow-x-auto flex-1 max-h-[20rem] p-0">
         <ScrollArea
           className="overflow-x-auto h-full p-0 min-w-max"
           type="scroll"
         >
-          {audioLog && (
+          {orderedCaptures && teamRadio ? (
             <div className="space-y-2">
-              {orderedCaptures && teamRadio ? (
-                orderedCaptures.map((capture, idx) => {
-                  const driverInfo = getDriverInfo(capture.racingNumber);
-                  const progress = progressMap?.get(idx) ?? 80;
-                  return (
-                    <div
-                      key={idx}
-                      className="border-none flex flex-col w-full p-0"
-                    >
-                      <div className="flex flex-row gap-2 rounded">
+              {orderedCaptures.map((capture, idx) => {
+                const driverInfo = getDriverInfo(capture.racingNumber);
+                const progress = progressMap?.get(idx) ?? 80;
+                return (
+                  <div
+                    key={idx}
+                    className="border-none flex flex-col w-full p-0"
+                  >
+                    <div className="flex flex-row gap-2 rounded">
+                      {headshot ? (
                         <img
                           src={driverInfo.headshot_url}
-                          className="object-cover h-[3.5rem] "
+                          className="object-cover h-[3.5rem]"
                         />
-                        <div
-                          className="relative w-full my-2 text-gray-400 border-none items-center border-[2px] rounded border-gray-400 flex justify-start overflow-hidden"
-                          onClick={() => handleAudioPlay(idx, capture.path)}
+                      ) : (
+                        <p
+                          className="text-md text-gray-100 h-[3rem] flex items-center"
+                          style={{
+                            fontFamily: mediumGeist.style.fontFamily,
+                            color: "#" + driverInfo.team_color,
+                          }}
                         >
-                          <div
-                            className={cn(
-                              "absolute inset-0 flex flex-row w-full items-center px-0",
-                              playingAudio === idx
-                                ? "opacity-100 translate-y-0"
-                                : "opacity-0 -translate-y-2"
-                            )}
-                          >
-                            <PauseIcon
-                              className="mx-1 hover:cursor-pointer transition"
-                              width={15}
-                            />
-                            <div className="flex flex-col gap-4 w-full">
-                              <div className="w-full h-[2px] mx-1 rounded overflow-hidden opacity-80">
-                                <div
-                                  className="h-full max-w-[90%] transition-[width] duration-150 ease-linear"
-                                  style={{
-                                    width: `${progress}%`,
-                                    background: "#" + driverInfo.team_color,
-                                  }}
-                                />
-                              </div>
+                          {driverInfo.name_acronym}
+                        </p>
+                      )}
+
+                      <div
+                        className="relative w-full my-2 text-gray-400 border-none items-center border-[2px] rounded border-gray-400 flex justify-start overflow-hidden"
+                        onClick={() => handleAudioPlay(idx, capture.path)}
+                      >
+                        <div
+                          className={cn(
+                            "absolute inset-0 flex flex-row w-full items-center px-0",
+                            playingAudio === idx
+                              ? "opacity-100 translate-y-0"
+                              : "opacity-0 -translate-y-2"
+                          )}
+                        >
+                          <PauseIcon
+                            className="mx-1 hover:cursor-pointer transition fill-gray-400"
+                            width={15}
+                          />
+                          <div className="flex flex-col gap-4 w-full">
+                            <div className="w-full h-[2px] mx-1 rounded overflow-hidden">
+                              <div
+                                className="h-full max-w-[90%] transition-[width] duration-150 ease-linear"
+                                style={{
+                                  width: `${progress}%`,
+                                  background: "#" + driverInfo.team_color,
+                                }}
+                              />
                             </div>
                           </div>
+                        </div>
 
+                        <div
+                          className={cn(
+                            "absolute inset-0 flex flex-row w-full items-center px-0 transition-all duration-300 ease-out",
+                            playingAudio === idx ? "opacity-0" : "opacity-100"
+                          )}
+                        >
+                          <PlayIcon
+                            className="mx-1 hover:cursor-pointer fill-gray-400"
+                            width={15}
+                          />
                           <div
-                            className={cn(
-                              "absolute inset-0 flex flex-row w-full items-center px-0 transition-all duration-300 ease-out",
-                              playingAudio === idx ? "opacity-0" : "opacity-100"
-                            )}
-                          >
-                            <PlayIcon
-                              className="mx-1 hover:cursor-pointer"
-                              width={15}
-                            />
-                            <div
-                              className="w-[80%] h-[2px] mx-1 rounded opacity-60"
-                              style={{
-                                width: `${progress}%`,
-                                background: "#" + driverInfo.team_color,
-                              }}
-                            ></div>
-                          </div>
+                            className="w-[80%] h-[2px] mx-1 rounded"
+                            style={{
+                              width: `${progress}%`,
+                              background: "#" + driverInfo.team_color,
+                            }}
+                          ></div>
                         </div>
                       </div>
-                      <span
-                        className="text-xs flex flex-row gap-2 items-center text-gray-500 mx-[4.5rem]"
-                        style={mediumGeist.style}
-                      >
-                        {toLocaleTime(capture.utc)}
-
-                        {AUDIO_DOWNLOAD_URL ? (
-                          <a
-                            href={
-                              AUDIO_DOWNLOAD_URL +
-                              "?url=" +
-                              audioUrl +
-                              session?.path +
-                              capture.path +
-                              "&idx=" +
-                              idx
-                            }
-                          >
-                            <DownloadIcon width={15} />
-                          </a>
-                        ) : (
-                          <DownloadIcon width={15} />
-                        )}
-                      </span>
                     </div>
-                  );
-                })
-              ) : (
-                <div
-                  className="min-h-screen items-start justify-center py-8 flex"
-                  style={mediumGeist.style}
-                >
-                  <p className="text-xs text-gray-400">No race audios.</p>
-                </div>
-              )}
+                    <span
+                      className="text-xs flex flex-row gap-2 items-center text-gray-500 mx-[4.5rem]"
+                      style={mediumGeist.style}
+                    >
+                      {toLocaleTime(capture.utc)}
+
+                      {AUDIO_DOWNLOAD_URL ? (
+                        <a
+                          href={
+                            AUDIO_DOWNLOAD_URL +
+                            "?url=" +
+                            audioUrl +
+                            session?.path +
+                            capture.path +
+                            "&idx=" +
+                            idx
+                          }
+                        >
+                          <DownloadIcon width={15} />
+                        </a>
+                      ) : (
+                        <DownloadIcon width={15} />
+                      )}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div
+              className="min-h-[20rem] items-center justify-center flex"
+              style={mediumGeist.style}
+            >
+              <p className="text-xs text-gray-400">No race audios.</p>
             </div>
           )}
+          <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </CardContent>
     </Card>

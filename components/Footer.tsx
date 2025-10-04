@@ -8,12 +8,8 @@ import { useCorners, useSectors } from "@/hooks/use-cookies";
 import { useTelemetryAudio } from "@/hooks/use-raceControl";
 import { Github, Linkedin } from "lucide-react";
 
-const GITHUB_URL =
-  process.env.NEXT_PUBLIC_GITHUB_URL ||
-  "";
-const LINKEDIN_URL =
-  process.env.NEXT_PUBLIC_LINKEDIN_URL ||
-  "teenunez/";
+const GITHUB_URL = process.env.NEXT_PUBLIC_GITHUB_URL || "";
+const LINKEDIN_URL = process.env.NEXT_PUBLIC_LINKEDIN_URL || "";
 const DISCORD_INVITE_URL = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || "";
 const DISCORD_ICON_URL =
   process.env.NEXT_PUBLIC_DISCORD_ICON_URL ||
@@ -24,15 +20,13 @@ export default function Footer({
 }: {
   isDashboard: boolean;
 }) {
-
-    const { cookieAudio, toggleAudio } = useTelemetryAudio();
-    const { headshot, set: setHeadshot } = useHeadshot();
-    const { corners, set: setCorners } = useCorners();
-    const { sectors, set: setSectors } = useSectors();
-    const { audioLog, set: setAudioLog } = useAudioLog();
-    const { raceControlLog, set: setRaceControlLog } = useRaceControlLog();
-    const { circleOfDoom, set: setCircleOfDoom } = useCircleOfDoom();
-  
+  const { cookieAudio, toggleAudio } = useTelemetryAudio();
+  const { headshot, set: setHeadshot } = useHeadshot();
+  const { corners, set: setCorners } = useCorners();
+  const { sectors, set: setSectors } = useSectors();
+  const { audioLog, set: setAudioLog } = useAudioLog();
+  const { raceControlLog, set: setRaceControlLog } = useRaceControlLog();
+  const { circleOfDoom, set: setCircleOfDoom } = useCircleOfDoom();
 
   return (
     <div className="flex flex-col justify-center py-2">

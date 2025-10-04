@@ -14,8 +14,8 @@ interface RaceControlListProps {
 export default function RaceControlList({ raceControl }: RaceControlListProps) {
   const { raceControlLog } = useRaceControlLog();
   return (
-    <Card className="flex max-w-[20rem] gap-6 bg-transparent border-none md:p-0 py-[2rem]">
-      <CardContent className="overflow-x-auto flex-1 max-h-[40vh] p-0">
+    <Card className="flex w-[20rem] gap-6 bg-transparent border-none md:p-0 py-[2rem]">
+      <CardContent className="overflow-x-auto flex-1 max-h-[20rem] p-0">
         <ScrollArea className="overflow-x-auto h-full p-0" type="scroll">
           {raceControlLog && (
             <div className="space-y-2">
@@ -51,7 +51,7 @@ export default function RaceControlList({ raceControl }: RaceControlListProps) {
                 ))
               ) : (
                 <div
-                  className="min-h-screen items-start justify-center py-8 flex"
+                  className="min-h-[20rem] justify-center items-center flex"
                   style={mediumGeist.style}
                 >
                   <p className="text-xs text-gray-400">No race messages.</p>

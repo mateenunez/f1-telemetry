@@ -2,7 +2,11 @@ import { useState, useEffect, useMemo } from "react";
 import { TelemetryManager, type TelemetryData } from "../telemetry-manager";
 import { findYellowSectors } from "@/hooks/use-raceControl";
 
-export const getCompoundSvg = (compound: string, idx:number, iconSize: number) => {
+export const getCompoundSvg = (
+  compound: string,
+  idx: number,
+  iconSize: number
+) => {
   const iconMap: Record<string, string> = {
     SOFT: "/soft.svg",
     MEDIUM: "/medium.svg",
@@ -12,11 +16,12 @@ export const getCompoundSvg = (compound: string, idx:number, iconSize: number) =
   };
   const key = (compound || "").toUpperCase();
   const src = iconMap[key] || "/unknown.svg";
+  if (src === "unknown.svg") console.log("Unknown compound type: ", compound);
   return (
     <img
       src={src}
       alt={key}
-      key={key+idx}
+      key={key + idx}
       width={iconSize}
       height={iconSize}
       style={{ display: "inline-block", verticalAlign: "middle" }}
@@ -138,27 +143,6 @@ export function useTelemetryManager() {
       else return "SC";
     } else return null;
   }, [telemetryData?.raceControl]);
-
-    const getCompoundSvg = (compound: string, iconSize: number) => {
-    const iconMap: Record<string, string> = {
-      SOFT: "/soft.svg",
-      MEDIUM: "/medium.svg",
-      HARD: "/hard.svg",
-      INTERMEDIATE: "/intermediate.svg",
-      WET: "/wet.svg",
-    };
-    const key = (compound || "").toUpperCase();
-    const src = iconMap[key] || "/unknown.svg";
-    return (
-      <img
-        src={src}
-        alt={key}
-        width={iconSize}
-        height={iconSize}
-        style={{ display: "inline-block", verticalAlign: "middle" }}
-      />
-    );
-  };
 
   return {
     telemetryData,

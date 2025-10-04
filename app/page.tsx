@@ -160,16 +160,23 @@ export default function F1Dashboard() {
           />
         </div>
         <div className="flex flex-col-reverse md:flex-row items-center justify-evenly md:py-[2rem] gap-4 w-full">
-          { (audioLog || raceControlLog) &&
-            <div className="flex flex-col md:flex-row justify-center md:justify-evenly items-center w-full">
+          <div
+            className={`flex flex-col md:flex-row justify-center md:justify-evenly items-center ${
+              audioLog || raceControlLog ? "w-full" : "hidden"
+            }`}
+          >
+            {audioLog && (
               <SessionAudios
                 teamRadio={teamRadioCaptures}
                 drivers={driverInfos}
                 session={session}
               />
+            )}
+            {raceControlLog && (
               <RaceControlList raceControl={telemetryData?.raceControl} />
-            </div>
-          }
+            )}
+          </div>
+
           <CircleOfDoom
             currentLap={session?.current_lap}
             driverInfos={driverInfos}
