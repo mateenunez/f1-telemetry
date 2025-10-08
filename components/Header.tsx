@@ -1,14 +1,11 @@
 "use client";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import {
   CloudRain,
   Sun,
-  Cloud,
   Wind,
   Droplets,
-  SunDim,
   CloudSun,
 } from "lucide-react";
 import { Geist, Orbitron } from "next/font/google";
@@ -16,6 +13,7 @@ import F1Calendar from "@/components/Calendar";
 import type { TelemetryData } from "@/telemetry-manager";
 import { useEffect, useState } from "react";
 import { ensureUtc, formatTime, parseTimeOffset } from "@/utils/calendar";
+import PreferencesPanel from "./PreferencesPanel";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
@@ -61,43 +59,50 @@ export default function Header({ telemetryData }: HeaderProps) {
   }, [session?.date_start, session?.date_end]);
 
   return (
-    <Card className="bg-warmBlack1 text-white border-none mx-2 relative">
+    <Card className="bg-warmBlack1 text-white border-none relative">
       <CardHeader>
         <div className="flex flex-col md:flex-row lg:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <div>
-              <CardTitle className="text-xl sm:text-2xl" style={orbitron.style}>
-                {session?.session_name}: {session?.session_status}
-              </CardTitle>
-              <div
-                className="text-gray-500 text-sm flex flex-col justify-center items-center"
-                style={mediumGeist.style}
-              >
-                <div className="flex flex-row gap-1 justify-center w-full flex-wrap">
-                  <p>{session?.circuit_short_name} • </p>
-                  <p>
-                    {session?.country_name} • {session?.year}
-                  </p>
-                </div>
-                {session?.session_status !== "Finalised" && (
-                  /* Countdown */
-                  <div>
-                    <div className="flex items-center gap-1 py-1 text-offWhite flex-row">
-                      <div className="flex flex-col">
-                        <span
-                          className="text-sm font-mono"
-                          style={mediumGeist.style}
-                        >
-                          {formatTime(sessionTime)}
-                        </span>
-                      </div>
+          <div className="flex flex-row md:w-[20rem] md:justify-between items-center ">
+            <PreferencesPanel driverInfo={telemetryData?.drivers}/>
+            <div className="flex flex-row w-[18rem] items-center md:justify-between gap-2 justify-center">
+              <div className="flex items-center gap-4">
+                <div>
+                  <CardTitle
+                    className="flex flex-row items-center gap-4 text-xl sm:text-2xl"
+                    style={orbitron.style}
+                  >
+                    {session?.session_name}: {session?.session_status}
+                  </CardTitle>
+                  <div
+                    className="text-gray-500 text-sm flex flex-col justify-center items-center"
+                    style={mediumGeist.style}
+                  >
+                    <div className="flex flex-row gap-1 justify-center w-full flex-wrap">
+                      <p>{session?.circuit_short_name} • </p>
+                      <p>
+                        {session?.country_name} • {session?.year}
+                      </p>
                     </div>
+                    {session?.session_status !== "Finalised" && (
+                      /* Countdown */
+                      <div>
+                        <div className="flex items-center gap-1 py-1 text-offWhite flex-row">
+                          <div className="flex flex-col">
+                            <span
+                              className="text-sm font-mono"
+                              style={mediumGeist.style}
+                            >
+                              {formatTime(sessionTime)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
             </div>
           </div>
-
           <div
             className="flex items-center text-nowrap flex-col md:flex-row text-xs md:text-sm"
             style={mediumGeist.style}

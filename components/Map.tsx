@@ -19,6 +19,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Card, CardContent } from "./ui/card";
 import { useCorners, useSectors } from "@/hooks/use-cookies";
+import { usePreferences } from "@/context/preferences";
 
 // This is basically fearlessly copied from
 // https://github.com/tdjsnelling/monaco
@@ -67,8 +68,12 @@ export default function Map({
     startAngle: number;
   }>(null);
 
-  const { corners: cornersCookie } = useCorners();
-  const { sectors: sectorsCookie } = useSectors();
+  const { preferences } = usePreferences();
+  const cornersCookie = preferences.corners;
+  const sectorsCookie = preferences.sectors;
+  const favorites = new Set(
+    preferences.favoriteDrivers.map((d) => d.driver_number)
+  );
 
   useEffect(() => {
     (async () => {
@@ -326,7 +331,16 @@ export default function Map({
 
       {centerX && centerY && positions && drivers && (
         <>
-          {Object.values(drivers)
+          {Object.values(drivers) // Ordenar teniendo en cuenta los favoritos
+            .sort((a: ProcessedDriver, b: ProcessedDriver) => {
+              const aIsFavorite = favorites.has(a.driver_number);
+              const bIsFavorite = favorites.has(b.driver_number);
+
+              if (aIsFavorite === bIsFavorite) return 0;
+              if (aIsFavorite) return -1;
+              if (bIsFavorite) return 1;
+              return 0;
+            })
             .reverse()
             .map((driver) => {
               const pos = positions.find(
@@ -335,6 +349,7 @@ export default function Map({
               const tim = timing.find(
                 (t) => t.driver_number === driver.driver_number
               );
+              const isFavorite = driver && favorites.has(driver.driver_number);
               if (!pos || !tim) return null;
               return (
                 <CarDot
@@ -346,6 +361,7 @@ export default function Map({
                   rotation={rotation}
                   centerX={centerX}
                   centerY={centerY}
+                  favorite={isFavorite}
                 />
               );
             })}
@@ -386,6 +402,7 @@ const CornerNumber: React.FC<CornerNumberProps> = ({ number, x, y }) => {
 type CarDotProps = {
   name: string;
   color: string | undefined;
+  favorite: boolean;
 
   pos: PositionCar;
   rotation: number;
@@ -400,6 +417,7 @@ const CarDot = ({
   pos,
   name,
   color,
+  favorite,
   rotation,
   centerX,
   centerY,
@@ -425,14 +443,10 @@ const CarDot = ({
         filter: "drop-shadow(0 0 4px rgba(0,0,0,0.8))",
       }}
     >
-      {" "}
-      <circle r={140} fill={color ? `#${color}44` : "#fff2"} stroke="none" />
-      <circle id={`map.driver.circle`} r={120} />
-      <circle r={90} fill="#0002" stroke="none" />
       <text
         id={`map.driver.text`}
         fontWeight="bold"
-        fontSize={120 * 3}
+        fontSize={favorite ? 120 * 3.5 : 120 * 3}
         strokeWidth={0}
         style={{
           fontFamily: "Arial, sans-serif",
@@ -443,6 +457,16 @@ const CarDot = ({
       >
         {name}
       </text>
+      <g>
+        <circle
+          r={140}
+          fill={color ? `#${color}44` : "#fff2"}
+          stroke={favorite ? "yellow" : "#0022"}
+          strokeWidth={50}
+        />
+        <circle id={`map.driver.circle`} r={120} />
+        <circle r={90} fill={favorite ? "" : "#0002"} stroke="none" />
+      </g>
     </g>
   );
 };

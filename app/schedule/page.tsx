@@ -1,15 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  F1CalendarResponse,
-  fetchCalendar,
-  formatEventDateShort,
-  getCountryCode,
-} from "@/utils/calendar";
+import { F1CalendarResponse, fetchCalendar } from "@/utils/calendar";
 import NextSession from "@/components/NextSession";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Geist } from "next/font/google";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -36,7 +30,7 @@ export default function SchedulePage() {
 
   if (!calendar) {
     return (
-      <div className="min-h-screen bg-black p-4 flex items-start justify-center gap-4 overflow-hidden">
+      <div className="min-h-screen bg-warmBlack p-4 flex items-start justify-center gap-4 overflow-hidden">
         <div className="max-w-6xl w-full mx-auto px-4 md:px-8">
           <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
             {/* Header Skeleton */}
@@ -81,11 +75,11 @@ export default function SchedulePage() {
       >
         <div className="max-w-6xl mx-auto mt-12 px-4 md:px-8">
           <div className="flex flex-row justify-between items-center w-full gap-4 mb-8">
-            <span className="text-2xl font-regular flex flex-row gap-2">
+            <span className="text-2xl font-regular flex flex-row gap-2 hover:text-f1Red hover:cursor-pointer transition duration-300">
               Schedule
             </span>
 
-            <a className="text-xl font-regular hover:cursor-pointer" href="/">
+            <a className="text-xl font-regular hover:cursor-pointer hover:text-f1Blue transition duration-300" href="/live-timing">
               Telemetry
             </a>
           </div>
@@ -101,7 +95,7 @@ export default function SchedulePage() {
               <div className="flex flex-col w-full">
                 <span className="text-xl mb-4">Upnext</span>
                 <ScrollArea className="w-full">
-                  <Upnext upNextEvents={calendar.groupsByLocation}/>
+                  <Upnext upNextEvents={calendar.groupsByLocation} />
                   <ScrollBar
                     orientation="horizontal"
                     className="bg-gray-700 hidden md:block"
@@ -110,7 +104,7 @@ export default function SchedulePage() {
               </div>
             </div>
           </div>
-          <Footer isDashboard={false} />
+          <Footer />
         </div>
       </div>
     );

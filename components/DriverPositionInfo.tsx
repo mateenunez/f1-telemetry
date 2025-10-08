@@ -6,6 +6,7 @@ import { Geist, Aldrich } from "next/font/google";
 import type { ProcessedPosition, ProcessedDriver } from "@/processors";
 import { useHeadshot } from "@/hooks/use-cookies";
 import SoundWave from "./SoundWave";
+import { usePreferences } from "@/context/preferences";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
@@ -21,7 +22,9 @@ export default function DriverPositionInfo({
   driver,
   isPlaying,
 }: DriverPositionInfoProps) {
-  const { headshot } = useHeadshot();
+  const { getPreference } = usePreferences();
+  const headshot = getPreference('headshot');
+
   return (
     <div
       className={`flex flex-row items-center ${

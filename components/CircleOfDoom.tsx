@@ -1,3 +1,4 @@
+import { usePreferences } from "@/context/preferences";
 import { useCircleOfDoom } from "@/hooks/use-cookies";
 import {
   ProcessedDriver,
@@ -28,14 +29,14 @@ const deg2rad = (deg: number) => (deg * Math.PI) / 180;
 const polarToCartesian = (angleDeg: number, radius = r) => {
   const rad = deg2rad(angleDeg);
   return {
-    x: cx + radius * Math.cos(rad),
+    x: cx - radius * Math.cos(rad),
     y: cy - radius * Math.sin(rad),
   };
 };
 
 const polar = (deg: number, radius: number) => {
   const rad = deg2rad(deg);
-  return { x: cx + radius * Math.cos(rad), y: cy - radius * Math.sin(rad) };
+  return { x: cx - radius * Math.cos(rad), y: cy - radius * Math.sin(rad) };
 };
 
 const getAngularPos = (ref: number, dri: number, lastLap: number) => {
@@ -44,7 +45,7 @@ const getAngularPos = (ref: number, dri: number, lastLap: number) => {
 };
 
 const gapToNumber = (gap: string | undefined): number => {
-  if (gap === undefined) return 0;
+  if (gap === undefined || gap.includes("LAP")) return 0;
   const string = gap.slice(1);
   const number = Number(string);
   return number;
@@ -97,20 +98,28 @@ export default function CircleOfDoom({
       !refPilot ||
       refPilot?.retired ||
       refPilot?.knockedOut ||
-      refPilot.stopped
+      refPilot.stopped ||
+      !refPilot.last_lap_time
     )
       return map;
     const lastLapTime = laptimeToNumber(refPilot.last_lap_time);
     const refTime = gapToNumber(refPilot.gap_to_leader);
     if (!lastLapTime) return map;
 
+    const pitStopTime = 24; // Segundos que tarda un pit stop promedio
+    const pitAngularPos = (pitStopTime / lastLapTime) * 360; // Posición angular del pit
+    map.set(924, pitAngularPos); // 924 key arbitraria seleccionada por dejar caer la mano en el teclado.
+
     for (const dri of cleanTimings) {
-      if (!(dri.retired || dri.knockedOut || dri.stopped)) {
-        if (
+      if (
+        !(
+          dri.retired ||
+          dri.knockedOut ||
+          dri.stopped ||
           dri.gap_to_leader?.includes("L") ||
           dri.time_diff_to_fastest?.includes("L")
         )
-          return map;
+      ) {
         const gapTime = gapToNumber(
           dri.gap_to_leader || dri.time_diff_to_fastest
         );
@@ -121,7 +130,11 @@ export default function CircleOfDoom({
     return map;
   }, [cleanTimings, refDriver]);
 
-  const {circleOfDoom} = useCircleOfDoom();
+  const { getPreference } = usePreferences();
+  const circleOfDoom = getPreference("circleOfDoom");
+
+  const pitStopDeg = markersDeg.get(924);
+  const pitInner = polarToCartesian(adjusted(pitStopDeg || 60), r);
 
   return (
     <div
@@ -143,42 +156,73 @@ export default function CircleOfDoom({
               strokeWidth={strokeWidth}
             />
 
-            <g transform={`translate(${50}, ${50})`}>
-              {currentLap && (
+            {
+              <g>
+                <line
+                  x1={pitInner.x}
+                  y1={pitInner.y}
+                  x2={pitInner.x}
+                  y2={pitInner.y}
+                  stroke={"red"}
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                />
                 <text
-                  x={0}
-                  y={-2} // pequeño ajuste vertical
-                  fontSize={8} // más grande
-                  fill="#e5e7eb" // gray-200
+                  x={pitInner.x + 6}
+                  y={pitInner.y}
+                  fontSize={2}
+                  fill="red"
                   textAnchor="middle"
                   dominantBaseline="middle"
+                  strokeLinecap="round"
                   style={mediumGeist.style}
                 >
-                  LAP {currentLap}
+                  PIT TIME
                 </text>
+              </g>
+            }
+
+            <g transform={`translate(${50}, ${50})`}>
+              {refDriver && (
+                <g>
+                  {currentLap && (
+                    <text
+                      x={0}
+                      y={-2} // pequeño ajuste vertical
+                      fontSize={8} // más grande
+                      fill="#e5e7eb" // gray-200
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      style={mediumGeist.style}
+                    >
+                      LAP {currentLap}
+                    </text>
+                  )}
+                  <text
+                    x={0}
+                    y={8} // debajo de "LAP"
+                    fontSize={3} // más pequeño
+                    fill="#9ca3af" // gray-400
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    style={mediumGeist.style}
+                  >
+                    LAST LAP TIME
+                  </text>
+                  <text
+                    x={0}
+                    y={12} // debajo de "LAST LAP TIME"
+                    fontSize={4} // más pequeño
+                    fill="#e5e7eb"
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    style={mediumGeist.style}
+                  >
+                    {pilotRef?.last_lap_time}
+                  </text>
+                </g>
               )}
-              <text
-                x={0}
-                y={8} // debajo de "LAP"
-                fontSize={3} // más pequeño
-                fill="#9ca3af" // gray-400
-                textAnchor="middle"
-                dominantBaseline="middle"
-                style={mediumGeist.style}
-              >
-                LAST LAP TIME
-              </text>
-              <text
-                x={0}
-                y={12} // debajo de "LAST LAP TIME"
-                fontSize={4} // más pequeño
-                fill="#e5e7eb"
-                textAnchor="middle"
-                dominantBaseline="middle"
-                style={mediumGeist.style}
-              >
-                {pilotRef?.last_lap_time}
-              </text>
+
               <text
                 x={0}
                 y={18} // debajo de laptime
@@ -200,7 +244,7 @@ export default function CircleOfDoom({
               const driverInfo = driverInfos.find(
                 (driver) => driver?.driver_number === dri.driver_number
               );
-              if (deg === undefined) return;
+              if (deg === undefined || Number.isNaN(deg)) return;
               const outer = polarToCartesian(adjusted(deg), r);
               const inner = polarToCartesian(adjusted(deg), r - tickLength);
               const labelPos = polar(adjusted(deg), r - 10);

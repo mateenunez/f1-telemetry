@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 import { useTelemetryAudio, audioUrl } from "@/hooks/use-raceControl";
 import path from "path";
 import { useAudioLog, useCircleOfDoom, useHeadshot } from "@/hooks/use-cookies";
+import { usePreferences } from "@/context/preferences";
 
 interface SessionAudiosProps {
   teamRadio: ProcessedTeamRadio | undefined;
@@ -38,13 +39,12 @@ export default function SessionAudios({
 }: SessionAudiosProps) {
   const [playingAudio, setPlayingAudio] = useState<number | undefined>();
   const [progressMap, setProgressMap] = useState<Map<number, number>>();
-  const [orderedCaptures, setOrderedCaptures] = useState<
-    ProcessedCapture[] | []
-  >();
+
   const { playTeamRadioSound, radioAudioRef, stopTeamRadioSound } =
     useTelemetryAudio();
-  const { headshot } = useHeadshot();
-  const { audioLog } = useAudioLog();
+  const { getPreference } = usePreferences();
+
+  const headshot = getPreference("headshot");
 
   const getDriverInfo = (driverNumber: number) => {
     const driver = drivers.find((d) => d?.driver_number === driverNumber);
@@ -71,14 +71,11 @@ export default function SessionAudios({
     }
   };
 
-  useEffect(() => {
-    if (!teamRadio?.captures) return setOrderedCaptures([]);
-    setOrderedCaptures(
-      [...teamRadio.captures].sort(
+  const orderedCaptures = teamRadio
+    ? [...teamRadio.captures].sort(
         (a, b) => Date.parse(String(b.utc)) - Date.parse(String(a.utc))
       )
-    );
-  }, [teamRadio]);
+    : [];
 
   useEffect(() => {
     if (!radioAudioRef.current) return;

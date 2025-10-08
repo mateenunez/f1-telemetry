@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import DriverPositionInfo from "@/components/DriverPositionInfo";
 import PitsDrsSpeed from "@/components/PitsDrsSpeed";
@@ -19,7 +19,7 @@ import {
 import { memo, useEffect, useRef, useState } from "react";
 import { Orbitron } from "next/font/google";
 import { audioUrl, useTelemetryAudio } from "@/hooks/use-raceControl";
-import { useHeadshot } from "@/hooks/use-cookies";
+import { usePreferences } from "@/context/preferences";
 
 interface DriverPositionsProps {
   positions: ProcessedPosition[];
@@ -47,18 +47,23 @@ const DriverPositions = memo(function DriverPositions({
   session,
 }: DriverPositionsProps) {
   const [isPlayingAudio, setIsPlayingAudio] = useState<number | undefined>();
-  const lastPlayedUtcRef = useRef<string | undefined>(undefined);
+  const lastPlayedUtcRef = useRef<string | undefined>(
+    lastCapture ? lastCapture.utc : undefined
+  );
   const { playNotificationSound } = useTelemetryAudio();
   const { playTeamRadioSound, radioAudioRef } = useTelemetryAudio();
-  const { headshot } = useHeadshot();
+  const { getPreference, preferences } = usePreferences();
+  const headshot = getPreference("headshot");
 
   useEffect(() => {
     if (!lastCapture) return;
-    if (session?.session_status === "Finalised") return;
-    const url = audioUrl + session?.path + lastCapture.path;
-    lastPlayedUtcRef.current = lastCapture.utc;
-    playNotificationSound();
-    playTeamRadioSound(url);
+    if (session?.session_status !== "Finalised") return;
+    if (lastPlayedUtcRef.current !== lastCapture.utc) {
+      const url = audioUrl + session?.path + lastCapture.path;
+      playNotificationSound();
+      playTeamRadioSound(url);
+      lastPlayedUtcRef.current = lastCapture.utc;
+    }
   }, [lastCapture]);
 
   useEffect(() => {
@@ -77,10 +82,13 @@ const DriverPositions = memo(function DriverPositions({
   }, [radioAudioRef.current, lastCapture]);
 
   return (
-    <Card className="lg:col-span-6 bg-warmBlack1 border-none max-h-screen">
+    <Card className="lg:col-span-6 bg-warmBlack border-none max-h-screen">
       <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
         <ScrollArea className="overflow-x-auto min-w-max h-full" type="scroll">
-          <div style={orbitron.style}>
+          <div
+            style={orbitron.style}
+            className="sticky top-0 z-30 bg-warmBlack w-full py-1.5"
+          >
             <div className="py-1.5 text-[0.6rem] text-gray-400/50 text-center">
               <div className="flex flex-row gap-3">
                 <div
@@ -115,6 +123,7 @@ const DriverPositions = memo(function DriverPositions({
               const timingStats = driverTimingStats[idx];
               const carData = driverCarData[idx];
               const currentStints = driverStints[idx];
+              const isFavorite = driver?.driver_number && preferences.favoriteDrivers.some((d) => d.driver_number ===driver.driver_number);
 
               return (
                 <div
@@ -134,6 +143,7 @@ const DriverPositions = memo(function DriverPositions({
                           background: `linear-gradient(-90deg, #0d0d0d ${
                             headshot ? "90%" : "100%"
                           }, #${driver?.team_colour} 100%)`,
+                          boxShadow: isFavorite ? 'inset 0 0 0.2rem 0.2rem rgba(255, 255, 255, 0.15)' : ""
                         }
                   }
                 >
@@ -145,7 +155,7 @@ const DriverPositions = memo(function DriverPositions({
                   />
 
                   {/* Estadísticas */}
-                  <div className="flex flex-row items-center justify-around w-full py-1.5 gap-2">
+                  <div className="flex flex-row items-center justify-around w-full py-1.5 gap-2 overflow-x-auto">
                     <Tyres driverStints={currentStints} />
                     <PitsDrsSpeed
                       timing={timing}

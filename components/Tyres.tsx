@@ -2,7 +2,7 @@
 
 import { ProcessedStint } from "@/processors";
 import { Geist } from "next/font/google";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getCompoundSvg } from "@/hooks/use-telemetry";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
@@ -12,11 +12,9 @@ interface TyresProps {
 }
 
 export default function Tyres({ driverStints }: TyresProps) {
-  const currentStint = useMemo(() => {
-    if (driverStints) {
-      return driverStints[driverStints.length - 1];
-    }
-  }, [driverStints]);
+  const currentStint = driverStints
+    ? driverStints[driverStints.length - 1]
+    : undefined;
 
   return (
     <div

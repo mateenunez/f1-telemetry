@@ -4,6 +4,7 @@ import { Geist } from "next/font/google";
 import { ProcessedRaceControl } from "@/processors";
 import { toLocaleTime } from "@/utils/calendar";
 import { useRaceControlLog } from "@/hooks/use-cookies";
+import { usePreferences } from "@/context/preferences";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
@@ -12,7 +13,11 @@ interface RaceControlListProps {
 }
 
 export default function RaceControlList({ raceControl }: RaceControlListProps) {
-  const { raceControlLog } = useRaceControlLog();
+ 
+  
+  const { preferences, getPreference, setPreference } = usePreferences();
+  const raceControlLog = getPreference('raceControlLog');
+  
   return (
     <Card className="flex w-[20rem] gap-6 bg-transparent border-none md:p-0 py-[2rem]">
       <CardContent className="overflow-x-auto flex-1 max-h-[20rem] p-0">

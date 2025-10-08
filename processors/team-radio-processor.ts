@@ -10,18 +10,31 @@ export interface ProcessedCapture {
 
 export class TeamRadioProcessor {
     private teamRadio: ProcessedTeamRadio = { captures: [] }
-    
+
     processTeamRadio(teamRadioData: any): ProcessedTeamRadio {
-        if (!teamRadioData || !teamRadioData.Captures || !Array.isArray(teamRadioData.Captures)) {
+        if (!teamRadioData || !teamRadioData.Captures) {
             this.teamRadio.captures = [];
             return this.teamRadio;
         }
 
-        const newCaptures = teamRadioData.Captures.map((capture: any) => ({
-            utc: capture.Utc,
-            racingNumber: Number(capture.RacingNumber),
-            path: capture.Path
-        }));
+        let newCaptures;
+
+        if (!Array.isArray(teamRadioData.Captures)) {
+            const objectValues: any = Object.values(teamRadioData.Captures);
+            newCaptures = [{
+                utc: objectValues[0].Utc,
+                racingNumber: Number(objectValues[0].RacingNumber),
+                path: objectValues[0].Path
+            }]
+        } else {
+            newCaptures = teamRadioData.Captures.map((capture: any) => ({
+                utc: capture.Utc,
+                racingNumber: Number(capture.RacingNumber),
+                path: capture.Path
+            }));
+        }
+
+
 
         this.teamRadio.captures.push(...newCaptures);
 

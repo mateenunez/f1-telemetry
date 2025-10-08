@@ -4,7 +4,8 @@ import RaceControl from "@/components/RaceControl";
 import { Saira } from "next/font/google";
 import { memo } from "react";
 
-const saira = Saira({ subsets: ["latin"], weight: "400" });
+const saira = Saira({ subsets: ["latin"], weight: "500" });
+
 
 interface MapAndMessagesProps {
   telemetryData: any;
@@ -30,7 +31,7 @@ const MapAndMessages = memo(function MapAndMessages({
           </CardTitle>
           {session?.session_type === "Race" && (
             <CardTitle
-              className="text-xlg font-bold text-white tracking-wider mb-[2rem]"
+              className="text-xxl font-bold text-gray-200 tracking-widest mb-[2rem]"
               style={saira.style}
             >
               {session?.current_lap}/{session?.total_laps}
