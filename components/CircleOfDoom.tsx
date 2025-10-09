@@ -1,71 +1,19 @@
 import { usePreferences } from "@/context/preferences";
-import { useCircleOfDoom } from "@/hooks/use-cookies";
 import {
   ProcessedDriver,
   ProcessedPosition,
   ProcessedTiming,
 } from "@/processors";
 import { Geist } from "next/font/google";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 interface CircleOfDoomProps {
   currentPositions: (ProcessedPosition | undefined)[];
   timings: (ProcessedTiming | undefined)[];
   driverInfos: (ProcessedDriver | undefined)[];
   currentLap: number | undefined;
-  refDriver: number | null;
+  refDriver: number | undefined;
 }
-
-const ANGLE_OFFSET = 90;
-const CLOCKWISE = true;
-const tickLength = 3;
-const strokeWidth = 2;
-const cx = 50;
-const cy = 50;
-const r = 50 - strokeWidth / 2;
-
-const deg2rad = (deg: number) => (deg * Math.PI) / 180;
-
-const polarToCartesian = (angleDeg: number, radius = r) => {
-  const rad = deg2rad(angleDeg);
-  return {
-    x: cx - radius * Math.cos(rad),
-    y: cy - radius * Math.sin(rad),
-  };
-};
-
-const polar = (deg: number, radius: number) => {
-  const rad = deg2rad(deg);
-  return { x: cx - radius * Math.cos(rad), y: cy - radius * Math.sin(rad) };
-};
-
-const getAngularPos = (ref: number, dri: number, lastLap: number) => {
-  const angularPos = (dri - ref) / lastLap;
-  return angularPos * 360;
-};
-
-const gapToNumber = (gap: string | undefined): number => {
-  if (gap === undefined || gap.includes("LAP")) return 0;
-  const string = gap.slice(1);
-  const number = Number(string);
-  return number;
-};
-
-const laptimeToNumber = (laptime: string): number => {
-  const parts = laptime.trim().split(":");
-  if (parts.length !== 2) throw new Error("Formato inválido. Esperado M:SS:ms");
-
-  const [mStr, sStr] = parts;
-  const m = parseInt(mStr, 10);
-  const sec = Number(sStr);
-
-  if (Number.isNaN(m) || Number.isNaN(sec)) {
-    throw new Error("Formato inválido. Usa números en M:SS:ms");
-  }
-
-  return m * 60 + sec;
-};
-const adjusted = (deg: number) => (CLOCKWISE ? -deg : deg) + ANGLE_OFFSET;
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
@@ -76,6 +24,58 @@ export default function CircleOfDoom({
   currentLap,
   refDriver = 1,
 }: CircleOfDoomProps) {
+  const ANGLE_OFFSET = 90;
+  const CLOCKWISE = true;
+  const tickLength = 2;
+  const strokeWidth = 5.5;
+  const cx = 50;
+  const cy = 50;
+  const r = 50 - strokeWidth / 2;
+
+  const deg2rad = (deg: number) => (deg * Math.PI) / 180;
+
+  const polarToCartesian = (angleDeg: number, radius = r) => {
+    const rad = deg2rad(angleDeg);
+    return {
+      x: cx - radius * Math.cos(rad),
+      y: cy - radius * Math.sin(rad),
+    };
+  };
+
+  const polar = (deg: number, radius: number) => {
+    const rad = deg2rad(deg);
+    return { x: cx - radius * Math.cos(rad), y: cy - radius * Math.sin(rad) };
+  };
+
+  const getAngularPos = (ref: number, dri: number, lastLap: number) => {
+    const angularPos = (dri - ref) / lastLap;
+    return angularPos * 360;
+  };
+
+  const gapToNumber = (gap: string | undefined): number => {
+    if (gap === undefined || gap.includes("LAP")) return 0;
+    const string = gap.slice(1);
+    const number = Number(string);
+    return number;
+  };
+
+  const laptimeToNumber = (laptime: string): number => {
+    const parts = laptime.trim().split(":");
+    if (parts.length !== 2)
+      throw new Error("Formato inválido. Esperado M:SS:ms");
+
+    const [mStr, sStr] = parts;
+    const m = parseInt(mStr, 10);
+    const sec = Number(sStr);
+
+    if (Number.isNaN(m) || Number.isNaN(sec)) {
+      throw new Error("Formato inválido. Usa números en M:SS:ms");
+    }
+
+    return m * 60 + sec;
+  };
+  const adjusted = (deg: number) => (CLOCKWISE ? -deg : deg) + ANGLE_OFFSET;
+
   const cleanTimings = useMemo(
     () => (timings ?? []).filter((t): t is ProcessedTiming => !!t),
     [timings]
@@ -137,146 +137,140 @@ export default function CircleOfDoom({
   const pitInner = polarToCartesian(adjusted(pitStopDeg || 60), r);
 
   return (
-    <div
-      className={`flex items-center flex justify-center w-full md:max-w-[55%]`}
-    >
-      {circleOfDoom && (
-        <div className="w-[50%] flex justify-center aspect-square">
-          <svg
-            viewBox="0 0 100 100"
-            className="w-full h-full"
-            preserveAspectRatio="xMidYMid meet"
-          >
-            <circle
-              cx={50}
-              cy={50}
-              r={50 - strokeWidth / 2}
-              fill={"transparent"}
-              stroke={"#4a4a4ad1"}
-              strokeWidth={strokeWidth}
-            />
+    <div className={`flex items-center flex justify-center w-full `}>
+      <div>
+        <svg
+          viewBox="0 0 100 100"
+          className="w-full h-full"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <circle
+            cx={50}
+            cy={50}
+            r={50 - strokeWidth / 2}
+            fill={"transparent"}
+            stroke={"rgb(40, 40, 40)  "}
+            strokeWidth={strokeWidth}
+          />
 
-            {
+          {
+            <g>
+              <line
+                x1={pitInner.x - tickLength}
+                y1={pitInner.y}
+                x2={pitInner.x + tickLength}
+                y2={pitInner.y}
+                stroke={"#3B82F6"}
+                strokeWidth={2}
+                strokeLinecap="round"
+              />
+              <text
+                x={pitInner.x + 10}
+                y={pitInner.y}
+                fontSize={3}
+                fill="#3B82F6"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                strokeLinecap="round"
+                style={mediumGeist.style}
+              >
+                PIT TIME
+              </text>
+            </g>
+          }
+
+          <g transform={`translate(${50}, ${50})`}>
+            {refDriver && (
               <g>
+                {currentLap && (
+                  <text
+                    x={0}
+                    y={-2} // pequeño ajuste vertical
+                    fontSize={10} // más grande
+                    fill="#e5e7eb" // gray-200
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    style={mediumGeist.style}
+                  >
+                    LAP {currentLap}
+                  </text>
+                )}
+                <text
+                  x={0}
+                  y={8} // debajo de "LAP"
+                  fontSize={5} // más pequeño
+                  fill="#9ca3af" // gray-400
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  style={mediumGeist.style}
+                >
+                  LAST LAP TIME
+                </text>
+                <text
+                  x={0}
+                  y={16} // debajo de "LAST LAP TIME"
+                  fontSize={6} // más pequeño
+                  fill="#e5e7eb"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  style={mediumGeist.style}
+                >
+                  {pilotRef?.last_lap_time}
+                </text>
+              </g>
+            )}
+
+            <text
+              x={0}
+              y={24} // debajo de laptime
+              fontSize={7} // más pequeño
+              fill={"#" + (pilotRef?.team_colour || "e5e7eb")}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              style={mediumGeist.style}
+            >
+              {pilotRef?.name_acronym ? pilotRef.name_acronym : "PICK DRIVER"}
+            </text>
+          </g>
+
+          {currentPositions.map((dri, i) => {
+            if (!dri) return;
+            const deg = markersDeg?.get(dri?.driver_number);
+            const driverInfo = driverInfos.find(
+              (driver) => driver?.driver_number === dri.driver_number
+            );
+            if (deg === undefined || Number.isNaN(deg)) return;
+            const outer = polarToCartesian(adjusted(deg), r + tickLength);
+            const inner = polarToCartesian(adjusted(deg), r - tickLength);
+            const labelPos = polar(adjusted(deg), r - 7);
+
+            return (
+              <g key={i}>
                 <line
-                  x1={pitInner.x}
-                  y1={pitInner.y}
-                  x2={pitInner.x}
-                  y2={pitInner.y}
-                  stroke={"red"}
+                  x1={inner.x}
+                  y1={inner.y}
+                  x2={outer.x}
+                  y2={outer.y}
+                  stroke={"#" + driverInfo?.team_colour}
                   strokeWidth={2}
                   strokeLinecap="round"
                 />
                 <text
-                  x={pitInner.x + 6}
-                  y={pitInner.y}
-                  fontSize={2}
-                  fill="red"
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  strokeLinecap="round"
+                  x={labelPos.x}
+                  y={labelPos.y}
+                  fontSize={4}
+                  fill={"#" + driverInfo?.team_colour}
+                  textAnchor="middle" // centra horizontalmente
+                  dominantBaseline="middle" // centra verticalmente
                   style={mediumGeist.style}
                 >
-                  PIT TIME
+                  {driverInfo?.name_acronym}
                 </text>
               </g>
-            }
-
-            <g transform={`translate(${50}, ${50})`}>
-              {refDriver && (
-                <g>
-                  {currentLap && (
-                    <text
-                      x={0}
-                      y={-2} // pequeño ajuste vertical
-                      fontSize={8} // más grande
-                      fill="#e5e7eb" // gray-200
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      style={mediumGeist.style}
-                    >
-                      LAP {currentLap}
-                    </text>
-                  )}
-                  <text
-                    x={0}
-                    y={8} // debajo de "LAP"
-                    fontSize={3} // más pequeño
-                    fill="#9ca3af" // gray-400
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    style={mediumGeist.style}
-                  >
-                    LAST LAP TIME
-                  </text>
-                  <text
-                    x={0}
-                    y={12} // debajo de "LAST LAP TIME"
-                    fontSize={4} // más pequeño
-                    fill="#e5e7eb"
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    style={mediumGeist.style}
-                  >
-                    {pilotRef?.last_lap_time}
-                  </text>
-                </g>
-              )}
-
-              <text
-                x={0}
-                y={18} // debajo de laptime
-                fontSize={4} // más pequeño
-                fill={"#" + (pilotRef?.team_colour || "e5e7eb")}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                style={mediumGeist.style}
-              >
-                {pilotRef?.name_acronym
-                  ? pilotRef.name_acronym
-                  : "Pick a Driver"}
-              </text>
-            </g>
-
-            {currentPositions.map((dri, i) => {
-              if (!dri) return;
-              const deg = markersDeg?.get(dri?.driver_number);
-              const driverInfo = driverInfos.find(
-                (driver) => driver?.driver_number === dri.driver_number
-              );
-              if (deg === undefined || Number.isNaN(deg)) return;
-              const outer = polarToCartesian(adjusted(deg), r);
-              const inner = polarToCartesian(adjusted(deg), r - tickLength);
-              const labelPos = polar(adjusted(deg), r - 10);
-
-              return (
-                <g key={i}>
-                  <line
-                    x1={inner.x}
-                    y1={inner.y}
-                    x2={outer.x}
-                    y2={outer.y}
-                    stroke={"#" + driverInfo?.team_colour}
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                  />
-                  <text
-                    x={labelPos.x}
-                    y={labelPos.y}
-                    fontSize={4}
-                    fill={"#" + driverInfo?.team_colour}
-                    textAnchor="middle" // centra horizontalmente
-                    dominantBaseline="middle" // centra verticalmente
-                    style={mediumGeist.style}
-                  >
-                    {driverInfo?.name_acronym}
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
-        </div>
-      )}
+            );
+          })}
+        </svg>
+      </div>
     </div>
   );
 }

@@ -14,6 +14,7 @@ import SessionAudios from "@/components/SessionAudios";
 import RaceControlList from "@/components/RaceControlList";
 import CircleOfDoom from "@/components/CircleOfDoom";
 import { usePreferences } from "@/context/preferences";
+import { CircleCarData } from "@/components/CircleCarData";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
@@ -36,9 +37,11 @@ export default function F1Dashboard() {
     safetyCarActive,
   } = useTelemetryManager();
 
-  const { getPreference } = usePreferences();
-  const audioLog = getPreference("audioLog");
-  const raceControlLog = getPreference("raceControlLog")
+  const { preferences } = usePreferences();
+  const audioLog = preferences.audioLog;
+  const raceControlLog = preferences.raceControlLog;
+  const circleOfDoom = preferences.circleOfDoom;
+  const circleCarData = preferences.circleCarData;
 
   if (loading) {
     return (
@@ -178,16 +181,41 @@ export default function F1Dashboard() {
             )}
           </div>
 
-          <CircleOfDoom
-            currentLap={session?.current_lap}
-            driverInfos={driverInfos}
-            timings={driverTimings}
-            currentPositions={currentPositions}
-            refDriver={pinnedDriver}
-          />
+          <div className="flex md:flex-row flex-col gap-6 md:gap-0 w-full justify-evenly">
+            {circleOfDoom && (
+              <CircleOfDoom
+                currentLap={session?.current_lap}
+                driverInfos={driverInfos}
+                timings={driverTimings}
+                currentPositions={currentPositions}
+                refDriver={
+                  pinnedDriver
+                    ? pinnedDriver
+                    : currentPositions.at(0)?.driver_number
+                }
+              />
+            )}
+
+            {circleCarData && (
+              <CircleCarData
+                carData={
+                  pinnedDriver
+                    ? telemetryData?.carData.find(
+                        (c) => c.driver_number === pinnedDriver
+                      )
+                    : telemetryData?.carData.find(
+                        (c) =>
+                          c.driver_number ===
+                          currentPositions.at(0)?.driver_number
+                      )
+                }
+                driverInfo={driverInfos}
+              />
+            )}
+          </div>
         </div>
         {/* Footer */}
-        <Footer/>
+        <Footer />
       </div>
     </div>
   );

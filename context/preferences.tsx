@@ -20,6 +20,7 @@ export interface Preferences {
   audioLog: boolean;
   raceControlLog: boolean;
   circleOfDoom: boolean;
+  circleCarData: boolean;
   favoriteDrivers: ProcessedDriver[];
 }
 
@@ -31,7 +32,8 @@ const DEFAULT_CONFIG: Preferences = {
   audioLog: true,
   raceControlLog: true,
   circleOfDoom: true,
-  favoriteDrivers: []
+  circleCarData: true,
+  favoriteDrivers: [],
 };
 
 interface PreferencesContextValue {
@@ -43,9 +45,7 @@ interface PreferencesContextValue {
   ) => void;
 }
 
-const PreferencesContext = createContext<PreferencesContextValue | null>(
-  null
-);
+const PreferencesContext = createContext<PreferencesContextValue | null>(null);
 
 interface ProviderProps {
   children: ReactNode;
@@ -109,7 +109,9 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
 export function usePreferences(): PreferencesContextValue {
   const context = useContext(PreferencesContext);
   if (!context) {
-    throw new Error("usePreferences must be used within a PreferencesProvider.");
+    throw new Error(
+      "usePreferences must be used within a PreferencesProvider."
+    );
   }
   return context;
 }

@@ -2,11 +2,7 @@
 
 import { useState } from "react";
 import { usePreferences } from "@/context/preferences";
-import {
-  PanelLeftOpen,
-  PanelLeftClose,
-  X,
-} from "lucide-react";
+import { PanelLeftOpen, PanelLeftClose, X } from "lucide-react";
 import { Geist, Orbitron } from "next/font/google";
 import { ProcessedDriver } from "@/processors";
 
@@ -104,6 +100,10 @@ export default function PreferencesPanel({
       title: "Circle of Doom",
       description:
         "Show gap in seconds between drivers, its effective on races.",
+    },
+    circleCarData: {
+      title: "Circle Car-Data",
+      description: "Show speed, gear, throttle and brakes of one driver.",
     },
   };
 
