@@ -1,6 +1,12 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { TelemetryManager, type TelemetryData } from "../telemetry-manager";
 import { findYellowSectors } from "@/hooks/use-raceControl";
+import { usePreferences } from "@/context/preferences";
+
+interface QueuedMessage {
+  data: TelemetryData;
+  releaseTime: number;
+}
 
 export const getCompoundSvg = (
   compound: string,
@@ -34,25 +40,64 @@ export function useTelemetryManager() {
     null
   );
   const [loading, setLoading] = useState(true);
+  const { preferences } = usePreferences();
   const [telemetryManager] = useState(() => new TelemetryManager());
   const [pinnedDriver, setPinnedDriver] = useState<number | null>(null);
   const [mapFullscreen, setMapFullscreen] = useState(false);
+  const [delayed, setDelayed] = useState(true);
+  const messageQueue = useRef<QueuedMessage[]>([]);
+  const telemetryDataCallback = useRef(setTelemetryData);
+  const delayDurationMs = preferences.delay * 1000;
+  const PROCESS_INTERVAL_MS = 100;
 
   useEffect(() => {
     const wsUrl = process.env.NEXT_PUBLIC_WS_URL || "";
+
+    let intervalId: NodeJS.Timeout | null = null;
+    let timeoutId: NodeJS.Timeout | null = null;
+
+    messageQueue.current = [];
+    setDelayed(true);
+
     telemetryManager.connect(wsUrl, (data: TelemetryData) => {
-      setTelemetryData(data);
+      if (delayDurationMs === 0) {
+        if (delayed) setDelayed(false);
+        telemetryDataCallback.current(data);
+        return;
+      }
+
+      const releaseTime = Date.now() + delayDurationMs;
+      messageQueue.current.push({ data: data, releaseTime: releaseTime });
     });
+
+    intervalId = setInterval(processQueue, PROCESS_INTERVAL_MS);
+    timeoutId = setTimeout(() => {
+      setDelayed(false);
+    }, delayDurationMs);
+
     return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      if (intervalId) clearInterval(intervalId);
       telemetryManager.disconnect();
     };
-  }, [telemetryManager]);
+  }, [telemetryManager, delayDurationMs]);
 
   useEffect(() => {
     if (telemetryData) setLoading(false);
   }, [telemetryData]);
 
-  // Utilidades memoizadas
+  const processQueue = useCallback(() => {
+    const now = Date.now();
+    const queue = messageQueue.current;
+
+    while (queue.length > 0 && queue[0].releaseTime <= now) {
+      const message = queue.shift();
+      if (message) {
+        telemetryDataCallback.current(message.data);
+      }
+    }
+  }, []);
+
   const currentPositions = useMemo(() => {
     if (!telemetryData?.positions) return [];
     return telemetryData.positions
@@ -160,5 +205,6 @@ export function useTelemetryManager() {
     mapFullscreen,
     handleMapFullscreen,
     safetyCarActive,
+    delayed,
   };
 }

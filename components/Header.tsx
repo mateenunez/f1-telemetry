@@ -1,13 +1,7 @@
 "use client";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  CloudRain,
-  Sun,
-  Wind,
-  Droplets,
-  CloudSun,
-} from "lucide-react";
+import { CloudRain, Sun, Wind, Droplets, CloudSun } from "lucide-react";
 import { Geist, Orbitron } from "next/font/google";
 import F1Calendar from "@/components/Calendar";
 import type { TelemetryData } from "@/telemetry-manager";
@@ -25,7 +19,7 @@ interface HeaderProps {
 export default function Header({ telemetryData }: HeaderProps) {
   const session = telemetryData?.session;
   const weather = telemetryData?.weather;
-  const [sessionTime, setSessionTime] = useState(0);
+  const [sessionTime, setSessionTime] = useState<number>();
 
   const getWeatherIcon = () => {
     if (!weather) return <Sun className="h-6 w-6 text-gray-300" />;
@@ -39,34 +33,26 @@ export default function Header({ telemetryData }: HeaderProps) {
   useEffect(() => {
     if (!session?.date_start || !session?.date_end) return;
 
+    const lastUpdateTime = telemetryData?.lastUpdateTime;
     const offset = parseTimeOffset(session.gmt_offset);
     const startTime =
       new Date(ensureUtc(session.date_start)).getTime() - offset;
-
     if (session.session_status === "Finalised") return;
 
     const now = Date.now();
-
-    if (now < startTime) return;
-
-    const interval = setInterval(() => {
-      const currentTime = Date.now();
-      const elapsed = Math.min(currentTime - startTime);
-      setSessionTime(elapsed);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [session?.date_start, session?.date_end]);
+    if (now < startTime || !lastUpdateTime) return;
+    setSessionTime(lastUpdateTime.getTime() - startTime);
+  }, [session?.date_start, session?.date_end, telemetryData?.lastUpdateTime]);
 
   return (
     <Card className="bg-warmBlack1 text-white border-none relative">
       <CardHeader>
-        <div className="flex flex-col md:flex-row lg:flex-row items-center justify-between gap-6">
-          <div className="flex flex-row md:w-[20rem] md:justify-between items-center ">
-            <PreferencesPanel driverInfo={telemetryData?.drivers}/>
-            <div className="flex flex-row w-[18rem] items-center md:justify-between gap-2 justify-center">
-              <div className="flex items-center gap-4">
-                <div>
+        <div className="flex flex-col md:flex-row lg:flex-row items-center justify-between gap-1">
+          <div className="flex flex-row md:justify-start items-center ">
+            <div className="flex flex-row md:gap-[1rem] w-screen md:w-full px-4 justify-between items-center">
+              <PreferencesPanel driverInfo={telemetryData?.drivers} />
+              <div className="flex flex-col md:flex-row items-center md:justify-between justify-center">
+                <div className="flex items-center flex-col">
                   <CardTitle
                     className="flex flex-row items-center gap-4 text-xl sm:text-2xl"
                     style={orbitron.style}
@@ -74,35 +60,22 @@ export default function Header({ telemetryData }: HeaderProps) {
                     {session?.session_name}: {session?.session_status}
                   </CardTitle>
                   <div
-                    className="text-gray-500 text-sm flex flex-col justify-center items-center"
+                    className="text-gray-600 text-sm flex flex-col justify-center items-center"
                     style={mediumGeist.style}
-                  >
-                    <div className="flex flex-row gap-1 justify-center w-full flex-wrap">
-                      <p>{session?.circuit_short_name} • </p>
-                      <p>
-                        {session?.country_name} • {session?.year}
-                      </p>
-                    </div>
-                    {session?.session_status !== "Finalised" && (
-                      /* Countdown */
-                      <div>
-                        <div className="flex items-center gap-1 py-1 text-offWhite flex-row">
-                          <div className="flex flex-col">
-                            <span
-                              className="text-sm font-mono"
-                              style={mediumGeist.style}
-                            >
-                              {formatTime(sessionTime)}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  ></div>
                 </div>
               </div>
+              <div></div>
             </div>
           </div>
+          {session?.session_status !== "Finalised" && (
+            /* Countdown */
+            <div className="flex items-center py-1 text-offWhite flex-row text-xl sm:text-2xl">
+              <span className="text-xl font-mono" style={orbitron.style}>
+                {sessionTime && formatTime(sessionTime)}
+              </span>
+            </div>
+          )}
           <div
             className="flex items-center text-nowrap flex-col md:flex-row text-xs md:text-sm"
             style={mediumGeist.style}

@@ -23,6 +23,7 @@ export default function PreferencesPanel({
   const [favorites, setFavorites] = useState<any[]>(
     preferences.favoriteDrivers
   );
+  const [delay, setDelay] = useState<number>(preferences.delay);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -65,6 +66,29 @@ export default function PreferencesPanel({
     );
     setFavorites(newFavorites);
     setPreference("favoriteDrivers", newFavorites);
+  };
+
+  const handleDelayChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const stringValue = event.target.value;
+
+    if (stringValue === "") {
+      return;
+    }
+
+    let numValue = parseInt(stringValue, 10);
+    let finalValue: number;
+
+    if (isNaN(numValue) || numValue < 0) {
+      finalValue = 0;
+    } else if (numValue > 20) {
+      finalValue = 20;
+    } else {
+      finalValue = numValue;
+    }
+
+    setDelay(finalValue);
+
+    setPreference("delay", finalValue);
   };
 
   const preferenceDetails: Record<
@@ -143,7 +167,24 @@ export default function PreferencesPanel({
             />
             Settings
           </span>
-
+          <div className="flex flex-col gap-2 pb-6">
+            <p className="text-lg text-gray-100" style={mediumGeist.style}>
+              Delay
+            </p>
+            <div className="flex flex-row w-full justify-around gap-2 items-center">
+            <input
+              type="number"
+              placeholder="Delay in seconds..."
+              style={mediumGeist.style}
+              onChange={handleDelayChange}
+              value={delay}
+              className="w-[10rem] px-3 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            />
+            <p className="text-xs text-gray-500" style={mediumGeist.style}>
+              Set delay on seconds (máx 20s)
+            </p>
+            </div>
+          </div>
           <div className="space-y-3">
             <p className="text-lg text-gray-100" style={mediumGeist.style}>
               Visual

@@ -22,6 +22,7 @@ export interface Preferences {
   circleOfDoom: boolean;
   circleCarData: boolean;
   favoriteDrivers: ProcessedDriver[];
+  delay: number;
 }
 
 const DEFAULT_CONFIG: Preferences = {
@@ -34,6 +35,7 @@ const DEFAULT_CONFIG: Preferences = {
   circleOfDoom: true,
   circleCarData: true,
   favoriteDrivers: [],
+  delay: 0,
 };
 
 interface PreferencesContextValue {
@@ -51,11 +53,66 @@ interface ProviderProps {
   children: ReactNode;
 }
 
+function isPreferences(obj: any): obj is Preferences {
+  if (typeof obj !== "object" || obj === null) {
+    return false;
+  }
+
+  const requiredKeys: Array<keyof Preferences> = [
+    "sectors",
+    "corners",
+    "audio",
+    "headshot",
+    "audioLog",
+    "raceControlLog",
+    "circleOfDoom",
+    "circleCarData",
+    "favoriteDrivers",
+    "delay",
+  ];
+
+  for (const key of requiredKeys) {
+    if (!(key in obj) || obj[key] === undefined) {
+      return false;
+    }
+
+    if (
+      [
+        "sectors",
+        "corners",
+        "audio",
+        "headshot",
+        "audioLog",
+        "raceControlLog",
+        "circleOfDoom",
+        "circleCarData",
+      ].includes(key)
+    ) {
+      if (typeof obj[key] !== "boolean") return false;
+    }
+
+    if (key === "favoriteDrivers" && !Array.isArray(obj[key])) {
+      return false;
+    }
+
+    if (key === "delay" && typeof obj[key] !== "number") {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
   const [preferences, setPreferences] = useState<Preferences>(() => {
     const cookie = Cookies.get("f1t_config");
     try {
-      return cookie ? JSON.parse(cookie) : DEFAULT_CONFIG;
+      if (cookie) {
+        const cookieJson = JSON.parse(cookie);
+        const cookieUpdated = isPreferences(cookieJson);
+        return cookieUpdated ? cookieJson : DEFAULT_CONFIG;
+      }
+      return DEFAULT_CONFIG;
     } catch {
       return DEFAULT_CONFIG;
     }
