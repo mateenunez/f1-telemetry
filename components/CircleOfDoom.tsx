@@ -98,40 +98,41 @@ export default function CircleOfDoom({
       !refPilot ||
       refPilot?.retired ||
       refPilot?.knockedOut ||
-      refPilot.stopped ||
-      !refPilot.last_lap_time
+      refPilot.stopped
     )
       return map;
     const lastLapTime = laptimeToNumber(refPilot.last_lap_time);
-    const refTime = gapToNumber(refPilot.gap_to_leader);
     if (!lastLapTime) return map;
 
     const pitStopTime = 24; // Segundos que tarda un pit stop promedio
     const pitAngularPos = (pitStopTime / lastLapTime) * 360; // Posición angular del pit
     map.set(924, pitAngularPos); // 924 key arbitraria seleccionada por dejar caer la mano en el teclado.
 
+    let gtl = 0;
+    let gapToLeaders = new Map();
+
+    currentPositions.map((d) => {
+      const driverTimings = timings.find(
+        (dt) => dt?.driver_number === d?.driver_number
+      );
+      const diffAhead =
+        driverTimings?.time_diff_to_ahead || driverTimings?.interval_to_ahead;
+      const gapTime = gapToNumber(diffAhead);
+      gtl = gtl + gapTime;
+      gapToLeaders.set(d?.driver_number, gtl);
+    });
+
+    const refTime = gapToLeaders.get(refPilot.driver_number);
+
     for (const dri of cleanTimings) {
-      if (
-        !(
-          dri.retired ||
-          dri.knockedOut ||
-          dri.stopped ||
-          dri.gap_to_leader?.includes("L") ||
-          dri.time_diff_to_fastest?.includes("L")
-        )
-      ) {
-        const gapTime = gapToNumber(
-          dri.gap_to_leader || dri.time_diff_to_fastest
-        );
+      if (!(dri.retired || dri.knockedOut || dri.stopped)) {
+        const gapTime = gapToLeaders.get(dri.driver_number);
         const angularPos = getAngularPos(refTime, gapTime, lastLapTime);
         map.set(dri.driver_number, angularPos);
       }
     }
     return map;
   }, [cleanTimings, refDriver]);
-
-  const { getPreference } = usePreferences();
-  const circleOfDoom = getPreference("circleOfDoom");
 
   const pitStopDeg = markersDeg.get(924);
   const pitInner = polarToCartesian(adjusted(pitStopDeg || 60), r);
@@ -254,6 +255,7 @@ export default function CircleOfDoom({
                   stroke={"#" + driverInfo?.team_colour}
                   strokeWidth={2}
                   strokeLinecap="round"
+                  style={{ opacity: deg > 360 ? 0.3 : 1 }}
                 />
                 <text
                   x={labelPos.x}
@@ -262,7 +264,10 @@ export default function CircleOfDoom({
                   fill={"#" + driverInfo?.team_colour}
                   textAnchor="middle" // centra horizontalmente
                   dominantBaseline="middle" // centra verticalmente
-                  style={mediumGeist.style}
+                  style={{
+                    fontFamily: mediumGeist.style.fontFamily,
+                    opacity: deg > 360 ? 0.6 : 1,
+                  }}
                 >
                   {driverInfo?.name_acronym}
                 </text>
