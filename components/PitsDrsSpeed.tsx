@@ -43,7 +43,7 @@ export default function PitsDrsSpeed({
   return (
     <div className="flex flex-row gap-4">
       {/* DRS & Speed */}
-      <div className="flex flex-col min-w-[2rem]">
+      <div className="flex flex-col min-w-[3rem]">
         <span
           className="text-xs text-white self-center"
           style={mediumGeist.style}

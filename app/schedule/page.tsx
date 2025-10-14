@@ -31,8 +31,8 @@ export default function SchedulePage() {
   if (!calendar) {
     return (
       <div className="min-h-screen bg-warmBlack p-4 flex items-start justify-center gap-4 overflow-hidden">
-        <div className="max-w-6xl w-full mx-auto px-4 md:px-8">
-          <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
+        <div className="max-w-6xl w-full mx-auto px-4 md:px-8 blur-sm">
+          <SkeletonTheme baseColor="#151515ff" highlightColor="#444"> 
             {/* Header Skeleton */}
             <div className="flex flex-row justify-between mt-12 items-start md:items-center w-full gap-4 mb-8">
               <div className="flex flex-row items-center gap-4 w-full">

@@ -27,7 +27,7 @@ export default function CircleOfDoom({
   const ANGLE_OFFSET = 90;
   const CLOCKWISE = true;
   const tickLength = 2;
-  const strokeWidth = 5.5;
+  const strokeWidth = 4.5;
   const cx = 50;
   const cy = 50;
   const r = 50 - strokeWidth / 2;
@@ -180,7 +180,7 @@ export default function CircleOfDoom({
             </g>
           }
 
-          <g transform={`translate(${50}, ${50})`}>
+          <g transform={`translate(${50}, ${45})`}>
             {refDriver && (
               <g>
                 {currentLap && (
@@ -255,7 +255,7 @@ export default function CircleOfDoom({
                   stroke={"#" + driverInfo?.team_colour}
                   strokeWidth={2}
                   strokeLinecap="round"
-                  style={{ opacity: deg > 360 ? 0.3 : 1 }}
+                  style={{ opacity: deg > 360 || deg < -360 ? 0.3 : 1 }}
                 />
                 <text
                   x={labelPos.x}

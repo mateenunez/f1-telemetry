@@ -1,10 +1,8 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Volume2 } from "lucide-react";
 import { Geist, Aldrich } from "next/font/google";
 import type { ProcessedPosition, ProcessedDriver } from "@/processors";
-import { useHeadshot } from "@/hooks/use-cookies";
 import SoundWave from "./SoundWave";
 import { usePreferences } from "@/context/preferences";
 
@@ -23,7 +21,7 @@ export default function DriverPositionInfo({
   isPlaying,
 }: DriverPositionInfoProps) {
   const { getPreference } = usePreferences();
-  const headshot = getPreference('headshot');
+  const headshot = getPreference("headshot");
 
   return (
     <div
@@ -84,7 +82,10 @@ export default function DriverPositionInfo({
               {driver?.name_acronym}{" "}
               {isPlaying === driver?.driver_number && (
                 <span className="ml-2">
-                  <SoundWave teamColor={driver?.team_colour} width={undefined}/>
+                  <SoundWave
+                    teamColor={driver?.team_colour}
+                    width={undefined}
+                  />
                 </span>
               )}
             </span>

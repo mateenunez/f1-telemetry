@@ -18,7 +18,6 @@ import { getSectorColor } from "@/hooks/use-raceControl";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Card, CardContent } from "./ui/card";
-import { useCorners, useSectors } from "@/hooks/use-cookies";
 import { usePreferences } from "@/context/preferences";
 
 // This is basically fearlessly copied from
@@ -349,7 +348,12 @@ export default function Map({
               const tim = timing.find(
                 (t) => t.driver_number === driver.driver_number
               );
-              const isFavorite = driver && favorites.has(driver.driver_number);
+              let isFavorite: boolean;
+              if (favorites.size > 0) {
+                isFavorite = driver && favorites.has(driver.driver_number);
+              } else {
+                isFavorite = true;
+              }
               if (!pos || !tim) return null;
               return (
                 <CarDot
@@ -437,7 +441,7 @@ const CarDot = ({
         transition: "all 1s linear",
         transform,
         ...(color && { fill: `#${color}` }),
-        opacity: isRetired ? 0.4 : 1,
+        opacity: isRetired || !favorite ? 0.8 : 1,
         stroke: "black",
         strokeWidth: "2",
         filter: "drop-shadow(0 0 4px rgba(0,0,0,0.8))",
@@ -461,11 +465,11 @@ const CarDot = ({
         <circle
           r={140}
           fill={color ? `#${color}44` : "#fff2"}
-          stroke={favorite ? "yellow" : "#0022"}
+          stroke={"#0022"}
           strokeWidth={50}
         />
         <circle id={`map.driver.circle`} r={120} />
-        <circle r={90} fill={favorite ? "" : "#0002"} stroke="none" />
+        <circle r={90} fill={"#0002"} stroke="none" />
       </g>
     </g>
   );

@@ -57,7 +57,7 @@ const DriverPositions = memo(function DriverPositions({
 
   useEffect(() => {
     if (!lastCapture) return;
-    if (session?.session_status !== "Finalised") return;
+    if (session?.session_status === "Finalised") return;
     if (lastPlayedUtcRef.current !== lastCapture.utc) {
       const url = audioUrl + session?.path + lastCapture.path;
       playNotificationSound();
@@ -99,7 +99,7 @@ const DriverPositions = memo(function DriverPositions({
                   <div
                     className={`flex flex-row ${headshot ? "gap-2" : "gap-4"}`}
                   >
-                    <div className="min-w-[2rem]">SPEED</div>
+                    <div className="min-w-[3rem]">SPEED</div>
                     <div className="min-w-[2rem]">PITS</div>
                   </div>
                   <div className="w-[8.5rem] flex flex-row items-center align-text-top gap-6 justify-center">
@@ -111,7 +111,7 @@ const DriverPositions = memo(function DriverPositions({
                     </div>
                   </div>
                   <div className="min-w-[4.5rem] text-center">LAP TIMES</div>
-                  <div className="min-w-[16rem]">MINISECTORS & TIMES</div>
+                  <div className="min-w-[15rem]">MINISECTORS & TIMES</div>
                 </div>
               </div>
             </div>
@@ -123,7 +123,11 @@ const DriverPositions = memo(function DriverPositions({
               const timingStats = driverTimingStats[idx];
               const carData = driverCarData[idx];
               const currentStints = driverStints[idx];
-              const isFavorite = driver?.driver_number && preferences.favoriteDrivers.some((d) => d.driver_number ===driver.driver_number);
+              const isFavorite =
+                driver?.driver_number &&
+                preferences.favoriteDrivers.some(
+                  (d) => d.driver_number === driver.driver_number
+                );
 
               return (
                 <div
@@ -143,7 +147,9 @@ const DriverPositions = memo(function DriverPositions({
                           background: `linear-gradient(-90deg, #0d0d0d ${
                             headshot ? "90%" : "100%"
                           }, #${driver?.team_colour} 100%)`,
-                          boxShadow: isFavorite ? 'inset 0 0 0.2rem 0.2rem rgba(255, 255, 255, 0.15)' : ""
+                          boxShadow: isFavorite
+                            ? "inset 0 0 0.2rem 0.2rem rgba(255, 255, 255, 0.15)"
+                            : "",
                         }
                   }
                 >

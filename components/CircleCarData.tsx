@@ -31,7 +31,7 @@ export function CircleCarData({
     const rad = deg2rad(deg);
     return { x: cx - radius * Math.cos(rad), y: cy - radius * Math.sin(rad) };
   };
-  const strokeWidth = 6;
+  const strokeWidth = 4;
   const outerRadius = (size - strokeWidth) / 2;
   const outerCircumference = 2 * Math.PI * outerRadius;
 
@@ -245,18 +245,19 @@ export function CircleCarData({
             const speedStrokeDashoffset = blueArcLength - speedProgressDistance;
             const labelPos = polar(-speedStrokeDashoffset, -r);
             return (
-              <text
-                key={idx}
-                x={labelPos.x}
-                y={labelPos.y}
-                fontSize={3.5}
-                fill={"rgb(201, 199, 199)"}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                style={mediumGeist.style}
-              >
-                {mark}
-              </text>
+              <g key={idx}>
+                <text
+                  x={labelPos.x}
+                  y={labelPos.y}
+                  fontSize={3.5}
+                  fill={"white"}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  style={mediumGeist.style}
+                >
+                  {mark}
+                </text>
+              </g>
             );
           })}
         </svg>

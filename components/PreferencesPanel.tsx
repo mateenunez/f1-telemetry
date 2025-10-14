@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { usePreferences } from "@/context/preferences";
-import { PanelLeftOpen, PanelLeftClose, X } from "lucide-react";
+import { PanelLeftOpen, PanelLeftClose, X, Check } from "lucide-react";
 import { Geist, Orbitron } from "next/font/google";
 import { ProcessedDriver } from "@/processors";
 
@@ -87,8 +87,10 @@ export default function PreferencesPanel({
     }
 
     setDelay(finalValue);
+  };
 
-    setPreference("delay", finalValue);
+  const handleDelay = () => {
+    setPreference("delay", delay);
   };
 
   const preferenceDetails: Record<
@@ -171,18 +173,25 @@ export default function PreferencesPanel({
             <p className="text-lg text-gray-100" style={mediumGeist.style}>
               Delay
             </p>
-            <div className="flex flex-row w-full justify-around gap-2 items-center">
-            <input
-              type="number"
-              placeholder="Delay in seconds..."
-              style={mediumGeist.style}
-              onChange={handleDelayChange}
-              value={delay}
-              className="w-[10rem] px-3 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
-            />
-            <p className="text-xs text-gray-500" style={mediumGeist.style}>
-              Set delay on seconds (máx 20s)
-            </p>
+            <div className="flex flex-row w-full justify-around gap-2 h-[2.5rem] items-center">
+              <input
+                type="number"
+                placeholder="Delay in seconds..."
+                style={mediumGeist.style}
+                onChange={handleDelayChange}
+                value={delay}
+                className="w-[8rem] px-3 h-full text-sm rounded-md bg-warmBlack text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              />
+              <button
+                type="button"
+                className="flex justify-center items-center px-3 h-full text-sm rounded-md bg-warmBlack text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                onClick={handleDelay}
+              >
+                <Check width={15} />
+              </button>
+              <p className="text-xs text-gray-500" style={mediumGeist.style}>
+                Set delay on seconds (máx 20s).
+              </p>
             </div>
           </div>
           <div className="space-y-3">
@@ -218,8 +227,8 @@ export default function PreferencesPanel({
                           )
                         }
                       />
-                      <div className="w-10 h-5 bg-gray-800 rounded-full peer-checked:bg-gray-500 transition-colors"></div>
-                      <div className="absolute left-1 top-1 bg-gray-400 peer-checked:bg-white w-3 h-3 rounded-full transition-transform peer-checked:translate-x-5"></div>
+                      <div className="w-10 h-5 bg-gray-800 rounded-full peer-checked:bg-f1Green/75 transition-colors"></div>
+                      <div className="absolute left-1 top-1 bg-f1Blue peer-checked:bg-white w-3 h-3 rounded-full transition-transform peer-checked:translate-x-5"></div>
                     </label>
                   </>
                 ) : (

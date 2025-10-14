@@ -40,7 +40,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
   };
 
   return (
-    <div className="flex flex-row gap-2 min-w-[16rem] justify-between">
+    <div className="flex flex-row gap-1 min-w-[16rem] justify-evenly">
       {/* Minisectores */}
       <div className="text-xs text-white" style={aldrich.style}>
         {(["sector1", "sector2", "sector3"] as const).map(
@@ -105,7 +105,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
           const color = getBestSectorColor(sector);
           const displayValue = sector?.Value ?? "--:--";
           return (
-            <div className="flex flex-row gap-1" key={idx}>
+            <div className="flex flex-row gap-0" key={idx}>
               <span className={color}>{sector && displayValue}</span>
             </div>
           );
