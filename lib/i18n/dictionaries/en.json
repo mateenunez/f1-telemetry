@@ -30,7 +30,8 @@
     "hour": "hour",
     "minute": "minute",
     "second": "second",
-    "upnext": "Upnext"
+    "upnext": "Upnext",
+    "next": "Next"
   },
   "sessionTypes": {
     "practice1": "Practice 1",

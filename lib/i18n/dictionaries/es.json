@@ -30,7 +30,8 @@
     "hour": "hora",
     "minute": "minuto",
     "second": "segundo",
-    "upnext": "Próximamente"
+    "upnext": "Próximamente",
+    "next": "Siguiente"
   },
 
   "sessionTypes": {

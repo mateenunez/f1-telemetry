@@ -24,6 +24,8 @@ export default function CircleOfDoom({
   currentLap,
   refDriver = 1,
 }: CircleOfDoomProps) {
+  const { preferences } = usePreferences();
+
   const ANGLE_OFFSET = 90;
   const CLOCKWISE = true;
   const tickLength = 2;
@@ -175,7 +177,7 @@ export default function CircleOfDoom({
                 strokeLinecap="round"
                 style={mediumGeist.style}
               >
-                PIT TIME
+                {preferences.translate ? "PARADA " : "AFTER PIT"}
               </text>
             </g>
           }
@@ -193,19 +195,19 @@ export default function CircleOfDoom({
                     dominantBaseline="middle"
                     style={mediumGeist.style}
                   >
-                    LAP {currentLap}
+                    {preferences.translate ? "VUELTA" : "LAP"} {currentLap}
                   </text>
                 )}
                 <text
                   x={0}
                   y={8} // debajo de "LAP"
-                  fontSize={5} // más pequeño
+                  fontSize={4} // más pequeño
                   fill="#9ca3af" // gray-400
                   textAnchor="middle"
                   dominantBaseline="middle"
                   style={mediumGeist.style}
                 >
-                  LAST LAP TIME
+                  {preferences.translate ? "ÚLTIMA VUELTA" : "LAST LAP TIME"}
                 </text>
                 <text
                   x={0}

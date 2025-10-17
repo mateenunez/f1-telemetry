@@ -3,7 +3,6 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Geist } from "next/font/google";
 import { ProcessedRaceControl } from "@/processors";
 import { toLocaleTime } from "@/utils/calendar";
-import { useRaceControlLog } from "@/hooks/use-cookies";
 import { usePreferences } from "@/context/preferences";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });

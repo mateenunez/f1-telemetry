@@ -140,7 +140,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     <div className="min-h-screen bg-warmBlack px-2">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
         {/* Header */}
-        <Header telemetryData={telemetryData} />
+        <Header telemetryData={telemetryData} dict={dict}/>
         {/* Cards */}
         <div
           className={`!mt-0 grid grid-cols-1 lg:grid-cols-11 pb-4 border-none rounded-lg transition-all duration-500 ease-in-out`}
@@ -180,7 +180,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
               />
             )}
             {raceControlLog && (
-              <RaceControlList raceControl={telemetryData?.raceControl} />
+              <RaceControlList raceControl={preferences.translate ? telemetryData?.raceControlEs : telemetryData?.raceControl} />
             )}
           </div>
 

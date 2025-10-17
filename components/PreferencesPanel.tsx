@@ -113,12 +113,12 @@ export default function PreferencesPanel({
   > = preferences.translate
     ? {
         sectors: {
-          title: "Sectores de la Pista",
+          title: "Sectores marcados",
           description:
             "Mostrar los sectores coloreados en el mapa del circuito.",
         },
         corners: {
-          title: "Curvas de la Pista",
+          title: "Números de curvas",
           description:
             "Mostrar la numeración de las curvas y detalles de los giros en el mapa.",
         },
@@ -142,12 +142,12 @@ export default function PreferencesPanel({
             "Mostrar la lista oficial de mensajes de control de carrera.",
         },
         circleOfDoom: {
-          title: "Círculo de la Perdición",
+          title: 'Círculo "Doom"',
           description:
             "Mostrar la diferencia en segundos entre pilotos; es efectivo en carreras.",
         },
         circleCarData: {
-          title: "Círculo de Datos del Coche",
+          title: 'Círculo "CarData"',
           description:
             "Mostrar la velocidad, marcha, acelerador y frenos de un piloto.",
         },

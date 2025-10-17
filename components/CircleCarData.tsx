@@ -21,6 +21,8 @@ export function CircleCarData({
   carData,
   size = 100,
 }: CircleCarDataProps) {
+  const { preferences } = usePreferences();
+
   const cx = 50;
   const cy = 50;
   const r = 50 - 5 / 2;
@@ -181,7 +183,7 @@ export function CircleCarData({
               dominantBaseline="middle"
               style={mediumGeist.style}
             >
-              GEAR {gear}
+              {preferences.translate ? "MARCHA" : "GEAR"} {gear}
             </text>
             <text
               x={50}
@@ -195,7 +197,11 @@ export function CircleCarData({
                 fill: driver ? "#" + driver.team_colour : "rgb(201, 199, 199)",
               }}
             >
-              {driver ? driver.name_acronym : <>PICK DRIVER</>}
+              {driver ? (
+                driver.name_acronym
+              ) : (
+                <>{preferences ? "ELEGIR PILOTO" : "PICK DRIVER"}</>
+              )}
             </text>
             <text
               x={50}

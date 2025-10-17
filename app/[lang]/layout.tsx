@@ -39,11 +39,8 @@ export const metadata: Metadata = {
 
 export default function LangLayout({
   children,
-  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { lang: Locale };
 }>) {
-  const { lang } = params;
   return <PreferencesProvider>{children}</PreferencesProvider>;
 }

@@ -151,9 +151,9 @@ export function formatEventDate(dateString: string): string {
 const capitalizeFirstLetter = (s: string): string => {
     if (!s) return s;
     return s.charAt(0).toUpperCase() + s.slice(1);
-  };
+};
 
-export function formatEventDateShort(dateString: string, locale:string): string {
+export function formatEventDateShort(dateString: string, locale: string): string {
     try {
         const date = new Date(dateString);
 
@@ -460,7 +460,7 @@ export const parseTimeOffset = (timeString: string) => {
     return (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
 };
 
-export const translateSessionType = (sessionType: string, dict:any): string => {
+export const translateSessionType = (sessionType: string, dict: any): string => {
     if (!sessionType) {
         return '';
     }
@@ -485,4 +485,55 @@ export const translateSessionType = (sessionType: string, dict:any): string => {
     }
 
     return translatedName;
+};
+
+export const translateSessionName = (sessionType: string | undefined): string => {
+    if (!sessionType) {
+        return '';
+    }
+    const translations: { [key: string]: string } = {
+        'Sprint Race': "Carrera Sprint",
+        'Sprint Qualification': "Calificación Sprint",
+
+        'Practice 1': "Práctica 1",
+        'Practice 2': "Práctica 2",
+        'Practice 3': "Práctica 3",
+        'Qualifying': "Calificación",
+        'Race': "Carrera",
+    };
+
+    let translatedName = sessionType;
+
+    for (const [englishTerm, spanishTerm] of Object.entries(translations)) {
+
+        const regex = new RegExp(englishTerm, 'gi');
+
+        translatedName = translatedName.replace(regex, spanishTerm);
+    }
+
+    return translatedName;
+};
+
+// utils/calendar.ts
+export const translateSessionStatus = (status: string | undefined): string => {
+    if (!status) {
+        return '';
+    }
+
+    const translations: { [key: string]: string } = {
+        Started: "Iniciada",
+        Active: "Activa",
+        Inactive: "Inactiva",
+        Paused: "Pausada",
+        Finalised: "Finalizada",
+    };
+
+    let translated = status;
+
+    for (const [englishTerm, spanishTerm] of Object.entries(translations)) {
+        const regex = new RegExp(englishTerm, 'gi');
+        translated = translated.replace(regex, spanishTerm);
+    }
+
+    return translated;
 };

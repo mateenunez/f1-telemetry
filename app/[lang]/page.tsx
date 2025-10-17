@@ -3,8 +3,8 @@ import type { Locale } from "@/lib/i18n/config";
 import HomeContent from "@/components/HomeContent";
 import Footer from "@/components/Footer";
 
-export default async function Page({ params }: { params: { lang: Locale } }) {
-  const { lang } = params;
+export default async function Page({ params }: { params: Promise<{ lang: Locale }> }) {
+  const { lang } = await params;
   const dict = await getDictionary(lang);
 
   return (
