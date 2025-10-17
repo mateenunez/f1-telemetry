@@ -62,7 +62,7 @@ export default function CircleOfDoom({
   const laptimeToNumber = (laptime: string): number => {
     const parts = laptime.trim().split(":");
     if (parts.length !== 2)
-      throw new Error("Formato inválido. Esperado M:SS:ms");
+      return 0;
 
     const [mStr, sStr] = parts;
     const m = parseInt(mStr, 10);
