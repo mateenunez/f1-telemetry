@@ -1,7 +1,7 @@
 "use client";
 import { ColorShift } from "@/components/ColorShift";
 import Footer from "@/components/Footer";
-import { Geist, Orbitron } from "next/font/google";
+import { Geist } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -11,11 +11,16 @@ const F1T_SRC =
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const boldGeist = Geist({ subsets: ["latin"], weight: "800" });
 
-export default function Page() {
+interface HomeContentProps {
+  dict: any;
+}
+
+export default function HomeContent({ dict }: HomeContentProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   const map_mp4 = process.env.NEXT_PUBLIC_MAPS_MP4 || "";
-  const cod_mp4 = process.env.NEXT_PUBLIC_COD_MP4 || "";
+  const circles_mp4 = process.env.NEXT_PUBLIC_CIRCLES_MP4 || "";
+  const audio_mp4 = process.env.NEXT_PUBLIC_AUDIO_MP4 || "";
   const discord = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || "";
   const github = process.env.NEXT_PUBLIC_GITHUB_URL || "";
 
@@ -46,7 +51,7 @@ export default function Page() {
         ${isVisible ? "translate-y-0" : "-translate-y-full"}
       `}
       >
-        <div className="flex justify-between items-center  mx-auto px-4 py-3">
+        <div className="flex justify-between items-center mx-auto px-4 py-3">
           {/* Elemento 1: Logo o Título */}
           <Image
             src={F1T_SRC}
@@ -72,7 +77,7 @@ export default function Page() {
               style={mediumGeist.style}
               href="/live-timing"
             >
-              Dashboard
+              {dict.home.dashboardButton}
             </a>
             <a
               className="rounded w-full py-3 px-3 text-sm bg-transparent border-2 border-gray-200 text-gray-200 text-center transition duration-300 ease-in-out 
@@ -89,15 +94,15 @@ export default function Page() {
               style={mediumGeist.style}
               href="/schedule"
             >
-              Schedule
+              {dict.home.scheduleButton}
             </a>
           </nav>
         </div>
       </header>
-      <div className="flex flex-col">
-        <div className="flex flex-col min-h-screen justify-evenly py-[5rem] md:py-0">
-          <div className="flex flex-col md:flex-row w-full h-full justify-around">
-            <div className="flex flex-col gap-4 md:w-[50%] md:max-w-[25rem] items-center justify-center text-gray-200">
+      <div className="flex flex-col gap-[5rem] py-[2rem] justify-center items-center">
+        <div className="flex flex-col min-h-screen justify-evenly gap-[5rem]">
+          <div className="flex flex-col md:flex-row w-full h-full justify-around gap-8">
+            <div className="flex flex-col md:max-w-[25rem] items-center justify-center text-gray-200 gap-[2rem]  ">
               <h1
                 className="text-[2rem] text-gray-200 boldest "
                 style={boldGeist.style}
@@ -121,15 +126,13 @@ export default function Page() {
                     />
                   );
                 })}{" "}
-                | Real time dashboard and analytics
+                | {dict.home.title}
               </h1>
               <h2 className="text-md text-gray-300" style={mediumGeist.style}>
-                Get into a immersive experience watching Formula 1 real time
-                data as laps, sectors, minisectors, circuit and audios from race
-                warnings or team radios.
+                {dict.home.description}
               </h2>
             </div>
-            <div className="flex flex-col gap-8 items-center justify-center h-[20rem]">
+            <div className="flex flex-col gap-8 items-center justify-center">
               <a
                 className="rounded px-6 py-3 text-[1.5rem] bg-white text-black text-center transition duration-300 ease-in-out 
                 hover:-translate-y-1 
@@ -146,7 +149,7 @@ export default function Page() {
                 style={mediumGeist.style}
                 href="/live-timing"
               >
-                Dashboard
+                {dict.home.dashboardButton}
               </a>
               <a
                 className="rounded px-6 md:w-full py-3 text-[1.5rem] bg-transparent border-2 border-gray-200 text-gray-200 text-center transition duration-300 ease-in-out 
@@ -165,71 +168,104 @@ export default function Page() {
                 style={mediumGeist.style}
                 href="/schedule"
               >
-                Schedule
+                {dict.home.scheduleButton}
               </a>
             </div>
           </div>
-          <div className="w-full h-[20rem] items center flex flex-col-reverse md:flex-row justify-center mb-[2rem]">
-            <video src={cod_mp4} width="400" loop autoPlay muted />
-            <video src={map_mp4} width="600" loop autoPlay muted />
+          <div className="w-full flex justify-center">
+            <video
+              src={map_mp4}
+              loop
+              autoPlay
+              muted
+              className="md:max-h-[20rem]"
+            />
           </div>
-          <div className="flex flex-col md:flex-row gap-8 md:justify-evenly w-full h-full px-[5%]">
+          <div className="flex flex-col md:flex-row gap-[2rem] md:justify-evenly w-full h-full px-[5%]">
             <div
-              className="flex flex-col gap-4 max-w-[25rem]"
+              className="flex flex-col md:flex-row gap-[2rem] items-center"
               style={mediumGeist.style}
             >
-              <h5 className="text-xl text-gray-200 ">Who are we?</h5>
-              <span className="text-md text-gray-400 text-start">
-                This was made by some students from latam. We wanted to face a
-                challenge that combines the information system engineering with
-                UX/UI, and...we've
-                <span className="bold text-gray-200"> learned a lot!</span>
-              </span>
+              <div className="flex flex-col gap-4 w-full max-w-[30rem]">
+                <h5 className="text-xl text-gray-200 ">
+                  {dict.home.audioTitle}
+                </h5>
+                <span className="text-md text-gray-400 text-start">
+                  {dict.home.audioDesc1}
+                  <span className="bold text-gray-200">
+                    {" "}
+                    {dict.home.audioDesc2}
+                  </span>
+                </span>
+              </div>
+              <video
+                src={audio_mp4}
+                loop
+                autoPlay
+                muted
+                className="w-[20rem]"
+              />
             </div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-[2rem] md:justify-evenly w-full h-full px-[5%]">
             <div
-              className="flex flex-col gap-4 max-w-[25rem]"
+              className="flex flex-col md:flex-row gap-[2rem] items-center"
               style={mediumGeist.style}
             >
-              <h5 className="text-xl text-gray-200 ">What is our goal?</h5>
-              <span className="text-md text-gray-400 text-start">
-                Our goal is to attempt and display all analytics and data
-                possible, giving you the best experience at watching the race.
-                This is only possible with your very important feedback and
-                ideas, so please{" "}
-                <a
-                  href={discord}
-                  className="bold text-gray-200"
-                  target="_blank"
-                >
-                  reach us on our discord server!
-                </a>
-              </span>
+              <div className="flex flex-col gap-4 w-full max-w-[30rem]">
+                <h5 className="text-xl text-gray-200 ">
+                  {dict.home.circlesTitle}
+                </h5>
+                <span className="text-md text-gray-400 text-start">
+                  {dict.home.circlesDesc1}
+                  <span className="bold text-gray-200">
+                    {" "}
+                    {dict.home.circlesDesc2}
+                  </span>
+                  {dict.home.circlesDesc3}
+                </span>
+              </div>
+              <video
+                src={circles_mp4}
+                loop
+                autoPlay
+                muted
+                className="w-[20rem]"
+              />
             </div>
           </div>
         </div>
         <div
-          className="flex flex-col pb-[3rem] md:py-[3rem] gap-4 items-center text-center w-full h-full"
+          className="flex flex-col gap-4 md:max-w-[70%]"
           style={mediumGeist.style}
         >
-          <h5 className="text-xl text-gray-200 ">
-            To developers and designers
+          <h5 className="text-xl text-gray-200 text-center">
+            {dict.home.goalTitle}
           </h5>
+          <span className="text-md text-gray-400 text-center">
+            {dict.home.goalDesc1}{" "}
+            <a href={discord} className="bold text-gray-200" target="_blank">
+              {dict.home.goalDesc2}
+            </a>
+          </span>
+        </div>
+        <div
+          className="flex flex-col pb-[3rem] gap-4 items-center text-center w-full h-full"
+          style={mediumGeist.style}
+        >
+          <h5 className="text-xl text-gray-200 ">{dict.home.repoTitle}</h5>
           <div className="flex flex-col gap-0">
-            <span className="text-md text-gray-400 text-start items-center">
-              If you have any features ideas or critics you are happily invited
-              to contribute on this{" "}
+            <span className="text-md text-gray-400 text-center items-center">
+              {dict.home.repoDesc1}{" "}
               <a href={github} className="bold text-gray-200" target="_blank">
-                github repository.
+                {dict.home.repoDesc2}
               </a>
             </span>
-            <span className="bold text-gray-400">
-              This project will always be free and open source.
-            </span>
-            <span>🥥🏁</span>
+            <span className="bold text-gray-400">{dict.home.repoDesc3}</span>
+            <span>{dict.home.repoDesc4}</span>
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

@@ -8,14 +8,17 @@ import { Card, CardContent, CardHeader } from "./ui/card";
 
 interface UpNextProps {
   upNextEvents: GroupByLocation[];
+  dict: any;
 }
 
 function Session({
   sessionKey,
   eventData,
+  dict,
 }: {
   sessionKey: string;
   eventData: F1Event | undefined;
+  dict: any;
 }) {
   if (!eventData) return <></>;
 
@@ -24,12 +27,12 @@ function Session({
   return (
     <div className="flex flex-col gap-0 text-wrap text-gray-400 text-xs">
       <span className="text-md text-gray-100">{displayLabel}</span>
-      <span>{formatEventDateShort(eventData.start || "")}</span>
+      <span>{formatEventDateShort(eventData.start || "", dict.locale)}</span>
     </div>
   );
 }
 
-export default function Upnext({ upNextEvents }: UpNextProps) {
+export default function Upnext({ upNextEvents, dict }: UpNextProps) {
   return (
     <div className="flex gap-4 pb-4 flex-row">
       {upNextEvents.map((event, index) => (
@@ -52,13 +55,13 @@ export default function Upnext({ upNextEvents }: UpNextProps) {
           <CardContent className="flex flex-row gap-2">
             <div className="text-start flex flex-row justify-between">
               <div className="flex flex-col gap-0 justify-evenly px-2">
-                <Session sessionKey="p1" eventData={event.p1} />
-                <Session sessionKey="p2" eventData={event.p2} />
-                <Session sessionKey="p3" eventData={event.p3} />
-                <Session sessionKey="sq" eventData={event.sq} />
-                <Session sessionKey="sr" eventData={event.sr} />
-                <Session sessionKey="q" eventData={event.q} />
-                <Session sessionKey="r" eventData={event.r} />
+                <Session sessionKey="p1" eventData={event.p1} dict={dict} />
+                <Session sessionKey="p2" eventData={event.p2} dict={dict} />
+                <Session sessionKey="p3" eventData={event.p3} dict={dict} />
+                <Session sessionKey="sq" eventData={event.sq} dict={dict} />
+                <Session sessionKey="sr" eventData={event.sr} dict={dict} />
+                <Session sessionKey="q" eventData={event.q} dict={dict} />
+                <Session sessionKey="r" eventData={event.r} dict={dict} />
               </div>
               <div className="flex items-center max-w-[10rem]">
                 <img

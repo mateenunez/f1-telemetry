@@ -18,7 +18,11 @@ import { CircleCarData } from "@/components/CircleCarData";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
-export default function F1Dashboard() {
+interface TelemetryContentProps {
+  dict: any;
+}
+
+export function TelemetryContent({ dict }: TelemetryContentProps) {
   const {
     telemetryData,
     loading,
@@ -51,7 +55,7 @@ export default function F1Dashboard() {
             className="rounded-xl text-white text-xl text-center shadow-2xl animate-pulse"
             style={mediumGeist.style}
           >
-            Getting things ready...
+            {dict.loading}
           </div>
         </div>
         <div className="max-w-8xl mx-auto space-y-4 h-full">
@@ -213,8 +217,6 @@ export default function F1Dashboard() {
             )}
           </div>
         </div>
-        {/* Footer */}
-        <Footer />
       </div>
     </div>
   );

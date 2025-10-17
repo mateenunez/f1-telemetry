@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Geist } from "next/font/google";
 
-// Add your GIF URLs here
 const LOST_GIFS = [
   "https://media.tenor.com/nEP6ovplEd8AAAAi/so-really.gif",
   "https://media1.tenor.com/m/CbhnRg0n7ksAAAAC/kermit-the-frog-looking-for-directions.gif",
@@ -42,7 +41,7 @@ export default function NotFound() {
           className="text-4xl md:text-5xl font-medium text-white text-center"
           style={boldGeist.style}
         >
-          I think you're lost, bro.
+          Estás perdido, pibe
         </h1>
 
         <Link href="/">

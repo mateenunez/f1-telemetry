@@ -26,7 +26,7 @@ const MapAndMessages = memo(function MapAndMessages({
         <div className="flex flex-row gap-2 pt-4 items-center justify-between">
           <CardTitle className="text-lg font-thin text-white">
             <div className="flex justify-center">
-              <RaceControl raceControl={telemetryData?.raceControl || []} />
+              <RaceControl raceControl={telemetryData?.raceControlEs || []} />
             </div>
           </CardTitle>
           {session?.session_type === "Race" && (

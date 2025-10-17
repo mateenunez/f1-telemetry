@@ -1,5 +1,6 @@
 "use client";
 
+import { usePreferences } from "@/context/preferences";
 import {
   F1Event,
   getCountryCode,
@@ -7,6 +8,7 @@ import {
   getRelativeDate,
   getTimeOnly,
   TimeUntilNext,
+  translateSessionType,
 } from "@/utils/calendar";
 import { Geist } from "next/font/google";
 import { useEffect, useState } from "react";
@@ -14,11 +16,16 @@ import { useEffect, useState } from "react";
 interface NextSessionProps {
   session: F1Event;
   timeUntil: TimeUntilNext;
+  dict: any;
 }
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
-export default function NextSession({ session, timeUntil }: NextSessionProps) {
+export default function NextSession({
+  session,
+  timeUntil,
+  dict,
+}: NextSessionProps) {
   const [time, setTime] = useState<TimeUntilNext>(timeUntil);
   if (!session) return null;
 
@@ -58,25 +65,38 @@ export default function NextSession({ session, timeUntil }: NextSessionProps) {
       <div className="flex flex-col max-w-full justify-between items-center text-center">
         {/* Countdown Timer */}
         <div className="gap-4 tracking-wide md:tracking-widest flex md:flex-row text-[5rem]">
-          <TimeUnit value={time.days} label={time.days > 1 ? "days" : "day"} />
+          <TimeUnit
+            value={time.days}
+            label={time.days > 1 ? dict.schedule.day + "s" : dict.schedule.day}
+          />
           <TimeUnit
             value={time.hours}
-            label={time.hours > 1 ? "hours" : "hour"}
+            label={
+              time.hours > 1 ? dict.schedule.hour + "s" : dict.schedule.hour
+            }
           />
           <TimeUnit
             value={time.minutes}
-            label={time.minutes > 1 ? "minutes" : "minute"}
+            label={
+              time.minutes > 1
+                ? dict.schedule.minute + "s"
+                : dict.schedule.minute
+            }
           />
           <TimeUnit
             value={time.seconds}
-            label={time.seconds > 1 ? "seconds" : "second"}
+            label={
+              time.seconds > 1
+                ? dict.schedule.second + "s"
+                : dict.schedule.second
+            }
           />
         </div>
 
         {/* Session Details */}
         <div className="my-8 mx-8 flex flex-col">
           <span className="font-semibol text-xl tracking-wide mb-4 w-full">
-            {session.track + " " + session.type.toUpperCase()}
+            {session.track + " " + translateSessionType(session.type, dict).toUpperCase()}
           </span>
 
           <div className="flex md:flex-row justify-center gap-4">
@@ -90,7 +110,7 @@ export default function NextSession({ session, timeUntil }: NextSessionProps) {
             {/* Time Information */}
             <div className="flex flex-col text-left gap-0">
               <p className="text-xl">
-                {getDayOfWeek(session.start)} {getRelativeDate(session.start)}
+                {getDayOfWeek(session.start, dict.locale).toUpperCase()} {getRelativeDate(session.start)}
               </p>
               <div className="items-center text-gray-300">
                 {getTimeOnly(session.start)} - {getTimeOnly(session.end || "")}
