@@ -155,7 +155,7 @@ export class TelemetryManager {
         break
 
       case "RaceControlMessages":
-        this.raceControlProcessor.processRaceControlMessages(messageData)
+        this.raceControlProcessor.processRaceControlMessages(messageData, false)
         break
 
       case "RaceControlMessagesEs":
