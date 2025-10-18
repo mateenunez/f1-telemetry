@@ -88,8 +88,8 @@ export default function PreferencesPanel({
 
     if (isNaN(numValue) || numValue < 0) {
       finalValue = 0;
-    } else if (numValue > 20) {
-      finalValue = 20;
+    } else if (numValue > 60) {
+      finalValue = 60;
     } else {
       finalValue = numValue;
     }
@@ -257,9 +257,7 @@ export default function PreferencesPanel({
                 <Check width={15} />
               </button>
               <p className="text-xs text-gray-500" style={mediumGeist.style}>
-                {preferences.translate
-                  ? "Delay en segundos (máx 20s)."
-                  : "Set delay on seconds (máx 20s)."}
+                Set delay on seconds (máx 60s).
               </p>
             </div>
           </div>
