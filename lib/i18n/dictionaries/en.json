@@ -1,7 +1,7 @@
 {
   "home": {
-    "title": "Real time dashboard and analytics",
-    "description": "F1 Telemetry is a fan-made Formula 1 dashboard, it includes a configurable map and data for race analysis. In addition, you can listen to the team radios in real time, which are transcribed and translated with AI",
+    "title": "Formula 1 telemetrics",
+    "description": "F1 Telemetry is a real-time telemetry dashboard, so you can follow Formula 1 completely and from anywhere, without having to watch the broadcast.",
     "dashboardButton": "Dashboard",
     "scheduleButton": "Schedule",
     "audioTitle": "Team Radio + AI",

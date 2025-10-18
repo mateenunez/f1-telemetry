@@ -1,7 +1,7 @@
 {
   "home": {
-    "title": "Telemetría en tiempo real",
-    "description": "F1 Telemetry es un Telemetría de Fórmula 1 hecho por fans. Incluye un mapa configurable y datos para el análisis de carreras. Además, podés escuchar las radios de equipo en tiempo real, las cuales son transcritas y traducidas con IA.",
+    "title": "Telemetría de Fórmula 1",
+    "description": "F1 Telemetry es un dashboard de telemetría en tiempo real, para que puedas seguir la Fórmula 1 por completo y desde cualquier lado, sin necesidad de ver la transmisión.",
     "dashboardButton": "Telemetría",
     "scheduleButton": "Calendario",
     "audioTitle": "Radio de Equipo + IA",

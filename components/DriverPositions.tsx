@@ -108,14 +108,14 @@ const DriverPositions = memo(function DriverPositions({
                       {preferences.translate ? "PARADAS" : "PITS"}
                     </div>
                   </div>
-                  <div className="w-[8.5rem] flex flex-row items-center align-text-top gap-6 justify-center">
+                  <div className="w-[8.5rem] flex flex-row items-start align-text-top gap-6 justify-center">
                     <div className="text-center min-w-[2.5rem]">
                       {session?.session_type === "Race"
                         ? preferences.translate
                           ? "LÍDER"
                           : "LEADER"
                         : preferences.translate
-                        ? "MEJOR TIEMPO"
+                        ? "MEJOR VUELTA"
                         : "FASTEST"}
                     </div>
                     <div className="text-center min-w-[2.5rem]">
