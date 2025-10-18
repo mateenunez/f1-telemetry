@@ -20,7 +20,6 @@ import {
   type ProcessedPositionData,
   TimingStatsProcessor,
   type ProcessedTimingStats,
-  ProcessedCapture,
   ProcessedTeamRadio,
   TeamRadioProcessor,
 } from "@/processors"
@@ -32,6 +31,7 @@ export interface TelemetryData {
   weather: ProcessedWeather | null
   drivers: ProcessedDriver[]
   raceControl: ProcessedRaceControl[]
+  raceControlEs: ProcessedRaceControl[]
   pitStops: ProcessedPitStop[]
   stints: ProcessedStint[]
   session: ProcessedSession | null
@@ -155,7 +155,11 @@ export class TelemetryManager {
         break
 
       case "RaceControlMessages":
-        this.raceControlProcessor.processRaceControlMessages(messageData)
+        this.raceControlProcessor.processRaceControlMessages(messageData, false)
+        break
+
+      case "RaceControlMessagesEs":
+        this.raceControlProcessor.processRaceControlMessages(messageData, true)
         break
 
       case "PitStopSeries":
@@ -197,6 +201,7 @@ export class TelemetryManager {
       weather: this.weatherProcessor.getLatestWeather(),
       drivers: this.driverProcessor.getAllDrivers(),
       raceControl: this.raceControlProcessor.getLatestMessages(),
+      raceControlEs: this.raceControlProcessor.getLatestTranslatedMessages(),
       pitStops: [],
       stints: this.getAllStints(),
       session: this.sessionProcessor.getSessionInfo(),

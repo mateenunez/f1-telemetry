@@ -1,0 +1,48 @@
+{
+  "home": {
+    "title": "Formula 1 telemetrics",
+    "description": "F1 Telemetry is a real-time telemetry dashboard, so you can follow Formula 1 completely and from anywhere, without having to watch the broadcast.",
+    "dashboardButton": "Dashboard",
+    "scheduleButton": "Schedule",
+    "audioTitle": "Team Radio + AI",
+    "audioDesc1": "You can hear instantly the team radio message of every driver during race, we also",
+    "audioDesc2": "use AI for translation and transcription!",
+    "circlesTitle": "Real time analysis",
+    "circlesDesc1": "We are constantly adding features to improve race analysis, like the ",
+    "circlesDesc2": "Circle of Doom ",
+    "circlesDesc3": "which is great to take undercut decisions!",
+    "goalTitle": "What is our goal?",
+    "goalDesc1": "Our goal is to attempt and display all analytics and data possible, giving you the best experience at watching the race. This is only possible with your very important feedback and ideas, so please",
+    "goalDesc2": "reach us on our discord server!",
+    "repoTitle": "To developers and designers",
+    "repoDesc1": "If you have any features ideas or critics you are happily invited to contribute on this ",
+    "repoDesc2": "github repository.",
+    "repoDesc3": "This project will always be free and open source.",
+    "repoDesc4": "🥥🏁"
+  },
+  "footer": {
+    "legal": "This website is not associated, affiliated, authorized, endorsed, or officially connected in any way with Formula 1, the FIA, or any of its subsidiaries or affiliates."
+  },
+  "schedule": {
+    "homeButton": "Home",
+    "dashboardButton": "Dashboard",
+    "day": "day",
+    "hour": "hour",
+    "minute": "minute",
+    "second": "second",
+    "upnext": "Upnext",
+    "next": "Next"
+  },
+  "sessionTypes": {
+    "practice1": "Practice 1",
+    "practice2": "Practice 2",
+    "practice3": "Practice 3",
+    "qualifying": "Qualifying",
+    "race": "Race",
+    "sprintrace": "Sprint Race",
+    "sprintqualification": "Sprint Qualification"
+  },
+  "loading": "Getting things ready...",
+  "404": "I think you're lost, bro.",
+  "locale": "en"
+}

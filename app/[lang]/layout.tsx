@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import { Analytics } from "@vercel/analytics/next";
-import { PreferencesProvider } from "@/context/preferences";
+import { PreferencesProvider } from "@/context/preferences"; // optional: remove if you only want a single provider
 import { i18n, type Locale } from "@/lib/i18n/config";
 
 export async function generateStaticParams() {
@@ -39,31 +37,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function LangLayout({
   children,
-  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { lang: Locale };
 }>) {
-  const { lang } = params;
-
-  return (
-    <html lang={lang}>
-      <head>
-        {/* SEO extra tags */}
-        <meta
-          name="google-site-verification"
-          content="eF8UbK8ghA29zsWnzurWzjJgXzmLeucRd59QUDpdHTE"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#b91c1c" />
-        <link rel="canonical" href="https://www.f1telemetry.com/" />
-      </head>
-      <body>
-        <PreferencesProvider>{children}</PreferencesProvider>
-        <Analytics />
-      </body>
-    </html>
-  );
+  return <PreferencesProvider>{children}</PreferencesProvider>;
 }

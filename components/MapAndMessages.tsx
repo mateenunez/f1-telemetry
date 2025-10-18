@@ -3,9 +3,9 @@ import Map from "@/components/Map";
 import RaceControl from "@/components/RaceControl";
 import { Saira } from "next/font/google";
 import { memo } from "react";
+import { usePreferences } from "@/context/preferences";
 
 const saira = Saira({ subsets: ["latin"], weight: "500" });
-
 
 interface MapAndMessagesProps {
   telemetryData: any;
@@ -20,13 +20,20 @@ const MapAndMessages = memo(function MapAndMessages({
   yellowSectors,
   handleMapFullscreen,
 }: MapAndMessagesProps) {
+  const { preferences } = usePreferences();
   return (
     <Card className="lg:col-span-5 bg-warmBlack1 border-none border-2 flex flex-col">
       <CardHeader className="flex flex-col">
         <div className="flex flex-row gap-2 pt-4 items-center justify-between">
           <CardTitle className="text-lg font-thin text-white">
             <div className="flex justify-center">
-              <RaceControl raceControl={telemetryData?.raceControl || []} />
+              <RaceControl
+                raceControl={
+                  preferences.translate
+                    ? telemetryData.raceControlEs
+                    : telemetryData.raceControl
+                }
+              />
             </div>
           </CardTitle>
           {session?.session_type === "Race" && (

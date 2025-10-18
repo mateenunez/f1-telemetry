@@ -18,7 +18,11 @@ import { CircleCarData } from "@/components/CircleCarData";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
-export default function F1Dashboard() {
+interface TelemetryContentProps {
+  dict: any;
+}
+
+export function TelemetryContent({ dict }: TelemetryContentProps) {
   const {
     telemetryData,
     loading,
@@ -51,7 +55,7 @@ export default function F1Dashboard() {
             className="rounded-xl text-white text-xl text-center shadow-2xl animate-pulse"
             style={mediumGeist.style}
           >
-            Getting things ready...
+            {dict.loading}
           </div>
         </div>
         <div className="max-w-8xl mx-auto space-y-4 h-full">
@@ -136,7 +140,7 @@ export default function F1Dashboard() {
     <div className="min-h-screen bg-warmBlack px-2">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
         {/* Header */}
-        <Header telemetryData={telemetryData} />
+        <Header telemetryData={telemetryData} dict={dict}/>
         {/* Cards */}
         <div
           className={`!mt-0 grid grid-cols-1 lg:grid-cols-11 pb-4 border-none rounded-lg transition-all duration-500 ease-in-out`}
@@ -176,7 +180,7 @@ export default function F1Dashboard() {
               />
             )}
             {raceControlLog && (
-              <RaceControlList raceControl={telemetryData?.raceControl} />
+              <RaceControlList raceControl={preferences.translate ? telemetryData?.raceControlEs : telemetryData?.raceControl} />
             )}
           </div>
 
@@ -213,8 +217,6 @@ export default function F1Dashboard() {
             )}
           </div>
         </div>
-        {/* Footer */}
-        <Footer />
       </div>
     </div>
   );

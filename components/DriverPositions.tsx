@@ -95,23 +95,41 @@ const DriverPositions = memo(function DriverPositions({
                   className={`min-w-[${headshot ? "11.5rem" : "9rem"}]`}
                 ></div>
                 <div className="flex flex-row items-start justify-around w-full gap-2">
-                  <div className="min-w-[3rem]">TYRES</div>
+                  <div className="min-w-[3rem]">
+                    {preferences.translate ? "NEUM." : "TYRES"}
+                  </div>
                   <div
                     className={`flex flex-row ${headshot ? "gap-2" : "gap-4"}`}
                   >
-                    <div className="min-w-[3rem]">SPEED</div>
-                    <div className="min-w-[2rem]">PITS</div>
+                    <div className="min-w-[3rem]">
+                      {preferences.translate ? "VELOCIDAD" : "SPEED"}
+                    </div>
+                    <div className="min-w-[2rem]">
+                      {preferences.translate ? "PARADAS" : "PITS"}
+                    </div>
                   </div>
-                  <div className="w-[8.5rem] flex flex-row items-center align-text-top gap-6 justify-center">
+                  <div className="w-[8.5rem] flex flex-row items-start align-text-top gap-6 justify-center">
                     <div className="text-center min-w-[2.5rem]">
-                      {session?.session_type === "Race" ? "LEADER" : "FASTEST"}
+                      {session?.session_type === "Race"
+                        ? preferences.translate
+                          ? "LÍDER"
+                          : "LEADER"
+                        : preferences.translate
+                        ? "MEJOR VUELTA"
+                        : "FASTEST"}
                     </div>
                     <div className="text-center min-w-[2.5rem]">
                       {session?.session_type === "Race" ? "POS" : "INT"}
                     </div>
                   </div>
-                  <div className="min-w-[4.5rem] text-center">LAP TIMES</div>
-                  <div className="min-w-[15rem]">MINISECTORS & TIMES</div>
+                  <div className="min-w-[4.5rem] text-center">
+                    {preferences.translate ? "TIEMPOS DE VUELTA" : "LAP TIMES"}
+                  </div>
+                  <div className="min-w-[15rem]">
+                    {preferences.translate
+                      ? "MINISECTORES Y TIEMPOS"
+                      : "MINISECTORS & TIMES"}
+                  </div>
                 </div>
               </div>
             </div>

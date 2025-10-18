@@ -148,7 +148,12 @@ export function formatEventDate(dateString: string): string {
     }
 }
 
-export function formatEventDateShort(dateString: string): string {
+const capitalizeFirstLetter = (s: string): string => {
+    if (!s) return s;
+    return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+export function formatEventDateShort(dateString: string, locale: string): string {
     try {
         const date = new Date(dateString);
 
@@ -162,14 +167,14 @@ export function formatEventDateShort(dateString: string): string {
             day: 'numeric',
         };
 
-        const formattedDate = date.toLocaleDateString('en-US', dateOptions);
-        const formattedTime = date.toLocaleTimeString('en-US', {
+        const formattedDate = date.toLocaleDateString(locale, dateOptions);
+        const formattedTime = date.toLocaleTimeString(locale, {
             hour: '2-digit',
             minute: '2-digit',
             hour12: false
         });
 
-        return `${formattedDate} ${formattedTime}`;
+        return `${formattedDate} - ${formattedTime}`;
     } catch (error) {
         console.error('Error formatting date:', error);
         return 'Invalid date';
@@ -383,7 +388,7 @@ export function getCountryCode(location: string): string {
     return 'UN';
 }
 
-export function getDayOfWeek(dateString: string): string {
+export function getDayOfWeek(dateString: string, locale: string): string {
     try {
         const date = new Date(dateString);
 
@@ -391,7 +396,7 @@ export function getDayOfWeek(dateString: string): string {
             return 'Invalid date';
         }
 
-        const dayName = date.toLocaleDateString('en-US', {
+        const dayName = date.toLocaleDateString(locale, {
             weekday: 'long'
         });
 
@@ -453,4 +458,82 @@ export const toLocaleTime = (dateString: string) => {
 export const parseTimeOffset = (timeString: string) => {
     const [hours, minutes, seconds] = timeString.split(':').map(Number);
     return (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
+};
+
+export const translateSessionType = (sessionType: string, dict: any): string => {
+    if (!sessionType) {
+        return '';
+    }
+    const translations: { [key: string]: string } = {
+        'Sprint Race': dict.sessionTypes.sprintrace,
+        'Sprint Qualification': dict.sessionTypes.sprintqualification,
+
+        'Practice 1': dict.sessionTypes.practice1,
+        'Practice 2': dict.sessionTypes.practice2,
+        'Practice 3': dict.sessionTypes.practice3,
+        'Qualifying': dict.sessionTypes.qualifying,
+        'Race': dict.sessionTypes.race,
+    };
+
+    let translatedName = sessionType;
+
+    for (const [englishTerm, spanishTerm] of Object.entries(translations)) {
+
+        const regex = new RegExp(englishTerm, 'gi');
+
+        translatedName = translatedName.replace(regex, spanishTerm);
+    }
+
+    return translatedName;
+};
+
+export const translateSessionName = (sessionType: string | undefined): string => {
+    if (!sessionType) {
+        return '';
+    }
+    const translations: { [key: string]: string } = {
+        'Sprint Race': "Carrera Sprint",
+        'Sprint Qualification': "Calificación Sprint",
+
+        'Practice 1': "Práctica 1",
+        'Practice 2': "Práctica 2",
+        'Practice 3': "Práctica 3",
+        'Qualifying': "Calificación",
+        'Race': "Carrera",
+    };
+
+    let translatedName = sessionType;
+
+    for (const [englishTerm, spanishTerm] of Object.entries(translations)) {
+
+        const regex = new RegExp(englishTerm, 'gi');
+
+        translatedName = translatedName.replace(regex, spanishTerm);
+    }
+
+    return translatedName;
+};
+
+// utils/calendar.ts
+export const translateSessionStatus = (status: string | undefined): string => {
+    if (!status) {
+        return '';
+    }
+
+    const translations: { [key: string]: string } = {
+        Started: "Iniciada",
+        Active: "Activa",
+        Inactive: "Inactiva",
+        Paused: "Pausada",
+        Finalised: "Finalizada",
+    };
+
+    let translated = status;
+
+    for (const [englishTerm, spanishTerm] of Object.entries(translations)) {
+        const regex = new RegExp(englishTerm, 'gi');
+        translated = translated.replace(regex, spanishTerm);
+    }
+
+    return translated;
 };

@@ -23,6 +23,7 @@ export interface Preferences {
   circleCarData: boolean;
   favoriteDrivers: ProcessedDriver[];
   delay: number;
+  translate: boolean;
 }
 
 const DEFAULT_CONFIG: Preferences = {
@@ -36,6 +37,7 @@ const DEFAULT_CONFIG: Preferences = {
   circleCarData: true,
   favoriteDrivers: [],
   delay: 0,
+  translate: false,
 };
 
 interface PreferencesContextValue {

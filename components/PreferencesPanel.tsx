@@ -13,6 +13,11 @@ interface PreferencesPanelProps {
   driverInfo: ProcessedDriver[] | undefined;
 }
 
+type LanguageOptions = {
+  value: string;
+  label: string;
+};
+
 export default function PreferencesPanel({
   driverInfo,
 }: PreferencesPanelProps) {
@@ -24,6 +29,9 @@ export default function PreferencesPanel({
     preferences.favoriteDrivers
   );
   const [delay, setDelay] = useState<number>(preferences.delay);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(
+    preferences.translate ? "es" : "en"
+  );
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -93,45 +101,104 @@ export default function PreferencesPanel({
     setPreference("delay", delay);
   };
 
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newLang = event.target.value;
+    setSelectedLanguage(newLang);
+    setPreference("translate", newLang === "es");
+  };
+
   const preferenceDetails: Record<
     string,
     { title: string; description: string }
-  > = {
-    sectors: {
-      title: "Track Sectors",
-      description: "Display colored sectors on the circuit map.",
-    },
-    corners: {
-      title: "Track Corners",
-      description: "Show corner numbering and turn details on the map.",
-    },
-    audio: {
-      title: "Audio Pop-Ups",
-      description: "Enable sound effects and background audio during the race.",
-    },
-    headshot: {
-      title: "Driver Headshot",
-      description: "Show a picture for each driver.",
-    },
-    audioLog: {
-      title: "Driver Audios",
-      description:
-        "Display the history of audio messages and team radio calls.",
-    },
-    raceControlLog: {
-      title: "Race Messages",
-      description: "Show official race control messages list.",
-    },
-    circleOfDoom: {
-      title: "Circle of Doom",
-      description:
-        "Show gap in seconds between drivers, its effective on races.",
-    },
-    circleCarData: {
-      title: "Circle Car-Data",
-      description: "Show speed, gear, throttle and brakes of one driver.",
-    },
-  };
+  > = preferences.translate
+    ? {
+        sectors: {
+          title: "Sectores marcados",
+          description:
+            "Mostrar los sectores coloreados en el mapa del circuito.",
+        },
+        corners: {
+          title: "Números de curvas",
+          description:
+            "Mostrar la numeración de las curvas y detalles de los giros en el mapa.",
+        },
+        audio: {
+          title: "Notificaciones de Audio",
+          description:
+            "Activar efectos de sonido y audio de fondo durante la carrera.",
+        },
+        headshot: {
+          title: "Foto del Piloto",
+          description: "Mostrar una foto de cada piloto.",
+        },
+        audioLog: {
+          title: "Audios de Pilotos",
+          description:
+            "Mostrar el historial de mensajes de audio y llamadas de radio de equipo.",
+        },
+        raceControlLog: {
+          title: "Mensajes de Carrera",
+          description:
+            "Mostrar la lista oficial de mensajes de control de carrera.",
+        },
+        circleOfDoom: {
+          title: 'Círculo "Doom"',
+          description:
+            "Mostrar la diferencia en segundos entre pilotos; es efectivo en carreras.",
+        },
+        circleCarData: {
+          title: 'Círculo "CarData"',
+          description:
+            "Mostrar la velocidad, marcha, acelerador y frenos de un piloto.",
+        },
+      }
+    : {
+        sectors: {
+          title: "Track Sectors",
+          description: "Display colored sectors on the circuit map.",
+        },
+        corners: {
+          title: "Track Corners",
+          description: "Show corner numbering and turn details on the map.",
+        },
+        audio: {
+          title: "Audio Pop-Ups",
+          description:
+            "Enable sound effects and background audio during the race.",
+        },
+        headshot: {
+          title: "Driver Headshot",
+          description: "Show a picture for each driver.",
+        },
+        audioLog: {
+          title: "Driver Audios",
+          description:
+            "Display the history of audio messages and team radio calls.",
+        },
+        raceControlLog: {
+          title: "Race Messages",
+          description: "Show official race control messages list.",
+        },
+        circleOfDoom: {
+          title: "Circle of Doom",
+          description:
+            "Show gap in seconds between drivers, its effective on races.",
+        },
+        circleCarData: {
+          title: "Circle Car-Data",
+          description: "Show speed, gear, throttle and brakes of one driver.",
+        },
+      };
+
+  const options: LanguageOptions[] = preferences.translate
+    ? [
+        { value: "en", label: "Inglés" },
+        { value: "es", label: "Español" },
+      ]
+    : [
+        { value: "en", label: "English" },
+        { value: "es", label: "Spanish" },
+      ];
 
   return (
     <>
@@ -167,9 +234,9 @@ export default function PreferencesPanel({
               width={15}
               onClick={() => setOpen((prev) => !prev)}
             />
-            Settings
+            {preferences.translate ? "Configuración" : "Settings"}
           </span>
-          <div className="flex flex-col gap-2 pb-6">
+          <div className="flex flex-col gap-4 pb-4">
             <p className="text-lg text-gray-100" style={mediumGeist.style}>
               Delay
             </p>
@@ -194,9 +261,9 @@ export default function PreferencesPanel({
               </p>
             </div>
           </div>
-          <div className="space-y-3">
+          <div className="flex flex-col justify-evenly pb-4">
             <p className="text-lg text-gray-100" style={mediumGeist.style}>
-              Visual
+              {preferences.translate ? "Vista" : "Visuals"}
             </p>
             {Object.entries(preferences).map(([key, value]) => (
               <div
@@ -207,7 +274,7 @@ export default function PreferencesPanel({
                 {preferenceDetails[key as string] ? (
                   <>
                     {" "}
-                    <div className="flex flex-col px-2">
+                    <div className="flex flex-col px-2 py-2">
                       <span className="text-sm">
                         {preferenceDetails[key as string].title}
                       </span>
@@ -232,82 +299,116 @@ export default function PreferencesPanel({
                     </label>
                   </>
                 ) : (
-                  <></>
+                  ""
                 )}
               </div>
             ))}
+          </div>
+          <div className="flex flex-col gap-2 pb-4">
+            <p
+              className="text-lg text-gray-100 font-semibold"
+              style={mediumGeist.style}
+            >
+              {preferences.translate
+                ? "Pilotos Favoritos"
+                : "Favorites Drivers"}
+            </p>
 
-            <div className="flex flex-col gap-4 pt-2">
-              <p
-                className="text-lg text-gray-100 font-semibold"
-                style={mediumGeist.style}
-              >
-                Favorites Drivers
-              </p>
-
-              {/* Show selected driver acronym */}
-
-              <div className="text-gray-400 text-sm bg-warmBlack flex flex-row gap-2 flex-wrap ">
-                {favorites &&
-                  favorites.map((driver, idx) => (
-                    <span
-                      key={idx}
-                      className="font-bold text-gray-200 border-2 border-gray-400 p-1 rounded flex flex-row gap-1 w-[4rem] items-center hover:cursor-pointer"
-                      style={{
-                        fontFamily: mediumGeist.style.fontFamily,
-                        color: "#" + driver.team_colour,
-                      }}
-                      onClick={() => handleDeleteDriver(driver)}
-                    >
-                      <X width={15} color="red" />
-                      {driver.name_acronym}
-                    </span>
-                  ))}
-              </div>
-
-              {/* Input */}
-              <div className="relative w-full max-w-xs">
-                <input
-                  type="text"
-                  style={mediumGeist.style}
-                  value={search}
-                  onChange={handleSearch}
-                  placeholder="Search by name or team..."
-                  className="w-full px-3 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
-                />
-
-                {/* Suggestions dropdown */}
-                {suggestions.length > 0 && (
-                  <ul className="absolute z-20 w-full mt-1 bg-warmBlack border border-gray-700 rounded-md shadow-lg max-h-48 overflow-auto">
-                    {suggestions.map((driver, idx) => (
-                      <li
-                        key={idx}
-                        onClick={() => handleSelectDriver(driver)}
-                        className="px-3 py-2 text-sm text-gray-200 hover:cursor-pointer"
-                      >
-                        <div className="font-medium" style={mediumGeist.style}>
-                          {driver.full_name}
-                        </div>
-                        <div
-                          className="text-xs text-gray-400"
-                          style={mediumGeist.style}
-                        >
-                          {driver.team_name}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+            {/* Show selected driver acronym */}
+            <div className="text-gray-400 text-sm bg-warmBlack flex flex-row gap-2 flex-wrap ">
+              {favorites &&
+                favorites.map((driver, idx) => (
+                  <span
+                    key={idx}
+                    className="font-bold text-gray-200 border-2 border-gray-400 p-1 rounded flex flex-row gap-1 w-[4rem] items-center hover:cursor-pointer"
+                    style={{
+                      fontFamily: mediumGeist.style.fontFamily,
+                      color: "#" + driver.team_colour,
+                    }}
+                    onClick={() => handleDeleteDriver(driver)}
+                  >
+                    <X width={15} color="red" />
+                    {driver.name_acronym}
+                  </span>
+                ))}
             </div>
 
-            {/* Metrics option */}
-            {/* <p className="text-lg text-gray-100" style={mediumGeist.style}>
-              Metrics
-            </p> */}
+            {/* Input */}
+            <div className="relative w-full max-w-xs">
+              <input
+                type="text"
+                style={mediumGeist.style}
+                value={search}
+                onChange={handleSearch}
+                placeholder={
+                  preferences.translate
+                    ? "Buscar por piloto o equipo..."
+                    : "Search by name or team..."
+                }
+                className="w-full px-3 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              />
 
-            {/* Help tutorial */}
-            {/* <div className="flex flex-col gap-2">
+              {/* Suggestions dropdown */}
+              {suggestions.length > 0 && (
+                <ul className="absolute z-20 w-full mt-1 bg-warmBlack border border-gray-700 rounded-md shadow-lg max-h-48 overflow-auto">
+                  {suggestions.map((driver, idx) => (
+                    <li
+                      key={idx}
+                      onClick={() => handleSelectDriver(driver)}
+                      className="px-3 py-2 text-sm text-gray-200 hover:cursor-pointer"
+                    >
+                      <div className="font-medium" style={mediumGeist.style}>
+                        {driver.full_name}
+                      </div>
+                      <div
+                        className="text-xs text-gray-400"
+                        style={mediumGeist.style}
+                      >
+                        {driver.team_name}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2 pb-4">
+            <p className="text-lg text-gray-100" style={mediumGeist.style}>
+              {preferences.translate ? "Idioma" : "Language"}
+            </p>
+            <div className="flex flex-col gap-2">
+              <p className="text-xs text-gray-400" style={mediumGeist.style}>
+                {preferences.translate
+                  ? "Las traducciones al español pueden tardar unos segundos más en llegar."
+                  : "The spanish translation may have additional delay."}
+              </p>
+              <select
+                id="language-select"
+                value={selectedLanguage}
+                onChange={handleSelectChange}
+                style={{
+                  marginRight: "20px",
+                  padding: "8px",
+                  fontFamily: mediumGeist.style.fontFamily,
+                }}
+                className="text-sm rounded-md bg-warmBlack text-gray-200 border-none"
+              >
+                {options.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                    className="bg-warmBlack text-gray-200 border-none"
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Help tutorial */}
+          {/* <div className="flex flex-col gap-2">
               <p className="text-lg text-gray-100" style={mediumGeist.style}>
                 Help!
               </p>
@@ -318,7 +419,6 @@ export default function PreferencesPanel({
                 </p>
               </div>
             </div> */}
-          </div>
         </div>
       </div>
     </>

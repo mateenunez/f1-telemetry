@@ -6,20 +6,30 @@ import { Geist, Orbitron } from "next/font/google";
 import F1Calendar from "@/components/Calendar";
 import type { TelemetryData } from "@/telemetry-manager";
 import { useEffect, useState } from "react";
-import { ensureUtc, formatTime, parseTimeOffset } from "@/utils/calendar";
+import {
+  ensureUtc,
+  formatTime,
+  parseTimeOffset,
+  translateSessionName,
+  translateSessionStatus,
+} from "@/utils/calendar";
 import PreferencesPanel from "./PreferencesPanel";
+import { usePreferences } from "@/context/preferences";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 interface HeaderProps {
   telemetryData: TelemetryData | null;
+  dict: any;
 }
 
-export default function Header({ telemetryData }: HeaderProps) {
+export default function Header({ telemetryData, dict }: HeaderProps) {
   const session = telemetryData?.session;
   const weather = telemetryData?.weather;
   const [sessionTime, setSessionTime] = useState<number>();
+
+  const { preferences } = usePreferences();
 
   const getWeatherIcon = () => {
     if (!weather) return <Sun className="h-6 w-6 text-gray-300" />;
@@ -57,7 +67,13 @@ export default function Header({ telemetryData }: HeaderProps) {
                     className="flex flex-row items-center gap-4 text-xl sm:text-2xl"
                     style={orbitron.style}
                   >
-                    {session?.session_name}: {session?.session_status}
+                    {preferences.translate
+                      ? translateSessionName(session?.session_name)
+                      : session?.session_name}
+                    :{" "}
+                    {preferences.translate
+                      ? translateSessionStatus(session?.session_status)
+                      : session?.session_status}
                   </CardTitle>
                   <div
                     className="text-gray-600 text-sm flex flex-col justify-center items-center"
@@ -81,7 +97,7 @@ export default function Header({ telemetryData }: HeaderProps) {
             style={mediumGeist.style}
           >
             {session?.session_status === "Finalised" ? (
-              <F1Calendar />
+              <F1Calendar dict={dict} />
             ) : (
               <>
                 {/* Weather Info */}
