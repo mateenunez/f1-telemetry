@@ -243,7 +243,7 @@ export default function PreferencesPanel({
             <div className="flex flex-row w-full justify-around gap-2 h-[2.5rem] items-center">
               <input
                 type="number"
-                placeholder="Delay in seconds..."
+                placeholder={preferences.translate ? "Delay en segundos..." : "Delay in seconds..."}
                 style={mediumGeist.style}
                 onChange={handleDelayChange}
                 value={delay}
@@ -257,7 +257,7 @@ export default function PreferencesPanel({
                 <Check width={15} />
               </button>
               <p className="text-xs text-gray-500" style={mediumGeist.style}>
-                Set delay on seconds (máx 60s).
+                {preferences.translate ? "Ajustar delay en segundos (máx 60s)." : "Set delay on seconds (máx 60s)."}
               </p>
             </div>
           </div>

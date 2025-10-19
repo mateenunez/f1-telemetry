@@ -15,6 +15,7 @@ import RaceControlList from "@/components/RaceControlList";
 import CircleOfDoom from "@/components/CircleOfDoom";
 import { usePreferences } from "@/context/preferences";
 import { CircleCarData } from "@/components/CircleCarData";
+import { useEffect, useState } from "react";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
@@ -47,6 +48,19 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   const circleOfDoom = preferences.circleOfDoom;
   const circleCarData = preferences.circleCarData;
 
+  const [countdown, setCountdown] = useState<number | null>(null);
+  useEffect(() => {
+    if (delayed && preferences.delay > 0) {
+      setCountdown(preferences.delay);
+      const interval = setInterval(() => {
+        setCountdown((prev) => (prev !== null && prev > 0 ? prev - 1 : 0));
+      }, 1000);
+      return () => clearInterval(interval);
+    } else {
+      setCountdown(null);
+    }
+  }, [delayed, loading, preferences.delay]);
+
   if (delayed || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 px-2">
@@ -56,6 +70,11 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
             style={mediumGeist.style}
           >
             {dict.loading}
+            {countdown && preferences.delay > 0 && (
+              <div className="mt-2 text-white/80 text-base">
+                {dict.delaying}: {countdown}s
+              </div>
+            )}
           </div>
         </div>
         <div className="max-w-8xl mx-auto space-y-4 h-full">
@@ -140,7 +159,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     <div className="min-h-screen bg-warmBlack px-2">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
         {/* Header */}
-        <Header telemetryData={telemetryData} dict={dict}/>
+        <Header telemetryData={telemetryData} dict={dict} />
         {/* Cards */}
         <div
           className={`!mt-0 grid grid-cols-1 lg:grid-cols-11 pb-4 border-none rounded-lg transition-all duration-500 ease-in-out`}
@@ -180,7 +199,13 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
               />
             )}
             {raceControlLog && (
-              <RaceControlList raceControl={preferences.translate ? telemetryData?.raceControlEs : telemetryData?.raceControl} />
+              <RaceControlList
+                raceControl={
+                  preferences.translate
+                    ? telemetryData?.raceControlEs
+                    : telemetryData?.raceControl
+                }
+              />
             )}
           </div>
 

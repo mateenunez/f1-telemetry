@@ -1,5 +1,4 @@
 import {
-  ProcessedCapture,
   ProcessedDriver,
   ProcessedSession,
   ProcessedTeamRadio,
@@ -7,20 +6,11 @@ import {
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "./ui/card";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
-import {
-  DownloadIcon,
-  PauseIcon,
-  PlayIcon,
-  CirclePlayIcon,
-  CirclePauseIcon,
-} from "lucide-react";
+import { DownloadIcon, PauseIcon, PlayIcon } from "lucide-react";
 import { toLocaleTime } from "@/utils/calendar";
-import SoundWave from "./SoundWave";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { useTelemetryAudio, audioUrl } from "@/hooks/use-raceControl";
-import path from "path";
-import { useAudioLog, useCircleOfDoom, useHeadshot } from "@/hooks/use-cookies";
 import { usePreferences } from "@/context/preferences";
 
 interface SessionAudiosProps {
@@ -46,12 +36,13 @@ export default function SessionAudios({
 
   const headshot = getPreference("headshot");
 
-  const getDriverInfo = (driverNumber: number) => {
+  const getdriver = (driverNumber: number) => {
     const driver = drivers.find((d) => d?.driver_number === driverNumber);
     return {
       headshot_url: driver?.headshot_url,
       team_color: driver?.team_colour,
       name_acronym: driver?.name_acronym,
+      driver_number: driver?.driver_number,
     };
   };
 
@@ -114,7 +105,7 @@ export default function SessionAudios({
           {orderedCaptures && teamRadio ? (
             <div className="space-y-2">
               {orderedCaptures.map((capture, idx) => {
-                const driverInfo = getDriverInfo(capture.racingNumber);
+                const driver = getdriver(capture.racingNumber);
                 const progress = progressMap?.get(idx) ?? 80;
                 return (
                   <div
@@ -123,19 +114,31 @@ export default function SessionAudios({
                   >
                     <div className="flex flex-row gap-2 rounded">
                       {headshot ? (
-                        <img
-                          src={driverInfo.headshot_url}
-                          className="object-cover h-[3.5rem]"
-                        />
+                        <>
+                          {driver?.headshot_url && (
+                            <img
+                              src={driver?.headshot_url}
+                              className="object-cover h-[60px]"
+                              alt={`${driver.name_acronym} headshot f1 telemetry`}
+                            />
+                          )}
+                          {driver?.driver_number === 43 && (
+                            <img
+                              src="/franco-colapinto.png"
+                              className="object-cover h-[60px]"
+                              alt="Franco Colapinto headshot f1 telemetry"
+                            />
+                          )}
+                        </>
                       ) : (
                         <p
                           className="text-md text-gray-100 h-[3rem] flex items-center"
                           style={{
                             fontFamily: mediumGeist.style.fontFamily,
-                            color: "#" + driverInfo.team_color,
+                            color: "#" + driver.team_color,
                           }}
                         >
-                          {driverInfo.name_acronym}
+                          {driver.name_acronym}
                         </p>
                       )}
 
@@ -161,7 +164,7 @@ export default function SessionAudios({
                                 className="h-full max-w-[90%] transition-[width] duration-150 ease-linear"
                                 style={{
                                   width: `${progress}%`,
-                                  background: "#" + driverInfo.team_color,
+                                  background: "#" + driver.team_color,
                                 }}
                               />
                             </div>
@@ -182,7 +185,7 @@ export default function SessionAudios({
                             className="w-[80%] h-[2px] mx-1 rounded"
                             style={{
                               width: `${progress}%`,
-                              background: "#" + driverInfo.team_color,
+                              background: "#" + driver.team_color,
                             }}
                           ></div>
                         </div>

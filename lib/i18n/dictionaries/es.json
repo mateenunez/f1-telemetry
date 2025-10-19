@@ -44,6 +44,7 @@
     "sprintqualification": "Clasificación Sprint"
   },
   "loading": "Preparando el sistema...",
+  "delaying": "Aplicando delay",
   "404": "Estás perdido, pibe.",
   "locale": "es"
 }

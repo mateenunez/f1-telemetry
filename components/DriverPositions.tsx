@@ -102,13 +102,11 @@ const DriverPositions = memo(function DriverPositions({
                     className={`flex flex-row ${headshot ? "gap-2" : "gap-4"}`}
                   >
                     <div className="min-w-[3rem]">
-                      {preferences.translate ? "VELOCIDAD" : "SPEED"}
+                      {preferences.translate ? "DRS" : "SPEED"}
                     </div>
-                    <div className="min-w-[2rem]">
-                      {preferences.translate ? "PARADAS" : "PITS"}
-                    </div>
+                    <div className="min-w-[2rem]">PITS</div>
                   </div>
-                  <div className="w-[8.5rem] flex flex-row items-start align-text-top gap-6 justify-center">
+                  <div className="w-[8rem] flex flex-row items-start align-text-top gap-6 justify-center">
                     <div className="text-center min-w-[2.5rem]">
                       {session?.session_type === "Race"
                         ? preferences.translate
@@ -118,12 +116,12 @@ const DriverPositions = memo(function DriverPositions({
                         ? "MEJOR VUELTA"
                         : "FASTEST"}
                     </div>
-                    <div className="text-center min-w-[2.5rem]">
+                    <div className="text-start min-w-[2.5rem]">
                       {session?.session_type === "Race" ? "POS" : "INT"}
                     </div>
                   </div>
-                  <div className="min-w-[4.5rem] text-center">
-                    {preferences.translate ? "TIEMPOS DE VUELTA" : "LAP TIMES"}
+                  <div className="min-w-[4.5rem] text-start">
+                    {preferences.translate ? "VUELTAS" : "LAP TIMES"}
                   </div>
                   <div className="min-w-[15rem]">
                     {preferences.translate
