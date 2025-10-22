@@ -23,15 +23,11 @@ export interface ProcessedSession {
 }
 
 export class SessionProcessor {
-  private sessionInfo: ProcessedSession | null = null
+  private sessionInfo: ProcessedSession
 
-  processSessionInfo(sessionData: any): ProcessedSession | null {
-    if (!sessionData) {
-      return null
-    }
-
-    const meeting = sessionData.Meeting || {}
-    const existing = this.sessionInfo || {
+  constructor() {
+    // Initialize with default values
+    this.sessionInfo = {
       session_name: "",
       session_type: "",
       location: "",
@@ -43,19 +39,28 @@ export class SessionProcessor {
       gmt_offset: "",
       current_lap: 0,
       total_laps: 0,
-      track_status: "Unknown",
-      circuit_key: "",
+      track_status: "",
+      circuit_key: 0,
       session_status: "",
       path: "",
       series: [] as QualifyingParts[]
     }
+  }
+
+  processSessionInfo(sessionData: any): ProcessedSession | null {
+    if (!sessionData) {
+      return null
+    }
+
+    const meeting = sessionData.Meeting || {}
+    
+    const existing = this.sessionInfo
 
     let series = existing.series;
 
     if (Array.isArray(sessionData.Series)) {
       series = sessionData.Series;
     } else {
-      // updates during the race contain a single object that must be appended to the existing array.
       series.push(sessionData.Series)
     }
 
@@ -83,7 +88,7 @@ export class SessionProcessor {
   }
 
   processLapCount(lapCountData: any): void {
-    if (!lapCountData || !this.sessionInfo) return
+    if (!lapCountData) return
 
     const existing = this.sessionInfo
 
@@ -95,17 +100,19 @@ export class SessionProcessor {
   }
 
   processTrackStatus(trackStatusData: any): void {
-    if (!trackStatusData || !this.sessionInfo) return
+    if (!trackStatusData) return
 
-    const existing = this.sessionInfo
-
-    this.sessionInfo = {
+    const existing = this.sessionInfo;
+    
+    const processed = {
       ...existing,
-      track_status: trackStatusData.Message ?? trackStatusData.Status ?? existing.track_status,
+      track_status: trackStatusData.Message ?? existing.track_status,
     }
+
+    this.sessionInfo = processed;
   }
 
-  getSessionInfo(): ProcessedSession | null {
+  getSessionInfo(): ProcessedSession {
     return this.sessionInfo
   }
 }

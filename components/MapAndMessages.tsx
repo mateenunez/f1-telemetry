@@ -1,11 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Map from "@/components/Map";
 import RaceControl from "@/components/RaceControl";
-import { Saira } from "next/font/google";
+import { Orbitron } from "next/font/google";
 import { memo } from "react";
 import { usePreferences } from "@/context/preferences";
+import { getTrackStatusColor, getTrackStatusLabel } from "@/utils/telemetry";
 
-const saira = Saira({ subsets: ["latin"], weight: "500" });
+const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 interface MapAndMessagesProps {
   telemetryData: any;
@@ -26,7 +27,7 @@ const MapAndMessages = memo(function MapAndMessages({
       <CardHeader className="flex flex-col">
         <div className="flex flex-row gap-2 pt-4 items-center justify-between">
           <CardTitle className="text-lg font-thin text-white">
-            <div className="flex justify-center">
+            <div className="flex justify-center items-center">
               <RaceControl
                 raceControl={
                   preferences.translate
@@ -36,14 +37,31 @@ const MapAndMessages = memo(function MapAndMessages({
               />
             </div>
           </CardTitle>
-          {session?.session_type === "Race" && (
-            <CardTitle
-              className="text-xxl font-bold text-gray-200 tracking-widest mb-[2rem]"
-              style={saira.style}
-            >
-              {session?.current_lap}/{session?.total_laps}
-            </CardTitle>
-          )}
+          <div className="flex flex-col h-full justify-start items-start">
+            {session?.session_type === "Race" && (
+              <CardTitle
+                className="text-xxl font-bold text-gray-200 tracking-widest"
+                style={orbitron.style}
+              >
+                {session?.current_lap}/{session?.total_laps}
+              </CardTitle>
+            )}
+            {session.track_status && (
+              <CardTitle
+                className={`${
+                  session.session_type === "Race" ? "text-xs" : "text-md"
+                } text-gray-200 tracking-widest w-full text-top flex-wrap text-center`}
+                style={{
+                  fontFamily: orbitron.style.fontFamily,
+                  color: getTrackStatusColor(session.track_status),
+                }}
+              >
+                {preferences.translate
+                  ? getTrackStatusLabel(session.track_status, true)
+                  : getTrackStatusLabel(session.track_status, false)}
+              </CardTitle>
+            )}
+          </div>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col justify-center h-full p-0">

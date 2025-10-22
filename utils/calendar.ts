@@ -93,13 +93,14 @@ export async function fetchCalendar(): Promise<F1CalendarResponse> {
     }
 }
 
-export function formatTimeUntil(timeUntil: TimeUntilNext): string {
+export function formatTimeUntil(timeUntil: TimeUntilNext, translate: boolean = false): string {
+
     if (timeUntil.days > 0) {
-        return `${timeUntil.days} day${timeUntil.days > 1 ? 's' : ''} ${timeUntil.hours}h ${timeUntil.minutes}m`;
+        return `${timeUntil.days}${translate ? " día" : " day"}${timeUntil.days > 1 ? 's' : ''} ${timeUntil.hours}h ${timeUntil.minutes}m`;
     } else if (timeUntil.hours > 0) {
         return `${timeUntil.hours}hs ${timeUntil.minutes}min`;
     } else {
-        return `${timeUntil.minutes}minutes`;
+        return `${timeUntil.minutes}${translate ? "minutos " : "minutes "}`;
     }
 }
 
@@ -147,11 +148,6 @@ export function formatEventDate(dateString: string): string {
         return 'Invalid date';
     }
 }
-
-const capitalizeFirstLetter = (s: string): string => {
-    if (!s) return s;
-    return s.charAt(0).toUpperCase() + s.slice(1);
-};
 
 export function formatEventDateShort(dateString: string, locale: string): string {
     try {
@@ -514,7 +510,6 @@ export const translateSessionName = (sessionType: string | undefined): string =>
     return translatedName;
 };
 
-// utils/calendar.ts
 export const translateSessionStatus = (status: string | undefined): string => {
     if (!status) {
         return '';
@@ -528,12 +523,7 @@ export const translateSessionStatus = (status: string | undefined): string => {
         Finalised: "Finalizada",
     };
 
-    let translated = status;
-
-    for (const [englishTerm, spanishTerm] of Object.entries(translations)) {
-        const regex = new RegExp(englishTerm, 'gi');
-        translated = translated.replace(regex, spanishTerm);
-    }
+    const translated = translations[status];
 
     return translated;
 };

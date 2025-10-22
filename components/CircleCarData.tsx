@@ -231,6 +231,7 @@ export function CircleCarData({
               x={50}
               y={85}
               fontSize="10"
+              fontWeight={"bold"}
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
@@ -249,14 +250,14 @@ export function CircleCarData({
             const speedFraction = Math.min(Math.max(speed, 0), 360) / 300;
             const speedProgressDistance = speedFraction * blueArcLength;
             const speedStrokeDashoffset = blueArcLength - speedProgressDistance;
-            const labelPos = polar(-speedStrokeDashoffset, -r);
+            const labelPos = polar(-speedStrokeDashoffset, -r+10);
             return (
               <g key={idx}>
                 <text
                   x={labelPos.x}
                   y={labelPos.y}
                   fontSize={3.5}
-                  fill={"white"}
+                  fill={"rgb(201, 199, 199)"}
                   textAnchor="middle"
                   dominantBaseline="middle"
                   style={mediumGeist.style}

@@ -7,11 +7,12 @@ import {
   translateSessionType,
 } from "@/utils/calendar";
 import { Geist, Orbitron } from "next/font/google";
+import { usePreferences } from "@/context/preferences";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
-export default function F1Calendar({dict}: {dict: any}) {
+export default function F1Calendar({ dict }: { dict: any }) {
   const [upcoming, setUpcoming] = useState<F1UpcomingResponse | null>(null);
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export default function F1Calendar({dict}: {dict: any}) {
           className="flex flex-row gap-2 hover:cursor-pointer text-md font-regular"
           href="/schedule"
         >
-          {formatTimeUntil(upcoming.timeUntilNext).toUpperCase()}{" "}
+          {formatTimeUntil(upcoming.timeUntilNext, dict.locale === "es").toUpperCase()}{" "}
         </a>
       </div>
     );

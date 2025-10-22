@@ -41,18 +41,23 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
   };
 
   useEffect(() => {
-    if (!session?.date_start || !session?.date_end) return;
+    if (!session?.date_end) return;
 
-    const lastUpdateTime = telemetryData?.lastUpdateTime;
     const offset = parseTimeOffset(session.gmt_offset);
-    const startTime =
-      new Date(ensureUtc(session.date_start)).getTime() - offset;
+    const endTime = new Date(ensureUtc(session.date_end)).getTime() - offset;
     if (session.session_status === "Finalised") return;
 
-    const now = Date.now();
-    if (now < startTime || !lastUpdateTime) return;
-    setSessionTime(lastUpdateTime.getTime() - startTime);
-  }, [session?.date_start, session?.date_end, telemetryData?.lastUpdateTime]);
+    const update = () => {
+      const now = telemetryData?.lastUpdateTime.getTime();
+      if (!now) return;
+      const remaining = Math.max(0, endTime - now);
+      setSessionTime(remaining);
+    };
+
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, [session?.session_status, telemetryData?.lastUpdateTime]);
 
   return (
     <Card className="bg-warmBlack1 text-white border-none relative">
@@ -88,7 +93,7 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
             /* Countdown */
             <div className="flex items-center py-1 text-offWhite flex-row text-xl sm:text-2xl">
               <span className="text-xl font-mono" style={orbitron.style}>
-                {sessionTime && formatTime(sessionTime)}
+                {sessionTime !== undefined ? formatTime(sessionTime) : null}
               </span>
             </div>
           )}

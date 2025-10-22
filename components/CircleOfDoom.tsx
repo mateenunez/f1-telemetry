@@ -63,8 +63,7 @@ export default function CircleOfDoom({
 
   const laptimeToNumber = (laptime: string): number => {
     const parts = laptime.trim().split(":");
-    if (parts.length !== 2)
-      return 0;
+    if (parts.length !== 2) return 0;
 
     const [mStr, sStr] = parts;
     const m = parseInt(mStr, 10);
@@ -264,8 +263,14 @@ export default function CircleOfDoom({
                   y={labelPos.y}
                   fontSize={4}
                   fill={"#" + driverInfo?.team_colour}
-                  textAnchor="middle" // centra horizontalmente
-                  dominantBaseline="middle" // centra verticalmente
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  transform={(() => {
+                    const angle = adjusted(deg) + 90; // tangent to the circle
+                    const finalAngle =
+                      angle > 90 && angle < 270 ? angle - 180 : angle; // keep text upright
+                    return `rotate(${finalAngle} ${labelPos.x} ${labelPos.y})`;
+                  })()}
                   style={{
                     fontFamily: mediumGeist.style.fontFamily,
                     opacity: deg > 360 ? 0.6 : 1,

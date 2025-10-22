@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { usePreferences } from "@/context/preferences";
-import { PanelLeftOpen, PanelLeftClose, X, Check } from "lucide-react";
+import { X, Check, PanelLeft } from "lucide-react";
 import { Geist, Orbitron } from "next/font/google";
 import { ProcessedDriver } from "@/processors";
 
@@ -203,7 +203,7 @@ export default function PreferencesPanel({
   return (
     <>
       {/* Toggle Button */}
-      <PanelLeftOpen
+      <PanelLeft
         className="text-gray-600 hover:text-gray-400 hover:cursor-pointer"
         width={15}
         onClick={() => setOpen((prev) => !prev)}
@@ -225,25 +225,32 @@ export default function PreferencesPanel({
         }`}
       >
         <div className="p-8 overflow-y-auto h-full">
+          {/* Panel button */}
           <span
             className="text-xl font-semibold mb-6 text-center flex gap-6 items-center"
             style={orbitron.style}
           >
-            <PanelLeftClose
+            <PanelLeft
               className="text-gray-600 hover:text-gray-400 hover:cursor-pointer"
               width={15}
               onClick={() => setOpen((prev) => !prev)}
             />
             {preferences.translate ? "Configuración" : "Settings"}
           </span>
+
+          {/* Delay */}
           <div className="flex flex-col gap-4 pb-4">
-            <p className="text-lg text-gray-100" style={mediumGeist.style}>
+            <p className="text-md text-gray-100" style={orbitron.style}>
               Delay
             </p>
             <div className="flex flex-row w-full justify-around gap-2 h-[2.5rem] items-center">
               <input
                 type="number"
-                placeholder={preferences.translate ? "Delay en segundos..." : "Delay in seconds..."}
+                placeholder={
+                  preferences.translate
+                    ? "Delay en segundos..."
+                    : "Delay in seconds..."
+                }
                 style={mediumGeist.style}
                 onChange={handleDelayChange}
                 value={delay}
@@ -257,57 +264,51 @@ export default function PreferencesPanel({
                 <Check width={15} />
               </button>
               <p className="text-xs text-gray-500" style={mediumGeist.style}>
-                {preferences.translate ? "Ajustar delay en segundos (máx 60s)." : "Set delay on seconds (máx 60s)."}
+                {preferences.translate
+                  ? "Ajustar delay en segundos (máx 60s)."
+                  : "Set delay on seconds (máx 60s)."}
               </p>
             </div>
           </div>
-          <div className="flex flex-col justify-evenly pb-4">
-            <p className="text-lg text-gray-100" style={mediumGeist.style}>
-              {preferences.translate ? "Vista" : "Visuals"}
+
+          {/* Language */}
+          <div className="flex flex-col gap-2 pb-4">
+            <p className="text-md text-gray-100" style={orbitron.style}>
+              {preferences.translate ? "Idioma" : "Language"}
             </p>
-            {Object.entries(preferences).map(([key, value]) => (
-              <div
-                key={key}
-                className="flex items-center justify-between"
-                style={mediumGeist.style}
+            <div className="flex flex-col gap-2">
+              <p className="text-xs text-gray-400" style={mediumGeist.style}>
+                {preferences.translate
+                  ? "Las traducciones al español pueden tardar unos segundos más en llegar."
+                  : "The spanish translation may have additional delay."}
+              </p>
+              <select
+                id="language-select"
+                value={selectedLanguage}
+                onChange={handleSelectChange}
+                style={{
+                  fontFamily: mediumGeist.style.fontFamily,
+                }}
+                className="text-sm py-2 px-2 rounded-md bg-warmBlack text-gray-200 border border-gray-700"
               >
-                {preferenceDetails[key as string] ? (
-                  <>
-                    {" "}
-                    <div className="flex flex-col px-2 py-2">
-                      <span className="text-sm">
-                        {preferenceDetails[key as string].title}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {preferenceDetails[key as string].description}
-                      </span>
-                    </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="sr-only peer"
-                        checked={value}
-                        onChange={(e) =>
-                          setPreference(
-                            key as keyof typeof preferences,
-                            e.target.checked
-                          )
-                        }
-                      />
-                      <div className="w-10 h-5 bg-gray-800 rounded-full peer-checked:bg-f1Green/75 transition-colors"></div>
-                      <div className="absolute left-1 top-1 bg-f1Blue peer-checked:bg-white w-3 h-3 rounded-full transition-transform peer-checked:translate-x-5"></div>
-                    </label>
-                  </>
-                ) : (
-                  ""
-                )}
-              </div>
-            ))}
+                {options.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                    className="bg-warmBlack px-2 text-gray-200 border-none"
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
+
+          {/* Favorite Drivers */}
           <div className="flex flex-col gap-2 pb-4">
             <p
-              className="text-lg text-gray-100 font-semibold"
-              style={mediumGeist.style}
+              className="text-md text-gray-100 font-semibold"
+              style={orbitron.style}
             >
               {preferences.translate
                 ? "Pilotos Favoritos"
@@ -373,38 +374,52 @@ export default function PreferencesPanel({
             </div>
           </div>
 
-          <div className="flex flex-col gap-2 pb-4">
-            <p className="text-lg text-gray-100" style={mediumGeist.style}>
-              {preferences.translate ? "Idioma" : "Language"}
+          {/* Visuals */}
+          <div className="flex flex-col justify-evenly pb-4">
+            <p className="text-md text-gray-100" style={orbitron.style}>
+              {preferences.translate ? "Vista" : "Visuals"}
             </p>
-            <div className="flex flex-col gap-2">
-              <p className="text-xs text-gray-400" style={mediumGeist.style}>
-                {preferences.translate
-                  ? "Las traducciones al español pueden tardar unos segundos más en llegar."
-                  : "The spanish translation may have additional delay."}
-              </p>
-              <select
-                id="language-select"
-                value={selectedLanguage}
-                onChange={handleSelectChange}
-                style={{
-                  marginRight: "20px",
-                  padding: "8px",
-                  fontFamily: mediumGeist.style.fontFamily,
-                }}
-                className="text-sm rounded-md bg-warmBlack text-gray-200 border-none"
+            {Object.entries(preferences).map(([key, value]) => (
+              <div
+                key={key}
+                className="flex items-center justify-between"
+                style={mediumGeist.style}
               >
-                {options.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                    className="bg-warmBlack text-gray-200 border-none"
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+                {preferenceDetails[key as string] ? (
+                  <>
+                    {" "}
+                    <div className="flex flex-col px-2 py-2">
+                      <span
+                        className="text-xs"
+                        style={mediumGeist.style}
+                      >
+                        {preferenceDetails[key as string].title}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        {preferenceDetails[key as string].description}
+                      </span>
+                    </div>
+                    <label className="relative inline-flex items-start cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={value}
+                        onChange={(e) =>
+                          setPreference(
+                            key as keyof typeof preferences,
+                            e.target.checked
+                          )
+                        }
+                      />
+                      <div className="w-10 h-5 bg-gray-800 rounded-full peer-checked:bg-f1Blue/80 transition-colors"></div>
+                      <div className="absolute left-1 top-1 bg-f1Blue peer-checked:bg-white w-3 h-3 rounded-full transition-transform peer-checked:translate-x-5"></div>
+                    </label>
+                  </>
+                ) : (
+                  ""
+                )}
+              </div>
+            ))}
           </div>
 
           {/* Help tutorial */}

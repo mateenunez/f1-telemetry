@@ -79,7 +79,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
 
       {/* Tiempos de sector */}
       <div
-        className="flex items-center flex-col text-xs text-white"
+        className="flex items-center flex-col text-xs text-white min-w-[2.5rem]"
         style={oxanium.style}
       >
         {(["sector1", "sector2", "sector3"] as const).map((sectorKey, idx) => {
@@ -97,7 +97,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
 
       {/* Mejores tiempos de sector */}
       <div
-        className="flex items-center flex-col text-xs text-white"
+        className="flex items-center flex-col text-xs text-white min-w-[2.5rem]"
         style={oxanium.style}
       >
         {timingStats?.best_sectors.map((sectorKey, idx) => {
