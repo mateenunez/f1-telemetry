@@ -23,9 +23,11 @@ const MapAndMessages = memo(function MapAndMessages({
 }: MapAndMessagesProps) {
   const { preferences } = usePreferences();
   return (
-    <Card className="lg:col-span-5 bg-warmBlack1 border-none border-2 flex flex-col">
-      <CardHeader className="flex flex-col">
-        <div className="flex flex-row gap-2 pt-4 items-center justify-between">
+    <Card className="lg:col-span-5 bg-warmBlack1 border-none flex flex-col">
+      <CardHeader className="flex flex-col py-2">
+        <div
+          className="flex flex-row gap-2 pt-4 items-center justify-between px-4 rounded-lg py-2 min-h-[5rem]"
+        >
           <CardTitle className="text-lg font-thin text-white">
             <div className="flex justify-center items-center">
               <RaceControl

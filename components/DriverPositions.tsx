@@ -84,29 +84,32 @@ const DriverPositions = memo(function DriverPositions({
   return (
     <Card className="lg:col-span-6 bg-warmBlack border-none max-h-screen">
       <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
-        <ScrollArea className="overflow-x-auto min-w-max h-full" type="scroll">
+        <ScrollArea
+          className="overflow-x-auto min-w-max h-full"
+          type="scroll"
+        >
           <div
             style={orbitron.style}
             className="sticky top-0 z-30 bg-warmBlack w-full py-1.5"
           >
-            <div className="py-1.5 text-[0.6rem] text-gray-400/50 text-center">
+            <div className="py-1.5 text-[0.6rem] text-gray-500 text-center">
               <div className="flex flex-row gap-3">
                 <div
                   className={`min-w-[${headshot ? "11.5rem" : "9rem"}]`}
                 ></div>
-                <div className="flex flex-row items-start justify-around w-full gap-2">
+                <div className="flex flex-row items-start justify-around w-full gap-0">
                   <div className="min-w-[3rem]">
                     {preferences.translate ? "NEUM." : "TYRES"}
                   </div>
                   <div
                     className={`flex flex-row ${headshot ? "gap-2" : "gap-4"}`}
                   >
-                    <div className="min-w-[3rem]">
+                    <div className="min-w-[3rem] text-start">
                       {preferences.translate ? "DRS" : "SPEED"}
                     </div>
-                    <div className="min-w-[2rem]">PITS</div>
+                    <div className="min-w-[2rem] text-start">PITS</div>
                   </div>
-                  <div className="w-[8rem] flex flex-row items-start align-text-top gap-6 justify-center">
+                  <div className="w-[7.5rem] flex flex-row items-start align-text-top gap-6 justify-between">
                     <div className="text-center min-w-[2.5rem]">
                       {session?.session_type === "Race"
                         ? preferences.translate
@@ -160,12 +163,9 @@ const DriverPositions = memo(function DriverPositions({
                         }
                       : {
                           opacity: 1,
-                          background: `linear-gradient(-90deg, #0d0d0d ${
+                          background: `linear-gradient(-90deg, ${isFavorite ? "#"+driver.team_colour+"30" : "#0d0d0d"} ${
                             headshot ? "90%" : "100%"
                           }, #${driver?.team_colour} 100%)`,
-                          boxShadow: isFavorite
-                            ? "inset 0 0 0.2rem 0.2rem rgba(255, 255, 255, 0.15)"
-                            : "",
                         }
                   }
                 >

@@ -64,7 +64,13 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
       <CardHeader>
         <div className="flex flex-col md:flex-row lg:flex-row items-center justify-between gap-1">
           <div className="flex flex-row md:justify-start items-center ">
-            <div className="flex flex-row md:gap-[1rem] w-screen md:w-full px-4 justify-between items-center">
+            <div
+              className="flex flex-row md:gap-[1rem] w-screen md:w-full px-4 justify-between items-center border-2 border-gray-800 rounded-full px-4 py-2 transition-all duration-800 ease-in-out"
+              style={{
+                boxShadow:
+                  "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
+              }}
+            >
               <PreferencesPanel driverInfo={telemetryData?.drivers} />
               <div className="flex flex-col md:flex-row items-center md:justify-between justify-center">
                 <div className="flex items-center flex-col">
@@ -91,8 +97,14 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
           </div>
           {session?.session_status !== "Finalised" && (
             /* Countdown */
-            <div className="flex items-center py-1 text-offWhite flex-row text-xl sm:text-2xl">
-              <span className="text-xl font-mono" style={orbitron.style}>
+            <div
+              className="flex items-center py-2 px-4 w-[8.5rem] text-center items-center text-offWhite flex-row text-xl sm:text-2xl border-2 border-gray-800 rounded-full px-4 py-2 transition-all duration-800 ease-in-out"
+              style={{
+                boxShadow:
+                  "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
+              }}
+            >
+              <span className="text-xl font-mono text-center w-full" style={orbitron.style}>
                 {sessionTime !== undefined ? formatTime(sessionTime) : null}
               </span>
             </div>
@@ -107,11 +119,17 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
               <>
                 {/* Weather Info */}
                 {weather && (
-                  <div className="flex items-center py-1 text-offWhite">
+                  <div
+                    className="flex items-center text-offWhite border-2 rounded-full px-4 py-2 transition-all duration-800 ease-in-out border-gray-800"
+                    style={{
+                      boxShadow:
+                        "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
+                    }}
+                  >
                     <div className="px-2">{getWeatherIcon()}</div>
                     {/* Air Temperature Bar */}
                     <div className="flex flex-col items-center">
-                      <span className="text-xs flex flex-row items-center gap-1 p-1">
+                      <span className="text-xs flex flex-row items-center gap-1 mb-2 px-1 h-4">
                         <Wind width={15} />{" "}
                         {Math.round(weather.air_temperature)}°C
                       </span>
@@ -137,7 +155,7 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
 
                     {/* Track Temperature Bar */}
                     <div className="flex flex-col items-center">
-                      <span className="text-xs p-2">
+                      <span className="text-xs px-1 h-4 mb-2">
                         Track {Math.round(weather.track_temperature)}°C
                       </span>
                       <div className="relative w-[4rem] h-2 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 rounded-full">
@@ -159,7 +177,7 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
 
                     {/* Humidity Bar */}
                     <div className="flex flex-col items-center">
-                      <span className="text-xs flex flex-row gap-1 items-center p-1">
+                      <span className="text-xs flex flex-row gap-1 items-center mb-2 px-1 h-4">
                         <Droplets width={15} /> {Math.round(weather.humidity)}%
                       </span>
                       <div className="relative w-[4rem] h-2 bg-gradient-to-r from-blue-300 via-blue-500 to-blue-900 rounded-full">

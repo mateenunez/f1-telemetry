@@ -251,15 +251,23 @@ export default function PreferencesPanel({
                     ? "Delay en segundos..."
                     : "Delay in seconds..."
                 }
-                style={mediumGeist.style}
+                style={{
+                  fontFamily: mediumGeist.style.fontFamily,
+                  boxShadow:
+                    "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
+                }}
                 onChange={handleDelayChange}
                 value={delay}
-                className="w-[8rem] px-3 h-full text-sm rounded-md bg-warmBlack text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="w-[8rem] px-3 h-full text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 transition-all duration-800 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
               />
               <button
                 type="button"
-                className="flex justify-center items-center px-3 h-full text-sm rounded-md bg-warmBlack text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="flex justify-center items-center px-3 h-full text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 transition-all duration-800 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
                 onClick={handleDelay}
+                style={{
+                  boxShadow:
+                    "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
+                }}
               >
                 <Check width={15} />
               </button>
@@ -288,14 +296,17 @@ export default function PreferencesPanel({
                 onChange={handleSelectChange}
                 style={{
                   fontFamily: mediumGeist.style.fontFamily,
+                  boxShadow:
+                    "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
                 }}
-                className="text-sm py-2 px-2 rounded-md bg-warmBlack text-gray-200 border border-gray-700"
+                className="text-sm py-2 px-2 rounded-md bg-warmBlack text-gray-200 border-2 border-gray-700 transition-all duration-800 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
               >
                 {options.map((option) => (
                   <option
                     key={option.value}
                     value={option.value}
                     className="bg-warmBlack px-2 text-gray-200 border-none"
+                    style={mediumGeist.style}
                   >
                     {option.label}
                   </option>
@@ -316,7 +327,7 @@ export default function PreferencesPanel({
             </p>
 
             {/* Show selected driver acronym */}
-            <div className="text-gray-400 text-sm bg-warmBlack flex flex-row gap-2 flex-wrap ">
+            <div className="text-gray-400 text-sm bg-transparent flex flex-row gap-2 flex-wrap">
               {favorites &&
                 favorites.map((driver, idx) => (
                   <span
@@ -338,7 +349,11 @@ export default function PreferencesPanel({
             <div className="relative w-full max-w-xs">
               <input
                 type="text"
-                style={mediumGeist.style}
+                style={{
+                  fontFamily: mediumGeist.style.fontFamily,
+                  boxShadow:
+                    "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
+                }}
                 value={search}
                 onChange={handleSearch}
                 placeholder={
@@ -346,7 +361,7 @@ export default function PreferencesPanel({
                     ? "Buscar por piloto o equipo..."
                     : "Search by name or team..."
                 }
-                className="w-full px-3 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="w-full px-3 py-2 text-sm rounded-md bg-warmBlack text-gray-200 border-2 border-gray-700 transition-all duration-800 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
               />
 
               {/* Suggestions dropdown */}
@@ -389,10 +404,7 @@ export default function PreferencesPanel({
                   <>
                     {" "}
                     <div className="flex flex-col px-2 py-2">
-                      <span
-                        className="text-xs"
-                        style={mediumGeist.style}
-                      >
+                      <span className="text-xs" style={mediumGeist.style}>
                         {preferenceDetails[key as string].title}
                       </span>
                       <span className="text-xs text-gray-500">
@@ -411,8 +423,8 @@ export default function PreferencesPanel({
                           )
                         }
                       />
-                      <div className="w-10 h-5 bg-gray-800 rounded-full peer-checked:bg-f1Blue/80 transition-colors"></div>
-                      <div className="absolute left-1 top-1 bg-f1Blue peer-checked:bg-white w-3 h-3 rounded-full transition-transform peer-checked:translate-x-5"></div>
+                      <div className="w-10 h-5 bg-gray-800 rounded-full peer-checked:bg-f1Blue/80 transition-colors peer-checked:shadow-f1Blue-md"></div>
+                      <div className="absolute left-1 top-1 bg-f1Blue peer-checked:bg-white w-3 h-3 rounded-full transition-transform peer-checked:translate-x-5 " ></div>
                     </label>
                   </>
                 ) : (

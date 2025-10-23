@@ -441,7 +441,7 @@ const CarDot = ({
         transition: "all 1s linear",
         transform,
         ...(color && { fill: `#${color}` }),
-        opacity: isRetired || !favorite ? 0.8 : 1,
+        opacity: isRetired || !favorite ? 0.5 : 1,
         stroke: "black",
         strokeWidth: "2",
         filter: "drop-shadow(0 0 4px rgba(0,0,0,0.8))",

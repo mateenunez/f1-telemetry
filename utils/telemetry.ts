@@ -17,7 +17,7 @@ export const TRACK_STATUS_LABELS_ES: Record<TrackStatusKey, string> = {
 };
 
 export const TRACK_STATUS_COLORS: Record<TrackStatusKey, string> = {
-    AllClear: '#F3F3F3a1',   // offWhite
+    AllClear: '#6B7280',   // offWhite
     Yellow: '#eab309',     // yellow-500
     Red: '#ef4444',        // red-500
     Aborted: '#F3F3F366',    // gray-500

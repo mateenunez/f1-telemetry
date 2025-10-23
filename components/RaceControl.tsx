@@ -42,10 +42,10 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
 
   return (
     <Card className="bg-transparent border-none p-0">
-      <CardContent className="align-center">
+      <CardContent className="align-center p-0">
         {lastMessage && (
           <div
-            className={`px-2 rounded text-f1Blue py-0`}
+            className={`rounded text-f1Blue py-0`}
             style={mediumGeist.style}
           >
             <p className="text-xs text-gray-200 leading-tight">

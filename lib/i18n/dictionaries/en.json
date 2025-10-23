@@ -1,7 +1,7 @@
 {
   "home": {
     "title": "Formula 1 telemetrics",
-    "description": "F1 Telemetry is a real-time telemetry dashboard, so you can follow Formula 1 completely and from anywhere, without having to watch the broadcast.",
+    "description": "F1 Telemetry is a real-time telemetry dashboard, follow Formula 1 completely and from anywhere, without having to watch the broadcast.",
     "dashboardButton": "Dashboard",
     "scheduleButton": "Schedule",
     "audioTitle": "Team Radio + AI",
@@ -31,7 +31,13 @@
     "minute": "minute",
     "second": "second",
     "upnext": "Upnext",
-    "next": "Next"
+    "next": "Next",
+    "title": "Schedule",
+    "description": "F1 Telemetry schedule page with upcoming sessions and race calendar."
+  },
+  "liveTiming": {
+    "title": "Live Timing",
+    "description": "Real-time F1 telemetry dashboard with live timing, driver positions, lap times, and race analytics. Follow Formula 1 races with detailed data."
   },
   "sessionTypes": {
     "practice1": "Practice 1",
