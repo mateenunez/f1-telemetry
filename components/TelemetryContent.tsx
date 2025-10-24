@@ -162,7 +162,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
         <Header telemetryData={telemetryData} dict={dict} />
         {/* Cards */}
         <div
-          className={`!mt-0 grid grid-cols-1 lg:grid-cols-11 pb-4 border-none rounded-lg transition-all duration-500 ease-in-out`}
+          className={`!mt-0 grid grid-cols-1 lg:grid-cols-11 lg:border-b-2 lg:border-t-0 lg:border-l-0 lg:border-r-0 lg:rounded-none lg:border-gray-800`}
+
         >
           {/* Posiciones Actuales */}
           <DriverPositions

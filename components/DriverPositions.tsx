@@ -84,10 +84,7 @@ const DriverPositions = memo(function DriverPositions({
   return (
     <Card className="lg:col-span-6 bg-warmBlack border-none max-h-screen">
       <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
-        <ScrollArea
-          className="overflow-x-auto min-w-max h-full"
-          type="scroll"
-        >
+        <ScrollArea className="overflow-x-auto min-w-max h-full" type="scroll">
           <div
             style={orbitron.style}
             className="sticky top-0 z-30 bg-warmBlack w-full py-1.5"
@@ -95,8 +92,12 @@ const DriverPositions = memo(function DriverPositions({
             <div className="py-1.5 text-[0.6rem] text-gray-500 text-center">
               <div className="flex flex-row gap-3">
                 <div
-                  className={`min-w-[${headshot ? "11.5rem" : "9rem"}]`}
-                ></div>
+                  className={`min-w-[${
+                    headshot ? "11.5rem" : "9rem"
+                  }] items-center`}
+                >
+                  {preferences.translate ? "PILOTO" : "DRIVER"}
+                </div>
                 <div className="flex flex-row items-start justify-around w-full gap-0">
                   <div className="min-w-[3rem]">
                     {preferences.translate ? "NEUM." : "TYRES"}
@@ -163,9 +164,13 @@ const DriverPositions = memo(function DriverPositions({
                         }
                       : {
                           opacity: 1,
-                          background: `linear-gradient(-90deg, ${isFavorite ? "#"+driver.team_colour+"30" : "#0d0d0d"} ${
-                            headshot ? "90%" : "100%"
-                          }, #${driver?.team_colour} 100%)`,
+                          background: `linear-gradient(-90deg, ${
+                            isFavorite
+                              ? "#" + driver.team_colour + "30"
+                              : "#0d0d0d"
+                          } ${headshot ? "90%" : "100%"}, #${
+                            driver?.team_colour
+                          } 100%)`,
                         }
                   }
                 >

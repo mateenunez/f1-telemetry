@@ -35,11 +35,8 @@ export default function F1Calendar({ dict }: { dict: any }) {
   if (upcoming) {
     return (
       <div
-        className="flex flex-col gap-0 items-center text-offWhite border-2 rounded-full px-6 py-2 transition-all duration-800 ease-in-out border-gray-800 "
-        style={{
-          boxShadow:
-            "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
-        }}
+        className="flex flex-col gap-0 items-center text-offWhite"
+
       >
         <div
           className="flex flex-row lg:flex-row text-xs md:text-sm lg:text-sm text-gray-500 gap-1"

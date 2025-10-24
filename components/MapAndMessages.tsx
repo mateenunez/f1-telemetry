@@ -23,7 +23,7 @@ const MapAndMessages = memo(function MapAndMessages({
 }: MapAndMessagesProps) {
   const { preferences } = usePreferences();
   return (
-    <Card className="lg:col-span-5 bg-warmBlack1 border-none flex flex-col">
+    <Card className="lg:col-span-5 bg-warmBlack1 flex flex-col border-none" >
       <CardHeader className="flex flex-col py-2">
         <div
           className="flex flex-row gap-2 pt-4 items-center justify-between px-4 rounded-lg py-2 min-h-[5rem]"
@@ -52,7 +52,7 @@ const MapAndMessages = memo(function MapAndMessages({
               <CardTitle
                 className={`${
                   session.session_type === "Race" ? "text-xs" : "text-md"
-                } text-gray-200 tracking-widest w-full text-top flex-wrap text-center`}
+                } text-gray-200 tracking-widest w-full text-top flex-wrap text-center mt-1`}
                 style={{
                   fontFamily: orbitron.style.fontFamily,
                   color: getTrackStatusColor(session.track_status),

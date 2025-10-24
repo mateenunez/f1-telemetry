@@ -88,7 +88,7 @@ const config: Config = {
 			boxShadow: {
 				'f1Blue': '0 0 8px -2px rgba(59, 130, 246, 0.4)',
 				'f1Blue-md': '0 0 20px -2px rgba(59, 130, 246, 0.8), 0 0 10px -1px rgba(59, 130, 246, 0.5)',
-				'gray-800': '0 0 8px -2px rgba(31, 41, 55, 0.3)',
+				'gray-800': '0 6px 12px -3px #37415180, -3px 0 6px -3px #37415180, 3px 0 6px -3px #37415180',
 			},
 			keyframes: {
 				'accordion-down': {

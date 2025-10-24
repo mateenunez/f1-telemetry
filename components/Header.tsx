@@ -60,16 +60,12 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
   }, [session?.session_status, telemetryData?.lastUpdateTime]);
 
   return (
-    <Card className="bg-warmBlack1 text-white border-none relative">
+    <Card className="bg-warmBlack1 text-white border-b-2 border-t-0 border-l-0 border-r-0 rounded-none border-gray-800 relative">
       <CardHeader>
         <div className="flex flex-col md:flex-row lg:flex-row items-center justify-between gap-1">
-          <div className="flex flex-row md:justify-start items-center ">
+          <div className="flex flex-row md:justify-start items-center mx-4">
             <div
-              className="flex flex-row md:gap-[1rem] w-screen md:w-full px-4 justify-between items-center border-2 border-gray-800 rounded-full px-4 py-2 transition-all duration-800 ease-in-out"
-              style={{
-                boxShadow:
-                  "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
-              }}
+              className="flex flex-row md:gap-[1rem] w-[20rem] md:w-full justify-between items-center"
             >
               <PreferencesPanel driverInfo={telemetryData?.drivers} />
               <div className="flex flex-col md:flex-row items-center md:justify-between justify-center">
@@ -120,11 +116,7 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
                 {/* Weather Info */}
                 {weather && (
                   <div
-                    className="flex items-center text-offWhite border-2 rounded-full px-4 py-2 transition-all duration-800 ease-in-out border-gray-800"
-                    style={{
-                      boxShadow:
-                        "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
-                    }}
+                    className="flex items-center text-offWhite"
                   >
                     <div className="px-2">{getWeatherIcon()}</div>
                     {/* Air Temperature Bar */}
