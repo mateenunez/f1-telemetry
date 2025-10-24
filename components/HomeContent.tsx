@@ -193,7 +193,6 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 <span className="text-md text-gray-400 text-start">
                   {dict.home.audioDesc1}
                   <span className="bold text-gray-200">
-                    {" "}
                     {dict.home.audioDesc2}
                   </span>
                 </span>
@@ -244,8 +243,13 @@ export default function HomeContent({ dict }: HomeContentProps) {
           </h5>
           <span className="text-md text-gray-400 text-center">
             {dict.home.goalDesc1}{" "}
-            <a href={discord} className="bold text-gray-200" target="_blank">
-              {dict.home.goalDesc2}
+            <a
+              href={discord}
+              className="bold text-gray-200 relative inline-block transition-all duration-300 hover:text-white group"
+              target="_blank"
+            >
+              <span className="relative z-10">{dict.home.goalDesc2}</span>
+              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-offWhite transition-all duration-500 group-hover:w-full"></span>
             </a>
           </span>
         </div>
@@ -257,9 +261,14 @@ export default function HomeContent({ dict }: HomeContentProps) {
           <div className="flex flex-col gap-0">
             <span className="text-md text-gray-400 text-center items-center">
               {dict.home.repoDesc1}{" "}
-              <a href={github} className="bold text-gray-200" target="_blank">
-                {dict.home.repoDesc2}
-              </a>
+              <a
+              href={discord}
+              className="bold text-gray-200 relative inline-block transition-all duration-300 hover:text-white group"
+              target="_blank"
+            >
+              <span className="relative z-10">{dict.home.repoDesc2}</span>
+              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-offWhite transition-all duration-500 group-hover:w-full"></span>
+            </a>
             </span>
             <span className="bold text-gray-400">{dict.home.repoDesc3}</span>
             <span>{dict.home.repoDesc4}</span>
