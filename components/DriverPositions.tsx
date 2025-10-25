@@ -82,7 +82,7 @@ const DriverPositions = memo(function DriverPositions({
   }, [radioAudioRef.current, lastCapture]);
 
   return (
-    <Card className="lg:col-span-6 bg-warmBlack border-none max-h-screen">
+    <Card className="lg:col-span-5 bg-warmBlack border-none max-h-screen">
       <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
         <ScrollArea className="overflow-x-auto min-w-max h-full" type="scroll">
           <div
@@ -105,12 +105,12 @@ const DriverPositions = memo(function DriverPositions({
                   <div
                     className={`flex flex-row ${headshot ? "gap-2" : "gap-4"}`}
                   >
-                    <div className="min-w-[2.3rem] text-center">
+                    <div className="min-w-[3rem] text-center">
                       {preferences.translate ? "DRS" : "SPEED"}
                     </div>
-                    <div className="min-w-[2rem] text-center">PITS</div>
+                    <div className="min-w-[3rem] text-center">PITS</div>
                   </div>
-                  <div className="w-[7.5rem] flex flex-row items-start align-text-top gap-6 justify-between">
+                  <div className="w-[7rem] flex flex-row items-start align-text-top gap-4 justify-between">
                     <div className="text-center min-w-[2.5rem]">
                       {session?.session_type === "Race"
                         ? preferences.translate
@@ -127,7 +127,7 @@ const DriverPositions = memo(function DriverPositions({
                   <div className="min-w-[4.5rem] text-start">
                     {preferences.translate ? "VUELTAS" : "LAP TIMES"}
                   </div>
-                  <div className="min-w-[14rem]">
+                  <div className="min-w-[13rem]">
                     {preferences.translate
                       ? "MINISECTORES Y TIEMPOS"
                       : "MINISECTORS & TIMES"}

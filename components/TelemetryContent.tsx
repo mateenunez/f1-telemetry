@@ -91,7 +91,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
             {/* Cards Skeleton */}
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-4 pb-4">
               {/* Posiciones Skeleton */}
-              <Card className="lg:col-span-6 bg-warmBlack1 border-none max-h-screen px-2">
+              <Card className="lg:col-span-5 bg-warmBlack1 border-none max-h-screen px-2">
                 <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
                   <div className="space-y-2">
                     {Array.from({ length: 20 }).map((_, idx) => (
@@ -101,7 +101,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                 </CardContent>
               </Card>
               {/* Mapa y Race Control Skeleton */}
-              <Card className="lg:col-span-4 bg-warmBlack1 border-none flex flex-col md:mt-8 p-0 m-0">
+              <Card className="lg:col-span-5 bg-warmBlack1 border-none flex flex-col p-0 m-0">
                 <CardHeader className="pb-3 flex flex-row items-center justify-between">
                   <Skeleton height={32} width={180} />
                   <Skeleton height={32} width={120} />
@@ -162,8 +162,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
         <Header telemetryData={telemetryData} dict={dict} />
         {/* Cards */}
         <div
-          className={`!mt-0 grid grid-cols-1 lg:grid-cols-11 lg:border-b-2 lg:border-t-0 lg:border-l-0 lg:border-r-0 lg:rounded-none lg:border-gray-800`}
-
+          className={`!mt-0 grid grid-cols-1 lg:grid-cols-10 lg:border-b-2 lg:border-t-0 lg:border-l-0 lg:border-r-0 lg:rounded-none lg:border-gray-800`}
         >
           {/* Posiciones Actuales */}
           <DriverPositions

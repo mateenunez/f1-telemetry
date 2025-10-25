@@ -40,7 +40,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
   };
 
   return (
-    <div className="flex flex-row gap-1 min-w-[14rem] justify-center gap-3">
+    <div className="flex flex-row min-w-[13rem] justify-center gap-2">
       {/* Minisectores */}
       <div className="text-xs text-white" style={aldrich.style}>
         {(["sector1", "sector2", "sector3"] as const).map(

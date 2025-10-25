@@ -41,7 +41,7 @@ export default function DriverGaps({ timing, session }: DriverGapsProps) {
   }
 
   return (
-    <div className="flex flex-row justify-between min-w-[7.5rem] items-center">
+    <div className="flex flex-row justify-between min-w-[6rem] gap-4 items-center">
       {timing?.gap_to_leader ||
       (lastGap?.GapToLeader && lastGap?.GapToLeader !== "") ? (
         <div
