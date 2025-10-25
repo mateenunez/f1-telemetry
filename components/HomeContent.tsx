@@ -42,7 +42,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-warmBlack px-[15%]">
+    <div className="min-h-screen bg-warmBlack max-w-4xl mx-auto px-4">
       <header
         className={`
         fixed top-0 left-0 w-full gap-4 md:px-[15%] h-[5rem] z-50 
@@ -99,7 +99,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
           </nav>
         </div>
       </header>
-      <div className="flex flex-col gap-[5rem] py-[2rem] justify-center items-center">
+      <div className="flex flex-col gap-[5rem] py-[2rem] justify-center items-center w-full ">
         <div className="flex flex-col min-h-screen justify-evenly gap-[5rem]">
           <div className="flex flex-col md:flex-row w-full h-full justify-around gap-8">
             <div className="flex flex-col md:max-w-[25rem] items-center justify-center text-gray-200 gap-[2rem]  ">
@@ -172,6 +172,16 @@ export default function HomeContent({ dict }: HomeContentProps) {
               </a>
             </div>
           </div>
+          {dict.announce?.error && (
+            <div className="flex justify-center w-full px-[5%]">
+              <div
+                className="w-full bg-red-600/20 border-red-600 border-2 text-white px-6 py-4 rounded-lg text-center"
+                style={mediumGeist.style}
+              >
+                {dict.announce.error}
+              </div>
+            </div>
+          )}
           <div className="w-full flex justify-center">
             <video
               src={map_mp4}
@@ -262,13 +272,13 @@ export default function HomeContent({ dict }: HomeContentProps) {
             <span className="text-md text-gray-400 text-center items-center">
               {dict.home.repoDesc1}{" "}
               <a
-              href={discord}
-              className="bold text-gray-200 relative inline-block transition-all duration-300 hover:text-white group"
-              target="_blank"
-            >
-              <span className="relative z-10">{dict.home.repoDesc2}</span>
-              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-offWhite transition-all duration-500 group-hover:w-full"></span>
-            </a>
+                href={discord}
+                className="bold text-gray-200 relative inline-block transition-all duration-300 hover:text-white group"
+                target="_blank"
+              >
+                <span className="relative z-10">{dict.home.repoDesc2}</span>
+                <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-offWhite transition-all duration-500 group-hover:w-full"></span>
+              </a>
             </span>
             <span className="bold text-gray-400">{dict.home.repoDesc3}</span>
             <span>{dict.home.repoDesc4}</span>

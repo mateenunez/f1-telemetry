@@ -33,7 +33,9 @@
     "upnext": "Próximamente",
     "next": "Siguiente",
     "title": "Calendario",
-    "description": "Calendario de F1 Telemetry con las próximas sesiones de Formula 1"
+    "description": "Calendario de F1 Telemetry con las próximas sesiones de Formula 1",
+    "today": "Hoy",
+    "tomorrow": "Mañana"
   },
   "liveTiming": {
     "title": "Telemetría en vivo",
@@ -47,6 +49,9 @@
     "race": "Carrera",
     "sprintrace": "Carrera Sprint",
     "sprintqualification": "Clasificación Sprint"
+  },
+  "announce": {
+    "error": "Los neumáticos no están funcionando correctamente en las Qualys. Si encontraste otro bug podés reportarlo en el servidor de discord que está abajo."
   },
   "loading": "Preparando el sistema...",
   "delaying": "Aplicando delay",

@@ -110,7 +110,7 @@ export default function NextSession({
             {/* Time Information */}
             <div className="flex flex-col text-left gap-0">
               <p className="text-xl">
-                {getDayOfWeek(session.start, dict.locale).toUpperCase()} {getRelativeDate(session.start)}
+                {getDayOfWeek(session.start, dict.locale).toUpperCase()} {getRelativeDate(session.start, dict)}
               </p>
               <div className="items-center text-gray-300">
                 {getTimeOnly(session.start)} - {getTimeOnly(session.end || "")}

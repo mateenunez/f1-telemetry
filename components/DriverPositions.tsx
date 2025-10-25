@@ -98,17 +98,17 @@ const DriverPositions = memo(function DriverPositions({
                 >
                   {preferences.translate ? "PILOTO" : "DRIVER"}
                 </div>
-                <div className="flex flex-row items-start justify-around w-full gap-0">
+                <div className="flex flex-row items-start justify-around w-full">
                   <div className="min-w-[3rem]">
                     {preferences.translate ? "NEUM." : "TYRES"}
                   </div>
                   <div
                     className={`flex flex-row ${headshot ? "gap-2" : "gap-4"}`}
                   >
-                    <div className="min-w-[3rem] text-start">
+                    <div className="min-w-[2.3rem] text-center">
                       {preferences.translate ? "DRS" : "SPEED"}
                     </div>
-                    <div className="min-w-[2rem] text-start">PITS</div>
+                    <div className="min-w-[2rem] text-center">PITS</div>
                   </div>
                   <div className="w-[7.5rem] flex flex-row items-start align-text-top gap-6 justify-between">
                     <div className="text-center min-w-[2.5rem]">
@@ -127,7 +127,7 @@ const DriverPositions = memo(function DriverPositions({
                   <div className="min-w-[4.5rem] text-start">
                     {preferences.translate ? "VUELTAS" : "LAP TIMES"}
                   </div>
-                  <div className="min-w-[15rem]">
+                  <div className="min-w-[14rem]">
                     {preferences.translate
                       ? "MINISECTORES Y TIEMPOS"
                       : "MINISECTORS & TIMES"}

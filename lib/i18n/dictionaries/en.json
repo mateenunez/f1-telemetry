@@ -5,7 +5,7 @@
     "dashboardButton": "Dashboard",
     "scheduleButton": "Schedule",
     "audioTitle": "Team Radio + AI",
-    "audioDesc1": "You can hear instantly the team radio message of every driver during race, we also",
+    "audioDesc1": "You can hear instantly the team radio message of every driver during race, we also ",
     "audioDesc2": "use AI for translation and transcription!",
     "circlesTitle": "Real time analysis",
     "circlesDesc1": "We are constantly adding features to improve race analysis, like the ",
@@ -33,7 +33,9 @@
     "upnext": "Upnext",
     "next": "Next",
     "title": "Schedule",
-    "description": "F1 Telemetry schedule page with upcoming sessions and race calendar."
+    "description": "F1 Telemetry schedule page with upcoming sessions and race calendar.",
+    "today": "Today",
+    "tomorrow": "Tomorrow"
   },
   "liveTiming": {
     "title": "Live Timing",
@@ -47,6 +49,9 @@
     "race": "Race",
     "sprintrace": "Sprint Race",
     "sprintqualification": "Sprint Qualification"
+  },
+  "announce": {
+    "error": "Tyres are not working properly on qualifying sessions. If you have found another issue let us know in the discord server below."
   },
   "loading": "Getting things ready...",
   "delaying": "Applying delay",

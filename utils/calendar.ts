@@ -196,7 +196,7 @@ export function formatEventTime(dateString: string): string {
     }
 }
 
-export function getRelativeDate(dateString: string): string {
+export function getRelativeDate(dateString: string, dict:any): string {
     try {
         const date = new Date(dateString);
         const now = new Date();
@@ -209,9 +209,9 @@ export function getRelativeDate(dateString: string): string {
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
         if (date.getDay().toString() == now.getDay().toString()) {
-            return '(Today)';
+            return `(${dict.schedule.today})`;
         } else if (diffDays > 1) {
-            return '(Tomorrow)';
+            return `(${dict.schedule.tomorrow})`;
         }
         else {
             return ``;
