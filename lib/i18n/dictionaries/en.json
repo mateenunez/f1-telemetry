@@ -53,6 +53,10 @@
   "announce": {
     "error": "Tyres are not working properly on qualifying sessions. If you have found another issue let us know in the discord server below."
   },
+  "tourSteps": {
+    "welcome": "Let's take a quick tour to get you familiar with the main features of the dashboard.",
+    "positions": "Here you can see the current positions of all drivers in the race, updated in real-time."
+  },
   "loading": "Getting things ready...",
   "delaying": "Applying delay",
   "404": "I think you're lost, bro.",

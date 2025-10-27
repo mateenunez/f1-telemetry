@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PreferencesProvider } from "@/context/preferences";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
+import { TourProvider } from "@/context/tour";
 
 export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }));
@@ -31,7 +32,7 @@ export async function generateMetadata({
       description: dict.home.description, // Use localized description
       url: `https://www.f1telemetry.com/${lang}`, // Include language in URL
       siteName: "F1 Telemetry",
-      locale: lang === 'es' ? 'es_ES' : 'en_US', // Dynamic locale
+      locale: lang === "es" ? "es_ES" : "en_US", // Dynamic locale
       type: "website",
     },
     robots: {
@@ -45,10 +46,21 @@ export async function generateMetadata({
   };
 }
 
-export default function LangLayout({
+export default async function LangLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ lang: Locale }>;
 }>) {
-  return <PreferencesProvider>{children}</PreferencesProvider>;
+  const { lang } = await params;
+  const dict = await getDictionary(lang);
+
+  return (
+    <PreferencesProvider>
+      <TourProvider dict={dict}>
+        {children}
+      </TourProvider>
+    </PreferencesProvider>
+  );
 }

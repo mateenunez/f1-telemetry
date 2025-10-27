@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { usePreferences } from "@/context/preferences";
-import { X, Check, PanelLeft } from "lucide-react";
+import { X, Check, PanelLeft, PlayCircle } from "lucide-react";
 import { Geist, Orbitron } from "next/font/google";
 import { ProcessedDriver } from "@/processors";
+import { useTour } from "@reactour/tour";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
@@ -22,6 +23,7 @@ export default function PreferencesPanel({
   driverInfo,
 }: PreferencesPanelProps) {
   const { preferences, setPreference } = usePreferences();
+  const { setIsOpen } = useTour();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
@@ -105,6 +107,13 @@ export default function PreferencesPanel({
     const newLang = event.target.value;
     setSelectedLanguage(newLang);
     setPreference("translate", newLang === "es");
+  };
+
+  const handleRestartTour = () => {
+    setOpen(false);
+    setTimeout(() => {
+      setIsOpen(true);
+    }, 300);
   };
 
   const preferenceDetails: Record<
@@ -313,6 +322,34 @@ export default function PreferencesPanel({
                 ))}
               </select>
             </div>
+          </div>
+
+          {/* Tutorial Button */}
+          <div className="flex flex-col gap-2 pb-4">
+            <p className="text-md text-gray-100" style={orbitron.style}>
+              {preferences.translate ? "Tutorial" : "Tutorial"}
+            </p>
+            <button
+              onClick={handleRestartTour}
+              className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-f1Blue hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue"
+              style={{
+                fontFamily: mediumGeist.style.fontFamily,
+                boxShadow:
+                  "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
+              }}
+            >
+              <PlayCircle width={18} className="text-f1Blue" />
+              <span>
+                {preferences.translate
+                  ? "Reiniciar Tutorial"
+                  : "Restart Tutorial"}
+              </span>
+            </button>
+            <p className="text-xs text-gray-400" style={mediumGeist.style}>
+              {preferences.translate
+                ? "Vuelve a ver el tutorial de introducción."
+                : "Show the introduction tutorial again."}
+            </p>
           </div>
 
           {/* Favorite Drivers */}
