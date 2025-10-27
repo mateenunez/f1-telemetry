@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { TelemetryManager, type TelemetryData } from "../telemetry-manager";
 import { findYellowSectors } from "@/hooks/use-raceControl";
 import { usePreferences } from "@/context/preferences";
+import { getAboutToBeEliminatedDrivers } from "@/utils/telemetry";
 
 interface QueuedMessage {
   data: TelemetryData;
@@ -177,17 +178,8 @@ export function useTelemetryManager() {
     [telemetryData?.raceControl]
   );
 
-  const safetyCarActive = useMemo(() => {
-    const latestMessage = telemetryData?.raceControl?.[0];
-    if (!latestMessage) return null;
-    if (
-      latestMessage.category === "SafetyCar" &&
-      latestMessage.status === "Deployed"
-    ) {
-      if (latestMessage.mode === "VIRTUAL SAFETY CAR") return "VSC";
-      else return "SC";
-    } else return null;
-  }, [telemetryData?.raceControl]);
+  const aboutToBeEliminated = useMemo(() => getAboutToBeEliminatedDrivers(currentPositions, telemetryData?.session, telemetryData?.timing), [telemetryData?.positions])
+
 
   return {
     telemetryData,
@@ -204,7 +196,7 @@ export function useTelemetryManager() {
     handlePinnedDriver,
     mapFullscreen,
     handleMapFullscreen,
-    safetyCarActive,
     delayed,
+    aboutToBeEliminated
   };
 }

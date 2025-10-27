@@ -32,9 +32,9 @@ export default function SessionAudios({
 
   const { playTeamRadioSound, radioAudioRef, stopTeamRadioSound } =
     useTelemetryAudio();
-  const { getPreference } = usePreferences();
 
-  const headshot = getPreference("headshot");
+  const { preferences } = usePreferences();
+  const headshot = preferences.headshot;
 
   const getdriver = (driverNumber: number) => {
     const driver = drivers.find((d) => d?.driver_number === driverNumber);
@@ -224,7 +224,11 @@ export default function SessionAudios({
               className="min-h-[20rem] items-center justify-center flex"
               style={mediumGeist.style}
             >
-              <p className="text-xs text-gray-400">No race audios.</p>
+              <p className="text-xs text-gray-400">
+                {preferences.translate
+                  ? "Sin audios de carrera."
+                  : "No team audios."}
+              </p>
             </div>
           )}
           <ScrollBar orientation="horizontal" />

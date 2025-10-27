@@ -16,7 +16,7 @@ import {
   ProcessedCapture,
   ProcessedSession,
 } from "@/processors";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Orbitron } from "next/font/google";
 import { audioUrl, useTelemetryAudio } from "@/hooks/use-raceControl";
 import { usePreferences } from "@/context/preferences";
@@ -31,6 +31,7 @@ interface DriverPositionsProps {
   lastCapture: ProcessedCapture | undefined;
   handlePinnedDriver: (driverNumber: number) => void;
   session: ProcessedSession | null | undefined;
+  aboutToBeEliminated: number[];
 }
 
 const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
@@ -45,11 +46,14 @@ const DriverPositions = memo(function DriverPositions({
   lastCapture,
   handlePinnedDriver,
   session,
+  aboutToBeEliminated,
 }: DriverPositionsProps) {
   const [isPlayingAudio, setIsPlayingAudio] = useState<number | undefined>();
   const lastPlayedUtcRef = useRef<string | undefined>(
     lastCapture ? lastCapture.utc : undefined
   );
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollPosition = useRef(0); 
   const { playNotificationSound } = useTelemetryAudio();
   const { playTeamRadioSound, radioAudioRef } = useTelemetryAudio();
   const { getPreference, preferences } = usePreferences();
@@ -81,16 +85,32 @@ const DriverPositions = memo(function DriverPositions({
     };
   }, [radioAudioRef.current, lastCapture]);
 
+  useLayoutEffect(() => {
+    if (scrollRef.current) {
+      scrollPosition.current = scrollRef.current.scrollTop;
+    }
+  }, [positions]); 
+  
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollPosition.current;
+    }
+  }); 
+
   return (
     <Card className="lg:col-span-5 bg-warmBlack border-none max-h-screen">
       <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
-        <ScrollArea className="overflow-x-auto min-w-max h-full" type="scroll">
+        <ScrollArea
+          className="overflow-x-auto min-w-max h-full"
+          type="scroll"
+          ref={scrollRef}
+        >
           <div
             style={orbitron.style}
             className="sticky top-0 z-30 bg-warmBlack w-full py-1.5"
           >
             <div className="py-1.5 text-[0.6rem] text-gray-500 text-center">
-              <div className="flex flex-row gap-3">
+              <div className="flex flex-row gap-2">
                 <div
                   className={`min-w-[${
                     headshot ? "11.5rem" : "9rem"
@@ -102,15 +122,13 @@ const DriverPositions = memo(function DriverPositions({
                   <div className="min-w-[3rem]">
                     {preferences.translate ? "NEUM." : "TYRES"}
                   </div>
-                  <div
-                    className={`flex flex-row ${headshot ? "gap-2" : "gap-4"}`}
-                  >
+                  <div className={`flex flex-row w-[6rem]`}>
                     <div className="min-w-[3rem] text-center">
                       {preferences.translate ? "DRS" : "SPEED"}
                     </div>
                     <div className="min-w-[3rem] text-center">PITS</div>
                   </div>
-                  <div className="w-[7rem] flex flex-row items-start align-text-top gap-4 justify-between">
+                  <div className="w-[8rem] flex flex-row items-center align-text-top gap-4 justify-around">
                     <div className="text-center min-w-[2.5rem]">
                       {session?.session_type === "Race"
                         ? preferences.translate
@@ -124,7 +142,7 @@ const DriverPositions = memo(function DriverPositions({
                       {session?.session_type === "Race" ? "POS" : "INT"}
                     </div>
                   </div>
-                  <div className="min-w-[4.5rem] text-start">
+                  <div className="w-[5rem] text-center">
                     {preferences.translate ? "VUELTAS" : "LAP TIMES"}
                   </div>
                   <div className="min-w-[13rem]">
@@ -148,11 +166,14 @@ const DriverPositions = memo(function DriverPositions({
                 preferences.favoriteDrivers.some(
                   (d) => d.driver_number === driver.driver_number
                 );
+              const isAboutToBeEliminated =
+                driver?.driver_number &&
+                aboutToBeEliminated.includes(driver?.driver_number);
 
               return (
                 <div
                   key={pos.driver_number}
-                  className={`flex items-center gap-2 rounded-md transition-opacity max-w-full overflow-x-auto min-w-0 min-h-full cursor-pointer`}
+                  className={`flex items-center gap-0 rounded-md transition-all w-full overflow-x-auto min-w-0 min-h-full cursor-pointer`}
                   onDoubleClick={() => handlePinnedDriver(pos.driver_number)}
                   style={
                     timing?.knockedOut || timing?.retired || timing?.stopped
@@ -165,12 +186,14 @@ const DriverPositions = memo(function DriverPositions({
                       : {
                           opacity: 1,
                           background: `linear-gradient(-90deg, ${
-                            isFavorite
+                            isAboutToBeEliminated
+                              ? "#6b040452"
+                              : isFavorite
                               ? "#" + driver.team_colour + "30"
                               : "#0d0d0d"
-                          } ${headshot ? "90%" : "100%"}, #${
-                            driver?.team_colour
-                          } 100%)`,
+                          } ${
+                            headshot && !isAboutToBeEliminated ? "90%" : "100%"
+                          }, #${driver?.team_colour} 100%)`,
                         }
                   }
                 >

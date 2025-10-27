@@ -51,7 +51,7 @@
     "sprintqualification": "Sprint Qualification"
   },
   "announce": {
-    "error": "Tyres are not working properly on qualifying sessions. If you have found another issue let us know in the discord server below."
+    "error": "Team radio transcriptions are currently in development."
   },
   "loading": "Getting things ready...",
   "delaying": "Applying delay",

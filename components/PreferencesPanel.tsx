@@ -285,7 +285,7 @@ export default function PreferencesPanel({
               {preferences.translate ? "Idioma" : "Language"}
             </p>
             <div className="flex flex-col gap-2">
-              <p className="text-xs text-gray-400" style={mediumGeist.style}>
+              <p className="text-xs text-gray-500" style={mediumGeist.style}>
                 {preferences.translate
                   ? "Las traducciones al español pueden tardar unos segundos más en llegar."
                   : "The spanish translation may have additional delay."}

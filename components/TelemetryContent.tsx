@@ -40,6 +40,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     mapFullscreen,
     handleMapFullscreen,
     delayed,
+    aboutToBeEliminated,
   } = useTelemetryManager();
 
   const { preferences } = usePreferences();
@@ -175,6 +176,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
             lastCapture={teamRadioCaptures?.captures.findLast((c) => c)}
             handlePinnedDriver={handlePinnedDriver}
             session={session}
+            aboutToBeEliminated={aboutToBeEliminated}
           />
 
           {/* Mapa en tiempo real y race control */}

@@ -51,7 +51,7 @@
     "sprintqualification": "Clasificación Sprint"
   },
   "announce": {
-    "error": "Los neumáticos no están funcionando correctamente en las Qualys. Si encontraste otro bug podés reportarlo en el servidor de discord que está abajo."
+    "error": "Las transcripciones para los audios de equipos estarán disponibles en breve."
   },
   "loading": "Preparando el sistema...",
   "delaying": "Aplicando delay",

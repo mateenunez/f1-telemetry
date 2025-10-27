@@ -12,11 +12,9 @@ interface RaceControlListProps {
 }
 
 export default function RaceControlList({ raceControl }: RaceControlListProps) {
- 
-  
   const { preferences } = usePreferences();
   const raceControlLog = preferences.raceControlLog;
-  
+
   return (
     <Card className="flex w-full bg-transparent border-b-2 border-t-2 border-l-0 border-r-0 rounded-none border-gray-800 pt-2 md:border-none">
       <CardContent className="overflow-x-auto flex-1 max-h-[20rem] w-[20rem] px-6 py-4">
@@ -58,7 +56,11 @@ export default function RaceControlList({ raceControl }: RaceControlListProps) {
                   className="min-h-[20rem] justify-center items-center flex"
                   style={mediumGeist.style}
                 >
-                  <p className="text-xs text-gray-400">{preferences.translate ? "Sin mensajes de carrera." : "No race messages."}</p>
+                  <p className="text-xs text-gray-400">
+                    {preferences.translate
+                      ? "Sin mensajes de carrera."
+                      : "No race messages."}
+                  </p>
                 </div>
               )}
             </div>
