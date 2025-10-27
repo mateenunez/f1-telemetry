@@ -24,6 +24,7 @@ export interface Preferences {
   favoriteDrivers: ProcessedDriver[];
   delay: number;
   translate: boolean;
+  hasSeenTour: boolean;
 }
 
 const DEFAULT_CONFIG: Preferences = {
@@ -38,6 +39,7 @@ const DEFAULT_CONFIG: Preferences = {
   favoriteDrivers: [],
   delay: 0,
   translate: false,
+  hasSeenTour: false,
 };
 
 interface PreferencesContextValue {
@@ -71,6 +73,7 @@ function isPreferences(obj: any): obj is Preferences {
     "circleCarData",
     "favoriteDrivers",
     "delay",
+    "hasSeenTour",
   ];
 
   for (const key of requiredKeys) {
@@ -88,6 +91,7 @@ function isPreferences(obj: any): obj is Preferences {
         "raceControlLog",
         "circleOfDoom",
         "circleCarData",
+        "hasSeenTour",
       ].includes(key)
     ) {
       if (typeof obj[key] !== "boolean") return false;

@@ -83,7 +83,7 @@ const DriverPositions = memo(function DriverPositions({
 
   return (
     <Card className="lg:col-span-5 bg-warmBlack border-none max-h-screen">
-      <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
+      <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0 first-step">
         <ScrollArea className="overflow-x-auto min-w-max h-full" type="scroll">
           <div
             style={orbitron.style}

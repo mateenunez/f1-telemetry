@@ -53,6 +53,10 @@
   "announce": {
     "error": "Los neumáticos no están funcionando correctamente en las Qualys. Si encontraste otro bug podés reportarlo en el servidor de discord que está abajo."
   },
+  "tourSteps": {
+    "welcome": "Hagamos un rápido recorrido para familiarizarnos con las principales características del panel.",
+    "positions": "Aquí puedes ver las posiciones actuales de todos los pilotos en la carrera, actualizadas en tiempo real."
+  },
   "loading": "Preparando el sistema...",
   "delaying": "Aplicando delay",
   "404": "Estás perdido, pibe.",
