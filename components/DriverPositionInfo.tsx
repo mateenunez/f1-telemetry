@@ -36,7 +36,7 @@ export default function DriverPositionInfo({
         }`}
       >
         <Badge
-          className="w-8 h-8 rounded-full flex items-center justify-center text-md font-bold pr-0 w-[2rem]"
+          className="w-[2rem] text-[1rem] items-center font-bold pr-[0px] pl-4"
           style={{
             backgroundColor: `transparent`,
             fontFamily: aldrich.style.fontFamily,
@@ -47,13 +47,17 @@ export default function DriverPositionInfo({
 
         {headshot && (
           <div>
-            {driver && 
+            {driver && (
               <img
-                src={(driver.driver_number === 43) ? "/43.png" : driver?.headshot_url || "/driver.png"}
+                src={
+                  driver.driver_number === 43
+                    ? "/43.png"
+                    : driver?.headshot_url || "/driver.png"
+                }
                 className="object-cover h-[60px]"
                 alt={`${driver.name_acronym} headshot f1 telemetry`}
               />
-            }
+            )}
           </div>
         )}
       </div>

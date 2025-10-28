@@ -225,7 +225,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                 }
               />
             )}
-
             {circleCarData && (
               <CircleCarData
                 carData={

@@ -53,7 +53,7 @@ const DriverPositions = memo(function DriverPositions({
     lastCapture ? lastCapture.utc : undefined
   );
   const scrollRef = useRef<HTMLDivElement>(null);
-  const scrollPosition = useRef(0); 
+  const scrollPosition = useRef(0);
   const { playNotificationSound } = useTelemetryAudio();
   const { playTeamRadioSound, radioAudioRef } = useTelemetryAudio();
   const { getPreference, preferences } = usePreferences();
@@ -89,13 +89,13 @@ const DriverPositions = memo(function DriverPositions({
     if (scrollRef.current) {
       scrollPosition.current = scrollRef.current.scrollTop;
     }
-  }, [positions]); 
-  
+  }, [positions]);
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollPosition.current;
     }
-  }); 
+  });
 
   return (
     <Card className="lg:col-span-5 bg-warmBlack border-none max-h-screen">
@@ -105,30 +105,35 @@ const DriverPositions = memo(function DriverPositions({
           type="scroll"
           ref={scrollRef}
         >
-          <div
-            style={orbitron.style}
-            className="sticky top-0 z-30 bg-warmBlack w-full py-1.5"
+          <table
+            className="table-auto min-w-max w-full text-[0.6rem] text-gray-500"
+            style={{ borderCollapse: "separate", borderSpacing: "0 0.5rem" }}
           >
-            <div className="py-1.5 text-[0.6rem] text-gray-500 text-center">
-              <div className="flex flex-row gap-2">
-                <div
-                  className={`min-w-[${
-                    headshot ? "11.5rem" : "9rem"
-                  }] items-center`}
+            <thead
+              style={orbitron.style}
+              className="sticky top-0 z-30 bg-warmBlack h-[2rem]"
+            >
+              <tr className="text-center">
+                <th
+                  className={`text-center ${
+                    headshot ? "min-w-[11.5rem]" : "min-w-[9rem]"
+                  }`}
                 >
                   {preferences.translate ? "PILOTO" : "DRIVER"}
-                </div>
-                <div className="flex flex-row items-start justify-around w-full">
-                  <div className="min-w-[3rem]">
-                    {preferences.translate ? "NEUM." : "TYRES"}
-                  </div>
-                  <div className={`flex flex-row w-[6rem]`}>
+                </th>
+                <th className="min-w-[3rem] font-normal">
+                  {preferences.translate ? "NEUM." : "TYRES"}
+                </th>
+                <th className="w-[6rem] font-normal">
+                  <div className="flex flex-row justify-around">
                     <div className="min-w-[3rem] text-center">
                       {preferences.translate ? "DRS" : "SPEED"}
                     </div>
                     <div className="min-w-[3rem] text-center">PITS</div>
                   </div>
-                  <div className="w-[8rem] flex flex-row items-center align-text-top gap-4 justify-around">
+                </th>
+                <th className="w-[7rem] font-normal">
+                  <div className="flex flex-row items-center gap-4 justify-around">
                     <div className="text-center min-w-[2.5rem]">
                       {session?.session_type === "Race"
                         ? preferences.translate
@@ -142,84 +147,106 @@ const DriverPositions = memo(function DriverPositions({
                       {session?.session_type === "Race" ? "POS" : "INT"}
                     </div>
                   </div>
-                  <div className="w-[5rem] text-center">
-                    {preferences.translate ? "VUELTAS" : "LAP TIMES"}
-                  </div>
-                  <div className="min-w-[13rem]">
-                    {preferences.translate
-                      ? "MINISECTORES Y TIEMPOS"
-                      : "MINISECTORS & TIMES"}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="space-y-2">
-            {positions.map((pos, idx) => {
-              const driver = driverInfos[idx];
-              const timing = driverTimings[idx];
-              const timingStats = driverTimingStats[idx];
-              const carData = driverCarData[idx];
-              const currentStints = driverStints[idx];
-              const isFavorite =
-                driver?.driver_number &&
-                preferences.favoriteDrivers.some(
-                  (d) => d.driver_number === driver.driver_number
+                </th>
+                <th className="w-[5rem] text-center font-normal">
+                  {preferences.translate ? "VUELTAS" : "LAP TIMES"}
+                </th>
+                <th className="min-w-[13rem] text-center font-normal">
+                  {preferences.translate
+                    ? "MINISECTORES Y TIEMPOS"
+                    : "MINISECTORS & TIMES"}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {positions.map((pos, idx) => {
+                const driver = driverInfos[idx];
+                const timing = driverTimings[idx];
+                const timingStats = driverTimingStats[idx];
+                const carData = driverCarData[idx];
+                const currentStints = driverStints[idx];
+                const isFavorite =
+                  driver?.driver_number &&
+                  preferences.favoriteDrivers.some(
+                    (d) => d.driver_number === driver.driver_number
+                  );
+                const isAboutToBeEliminated =
+                  driver?.driver_number &&
+                  aboutToBeEliminated.includes(driver?.driver_number);
+
+                const baseStyle =
+                  timing?.knockedOut || timing?.retired || timing?.stopped
+                    ? {
+                        opacity: 0.4,
+                        background: `linear-gradient(-90deg, #0d0d0d ${
+                          headshot ? "90%" : "100%"
+                        }, #${driver?.team_colour} 100%)`,
+                      }
+                    : {
+                        opacity: 1,
+                        background: `linear-gradient(-90deg, ${
+                          isAboutToBeEliminated
+                            ? "#6b040447"
+                            : isFavorite
+                            ? "#" + driver?.team_colour + "30"
+                            : "#0d0d0d"
+                        } ${
+                          headshot && !isAboutToBeEliminated ? "90%" : "100%"
+                        }, #${driver?.team_colour} 100%)`,
+                      };
+
+                return (
+                  <tr
+                    key={pos.driver_number}
+                    className="transition-all cursor-pointer py-1.5"
+                    onDoubleClick={() => handlePinnedDriver(pos.driver_number)}
+                    style={baseStyle}
+                  >
+                    <td className="rounded-l-md">
+                      <DriverPositionInfo
+                        position={pos}
+                        driver={driver}
+                        isPlaying={isPlayingAudio}
+                      />
+                    </td>
+
+                    <td>
+                      <Tyres driverStints={currentStints} />
+                    </td>
+
+                    <td>
+                      <div className="flex flex-row w-[6rem]">
+                        <PitsDrsSpeed
+                          timing={timing}
+                          carData={carData}
+                          driverStints={currentStints}
+                        />
+                      </div>
+                    </td>
+
+                    <td>
+                      <div className="w-[7rem] flex flex-row items-center gap-4 justify-around">
+                        <DriverGaps timing={timing} session={session} />
+                      </div>
+                    </td>
+
+                    <td>
+                      <LapTimes timing={timing} timingStats={timingStats} />
+                    </td>
+
+                    <td className="rounded-r-md">
+                      <div className="min-w-[13rem]">
+                        <Minisectors
+                          timing={timing}
+                          timingStats={timingStats}
+                        />
+                      </div>
+                    </td>
+                  </tr>
                 );
-              const isAboutToBeEliminated =
-                driver?.driver_number &&
-                aboutToBeEliminated.includes(driver?.driver_number);
-
-              return (
-                <div
-                  key={pos.driver_number}
-                  className={`flex items-center gap-0 rounded-md transition-all w-full overflow-x-auto min-w-0 min-h-full cursor-pointer`}
-                  onDoubleClick={() => handlePinnedDriver(pos.driver_number)}
-                  style={
-                    timing?.knockedOut || timing?.retired || timing?.stopped
-                      ? {
-                          opacity: 0.4,
-                          background: `linear-gradient(-90deg, #0d0d0d ${
-                            headshot ? "90%" : "100%"
-                          }, #${driver?.team_colour} 100%)`,
-                        }
-                      : {
-                          opacity: 1,
-                          background: `linear-gradient(-90deg, ${
-                            isAboutToBeEliminated
-                              ? "#6b040452"
-                              : isFavorite
-                              ? "#" + driver.team_colour + "30"
-                              : "#0d0d0d"
-                          } ${
-                            headshot && !isAboutToBeEliminated ? "90%" : "100%"
-                          }, #${driver?.team_colour} 100%)`,
-                        }
-                  }
-                >
-                  {/* Posición y datos del Piloto */}
-                  <DriverPositionInfo
-                    position={pos}
-                    driver={driver}
-                    isPlaying={isPlayingAudio}
-                  />
-
-                  {/* Estadísticas */}
-                  <div className="flex flex-row items-center justify-around w-full py-1.5 gap-2 overflow-x-auto">
-                    <Tyres driverStints={currentStints} />
-                    <PitsDrsSpeed
-                      timing={timing}
-                      carData={carData}
-                      driverStints={currentStints}
-                    />
-                    <DriverGaps timing={timing} session={session} />
-                    <LapTimes timing={timing} timingStats={timingStats} />
-                    <Minisectors timing={timing} timingStats={timingStats} />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+              })}
+            </tbody>
+          </table>
         </ScrollArea>
       </CardContent>
     </Card>

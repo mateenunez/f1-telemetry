@@ -41,7 +41,7 @@ export default function PitsDrsSpeed({
   };
 
   return (
-    <div className="flex flex-row gap-2 w-[5.5rem]">
+    <div className="flex flex-row gap-2 w-[6rem] justify-around">
       {/* DRS & Speed */}
       <div className="flex flex-col w-[3rem]">
         <span

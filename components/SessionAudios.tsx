@@ -102,7 +102,7 @@ export default function SessionAudios({
           className="overflow-x-auto h-full p-0 min-w-max"
           type="scroll"
         >
-          {orderedCaptures && teamRadio ? (
+          {orderedCaptures.length > 0 && teamRadio ? (
             <div className="space-y-2">
               {orderedCaptures.map((capture, idx) => {
                 const driver = getdriver(capture.racingNumber);
@@ -114,22 +114,19 @@ export default function SessionAudios({
                   >
                     <div className="flex flex-row gap-2 rounded">
                       {headshot ? (
-                        <>
-                          {driver?.headshot_url && (
+                        <div>
+                          {driver && (
                             <img
-                              src={driver?.headshot_url}
+                              src={
+                                driver.driver_number === 43
+                                  ? "/43.png"
+                                  : driver?.headshot_url || "/driver.png"
+                              }
                               className="object-cover h-[60px]"
                               alt={`${driver.name_acronym} headshot f1 telemetry`}
                             />
                           )}
-                          {driver?.driver_number === 43 && (
-                            <img
-                              src="/franco-colapinto.png"
-                              className="object-cover h-[60px]"
-                              alt="Franco Colapinto headshot f1 telemetry"
-                            />
-                          )}
-                        </>
+                        </div>
                       ) : (
                         <p
                           className="text-md text-gray-100 h-[3rem] flex items-center"
@@ -141,7 +138,6 @@ export default function SessionAudios({
                           {driver.name_acronym}
                         </p>
                       )}
-
                       <div
                         className="relative w-full my-2 text-gray-400 border-none items-center border-[2px] rounded border-gray-400 flex justify-start overflow-hidden"
                         onClick={() => handleAudioPlay(idx, capture.path)}

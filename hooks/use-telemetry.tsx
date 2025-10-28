@@ -178,7 +178,7 @@ export function useTelemetryManager() {
     [telemetryData?.raceControl]
   );
 
-  const aboutToBeEliminated = useMemo(() => getAboutToBeEliminatedDrivers(currentPositions, telemetryData?.session, telemetryData?.timing), [telemetryData?.positions])
+  const aboutToBeEliminated = useMemo(() => getAboutToBeEliminatedDrivers(currentPositions, telemetryData?.session, telemetryData?.timing), [telemetryData?.positions, telemetryData?.session])
 
 
   return {

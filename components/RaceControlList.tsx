@@ -21,7 +21,7 @@ export default function RaceControlList({ raceControl }: RaceControlListProps) {
         <ScrollArea className="overflow-x-auto h-full p-0" type="scroll">
           {raceControlLog && (
             <div className="space-y-2">
-              {raceControl ? (
+              {raceControl && raceControl?.length > 0 ? (
                 raceControl.map((msg, idx) => (
                   <div
                     key={`${msg.date}-${idx}`}
