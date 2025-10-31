@@ -172,7 +172,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
               </a>
             </div>
           </div>
-          {dict.announce?.error && (
+          {/* {dict.announce?.error && (
             <div className="flex justify-center w-full px-[5%]">
               <div
                 className="w-full bg-red-600/20 border-red-600 border-2 text-white px-6 py-4 rounded-lg text-center"
@@ -181,8 +181,8 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 {dict.announce.error}
               </div>
             </div>
-          )}
-          <div className="w-full flex justify-center">
+          )} */}
+          <div className="w-full flex justify-center relative">
             <video
               src={map_mp4}
               loop
@@ -190,6 +190,27 @@ export default function HomeContent({ dict }: HomeContentProps) {
               muted
               className="md:max-h-[20rem]"
             />
+            <a
+              href="/live-map"
+              className="absolute inset-0 flex items-center justify-center"
+              style={mediumGeist.style}
+            >
+              <button
+                className="px-4 py-2 rounded-md bg-white/10 text-white border border-white/30 hover:bg-white/20 transition                 hover:-translate-y-1 
+                hover:scale-105 
+                hover:shadow-2xl 
+                hover:text-gray-200
+                hover:border-none
+                hover:cursor-pointer
+                
+                focus:outline-none 
+                focus:ring-4 
+                focus:ring-gray-500 
+                focus:ring-opacity-50"
+              >
+                {dict.map.title}
+              </button>
+            </a>
           </div>
           <div className="flex flex-col md:flex-row gap-[2rem] md:justify-evenly w-full h-full px-[5%]">
             <div
