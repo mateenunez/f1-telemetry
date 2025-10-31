@@ -49,7 +49,7 @@ export default function DriverGaps({ timing, session }: DriverGapsProps) {
   const gap2Value = timing?.interval_to_ahead || lastGap?.IntervalToPositionAhead || "";
 
   return (
-    <div className="flex flex-row justify-around w-[7.5rem] gap-0 items-center">
+    <div className="flex flex-row justify-around w-full gap-2 items-center">
       <div
         className="flex flex-row text-sm text-white w-[3rem]"
         style={aldrich.style}

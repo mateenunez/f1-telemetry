@@ -41,6 +41,10 @@
     "title": "Telemetría en vivo",
     "description": "Dashboard de F1 Telemetry en tiempo real con tiempos en vivo, posiciones de pilotos, tiempos por vuelta y análisis de carrera. Sigue las carreras de Fórmula 1 con datos detallados."
   },
+  "map": {
+    "title": "Mapa en Vivo",
+    "description": "Mapa del circuito en vivo de Formula 1 por F1 Telemetry."
+  },
   "sessionTypes": {
     "practice1": "Práctica 1",
     "practice2": "Práctica 2",

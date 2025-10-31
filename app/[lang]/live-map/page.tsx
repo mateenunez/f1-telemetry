@@ -1,8 +1,8 @@
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
-import { ScheduleContent } from "@/components/ScheduleContent";
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
+import LiveMapContent from "@/components/LiveMapContent";
 
 export async function generateMetadata({
   params,
@@ -13,21 +13,19 @@ export async function generateMetadata({
   const dict = await getDictionary(lang);
 
   return {
-    title: `${dict.schedule.title || "Schedule"} | F1 Telemetry`,
+    title: `${dict.map.title || "Live Map"} | F1 Telemetry`,
     description:
-      dict.schedule.description ||
-      "F1 Telemetry schedule page with upcoming sessions and race calendar.",
+      dict.map.description || "F1 Telemetry live map of the Formula 1 race circuit.",
     openGraph: {
-      title: `${dict.schedule.title || "Schedule"} | F1 Telemetry`,
+      title: `${dict.map.title || "Live Map"} | F1 Telemetry`,
       description:
-        dict.schedule.description ||
-        "F1 Telemetry schedule page with upcoming sessions and race calendar.",
-      url: `https://www.f1telemetry.com/${lang}/schedule`,
+        dict.map.description || "F1 Telemetry live map of the Formula 1 race  circuit.",
+      url: `https://www.f1telemetry.com/${lang}/live-map`,
     },
   };
 }
 
-export default async function SchedulePage({
+export default async function LiveMapPage({
   params,
 }: {
   params: { lang: Locale };
@@ -37,7 +35,7 @@ export default async function SchedulePage({
 
   return (
     <div className="min-h-screen bg-warmBlack">
-      <ScheduleContent dict={dict} />
+      <LiveMapContent />
       <Footer dict={dict} />
     </div>
   );

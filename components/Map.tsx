@@ -447,14 +447,37 @@ const CarDot = ({
         filter: "drop-shadow(0 0 4px rgba(0,0,0,0.8))",
       }}
     >
+      <rect
+        x="-600"
+        y="-550"
+        width="1000"
+        height="600"
+        fill="rgba(79, 78, 78, 0.8)"
+        style={{
+          transform: "translateX(100px) translateY(-200px)",
+          transformOrigin: "center center",
+          opacity: 0.5,
+        }}
+      />
+      <rect
+        x="-600"
+        y="-350"
+        width="80"
+        height="600"
+        fill={`#${color}`}
+        style={{
+          transform: "translateX(0px) translateY(-400px)",
+          transformOrigin: "center center",
+        }}
+      />
       <text
         id={`map.driver.text`}
         fontWeight="bold"
         fontSize={favorite ? 120 * 3.5 : 120 * 3}
         strokeWidth={0}
         style={{
-          fontFamily: "Arial, sans-serif",
-          transform: "translateX(100px) translateY(-160px)",
+          fontFamily: oxanium.style.fontFamily,
+          transform: "translateX(0px) translateY(-400px)",
           textAnchor: "middle",
           dominantBaseline: "middle",
         }}
