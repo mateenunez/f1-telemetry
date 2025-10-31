@@ -13,12 +13,12 @@ export async function generateMetadata({
   const dict = await getDictionary(lang);
 
   return {
-    title: `${dict.schedule.title || "Schedule"}`,
+    title: `${dict.schedule.title || "Schedule"} | F1 Telemetry`,
     description:
       dict.schedule.description ||
       "F1 Telemetry schedule page with upcoming sessions and race calendar.",
     openGraph: {
-      title: `${dict.schedule.title || "Schedule"}`,
+      title: `${dict.schedule.title || "Schedule"} | F1 Telemetry`,
       description:
         dict.schedule.description ||
         "F1 Telemetry schedule page with upcoming sessions and race calendar.",

@@ -225,7 +225,7 @@ const DriverPositions = memo(function DriverPositions({
                     </td>
 
                     <td>
-                      <div className="w-[7rem] flex flex-row items-center gap-4 justify-around">
+                      <div className="w-[7.5rem] flex flex-row items-center gap-4 justify-around">
                         <DriverGaps timing={timing} session={session} />
                       </div>
                     </td>

@@ -91,11 +91,11 @@ export class RaceControlProcessor {
     return processedBatch
   }
 
-  getLatestMessages(count = 60): ProcessedRaceControl[] {
+  getLatestMessages(count = 150): ProcessedRaceControl[] {
     return this.messages.slice(-count).reverse()
   }
 
-  getLatestTranslatedMessages(count = 60): ProcessedRaceControl[] {
+  getLatestTranslatedMessages(count = 150): ProcessedRaceControl[] {
     return this.translatedMessages.slice(-count).reverse()
   }
   getAllMessages(): ProcessedRaceControl[] {
