@@ -1,7 +1,7 @@
 {
   "home": {
     "title": "Formula 1 telemetrics",
-    "description": "F1 Telemetry is a real-time telemetry dashboard, follow Formula 1 completely and from anywhere, without having to watch the broadcast.",
+    "description": "F1 Telemetry is a real-time telemetry dashboard, follow Formula 1 completely and from anywhere, keep track of the race without having to watch the broadcast.",
     "dashboardButton": "Dashboard",
     "scheduleButton": "Schedule",
     "audioTitle": "Team Radio + AI",
@@ -12,12 +12,11 @@
     "circlesDesc2": "Circle of Doom ",
     "circlesDesc3": "which is great to take undercut decisions!",
     "goalTitle": "What is our goal?",
-    "goalDesc1": "Our goal is to attempt and display all analytics and data possible, giving you the best experience at watching the race. This is only possible with your very important feedback and ideas, so please",
+    "goalDesc1": "And also you can ",
     "goalDesc2": "reach us on our discord server!",
     "repoTitle": "To developers and designers",
     "repoDesc1": "If you have any features ideas or critics you are happily invited to contribute on this ",
     "repoDesc2": "github repository.",
-    "repoDesc3": "This project will always be free and open source.",
     "repoDesc4": "🥥🏁"
   },
   "footer": {

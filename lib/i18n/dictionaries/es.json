@@ -12,12 +12,11 @@
     "circlesDesc2": "Circle of Doom ",
     "circlesDesc3": "que sirve para tomar decisiones de undercut.",
     "goalTitle": "¿Por qué lo hicimos?",
-    "goalDesc1": "Nuestro objetivo es intentar mostrar todas las analíticas y datos posibles, brindándote la mejor experiencia al ver la carrera. Esto solo es posible con tu feedback e ideas, si querés contactanos en este ",
+    "goalDesc1": "También podés contactarnos en este ",
     "goalDesc2": "servidor de Discord.",
     "repoTitle": "Para desarrolladores y diseñadores",
     "repoDesc1": "Si tenes ideas de funcionalidades o críticas, estás invitado a contribuir en este ",
     "repoDesc2": "repositorio de GitHub.",
-    "repoDesc3": "Este proyecto siempre será gratuito y de código abierto.",
     "repoDesc4": "🥥🏁"
   },
   "footer": {
@@ -59,6 +58,6 @@
   },
   "loading": "Preparando el sistema...",
   "delaying": "Aplicando delay",
-  "404": "Estás perdido, pibe.",
+  "404": "Te perdiste?.",
   "locale": "es"
 }

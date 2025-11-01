@@ -10,7 +10,7 @@ export function LiveMapContent() {
   if (loading || !telemetryData?.session?.circuit_key) {
     return (
       <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
-        <div className="bg-warmBlack flex items-center justify-center min-h-[calc(100vh-200px)]">
+        <div className="bg-warmBlack flex items-center justify-center min-h-[calc(100vh-200px)] blur-sm">
           <div className="w-full max-w-7xl mx-auto px-4 py-8">
             <Skeleton className="rounded-lg" width="100%" height={700} />
           </div>

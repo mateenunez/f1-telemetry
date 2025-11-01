@@ -183,33 +183,18 @@ export default function HomeContent({ dict }: HomeContentProps) {
             </div>
           )} */}
           <div className="w-full flex justify-center relative">
-            <video
-              src={map_mp4}
-              loop
-              autoPlay
-              muted
-              className="md:max-h-[20rem]"
-            />
             <a
               href="/live-map"
-              className="absolute inset-0 flex items-center justify-center"
+              className="inset-0 flex items-center justify-center"
               style={mediumGeist.style}
             >
-              <button
-                className="px-4 py-2 rounded-md bg-white/10 text-white border border-white/30 hover:bg-white/20 transition                 hover:-translate-y-1 
-                hover:scale-105 
-                hover:shadow-2xl 
-                hover:text-gray-200
-                hover:border-none
-                hover:cursor-pointer
-                
-                focus:outline-none 
-                focus:ring-4 
-                focus:ring-gray-500 
-                focus:ring-opacity-50"
-              >
-                {dict.map.title}
-              </button>
+              <video
+                src={map_mp4}
+                loop
+                autoPlay
+                muted
+                className="md:max-h-[20rem]"
+              />
             </a>
           </div>
           <div className="flex flex-col md:flex-row gap-[2rem] md:justify-evenly w-full h-full px-[5%]">
@@ -270,39 +255,33 @@ export default function HomeContent({ dict }: HomeContentProps) {
           style={mediumGeist.style}
         >
           <h5 className="text-xl text-gray-200 text-center">
-            {dict.home.goalTitle}
+            {dict.home.repoTitle}
           </h5>
-          <span className="text-md text-gray-400 text-center">
-            {dict.home.goalDesc1}{" "}
-            <a
-              href={discord}
-              className="bold text-gray-200 relative inline-block transition-all duration-300 hover:text-white group"
-              target="_blank"
-            >
-              <span className="relative z-10">{dict.home.goalDesc2}</span>
-              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-offWhite transition-all duration-500 group-hover:w-full"></span>
-            </a>
-          </span>
-        </div>
-        <div
-          className="flex flex-col pb-[3rem] gap-4 items-center text-center w-full h-full"
-          style={mediumGeist.style}
-        >
-          <h5 className="text-xl text-gray-200 ">{dict.home.repoTitle}</h5>
-          <div className="flex flex-col gap-0">
+          <div className="flex flex-col gap-0 text-center items-center">
             <span className="text-md text-gray-400 text-center items-center">
               {dict.home.repoDesc1}{" "}
               <a
-                href={discord}
+                href={github}
                 className="bold text-gray-200 relative inline-block transition-all duration-300 hover:text-white group"
                 target="_blank"
               >
                 <span className="relative z-10">{dict.home.repoDesc2}</span>
                 <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-offWhite transition-all duration-500 group-hover:w-full"></span>
               </a>
+              {" "}
+              <span className="text-md text-gray-400 text-center">
+                {dict.home.goalDesc1}{" "}
+                <a
+                  href={discord}
+                  className="bold text-gray-200 relative inline-block transition-all duration-300 hover:text-white group"
+                  target="_blank"
+                >
+                  <span className="relative z-10">{dict.home.goalDesc2}</span>
+                  <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-offWhite transition-all duration-500 group-hover:w-full"></span>
+                </a>
+              </span>
+              <span>{dict.home.repoDesc4}</span>
             </span>
-            <span className="bold text-gray-400">{dict.home.repoDesc3}</span>
-            <span>{dict.home.repoDesc4}</span>
           </div>
         </div>
       </div>
