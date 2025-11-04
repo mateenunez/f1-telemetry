@@ -34,9 +34,9 @@ export function LiveMapContent({ dict }: { dict: any }) {
     return (
       <div className="bg-warmBlack">
         <Header telemetryData={telemetryData} dict={dict} />
-        <div className="flex flex-row w-full h-full">
+        <div className="flex flex-col-reverse md:flex-row w-full h-full">
           {/* Left list - 30% width */}
-          <div className="w-25%] max-h-screen overflow-y-auto px-2 py-3">
+          <div className="max-h-screen overflow-y-auto px-2 py-3">
             <div className="flex flex-col gap-2">
               {currentPositions.map((pos, idx) => {
                 const driver = driverInfos[idx];
@@ -44,7 +44,7 @@ export function LiveMapContent({ dict }: { dict: any }) {
                 return (
                   <div
                     key={pos.driver_number}
-                    className="rounded-md bg-[#0d0d0d] px-2 py-2"
+                    className="rounded-md bg-warmBlack2 px-2 py-2"
                   >
                     <div className="flex flex-row items-center justify-between gap-3">
                       <div className="min-w-0 flex-1">
@@ -67,7 +67,7 @@ export function LiveMapContent({ dict }: { dict: any }) {
             </div>
           </div>
           {/* Map - 70% width */}
-          <div className="w-[75%] flex items-center justify-center">
+          <div className="md:w-[75%] w-full flex items-center justify-center">
             <Map
               positions={telemetryData.positionData}
               drivers={telemetryData.drivers}
