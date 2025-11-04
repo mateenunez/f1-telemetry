@@ -28,14 +28,14 @@ export async function generateMetadata({
 export default async function LiveMapPage({
   params,
 }: {
-  params: { lang: Locale };
+  params: Promise<{ lang: Locale }>;
 }) {
-  const { lang } = params;
+  const { lang } = await params;
   const dict = await getDictionary(lang);
 
   return (
     <div className="min-h-screen bg-warmBlack">
-      <LiveMapContent />
+      <LiveMapContent dict={dict} />
       <Footer dict={dict} />
     </div>
   );

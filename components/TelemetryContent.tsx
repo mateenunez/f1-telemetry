@@ -37,8 +37,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     yellowSectors,
     pinnedDriver,
     handlePinnedDriver,
-    mapFullscreen,
-    handleMapFullscreen,
     delayed,
     aboutToBeEliminated,
   } = useTelemetryManager();
@@ -135,27 +133,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
 
   const session = telemetryData?.session;
 
-  if (
-    mapFullscreen &&
-    telemetryData?.session?.circuit_key &&
-    telemetryData.session
-  ) {
-    return (
-      <div
-        className="fixed inset-0 bg-warmBlack z-50 bg-flex items-center justify-center"
-        onDoubleClick={handleMapFullscreen}
-      >
-        <Map
-          positions={telemetryData.positionData}
-          drivers={telemetryData.drivers}
-          timing={telemetryData.timing}
-          circuitKey={telemetryData.session.circuit_key}
-          yellowSectors={yellowSectors}
-        />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-warmBlack px-2">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
@@ -184,7 +161,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
             telemetryData={telemetryData}
             session={session}
             yellowSectors={yellowSectors}
-            handleMapFullscreen={handleMapFullscreen}
           />
         </div>
         <div className="flex flex-col-reverse md:flex-row items-center justify-evenly md:py-[2rem] gap-4 w-full">

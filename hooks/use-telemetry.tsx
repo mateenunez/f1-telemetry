@@ -44,7 +44,6 @@ export function useTelemetryManager() {
   const { preferences } = usePreferences();
   const [telemetryManager] = useState(() => new TelemetryManager());
   const [pinnedDriver, setPinnedDriver] = useState<number | null>(null);
-  const [mapFullscreen, setMapFullscreen] = useState(false);
   const [delayed, setDelayed] = useState(true);
   const messageQueue = useRef<QueuedMessage[]>([]);
   const telemetryDataCallback = useRef(setTelemetryData);
@@ -115,13 +114,6 @@ export function useTelemetryManager() {
     [pinnedDriver]
   );
 
-  const handleMapFullscreen = useMemo(
-    () => () => {
-      setMapFullscreen((prev) => !prev);
-    },
-    []
-  );
-
   const driverInfos = useMemo(
     () =>
       currentPositions.map((pos) =>
@@ -178,8 +170,15 @@ export function useTelemetryManager() {
     [telemetryData?.raceControl]
   );
 
-  const aboutToBeEliminated = useMemo(() => getAboutToBeEliminatedDrivers(currentPositions, telemetryData?.session, telemetryData?.timing), [telemetryData?.positions, telemetryData?.session])
-
+  const aboutToBeEliminated = useMemo(
+    () =>
+      getAboutToBeEliminatedDrivers(
+        currentPositions,
+        telemetryData?.session,
+        telemetryData?.timing
+      ),
+    [telemetryData?.positions, telemetryData?.session]
+  );
 
   return {
     telemetryData,
@@ -194,9 +193,7 @@ export function useTelemetryManager() {
     yellowSectors,
     pinnedDriver,
     handlePinnedDriver,
-    mapFullscreen,
-    handleMapFullscreen,
     delayed,
-    aboutToBeEliminated
+    aboutToBeEliminated,
   };
 }
