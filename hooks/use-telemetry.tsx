@@ -177,7 +177,7 @@ export function useTelemetryManager() {
         telemetryData?.session,
         telemetryData?.timing
       ),
-    [telemetryData?.positions, telemetryData?.session]
+    [telemetryData?.positions, telemetryData?.session, telemetryData?.session?.track_status]
   );
 
   return {

@@ -34,7 +34,8 @@
     "title": "Calendario",
     "description": "Calendario de F1 Telemetry con las próximas sesiones de Formula 1",
     "today": "Hoy",
-    "tomorrow": "Mañana"
+    "tomorrow": "Mañana",
+    "loading": "Revisando el calendario oficial..."
   },
   "liveTiming": {
     "title": "Telemetría en vivo",

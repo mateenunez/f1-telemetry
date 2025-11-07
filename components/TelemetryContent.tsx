@@ -2,20 +2,17 @@
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Geist } from "next/font/google";
-import Map from "@/components/Map";
 import Header from "@/components/Header";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import DriverPositions from "@/components/DriverPositions";
 import MapAndMessages from "@/components/MapAndMessages";
 import { useTelemetryManager } from "@/hooks/use-telemetry";
-import Footer from "@/components/Footer";
 import SessionAudios from "@/components/SessionAudios";
 import RaceControlList from "@/components/RaceControlList";
 import CircleOfDoom from "@/components/CircleOfDoom";
 import { usePreferences } from "@/context/preferences";
 import { CircleCarData } from "@/components/CircleCarData";
-import { useEffect, useState } from "react";
 import { Countdown } from "./Countdown";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
@@ -53,13 +50,12 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
       <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 px-2">
         <div className="fixed inset-0 z-20 flex items-center justify-center bg-warmBlack/40 backdrop-blur-sm">
           <div
-            className="rounded-xl text-white text-xl text-center shadow-2xl animate-pulse"
+            className="text-white text-xl text-center animate-puls flex flex-col gap-2"
             style={mediumGeist.style}
           >
             {dict.loading}
-            {preferences.delay > 0 && (
-              <Countdown totalSeconds={preferences.delay}/>
-              
+            {preferences.delay > 0 &&  (
+              <Countdown totalSeconds={preferences.delay} />
             )}
           </div>
         </div>
@@ -174,7 +170,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
             )}
           </div>
 
-          <div className="flex md:flex-row flex-col gap-12 md:gap-0 w-full justify-evenly">
+          <div className="flex md:flex-row flex-col gap-12 md:gap-2 w-full justify-evenly">
             {circleOfDoom && (
               <CircleOfDoom
                 currentLap={session?.current_lap}

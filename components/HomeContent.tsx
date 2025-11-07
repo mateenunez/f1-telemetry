@@ -18,11 +18,11 @@ interface HomeContentProps {
 export default function HomeContent({ dict }: HomeContentProps) {
   const [isVisible, setIsVisible] = useState(false);
 
-  const map_mp4 = process.env.NEXT_PUBLIC_MAPS_MP4 || "";
-  const circles_mp4 = process.env.NEXT_PUBLIC_CIRCLES_MP4 || "";
-  const audio_mp4 = process.env.NEXT_PUBLIC_AUDIO_MP4 || "";
-  const discord = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || "";
-  const github = process.env.NEXT_PUBLIC_GITHUB_URL || "";
+  const map_mp4 = process.env.NEXT_PUBLIC_MAPS_MP4 || undefined;
+  const circles_mp4 = process.env.NEXT_PUBLIC_CIRCLES_MP4 || undefined;
+  const audio_mp4 = process.env.NEXT_PUBLIC_AUDIO_MP4 || undefined;
+  const discord = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || undefined;
+  const github = process.env.NEXT_PUBLIC_GITHUB_URL || undefined;
 
   const handleScroll = () => {
     const scrollPosition = window.scrollY;

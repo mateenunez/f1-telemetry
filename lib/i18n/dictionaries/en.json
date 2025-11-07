@@ -34,7 +34,8 @@
     "title": "Schedule",
     "description": "F1 Telemetry schedule page with upcoming sessions and race calendar.",
     "today": "Today",
-    "tomorrow": "Tomorrow"
+    "tomorrow": "Tomorrow",
+    "loading": "Checking the official schedule..."
   },
   "liveTiming": {
     "title": "Live Timing",

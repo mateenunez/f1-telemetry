@@ -128,6 +128,10 @@ export default function SessionAudios({
               {orderedCaptures.map((capture, idx) => {
                 const driver = getdriver(capture.racingNumber);
                 const progress = progressMap?.get(idx) ?? 80;
+                const hasTranscription =
+                  capture.transcription && capture.transcription !== "";
+                const hasEsTranscription =
+                  capture.transcriptionEs && capture.transcriptionEs !== "";
                 return (
                   <div
                     key={idx}
@@ -231,7 +235,7 @@ export default function SessionAudios({
                       ) : (
                         <DownloadIcon width={15} />
                       )}
-                      {(capture.transcription || capture.transcriptionEs) && (
+                      {(hasTranscription || hasEsTranscription) && (
                         <Copy
                           width={15}
                           className="cursor-pointer"
@@ -239,7 +243,7 @@ export default function SessionAudios({
                         />
                       )}
                     </span>
-                    {(capture.transcription || capture.transcriptionEs) && (
+                    {(hasTranscription || hasEsTranscription) && (
                       <div
                         className="flex flex-row gap-3 max-w-full w-[80%] mx-[4.5rem] overflow-hidden mt-2 items-stretch rounded-md"
                         style={{
@@ -258,8 +262,9 @@ export default function SessionAudios({
                           }}
                         >
                           {preferences.translate
-                            ? capture.transcriptionEs &&
-                              `" ${capture.transcriptionEs} "`
+                            ? hasEsTranscription
+                              ? `" ${capture.transcriptionEs} "`
+                              : capture.transcription
                             : capture.transcription &&
                               `" ${capture.transcription} "`}
                         </span>

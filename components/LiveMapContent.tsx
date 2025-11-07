@@ -44,7 +44,7 @@ export function LiveMapContent({ dict }: { dict: any }) {
                 return (
                   <div
                     key={pos.driver_number}
-                    className="rounded-md bg-warmBlack2 px-2 py-2"
+                    className="rounded-md bg-warmBlack px-2 py-2"
                   >
                     <div className="flex flex-row items-center justify-between gap-3">
                       <div className="min-w-0 flex-1">
