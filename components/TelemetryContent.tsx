@@ -16,6 +16,7 @@ import CircleOfDoom from "@/components/CircleOfDoom";
 import { usePreferences } from "@/context/preferences";
 import { CircleCarData } from "@/components/CircleCarData";
 import { useEffect, useState } from "react";
+import { Countdown } from "./Countdown";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
@@ -47,19 +48,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   const circleOfDoom = preferences.circleOfDoom;
   const circleCarData = preferences.circleCarData;
 
-  const [countdown, setCountdown] = useState<number | null>(null);
-  useEffect(() => {
-    if (delayed && preferences.delay > 0) {
-      setCountdown(preferences.delay);
-      const interval = setInterval(() => {
-        setCountdown((prev) => (prev !== null && prev > 0 ? prev - 1 : 0));
-      }, 1000);
-      return () => clearInterval(interval);
-    } else {
-      setCountdown(null);
-    }
-  }, [delayed, loading, preferences.delay]);
-
   if (delayed || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 px-2">
@@ -69,10 +57,9 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
             style={mediumGeist.style}
           >
             {dict.loading}
-            {countdown && preferences.delay > 0 && (
-              <div className="mt-2 text-white/80 text-base">
-                {dict.delaying}: {countdown}s
-              </div>
+            {preferences.delay > 0 && (
+              <Countdown totalSeconds={preferences.delay}/>
+              
             )}
           </div>
         </div>
