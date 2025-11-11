@@ -1,12 +1,9 @@
 "use client";
 import { ColorShift } from "@/components/ColorShift";
-import Footer from "@/components/Footer";
 import { Geist } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
-const F1T_SRC =
-  "https://res.cloudinary.com/dvukvnmqt/image/upload/v1759788318/f1telemetry_1_msrjwa.png";
+import { config } from "@/lib/config";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const boldGeist = Geist({ subsets: ["latin"], weight: "800" });
@@ -18,11 +15,11 @@ interface HomeContentProps {
 export default function HomeContent({ dict }: HomeContentProps) {
   const [isVisible, setIsVisible] = useState(false);
 
-  const map_mp4 = process.env.NEXT_PUBLIC_MAPS_MP4 || undefined;
-  const circles_mp4 = process.env.NEXT_PUBLIC_CIRCLES_MP4 || undefined;
-  const audio_mp4 = process.env.NEXT_PUBLIC_AUDIO_MP4 || undefined;
-  const discord = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || undefined;
-  const github = process.env.NEXT_PUBLIC_GITHUB_URL || undefined;
+  const map_mp4 = config.public.blobBaseUrl + "/mp4/livemap.mp4";
+  const circles_mp4 = config.public.blobBaseUrl + "/mp4/circles.mp4";
+  const audio_mp4 = config.public.blobBaseUrl + "/mp4/audios.mkv";
+
+  const f1t = config.public.blobBaseUrl + "/f1t.png";
 
   const handleScroll = () => {
     const scrollPosition = window.scrollY;
@@ -52,15 +49,12 @@ export default function HomeContent({ dict }: HomeContentProps) {
       `}
       >
         <div className="flex justify-between items-center mx-auto px-4 py-3">
-          {/* Elemento 1: Logo o Título */}
           <Image
-            src={F1T_SRC}
+            src={f1t}
             width={50}
             height={50}
             alt="Telemetría telemetria Formula 1"
           />
-
-          {/* Elemento 2: Navegación o Botón */}
           <nav className="flex flex-row gap-2">
             <a
               className="rounded px-3 py-3 text-sm bg-white text-black text-center transition duration-300 ease-in-out 
@@ -172,16 +166,6 @@ export default function HomeContent({ dict }: HomeContentProps) {
               </a>
             </div>
           </div>
-          {/* {dict.announce?.error && (
-            <div className="flex justify-center w-full px-[5%]">
-              <div
-                className="w-full bg-red-600/20 border-red-600 border-2 text-white px-6 py-4 rounded-lg text-center"
-                style={mediumGeist.style}
-              >
-                {dict.announce.error}
-              </div>
-            </div>
-          )} */}
           <div className="w-full flex justify-center relative">
             <a
               href="/live-map"
@@ -261,18 +245,17 @@ export default function HomeContent({ dict }: HomeContentProps) {
             <span className="text-md text-gray-400 text-center items-center">
               {dict.home.repoDesc1}{" "}
               <a
-                href={github}
+                href={config.public.github}
                 className="bold text-gray-200 relative inline-block transition-all duration-300 hover:text-white group"
                 target="_blank"
               >
                 <span className="relative z-10">{dict.home.repoDesc2}</span>
                 <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-offWhite transition-all duration-500 group-hover:w-full"></span>
-              </a>
-              {" "}
+              </a>{" "}
               <span className="text-md text-gray-400 text-center">
                 {dict.home.goalDesc1}{" "}
                 <a
-                  href={discord}
+                  href={config.public.discord}
                   className="bold text-gray-200 relative inline-block transition-all duration-300 hover:text-white group"
                   target="_blank"
                 >

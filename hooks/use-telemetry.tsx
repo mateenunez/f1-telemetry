@@ -3,6 +3,7 @@ import { TelemetryManager, type TelemetryData } from "../telemetry-manager";
 import { findYellowSectors } from "@/hooks/use-raceControl";
 import { usePreferences } from "@/context/preferences";
 import { getAboutToBeEliminatedDrivers } from "@/utils/telemetry";
+import { config } from "@/lib/config";
 
 interface QueuedMessage {
   data: TelemetryData;
@@ -15,15 +16,16 @@ export const getCompoundSvg = (
   iconSize: number
 ) => {
   const iconMap: Record<string, string> = {
-    SOFT: "/soft.svg",
-    MEDIUM: "/medium.svg",
-    HARD: "/hard.svg",
-    INTERMEDIATE: "/intermediate.svg",
-    WET: "/wet.svg",
+    SOFT: config.public.blobBaseUrl + "/tyres/soft.svg",
+    MEDIUM: config.public.blobBaseUrl + "/tyres/medium.svg",
+    HARD: config.public.blobBaseUrl + "/tyres/hard.svg",
+    INTERMEDIATE: config.public.blobBaseUrl + "/tyres/intermediate.svg",
+    WET: config.public.blobBaseUrl + "/tyres/wet.svg",
   };
   const key = (compound || "").toUpperCase();
-  const src = iconMap[key] || "/unknown.svg";
-  if (src === "unknown.svg") console.log("Unknown compound type: ", compound);
+  const src = iconMap[key] || config.public.blobBaseUrl + "/tyres/unknown.svg";
+  if (src === config.public.blobBaseUrl + "/tyres/unknown.svg")
+    console.log("Unknown compound type: ", compound);
   return (
     <img
       src={src}
@@ -51,24 +53,25 @@ export function useTelemetryManager() {
   const PROCESS_INTERVAL_MS = 100;
 
   useEffect(() => {
-    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || "";
-
     let intervalId: NodeJS.Timeout | null = null;
     let timeoutId: NodeJS.Timeout | null = null;
 
     messageQueue.current = [];
     setDelayed(true);
 
-    telemetryManager.connect(wsUrl, (data: TelemetryData) => {
-      if (delayDurationMs === 0) {
-        if (delayed) setDelayed(false);
-        telemetryDataCallback.current(data);
-        return;
-      }
+    telemetryManager.connect(
+      config.public.websocket || "",
+      (data: TelemetryData) => {
+        if (delayDurationMs === 0) {
+          if (delayed) setDelayed(false);
+          telemetryDataCallback.current(data);
+          return;
+        }
 
-      const releaseTime = Date.now() + delayDurationMs;
-      messageQueue.current.push({ data: data, releaseTime: releaseTime });
-    });
+        const releaseTime = Date.now() + delayDurationMs;
+        messageQueue.current.push({ data: data, releaseTime: releaseTime });
+      }
+    );
 
     intervalId = setInterval(processQueue, PROCESS_INTERVAL_MS);
     timeoutId = setTimeout(() => {
@@ -177,7 +180,11 @@ export function useTelemetryManager() {
         telemetryData?.session,
         telemetryData?.timing
       ),
-    [telemetryData?.positions, telemetryData?.session, telemetryData?.session?.track_status]
+    [
+      telemetryData?.positions,
+      telemetryData?.session,
+      telemetryData?.session?.track_status,
+    ]
   );
 
   return {

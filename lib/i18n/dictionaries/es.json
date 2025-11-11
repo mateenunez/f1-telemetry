@@ -58,7 +58,7 @@
     "error": "Las transcripciones para los audios de equipos estarán disponibles en breve."
   },
   "loading": "Preparando el sistema...",
-  "delaying": "Aplicando delay",
+  "delaying": "Aplicando delay...",
   "404": "Te perdiste?.",
   "locale": "es"
 }

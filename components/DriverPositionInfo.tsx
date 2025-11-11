@@ -5,10 +5,10 @@ import { Geist, Aldrich } from "next/font/google";
 import type { ProcessedPosition, ProcessedDriver } from "@/processors";
 import SoundWave from "./SoundWave";
 import { usePreferences } from "@/context/preferences";
+import { config } from "@/lib/config";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
-
 interface DriverPositionInfoProps {
   position: ProcessedPosition;
   driver: ProcessedDriver | undefined;
@@ -51,8 +51,8 @@ export default function DriverPositionInfo({
               <img
                 src={
                   driver.driver_number === 43
-                    ? "/43.png"
-                    : driver?.headshot_url || "/driver.png"
+                    ? config.public.blobBaseUrl + "/43.png"
+                    : driver?.headshot_url || config.public.blobBaseUrl + "/driver.png"
                 }
                 className="object-cover h-[60px]"
                 alt={`${driver.name_acronym} headshot f1 telemetry`}

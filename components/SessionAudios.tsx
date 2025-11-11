@@ -13,6 +13,7 @@ import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { useTelemetryAudio, audioUrl } from "@/hooks/use-raceControl";
 import { usePreferences } from "@/context/preferences";
+import { config } from "@/lib/config";
 
 interface SessionAudiosProps {
   teamRadio: ProcessedTeamRadio | undefined;
@@ -22,7 +23,7 @@ interface SessionAudiosProps {
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
-const AUDIO_DOWNLOAD_URL = process.env.NEXT_PUBLIC_AUDIO_DOWNLOAD_URL;
+const AUDIO_DOWNLOAD_URL = config.public + "download-mp3";
 
 export default function SessionAudios({
   teamRadio,
@@ -144,8 +145,9 @@ export default function SessionAudios({
                             <img
                               src={
                                 driver.driver_number === 43
-                                  ? "/43.png"
-                                  : driver?.headshot_url || "/driver.png"
+                                  ? config.public.blobBaseUrl + "/43.png"
+                                  : driver?.headshot_url ||
+                                    config.public.blobBaseUrl + "/driver.png"
                               }
                               className="object-cover h-[60px]"
                               alt={`${driver.name_acronym} headshot f1 telemetry`}

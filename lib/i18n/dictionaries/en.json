@@ -58,7 +58,7 @@
     "error": "Team radio transcriptions are currently in development."
   },
   "loading": "Getting things ready...",
-  "delaying": "Applying delay",
+  "delaying": "Applying delay...",
   "404": "I think you're lost, bro.",
   "locale": "en"
 }

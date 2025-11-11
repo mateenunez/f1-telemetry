@@ -46,68 +46,76 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   const circleCarData = preferences.circleCarData;
 
   if (delayed || loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 px-2">
-        <div className="fixed inset-0 z-20 flex items-center justify-center bg-warmBlack/40 backdrop-blur-sm">
-          <div
-            className="text-white text-xl text-center animate-puls flex flex-col gap-2"
+    const LoaderOverlay = () => (
+      <div className="fixed inset-0 z-20 flex items-center justify-center bg-warmBlack/40 backdrop-blur-sm">
+        {!loading ? (
+          <Countdown totalSeconds={preferences.delay} dict={dict} />
+        ) : (
+          <span
+            className="text-white text-xl text-center"
             style={mediumGeist.style}
           >
             {dict.loading}
-            {preferences.delay > 0 &&  (
-              <Countdown totalSeconds={preferences.delay} />
-            )}
+          </span>
+        )}
+      </div>
+    );
+
+    const HeaderSkeleton = () => (
+      <div className="flex flex-col md:flex-row gap-4 md:gap-0 justify-between items-center w-full px-6 py-4 mb-4">
+        <Skeleton height={60} width="20rem" className="w-[40vw] md:w-[20vw]" />
+        <Skeleton height={60} width="15rem" />
+      </div>
+    );
+
+    const PositionsSkeletonList = () => (
+      <Card className="lg:col-span-5 bg-warmBlack1 border-none max-h-screen px-2">
+        <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
+          <div className="space-y-2">
+            {Array.from({ length: 20 }).map((_, idx) => (
+              <Skeleton key={idx} height={60} width="100%" />
+            ))}
           </div>
+        </CardContent>
+      </Card>
+    );
+
+    const MapAndRaceSkeleton = () => (
+      <Card className="lg:col-span-5 bg-warmBlack1 border-none flex flex-col p-0 m-0">
+        <CardHeader className="pb-3 flex flex-row items-center justify-between">
+          <Skeleton height={32} width={180} />
+          <Skeleton height={32} width={120} />
+        </CardHeader>
+        <CardContent className="flex flex-col justify-center h-full">
+          <div className="overflow-hidden h-fit">
+            <Skeleton height={400} width="100%" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+
+    const CardsRowSkeleton = () => (
+      <div className="flex flex-col md:flex-row gap-8 md:px-0 py-[2rem] md:mx-[1rem] justify-between md:mr-[6rem]">
+        <div className="flex flex-col md:flex-row gap-8 justify-around">
+          {Array.from({ length: 2 }).map((_, idx) => (
+            <Skeleton key={idx} className="gap-2" width={400} height={250} />
+          ))}
         </div>
+        <Skeleton className="md:ml-2" height={250} width={400} />
+      </div>
+    );
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 px-2">
+        <LoaderOverlay />
         <div className="max-w-8xl mx-auto space-y-4 h-full">
           <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
-            {/* Header Skeleton */}
-            <div className="flex flex-col md:flex-row gap-4 md:gap-0 justify-between items-center w-full px-6 py-4 mb-4">
-              <Skeleton
-                height={60}
-                width="20rem"
-                className="w-[40vw] md:w-[20vw]"
-              />
-              <Skeleton height={60} width="15rem" />
-            </div>
-            {/* Cards Skeleton */}
+            <HeaderSkeleton />
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-4 pb-4">
-              {/* Posiciones Skeleton */}
-              <Card className="lg:col-span-5 bg-warmBlack1 border-none max-h-screen px-2">
-                <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
-                  <div className="space-y-2">
-                    {Array.from({ length: 20 }).map((_, idx) => (
-                      <Skeleton key={idx} height={60} width="100%" />
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-              {/* Mapa y Race Control Skeleton */}
-              <Card className="lg:col-span-5 bg-warmBlack1 border-none flex flex-col p-0 m-0">
-                <CardHeader className="pb-3 flex flex-row items-center justify-between">
-                  <Skeleton height={32} width={180} />
-                  <Skeleton height={32} width={120} />
-                </CardHeader>
-                <CardContent className="flex flex-col justify-center h-full">
-                  <div className="overflow-hidden h-fit">
-                    <Skeleton height={400} width="100%" />
-                  </div>
-                </CardContent>
-              </Card>
+              <PositionsSkeletonList />
+              <MapAndRaceSkeleton />
             </div>
-            <div className="flex flex-col md:flex-row gap-8 md:px-0 py-[2rem] md:mx-[1rem] justify-between md:mr-[6rem]">
-              <div className="flex flex-col md:flex-row gap-8 justify-around">
-                {Array.from({ length: 2 }).map((_, idx) => (
-                  <Skeleton
-                    key={idx}
-                    className="gap-2"
-                    width={400}
-                    height={250}
-                  />
-                ))}
-              </div>
-              <Skeleton className="md:ml-2" height={250} width={400} />
-            </div>
+            <CardsRowSkeleton />
           </SkeletonTheme>
         </div>
       </div>

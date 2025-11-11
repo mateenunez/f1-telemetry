@@ -9,12 +9,14 @@ interface CountdownProps {
   totalSeconds?: number;
   size?: number;
   strokeWidth?: number;
+  dict: any;
 }
 
 export function Countdown({
   totalSeconds,
   size = 50,
   strokeWidth = 4,
+  dict,
 }: CountdownProps) {
   const [mounted, setMounted] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState(() => {
@@ -70,7 +72,13 @@ export function Countdown({
   const centerY = size / 2;
 
   return (
-    <div className="flex flex-col items-center justify-center bg-none">
+    <div className="flex flex-col items-center justify-center gap-2 bg-none">
+      <span
+        className="text-white text-xl text-center"
+        style={mediumGeist.style}
+      >
+        {dict.delaying}
+      </span>
       <style>{`
         @keyframes pulse-stroke {
           0%, 100% {

@@ -38,6 +38,13 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
+  alternates: {
+    canonical: "https://www.f1telemetry.com/en",
+    languages: {
+      en: "https://www.f1telemetry.com/en",
+      es: "https://www.f1telemetry.com/es",
+    },
+  },
 };
 
 export default async function RootLayout({
@@ -58,8 +65,20 @@ export default async function RootLayout({
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#b91c1c" />
-        <link rel="canonical" href="https://www.f1telemetry.com/" />
-
+        <link rel="canonical" href={`https://www.f1telemetry.com/${lang}`} />
+        {i18n.locales.map((l) => (
+          <link
+            key={l}
+            rel="alternate"
+            hrefLang={l}
+            href={`https://www.f1telemetry.com/${l}`}
+          />
+        ))}
+        <link
+          rel="alternate"
+          hrefLang="x-default"
+          href="https://www.f1telemetry.com/en"
+        />
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-CS9SV8WN8Y"
