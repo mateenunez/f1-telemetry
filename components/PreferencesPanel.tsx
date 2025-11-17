@@ -213,7 +213,7 @@ export default function PreferencesPanel({
     <>
       {/* Toggle Button */}
       <PanelLeft
-        className="text-gray-600 hover:text-gray-400 hover:cursor-pointer"
+        className="text-gray-600 hover:text-gray-400 hover:cursor-pointer ninth-step"
         width={15}
         onClick={() => setOpen((prev) => !prev)}
       />
@@ -327,29 +327,28 @@ export default function PreferencesPanel({
           {/* Tutorial Button */}
           <div className="flex flex-col gap-2 pb-4">
             <p className="text-md text-gray-100" style={orbitron.style}>
-              {preferences.translate ? "Tutorial" : "Tutorial"}
+              Tutorial
+            </p>
+            <p className="text-xs text-gray-400" style={mediumGeist.style}>
+              {preferences.translate
+                ? "Vuelve a ver el tutorial de introducción."
+                : "Show the introduction tutorial again."}
             </p>
             <button
               onClick={handleRestartTour}
-              className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-f1Blue hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue"
+              className="flex items-start justify-start gap-2 px-4 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue"
               style={{
                 fontFamily: mediumGeist.style.fontFamily,
                 boxShadow:
                   "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
               }}
             >
-              <PlayCircle width={18} className="text-f1Blue" />
               <span>
                 {preferences.translate
                   ? "Reiniciar Tutorial"
                   : "Restart Tutorial"}
               </span>
             </button>
-            <p className="text-xs text-gray-400" style={mediumGeist.style}>
-              {preferences.translate
-                ? "Vuelve a ver el tutorial de introducción."
-                : "Show the introduction tutorial again."}
-            </p>
           </div>
 
           {/* Favorite Drivers */}
@@ -461,7 +460,7 @@ export default function PreferencesPanel({
                         }
                       />
                       <div className="w-10 h-5 bg-gray-800 rounded-full peer-checked:bg-f1Blue/80 transition-colors peer-checked:shadow-f1Blue-md"></div>
-                      <div className="absolute left-1 top-1 bg-f1Blue peer-checked:bg-white w-3 h-3 rounded-full transition-transform peer-checked:translate-x-5 " ></div>
+                      <div className="absolute left-1 top-1 bg-f1Blue peer-checked:bg-white w-3 h-3 rounded-full transition-transform peer-checked:translate-x-5 "></div>
                     </label>
                   </>
                 ) : (

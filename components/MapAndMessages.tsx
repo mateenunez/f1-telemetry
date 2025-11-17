@@ -23,13 +23,11 @@ const MapAndMessages = memo(function MapAndMessages({
 }: MapAndMessagesProps) {
   const { preferences } = usePreferences();
   return (
-    <Card className="lg:col-span-5 bg-warmBlack1 flex flex-col border-none" >
+    <Card className="lg:col-span-5 bg-warmBlack1 flex flex-col border-none">
       <CardHeader className="flex flex-col py-2">
-        <div
-          className="flex flex-row gap-2 pt-4 items-center justify-between px-4 rounded-lg py-2 min-h-[5rem]"
-        >
+        <div className="flex flex-row gap-2 pt-4 items-center justify-between px-4 rounded-lg py-2 min-h-[5rem]">
           <CardTitle className="text-lg font-thin text-white">
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center third-step">
               <RaceControl
                 raceControl={
                   preferences.translate
@@ -39,7 +37,7 @@ const MapAndMessages = memo(function MapAndMessages({
               />
             </div>
           </CardTitle>
-          <div className="flex flex-col h-full justify-start items-start">
+          <div className="flex flex-col h-full justify-start items-start fourth-step">
             {session?.session_type === "Race" && (
               <CardTitle
                 className="text-xxl font-bold text-gray-200 tracking-widest"
@@ -66,7 +64,7 @@ const MapAndMessages = memo(function MapAndMessages({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col justify-center h-full p-0">
+      <CardContent className="flex flex-col justify-center h-full p-0 second-step">
         <div className="overflow-hidden h-fit">
           {telemetryData && telemetryData.session?.circuit_key && (
             <div onDoubleClick={handleMapFullscreen}>

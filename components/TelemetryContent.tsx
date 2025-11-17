@@ -199,7 +199,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
         <div className="flex flex-col-reverse md:flex-row items-center justify-evenly md:py-[2rem] gap-4 w-full">
           <div
             className={`flex flex-col md:flex-row justify-center md:justify-evenly items-center ${
-              audioLog || raceControlLog ? "w-full" : "hidden"
+              audioLog || raceControlLog ? "w-full sixth-step" : "hidden"
             }`}
           >
             {audioLog && (
