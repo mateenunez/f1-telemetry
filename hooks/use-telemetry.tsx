@@ -46,48 +46,88 @@ export function useTelemetryManager() {
   const { preferences } = usePreferences();
   const [telemetryManager] = useState(() => new TelemetryManager());
   const [pinnedDriver, setPinnedDriver] = useState<number | null>(null);
-  const [delayed, setDelayed] = useState(true);
+  const [delayed, setDelayed] = useState(false);
+  const delayedRef = useRef(false);
   const messageQueue = useRef<QueuedMessage[]>([]);
   const telemetryDataCallback = useRef(setTelemetryData);
-  const delayDurationMs = preferences.delay * 1000;
+  const previousDelay = useRef<number>(0);
   const PROCESS_INTERVAL_MS = 100;
+
+  const deltaDelay = useMemo(() => {
+    return (previousDelay.current - preferences.delay) * 1000;
+  }, [preferences.delay]);
+
+  const isSessionFinalised = useMemo(() => {
+    return Boolean(
+      telemetryData?.session?.session_status === "Finalised"
+    );
+  }, [telemetryData?.session?.session_status]);
+
+  useEffect(() => {
+    delayedRef.current = delayed;
+  }, [delayed]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | null = null;
     let timeoutId: NodeJS.Timeout | null = null;
 
-    messageQueue.current = [];
-    setDelayed(true);
+    const emptyQueue = messageQueue.current.length === 0;
+
+    if (!emptyQueue && deltaDelay !== 0) updateMessagesQueue();
 
     telemetryManager.connect(
       config.public.websocket || "",
       (data: TelemetryData) => {
-        if (delayDurationMs === 0) {
-          if (delayed) setDelayed(false);
+
+        if (preferences.delay === 0 || isSessionFinalised ) {
+          if (delayedRef.current) {
+            delayedRef.current = false;
+            setDelayed(false);
+          }
           telemetryDataCallback.current(data);
+          if (loading) setLoading(false);
           return;
         }
 
-        const releaseTime = Date.now() + delayDurationMs;
+        const releaseTime = Date.now() + preferences.delay * 1000;
         messageQueue.current.push({ data: data, releaseTime: releaseTime });
       }
     );
 
+    if (deltaDelay < 0 && !delayedRef.current && !isSessionFinalised) {
+      delayedRef.current = true;
+      setDelayed(true);
+    }
+
+    if (preferences.delay === 0) {
+      messageQueue.current = [];
+      if (delayedRef.current) {
+        delayedRef.current = false;
+        setDelayed(false);
+      }
+    }
+
     intervalId = setInterval(processQueue, PROCESS_INTERVAL_MS);
-    timeoutId = setTimeout(() => {
-      setDelayed(false);
-    }, delayDurationMs);
+
+    if (delayedRef.current) {
+      timeoutId = setTimeout(() => {
+        if (delayedRef.current) {
+          delayedRef.current = false;
+          setDelayed(false);
+        }
+      }, deltaDelay * -1);
+    }
 
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
       if (intervalId) clearInterval(intervalId);
       telemetryManager.disconnect();
     };
-  }, [telemetryManager, delayDurationMs]);
+  }, [telemetryManager, deltaDelay]);
 
   useEffect(() => {
-    if (telemetryData) setLoading(false);
-  }, [telemetryData]);
+    previousDelay.current = preferences.delay;
+  }, [preferences.delay]);
 
   const processQueue = useCallback(() => {
     const now = Date.now();
@@ -97,6 +137,7 @@ export function useTelemetryManager() {
       const message = queue.shift();
       if (message) {
         telemetryDataCallback.current(message.data);
+        if (loading) setLoading(false);
       }
     }
   }, []);
@@ -187,6 +228,12 @@ export function useTelemetryManager() {
     ]
   );
 
+  const updateMessagesQueue = () => {
+    messageQueue.current.forEach((obj) => {
+      obj.releaseTime -= deltaDelay;
+    });
+  };
+
   return {
     telemetryData,
     loading,
@@ -201,6 +248,7 @@ export function useTelemetryManager() {
     pinnedDriver,
     handlePinnedDriver,
     delayed,
+    deltaDelay,
     aboutToBeEliminated,
   };
 }

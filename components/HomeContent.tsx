@@ -48,21 +48,22 @@ export default function HomeContent({ dict }: HomeContentProps) {
         ${isVisible ? "translate-y-0" : "-translate-y-full"}
       `}
       >
-        <div className="flex justify-between items-center mx-auto px-4 py-3">
+        <div className="flex justify-between items-center mx-auto px-4 h-full">
           <Image
             src={f1t}
-            width={50}
-            height={50}
-            alt="Telemetría telemetria Formula 1"
+            width={80}
+            height={80}
+            alt="Telemetría telemetria telemetrics Formula 1 F1 Telemetry logo"
           />
-          <nav className="flex flex-row gap-2">
+          <nav className="flex flex-row gap-2 items-center justify-center">
             <a
-              className="rounded px-3 py-3 text-sm bg-white text-black text-center transition duration-300 ease-in-out 
+              className="rounded px-3 py-3 text-sm bg-white text-black border-2 border-white text-center transition duration-300 ease-in-out 
                 
                 hover:bg-f1Blue
                 hover:shadow-2xl 
                 hover:text-gray-200
                 hover:cursor-pointer
+                hover:border-f1Blue
                 
                 focus:outline-none 
                 focus:ring-4 
@@ -177,7 +178,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 loop
                 autoPlay
                 muted
-                className="md:max-h-[20rem]"
+                className=""
               />
             </a>
           </div>
