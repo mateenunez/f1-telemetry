@@ -79,7 +79,7 @@ export function useTelemetryAudio() {
 
   const createAudio = (
     volumen = 1,
-    audioSrc = config.public.blobBaseUrl + "/mp3/race-control-notification.mp3"
+    audioSrc = config.public.assets.mp3.raceControl
   ) => {
     if (typeof window === "undefined" || !cookieAudio) return null;
     const audio = new Audio(audioSrc);

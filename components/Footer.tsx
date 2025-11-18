@@ -26,7 +26,7 @@ export default function Footer({ dict }: FooterProps) {
             className="text-xs text-gray-500 inline-block align-bottom text-bottom align-text-bottom"
           >
             <img
-              src={config.public.blobBaseUrl + "/discord.svg"}
+              src={config.public.assets.discordIcon}
               width={15}
               className="h-full"
             />

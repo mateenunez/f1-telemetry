@@ -5,6 +5,8 @@ import { usePreferences } from "@/context/preferences";
 import { getAboutToBeEliminatedDrivers } from "@/utils/telemetry";
 import { config } from "@/lib/config";
 
+const tyres = config.public.assets.tyres;
+
 interface QueuedMessage {
   data: TelemetryData;
   releaseTime: number;
@@ -16,16 +18,16 @@ export const getCompoundSvg = (
   iconSize: number
 ) => {
   const iconMap: Record<string, string> = {
-    SOFT: config.public.blobBaseUrl + "/tyres/soft.svg",
-    MEDIUM: config.public.blobBaseUrl + "/tyres/medium.svg",
-    HARD: config.public.blobBaseUrl + "/tyres/hard.svg",
-    INTERMEDIATE: config.public.blobBaseUrl + "/tyres/intermediate.svg",
-    WET: config.public.blobBaseUrl + "/tyres/wet.svg",
+    SOFT: tyres.soft,
+    MEDIUM: tyres.medium,
+    HARD: tyres.hard,
+    INTERMEDIATE: tyres.intermediate,
+    WET: tyres.wet,
   };
   const key = (compound || "").toUpperCase();
-  const src = iconMap[key] || config.public.blobBaseUrl + "/tyres/unknown.svg";
-  if (src === config.public.blobBaseUrl + "/tyres/unknown.svg")
-    console.log("Unknown compound type: ", compound);
+  const src = iconMap[key] || tyres.unknown;
+  if (src === tyres.unknown) console.log("Unknown compound type: ", compound);
+
   return (
     <img
       src={src}

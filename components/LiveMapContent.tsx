@@ -32,50 +32,16 @@ export function LiveMapContent({ dict }: { dict: any }) {
 
   if (telemetryData.session) {
     return (
-      <div className="bg-warmBlack">
+      <div className="bg-warmBlack min-h-screen">
         <Header telemetryData={telemetryData} dict={dict} />
-        <div className="flex flex-col-reverse md:flex-row w-full h-full">
-          {/* Left list - 30% width */}
-          <div className="max-h-screen overflow-y-auto px-2 py-3">
-            <div className="flex flex-col gap-2">
-              {currentPositions.map((pos, idx) => {
-                const driver = driverInfos[idx];
-                const timing = driverTimings[idx];
-                return (
-                  <div
-                    key={pos.driver_number}
-                    className="rounded-md bg-warmBlack px-2 py-2"
-                  >
-                    <div className="flex flex-row items-center justify-between gap-3">
-                      <div className="min-w-0 flex-1">
-                        <DriverPositionInfo
-                          position={pos}
-                          driver={driver}
-                          isPlaying={undefined}
-                        />
-                      </div>
-                      <div className="w-[7.5rem] shrink-0">
-                        <DriverGaps
-                          timing={timing}
-                          session={telemetryData.session}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          {/* Map - 70% width */}
-          <div className="md:w-[75%] w-full flex items-center justify-center">
-            <Map
-              positions={telemetryData.positionData}
-              drivers={telemetryData.drivers}
-              timing={telemetryData.timing}
-              circuitKey={telemetryData.session.circuit_key}
-              yellowSectors={yellowSectors}
-            />
-          </div>
+        <div className=" w-full flex items-center justify-center">
+          <Map
+            positions={telemetryData.positionData}
+            drivers={telemetryData.drivers}
+            timing={telemetryData.timing}
+            circuitKey={telemetryData.session.circuit_key}
+            yellowSectors={yellowSectors}
+          />
         </div>
       </div>
     );

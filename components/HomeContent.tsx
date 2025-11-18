@@ -15,11 +15,11 @@ interface HomeContentProps {
 export default function HomeContent({ dict }: HomeContentProps) {
   const [isVisible, setIsVisible] = useState(false);
 
-  const map_mp4 = config.public.blobBaseUrl + "/mp4/livemap.mp4";
-  const circles_mp4 = config.public.blobBaseUrl + "/mp4/circles.mp4";
-  const audio_mp4 = config.public.blobBaseUrl + "/mp4/audios.mkv";
+  const mapMp4 = config.public.assets.mp4.livemap;
+  const circlesMp4 = config.public.assets.mp4.circles;
+  const audioMp4 = config.public.assets.mp4.audios;
 
-  const f1t = config.public.blobBaseUrl + "/f1t.png";
+  const f1t = config.public.assets.f1t;
 
   const handleScroll = () => {
     const scrollPosition = window.scrollY;
@@ -173,7 +173,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
               style={mediumGeist.style}
             >
               <video
-                src={map_mp4}
+                src={mapMp4}
                 loop
                 autoPlay
                 muted
@@ -197,13 +197,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
                   </span>
                 </span>
               </div>
-              <video
-                src={audio_mp4}
-                loop
-                autoPlay
-                muted
-                className="w-[20rem]"
-              />
+              <video src={audioMp4} loop autoPlay muted className="w-[20rem]" />
             </div>
           </div>
           <div className="flex flex-col md:flex-row gap-[2rem] md:justify-evenly w-full h-full px-[5%]">
@@ -225,7 +219,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 </span>
               </div>
               <video
-                src={circles_mp4}
+                src={circlesMp4}
                 loop
                 autoPlay
                 muted

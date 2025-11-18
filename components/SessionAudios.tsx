@@ -145,9 +145,9 @@ export default function SessionAudios({
                             <img
                               src={
                                 driver.driver_number === 43
-                                  ? config.public.blobBaseUrl + "/43.png"
+                                  ? config.public.assets.col
                                   : driver?.headshot_url ||
-                                    config.public.blobBaseUrl + "/driver.png"
+                                    config.public.assets.driver
                               }
                               className="object-cover h-[60px]"
                               alt={`${driver.name_acronym} headshot f1 telemetry`}
