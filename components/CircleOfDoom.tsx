@@ -139,7 +139,7 @@ export default function CircleOfDoom({
   const pitInner = polarToCartesian(adjusted(pitStopDeg || 60), r);
 
   return (
-    <div className={`flex items-center flex justify-center w-full `}>
+    <div className="flex items-center flex justify-center w-full seventh-step">
       <div>
         <svg
           viewBox="0 0 100 100"

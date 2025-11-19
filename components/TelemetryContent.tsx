@@ -13,6 +13,8 @@ import RaceControlList from "@/components/RaceControlList";
 import CircleOfDoom from "@/components/CircleOfDoom";
 import { usePreferences } from "@/context/preferences";
 import { CircleCarData } from "@/components/CircleCarData";
+import { useEffect, useState } from "react";
+import { useTour } from "@reactour/tour";
 import { Countdown } from "./Countdown";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
@@ -39,8 +41,18 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     deltaDelay,
     aboutToBeEliminated,
   } = useTelemetryManager();
+  const { setIsOpen } = useTour();
+  const { preferences, setPreference } = usePreferences();
 
-  const { preferences } = usePreferences();
+  useEffect(() => {
+    if (!preferences.hasSeenTour && !loading && !delayed) {
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [preferences.hasSeenTour, loading, delayed, setIsOpen]);
+
   const audioLog = preferences.audioLog;
   const raceControlLog = preferences.raceControlLog;
   const circleOfDoom = preferences.circleOfDoom;
@@ -132,7 +144,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
         <Header telemetryData={telemetryData} dict={dict} />
         {/* Cards */}
         <div
-          className={`!mt-0 grid grid-cols-1 lg:grid-cols-10 lg:border-b-2 lg:border-t-0 lg:border-l-0 lg:border-r-0 lg:rounded-none lg:border-gray-800`}
+          className={`!mt-0 grid grid-cols-1 lg:grid-cols-10 lg:border-b-2 lg:border-t-0 lg:border-l-0 lg:border-r-0 lg:rounded-none lg:border-gray-800 welcome-step`}
         >
           {/* Posiciones Actuales */}
           <DriverPositions
@@ -158,7 +170,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
         <div className="flex flex-col-reverse md:flex-row items-center justify-evenly md:py-[2rem] gap-4 w-full">
           <div
             className={`flex flex-col md:flex-row justify-center md:justify-evenly items-center ${
-              audioLog || raceControlLog ? "w-full" : "hidden"
+              audioLog || raceControlLog ? "w-full sixth-step" : "hidden"
             }`}
           >
             {audioLog && (
