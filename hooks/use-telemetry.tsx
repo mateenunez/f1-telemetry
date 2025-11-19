@@ -52,16 +52,11 @@ export function useTelemetryManager() {
   const telemetryDataCallback = useRef(setTelemetryData);
   const previousDelay = useRef<number>(0);
   const PROCESS_INTERVAL_MS = 100;
+  const isSessionFinalisedRef = useRef(false);
 
   const deltaDelay = useMemo(() => {
     return (previousDelay.current - preferences.delay) * 1000;
   }, [preferences.delay]);
-
-  const isSessionFinalised = useMemo(() => {
-    return Boolean(
-      telemetryData?.session?.session_status === "Finalised"
-    );
-  }, [telemetryData?.session?.session_status]);
 
   useEffect(() => {
     delayedRef.current = delayed;
@@ -78,8 +73,12 @@ export function useTelemetryManager() {
     telemetryManager.connect(
       config.public.websocket || "",
       (data: TelemetryData) => {
+        const sessionFinalised = data?.session?.session_status === "Finalised";
+        if (sessionFinalised && !isSessionFinalisedRef.current) {
+          isSessionFinalisedRef.current = true;
+        }
 
-        if (preferences.delay === 0 || isSessionFinalised ) {
+        if (preferences.delay === 0 || isSessionFinalisedRef.current) {
           if (delayedRef.current) {
             delayedRef.current = false;
             setDelayed(false);
@@ -94,7 +93,11 @@ export function useTelemetryManager() {
       }
     );
 
-    if (deltaDelay < 0 && !delayedRef.current && !isSessionFinalised) {
+    if (
+      deltaDelay < 0 &&
+      !delayedRef.current &&
+      !isSessionFinalisedRef.current
+    ) {
       delayedRef.current = true;
       setDelayed(true);
     }
