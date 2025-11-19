@@ -204,7 +204,7 @@ export default function PreferencesPanel({
     <>
       {/* Toggle Button */}
       <PanelLeft
-        className="text-gray-600 hover:text-gray-400 hover:cursor-pointer"
+        className="text-gray-300 hover:text-gray-400 hover:cursor-pointer"
         width={15}
         onClick={() => setOpen((prev) => !prev)}
       />
@@ -231,7 +231,7 @@ export default function PreferencesPanel({
             style={orbitron.style}
           >
             <PanelLeft
-              className="text-gray-600 hover:text-gray-400 hover:cursor-pointer"
+              className="text-gray-300 hover:text-gray-400 hover:cursor-pointer"
               width={15}
               onClick={() => setOpen((prev) => !prev)}
             />

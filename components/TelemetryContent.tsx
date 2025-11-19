@@ -36,6 +36,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     pinnedDriver,
     handlePinnedDriver,
     delayed,
+    deltaDelay,
     aboutToBeEliminated,
   } = useTelemetryManager();
 
@@ -44,12 +45,14 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   const raceControlLog = preferences.raceControlLog;
   const circleOfDoom = preferences.circleOfDoom;
   const circleCarData = preferences.circleCarData;
+  const secondsDelay = (deltaDelay * -1) / 1000;
+  const session = telemetryData?.session;
 
-  if (delayed || loading) {
+  if (loading || delayed) {
     const LoaderOverlay = () => (
       <div className="fixed inset-0 z-20 flex items-center justify-center bg-warmBlack/40 backdrop-blur-sm">
-        {!loading ? (
-          <Countdown totalSeconds={preferences.delay} dict={dict} />
+        {delayed ? (
+          <Countdown totalSeconds={Math.max(secondsDelay, 0)} dict={dict} />
         ) : (
           <span
             className="text-white text-xl text-center"
@@ -121,8 +124,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
       </div>
     );
   }
-
-  const session = telemetryData?.session;
 
   return (
     <div className="min-h-screen bg-warmBlack px-2">

@@ -38,11 +38,11 @@
     "loading": "Checking the official schedule..."
   },
   "liveTiming": {
-    "title": "Live Timing",
+    "title": "Live timing",
     "description": "Real-time F1 telemetry dashboard with live timing, driver positions, lap times, and race analytics. Follow Formula 1 races with detailed data."
   },
   "map": {
-    "title": "Live Map",
+    "title": "Live map",
     "description": "F1 Telemetry live map of the Formula 1 race circuit."
   },
   "sessionTypes": {
