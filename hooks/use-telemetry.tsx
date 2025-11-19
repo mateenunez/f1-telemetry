@@ -2,6 +2,10 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { TelemetryManager, type TelemetryData } from "../telemetry-manager";
 import { findYellowSectors } from "@/hooks/use-raceControl";
 import { usePreferences } from "@/context/preferences";
+import { getAboutToBeEliminatedDrivers } from "@/utils/telemetry";
+import { config } from "@/lib/config";
+
+const tyres = config.public.assets.tyres;
 
 interface QueuedMessage {
   data: TelemetryData;
@@ -14,15 +18,16 @@ export const getCompoundSvg = (
   iconSize: number
 ) => {
   const iconMap: Record<string, string> = {
-    SOFT: "/soft.svg",
-    MEDIUM: "/medium.svg",
-    HARD: "/hard.svg",
-    INTERMEDIATE: "/intermediate.svg",
-    WET: "/wet.svg",
+    SOFT: tyres.soft,
+    MEDIUM: tyres.medium,
+    HARD: tyres.hard,
+    INTERMEDIATE: tyres.intermediate,
+    WET: tyres.wet,
   };
   const key = (compound || "").toUpperCase();
-  const src = iconMap[key] || "/unknown.svg";
-  if (src === "unknown.svg") console.log("Unknown compound type: ", compound);
+  const src = iconMap[key] || tyres.unknown;
+  if (src === tyres.unknown) console.log("Unknown compound type: ", compound);
+
   return (
     <img
       src={src}
@@ -43,48 +48,91 @@ export function useTelemetryManager() {
   const { preferences } = usePreferences();
   const [telemetryManager] = useState(() => new TelemetryManager());
   const [pinnedDriver, setPinnedDriver] = useState<number | null>(null);
-  const [mapFullscreen, setMapFullscreen] = useState(false);
-  const [delayed, setDelayed] = useState(true);
+  const [delayed, setDelayed] = useState(false);
+  const delayedRef = useRef(false);
   const messageQueue = useRef<QueuedMessage[]>([]);
   const telemetryDataCallback = useRef(setTelemetryData);
-  const delayDurationMs = preferences.delay * 1000;
+  const previousDelay = useRef<number>(0);
   const PROCESS_INTERVAL_MS = 100;
+  const isSessionFinalisedRef = useRef(false);
+
+  const deltaDelay = useMemo(() => {
+    return (previousDelay.current - preferences.delay) * 1000;
+  }, [preferences.delay]);
 
   useEffect(() => {
-    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || "";
+    delayedRef.current = delayed;
+  }, [delayed]);
 
+  useEffect(() => {
     let intervalId: NodeJS.Timeout | null = null;
     let timeoutId: NodeJS.Timeout | null = null;
 
-    messageQueue.current = [];
-    setDelayed(true);
+    const emptyQueue = messageQueue.current.length === 0;
 
-    telemetryManager.connect(wsUrl, (data: TelemetryData) => {
-      if (delayDurationMs === 0) {
-        if (delayed) setDelayed(false);
-        telemetryDataCallback.current(data);
-        return;
+    if (!emptyQueue && deltaDelay !== 0) updateMessagesQueue();
+
+    telemetryManager.connect(
+      config.public.websocket || "",
+      (data: TelemetryData) => {
+        const sessionFinalised = data?.session?.session_status === "Finalised";
+        if (sessionFinalised && !isSessionFinalisedRef.current) {
+          isSessionFinalisedRef.current = true;
+        }
+
+        if (preferences.delay === 0 || isSessionFinalisedRef.current) {
+          if (delayedRef.current) {
+            delayedRef.current = false;
+            setDelayed(false);
+          }
+          telemetryDataCallback.current(data);
+          if (loading) setLoading(false);
+          return;
+        }
+
+        const releaseTime = Date.now() + preferences.delay * 1000;
+        messageQueue.current.push({ data: data, releaseTime: releaseTime });
       }
+    );
 
-      const releaseTime = Date.now() + delayDurationMs;
-      messageQueue.current.push({ data: data, releaseTime: releaseTime });
-    });
+    if (
+      deltaDelay < 0 &&
+      !delayedRef.current &&
+      !isSessionFinalisedRef.current
+    ) {
+      delayedRef.current = true;
+      setDelayed(true);
+    }
+
+    if (preferences.delay === 0) {
+      messageQueue.current = [];
+      if (delayedRef.current) {
+        delayedRef.current = false;
+        setDelayed(false);
+      }
+    }
 
     intervalId = setInterval(processQueue, PROCESS_INTERVAL_MS);
-    timeoutId = setTimeout(() => {
-      setDelayed(false);
-    }, delayDurationMs);
+
+    if (delayedRef.current) {
+      timeoutId = setTimeout(() => {
+        if (delayedRef.current) {
+          delayedRef.current = false;
+          setDelayed(false);
+        }
+      }, deltaDelay * -1);
+    }
 
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
       if (intervalId) clearInterval(intervalId);
       telemetryManager.disconnect();
     };
-  }, [telemetryManager, delayDurationMs]);
+  }, [telemetryManager, deltaDelay]);
 
   useEffect(() => {
-    if (telemetryData) setLoading(false);
-  }, [telemetryData]);
+    previousDelay.current = preferences.delay;
+  }, [preferences.delay]);
 
   const processQueue = useCallback(() => {
     const now = Date.now();
@@ -94,6 +142,7 @@ export function useTelemetryManager() {
       const message = queue.shift();
       if (message) {
         telemetryDataCallback.current(message.data);
+        if (loading) setLoading(false);
       }
     }
   }, []);
@@ -112,13 +161,6 @@ export function useTelemetryManager() {
       setPinnedDriver(pinnedDriver === driverNumber ? null : driverNumber);
     },
     [pinnedDriver]
-  );
-
-  const handleMapFullscreen = useMemo(
-    () => () => {
-      setMapFullscreen((prev) => !prev);
-    },
-    []
   );
 
   const driverInfos = useMemo(
@@ -177,17 +219,25 @@ export function useTelemetryManager() {
     [telemetryData?.raceControl]
   );
 
-  const safetyCarActive = useMemo(() => {
-    const latestMessage = telemetryData?.raceControl?.[0];
-    if (!latestMessage) return null;
-    if (
-      latestMessage.category === "SafetyCar" &&
-      latestMessage.status === "Deployed"
-    ) {
-      if (latestMessage.mode === "VIRTUAL SAFETY CAR") return "VSC";
-      else return "SC";
-    } else return null;
-  }, [telemetryData?.raceControl]);
+  const aboutToBeEliminated = useMemo(
+    () =>
+      getAboutToBeEliminatedDrivers(
+        currentPositions,
+        telemetryData?.session,
+        telemetryData?.timing
+      ),
+    [
+      telemetryData?.positions,
+      telemetryData?.session,
+      telemetryData?.session?.track_status,
+    ]
+  );
+
+  const updateMessagesQueue = () => {
+    messageQueue.current.forEach((obj) => {
+      obj.releaseTime -= deltaDelay;
+    });
+  };
 
   return {
     telemetryData,
@@ -202,9 +252,8 @@ export function useTelemetryManager() {
     yellowSectors,
     pinnedDriver,
     handlePinnedDriver,
-    mapFullscreen,
-    handleMapFullscreen,
-    safetyCarActive,
     delayed,
+    deltaDelay,
+    aboutToBeEliminated,
   };
 }

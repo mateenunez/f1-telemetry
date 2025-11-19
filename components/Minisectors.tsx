@@ -27,14 +27,14 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
   };
 
   const getSectorTimeColor = (sector: any) => {
-    if (!sector) return "text-white";
+    if (!sector || !sector.PreviousValue) return "text-f1Yellow";
     if (sector?.OverallFastest) return "text-f1Purple";
     if (sector?.PersonalFastest) return "text-green-400";
     return "text-f1Yellow";
   };
 
   const getBestSectorColor = (sector: any) => {
-    if (!sector.Position) return "text-white";
+    if (!sector) return "text-white";
     if (sector?.Position === 1) return "text-purple-500";
     return "text-green-400";
   };
@@ -59,10 +59,10 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
                       style={{
                         backgroundColor: bg,
                         width: 8,
-                        height: 6,
-                        borderRadius: 3,
+                        height: 5,
+                        borderRadius: 4,
                         stroke: bg,
-                        strokeWidth: 2,
+                        strokeWidth: 4,
                         padding: 2,
                         display: "inline-block",
                         marginLeft: 2,
@@ -86,10 +86,10 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
           const sector = timing?.sector_times[sectorKey];
           const color = getSectorTimeColor(sector);
           const displayValue =
-            sector?.Value ?? sector?.PreviousValue ?? "--:--";
+            sector?.Value ?? sector?.PreviousValue ?? "--.---";
           return (
             <div className="flex flex-row gap-0" key={sectorKey}>
-              <span className={color}>{sector && displayValue}</span>
+              <span className={color}>{sector && displayValue || "--.---"}</span>
             </div>
           );
         })}
@@ -97,7 +97,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
 
       {/* Mejores tiempos de sector */}
       <div
-        className="flex items-center flex-col text-xs text-white min-w-[2.5rem]"
+        className="flex items-center flex-col text-xs min-w-[2.5rem]"
         style={oxanium.style}
       >
         {timingStats?.best_sectors.map((sectorKey, idx) => {
@@ -106,7 +106,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
           const displayValue = sector?.Value ?? "--:--";
           return (
             <div className="flex flex-row gap-0" key={idx}>
-              <span className={color}>{sector && displayValue}</span>
+              <span className={color}>{sector && displayValue || "--.---"}</span>
             </div>
           );
         })}

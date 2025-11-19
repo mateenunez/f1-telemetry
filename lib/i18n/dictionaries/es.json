@@ -12,12 +12,11 @@
     "circlesDesc2": "Circle of Doom ",
     "circlesDesc3": "que sirve para tomar decisiones de undercut.",
     "goalTitle": "¿Por qué lo hicimos?",
-    "goalDesc1": "Nuestro objetivo es intentar mostrar todas las analíticas y datos posibles, brindándote la mejor experiencia al ver la carrera. Esto solo es posible con tu feedback e ideas, si querés contactanos en este ",
+    "goalDesc1": "También podés contactarnos en este ",
     "goalDesc2": "servidor de Discord.",
     "repoTitle": "Para desarrolladores y diseñadores",
     "repoDesc1": "Si tenes ideas de funcionalidades o críticas, estás invitado a contribuir en este ",
     "repoDesc2": "repositorio de GitHub.",
-    "repoDesc3": "Este proyecto siempre será gratuito y de código abierto.",
     "repoDesc4": "🥥🏁"
   },
   "footer": {
@@ -35,11 +34,16 @@
     "title": "Calendario",
     "description": "Calendario de F1 Telemetry con las próximas sesiones de Formula 1",
     "today": "Hoy",
-    "tomorrow": "Mañana"
+    "tomorrow": "Mañana",
+    "loading": "Revisando el calendario oficial..."
   },
   "liveTiming": {
     "title": "Telemetría en vivo",
     "description": "Dashboard de F1 Telemetry en tiempo real con tiempos en vivo, posiciones de pilotos, tiempos por vuelta y análisis de carrera. Sigue las carreras de Fórmula 1 con datos detallados."
+  },
+  "map": {
+    "title": "Mapa en vivo",
+    "description": "Mapa del circuito en vivo de Formula 1 por F1 Telemetry."
   },
   "sessionTypes": {
     "practice1": "Práctica 1",
@@ -51,7 +55,7 @@
     "sprintqualification": "Clasificación Sprint"
   },
   "announce": {
-    "error": "Los neumáticos no están funcionando correctamente en las Qualys. Si encontraste otro bug podés reportarlo en el servidor de discord que está abajo."
+    "error": "Las transcripciones para los audios de equipos estarán disponibles en breve."
   },
   "tourSteps": {
     "welcome": "Bienvenido! con este tutorial vamos a mostrarte las funcionalidades de la telemetría.",
@@ -66,7 +70,7 @@
     "preferences": "IMPORTANTE: Este es el panel de preferencias, podés personalizar la telemetría acá. ¡Que disfrutes!"
   },
   "loading": "Preparando el sistema...",
-  "delaying": "Aplicando delay",
-  "404": "Estás perdido, pibe.",
+  "delaying": "Aplicando delay...",
+  "404": "Te perdiste?.",
   "locale": "es"
 }

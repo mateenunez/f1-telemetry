@@ -5,6 +5,7 @@ import { Orbitron } from "next/font/google";
 import { memo } from "react";
 import { usePreferences } from "@/context/preferences";
 import { getTrackStatusColor, getTrackStatusLabel } from "@/utils/telemetry";
+import Link from "next/link";
 
 const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
@@ -12,14 +13,12 @@ interface MapAndMessagesProps {
   telemetryData: any;
   session: any;
   yellowSectors: Set<number>;
-  handleMapFullscreen: () => void;
 }
 
 const MapAndMessages = memo(function MapAndMessages({
   telemetryData,
   session,
   yellowSectors,
-  handleMapFullscreen,
 }: MapAndMessagesProps) {
   const { preferences } = usePreferences();
   return (
@@ -65,19 +64,17 @@ const MapAndMessages = memo(function MapAndMessages({
         </div>
       </CardHeader>
       <CardContent className="flex flex-col justify-center h-full p-0 second-step">
-        <div className="overflow-hidden h-fit">
+        <Link href={`/live-map`} className="overflow-hidden h-fit">
           {telemetryData && telemetryData.session?.circuit_key && (
-            <div onDoubleClick={handleMapFullscreen}>
-              <Map
-                positions={telemetryData.positionData}
-                drivers={telemetryData.drivers}
-                timing={telemetryData.timing}
-                circuitKey={telemetryData.session.circuit_key}
-                yellowSectors={yellowSectors}
-              />
-            </div>
+            <Map
+              positions={telemetryData.positionData}
+              drivers={telemetryData.drivers}
+              timing={telemetryData.timing}
+              circuitKey={telemetryData.session.circuit_key}
+              yellowSectors={yellowSectors}
+            />
           )}
-        </div>
+        </Link>
       </CardContent>
     </Card>
   );

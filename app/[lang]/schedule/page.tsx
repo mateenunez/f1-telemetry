@@ -7,18 +7,18 @@ import type { Metadata } from "next";
 export async function generateMetadata({
   params,
 }: {
-  params: { lang: Locale };
+  params: Promise<{ lang: Locale }>;
 }): Promise<Metadata> {
   const { lang } = await params;
   const dict = await getDictionary(lang);
 
   return {
-    title: `${dict.schedule.title || "Schedule"}`,
+    title: `${dict.schedule.title || "Schedule"} | F1 Telemetry`,
     description:
       dict.schedule.description ||
       "F1 Telemetry schedule page with upcoming sessions and race calendar.",
     openGraph: {
-      title: `${dict.schedule.title || "Schedule"}`,
+      title: `${dict.schedule.title || "Schedule"} | F1 Telemetry`,
       description:
         dict.schedule.description ||
         "F1 Telemetry schedule page with upcoming sessions and race calendar.",
@@ -30,9 +30,9 @@ export async function generateMetadata({
 export default async function SchedulePage({
   params,
 }: {
-  params: { lang: Locale };
+  params: Promise<{ lang: Locale }>;
 }) {
-  const { lang } = params;
+  const { lang } = await params;
   const dict = await getDictionary(lang);
 
   return (

@@ -5,10 +5,10 @@ import { Geist, Aldrich } from "next/font/google";
 import type { ProcessedPosition, ProcessedDriver } from "@/processors";
 import SoundWave from "./SoundWave";
 import { usePreferences } from "@/context/preferences";
+import { config } from "@/lib/config";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
-
 interface DriverPositionInfoProps {
   position: ProcessedPosition;
   driver: ProcessedDriver | undefined;
@@ -36,7 +36,7 @@ export default function DriverPositionInfo({
         }`}
       >
         <Badge
-          className="w-8 h-8 rounded-full flex items-center justify-center text-md font-bold pr-0  min-w-[2rem]"
+          className="w-[2rem] text-[1rem] items-center font-bold pr-[0px] pl-4"
           style={{
             backgroundColor: `transparent`,
             fontFamily: aldrich.style.fontFamily,
@@ -46,22 +46,19 @@ export default function DriverPositionInfo({
         </Badge>
 
         {headshot && (
-          <>
-            {driver?.headshot_url && (
+          <div>
+            {driver && (
               <img
-                src={driver?.headshot_url}
+                src={
+                  driver.driver_number === 43
+                    ? config.public.assets.col
+                    : driver?.headshot_url || config.public.assets.driver
+                }
                 className="object-cover h-[60px]"
                 alt={`${driver.name_acronym} headshot f1 telemetry`}
               />
             )}
-            {driver?.driver_number === 43 && (
-              <img
-                src="/franco-colapinto.png"
-                className="object-cover h-[60px]"
-                alt="Franco Colapinto headshot f1 telemetry"
-              />
-            )}
-          </>
+          </div>
         )}
       </div>
 

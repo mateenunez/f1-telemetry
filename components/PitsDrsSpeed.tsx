@@ -41,9 +41,9 @@ export default function PitsDrsSpeed({
   };
 
   return (
-    <div className="flex flex-row gap-2">
+    <div className="flex flex-row gap-2 w-[6rem] justify-around">
       {/* DRS & Speed */}
-      <div className="flex flex-col min-w-[3rem]">
+      <div className="flex flex-col w-[3rem]">
         <span
           className="text-xs text-white self-center"
           style={mediumGeist.style}
@@ -73,8 +73,8 @@ export default function PitsDrsSpeed({
         style={orbitron.style}
       >
         {timing?.in_pit ? (
-          <span className="text-f1Blue flex flex-col" style={mediumGeist.style}>
-            IN PIT
+          <span className="flex flex-col" style={mediumGeist.style}>
+            <p className="text-f1Blue text-nowrap flex flex-nowrap">IN PIT</p>
             <span
               style={mediumGeist.style}
               className="text-[0.6rem] text-white text-center"
@@ -85,7 +85,7 @@ export default function PitsDrsSpeed({
         ) : (
           <span style={mediumGeist.style}>
             {driverStints && (
-              <div className="flex flex-row gap-0 flex-wrap justify-center">
+              <div className="flex flex-row gap-0 justify-start flex-wrap">
                 {previousStintCompounds}
               </div>
             )}

@@ -41,7 +41,7 @@ export default function NotFound() {
           className="text-4xl md:text-5xl font-medium text-white text-center"
           style={boldGeist.style}
         >
-          Estás perdido, pibe
+          Te perdiste?
         </h1>
 
         <Link href="/">

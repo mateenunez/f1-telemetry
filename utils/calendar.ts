@@ -1,3 +1,5 @@
+import { config } from "@/lib/config";
+
 export interface F1Event {
     id: string;
     type: string;
@@ -48,7 +50,7 @@ export interface F1UpcomingResponse {
 export async function fetchUpcoming(): Promise<F1UpcomingResponse> {
     try {
 
-        const upcomingUrl = process.env.NEXT_PUBLIC_UPCOMING_URL || "";
+        const upcomingUrl = config.public.apiUrl + "upcoming";
         const response = await fetch(upcomingUrl);
 
         if (!response.ok) {
@@ -72,7 +74,7 @@ export async function fetchUpcoming(): Promise<F1UpcomingResponse> {
 export async function fetchCalendar(): Promise<F1CalendarResponse> {
     try {
 
-        const calendarUrl = process.env.NEXT_PUBLIC_CALENDAR_URL || "";
+        const calendarUrl = config.public.apiUrl + "calendar";
         const response = await fetch(calendarUrl);
 
         if (!response.ok) {

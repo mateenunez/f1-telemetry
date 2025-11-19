@@ -3,6 +3,7 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { PreferencesProvider } from "@/context/preferences";
 import { i18n, type Locale } from "@/lib/i18n/config";
+import Script from "next/script";
 
 export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }));
@@ -37,6 +38,13 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
+  alternates: {
+    canonical: "https://www.f1telemetry.com/en",
+    languages: {
+      en: "https://www.f1telemetry.com/en",
+      es: "https://www.f1telemetry.com/es",
+    },
+  },
 };
 
 export default async function RootLayout({
@@ -51,14 +59,39 @@ export default async function RootLayout({
   return (
     <html lang={lang}>
       <head>
-        {/* SEO extra tags */}
         <meta
           name="google-site-verification"
           content="eF8UbK8ghA29zsWnzurWzjJgXzmLeucRd59QUDpdHTE"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#b91c1c" />
-        <link rel="canonical" href="https://www.f1telemetry.com/" />
+        <link rel="canonical" href={`https://www.f1telemetry.com/${lang}`} />
+        {i18n.locales.map((l) => (
+          <link
+            key={l}
+            rel="alternate"
+            hrefLang={l}
+            href={`https://www.f1telemetry.com/${l}`}
+          />
+        ))}
+        <link
+          rel="alternate"
+          hrefLang="x-default"
+          href="https://www.f1telemetry.com/en"
+        />
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-CS9SV8WN8Y"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-CS9SV8WN8Y');
+        `}
+        </Script>
       </head>
       <body>
         <PreferencesProvider>{children}</PreferencesProvider>

@@ -34,35 +34,34 @@ body {
   background: rgba(255, 255, 255, 0.5);
 }
 
-/* Estilo para las barras de scroll en Webkit (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-  width: 8px; /* Ancho de la barra vertical */
-  height: 8px; /* Alto de la barra horizontal */
+  width: 8px;
+  height: 8px; 
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a1a; /* Color del fondo de la barra */
+  background: #1a1a1a;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4a4a4a; /* Color del "pulgar" de la barra */
+  background: #4a4a4a; 
   border-radius: 4px;
   border: 1px solid #2a2a2a;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6a6a6a; /* Color al hacer hover */
+  background: #6a6a6a;
 }
 
 ::-webkit-scrollbar-corner {
-  background: #1a1a1a; /* Color de la esquina donde se cruzan las barras */
+  background: #1a1a1a;
 }
 
 /* Estilo para Firefox */
 * {
-  scrollbar-width: thin; /* "auto" | "thin" | "none" */
-  scrollbar-color: #4a4a4a #1a1a1a; /* thumb track */
+  scrollbar-width: thin;
+  scrollbar-color: #4a4a4a #1a1a1a;
 }
 
 @layer utilities {

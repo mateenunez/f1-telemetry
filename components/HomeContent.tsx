@@ -1,12 +1,9 @@
 "use client";
 import { ColorShift } from "@/components/ColorShift";
-import Footer from "@/components/Footer";
 import { Geist } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
-const F1T_SRC =
-  "https://res.cloudinary.com/dvukvnmqt/image/upload/v1759788318/f1telemetry_1_msrjwa.png";
+import { config } from "@/lib/config";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const boldGeist = Geist({ subsets: ["latin"], weight: "800" });
@@ -18,11 +15,11 @@ interface HomeContentProps {
 export default function HomeContent({ dict }: HomeContentProps) {
   const [isVisible, setIsVisible] = useState(false);
 
-  const map_mp4 = process.env.NEXT_PUBLIC_MAPS_MP4 || "";
-  const circles_mp4 = process.env.NEXT_PUBLIC_CIRCLES_MP4 || "";
-  const audio_mp4 = process.env.NEXT_PUBLIC_AUDIO_MP4 || "";
-  const discord = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || "";
-  const github = process.env.NEXT_PUBLIC_GITHUB_URL || "";
+  const mapMp4 = config.public.assets.mp4.livemap;
+  const circlesMp4 = config.public.assets.mp4.circles;
+  const audioMp4 = config.public.assets.mp4.audios;
+
+  const f1t = config.public.assets.f1t;
 
   const handleScroll = () => {
     const scrollPosition = window.scrollY;
@@ -51,24 +48,22 @@ export default function HomeContent({ dict }: HomeContentProps) {
         ${isVisible ? "translate-y-0" : "-translate-y-full"}
       `}
       >
-        <div className="flex justify-between items-center mx-auto px-4 py-3">
-          {/* Elemento 1: Logo o Título */}
+        <div className="flex justify-between items-center mx-auto px-4 h-full">
           <Image
-            src={F1T_SRC}
-            width={50}
-            height={50}
-            alt="Telemetría telemetria Formula 1"
+            src={f1t}
+            width={80}
+            height={80}
+            alt="Telemetría telemetria telemetrics Formula 1 F1 Telemetry logo"
           />
-
-          {/* Elemento 2: Navegación o Botón */}
-          <nav className="flex flex-row gap-2">
+          <nav className="flex flex-row gap-2 items-center justify-center">
             <a
-              className="rounded px-3 py-3 text-sm bg-white text-black text-center transition duration-300 ease-in-out 
+              className="rounded px-3 py-3 text-sm bg-white text-black border-2 border-white text-center transition duration-300 ease-in-out 
                 
                 hover:bg-f1Blue
                 hover:shadow-2xl 
                 hover:text-gray-200
                 hover:cursor-pointer
+                hover:border-f1Blue
                 
                 focus:outline-none 
                 focus:ring-4 
@@ -172,24 +167,20 @@ export default function HomeContent({ dict }: HomeContentProps) {
               </a>
             </div>
           </div>
-          {dict.announce?.error && (
-            <div className="flex justify-center w-full px-[5%]">
-              <div
-                className="w-full bg-red-600/20 border-red-600 border-2 text-white px-6 py-4 rounded-lg text-center"
-                style={mediumGeist.style}
-              >
-                {dict.announce.error}
-              </div>
-            </div>
-          )}
-          <div className="w-full flex justify-center">
-            <video
-              src={map_mp4}
-              loop
-              autoPlay
-              muted
-              className="md:max-h-[20rem]"
-            />
+          <div className="w-full flex justify-center relative">
+            <a
+              href="/live-map"
+              className="inset-0 flex items-center justify-center"
+              style={mediumGeist.style}
+            >
+              <video
+                src={mapMp4}
+                loop
+                autoPlay
+                muted
+                className=""
+              />
+            </a>
           </div>
           <div className="flex flex-col md:flex-row gap-[2rem] md:justify-evenly w-full h-full px-[5%]">
             <div
@@ -207,13 +198,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
                   </span>
                 </span>
               </div>
-              <video
-                src={audio_mp4}
-                loop
-                autoPlay
-                muted
-                className="w-[20rem]"
-              />
+              <video src={audioMp4} loop autoPlay muted className="w-[20rem]" />
             </div>
           </div>
           <div className="flex flex-col md:flex-row gap-[2rem] md:justify-evenly w-full h-full px-[5%]">
@@ -235,7 +220,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 </span>
               </div>
               <video
-                src={circles_mp4}
+                src={circlesMp4}
                 loop
                 autoPlay
                 muted
@@ -249,39 +234,32 @@ export default function HomeContent({ dict }: HomeContentProps) {
           style={mediumGeist.style}
         >
           <h5 className="text-xl text-gray-200 text-center">
-            {dict.home.goalTitle}
+            {dict.home.repoTitle}
           </h5>
-          <span className="text-md text-gray-400 text-center">
-            {dict.home.goalDesc1}{" "}
-            <a
-              href={discord}
-              className="bold text-gray-200 relative inline-block transition-all duration-300 hover:text-white group"
-              target="_blank"
-            >
-              <span className="relative z-10">{dict.home.goalDesc2}</span>
-              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-offWhite transition-all duration-500 group-hover:w-full"></span>
-            </a>
-          </span>
-        </div>
-        <div
-          className="flex flex-col pb-[3rem] gap-4 items-center text-center w-full h-full"
-          style={mediumGeist.style}
-        >
-          <h5 className="text-xl text-gray-200 ">{dict.home.repoTitle}</h5>
-          <div className="flex flex-col gap-0">
+          <div className="flex flex-col gap-0 text-center items-center">
             <span className="text-md text-gray-400 text-center items-center">
               {dict.home.repoDesc1}{" "}
               <a
-                href={discord}
+                href={config.public.github}
                 className="bold text-gray-200 relative inline-block transition-all duration-300 hover:text-white group"
                 target="_blank"
               >
                 <span className="relative z-10">{dict.home.repoDesc2}</span>
                 <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-offWhite transition-all duration-500 group-hover:w-full"></span>
-              </a>
+              </a>{" "}
+              <span className="text-md text-gray-400 text-center">
+                {dict.home.goalDesc1}{" "}
+                <a
+                  href={config.public.discord}
+                  className="bold text-gray-200 relative inline-block transition-all duration-300 hover:text-white group"
+                  target="_blank"
+                >
+                  <span className="relative z-10">{dict.home.goalDesc2}</span>
+                  <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-offWhite transition-all duration-500 group-hover:w-full"></span>
+                </a>
+              </span>
+              <span>{dict.home.repoDesc4}</span>
             </span>
-            <span className="bold text-gray-400">{dict.home.repoDesc3}</span>
-            <span>{dict.home.repoDesc4}</span>
           </div>
         </div>
       </div>

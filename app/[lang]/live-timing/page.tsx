@@ -7,18 +7,18 @@ import type { Metadata } from "next";
 export async function generateMetadata({
   params,
 }: {
-  params: { lang: Locale };
+  params: Promise<{ lang: Locale }>;
 }): Promise<Metadata> {
   const { lang } = await params;
   const dict = await getDictionary(lang);
 
   return {
-    title: `${dict.liveTiming.title || "Live Timing"}`,
+    title: `${dict.liveTiming.title || "Live Timing"} | F1 Telemetry`,
     description:
       dict.liveTiming.description ||
       "F1 Telemetry live timing dashboard with real-time data and analytics.",
     openGraph: {
-      title: `${dict.liveTiming.title || "Live Timing"}`,
+      title: `${dict.liveTiming.title || "Live Timing"} | F1 Telemetry`,
       description:
         dict.liveTiming.description ||
         "F1 Telemetry live timing dashboard with real-time data and analytics.",
@@ -30,7 +30,7 @@ export async function generateMetadata({
 export default async function Telemetry({
   params,
 }: {
-  params: { lang: Locale };
+  params: Promise<{ lang: Locale }>;
 }) {
   const param = await params;
   const dict = await getDictionary(param.lang);

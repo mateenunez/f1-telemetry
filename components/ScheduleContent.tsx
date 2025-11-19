@@ -32,38 +32,59 @@ export function ScheduleContent({ dict }: ScheduleContentProps) {
   }, []);
 
   if (!calendar) {
+    const LoaderOverlay = () => (
+      <div className="fixed inset-0 z-20 flex items-center justify-center bg-warmBlack/40 backdrop-blur-sm">
+        <div
+          className="rounded-xl text-white text-xl text-center"
+          style={mediumGeist.style}
+        >
+          {dict.schedule.loading}
+        </div>
+      </div>
+    );
+
+    const HeaderSkeleton = () => (
+      <div className="flex flex-row justify-between mt-12 items-start md:items-center w-full gap-4 mb-8">
+        <div className="flex flex-row items-center gap-4 w-full">
+          <Skeleton height={36} width={"8rem"} />
+        </div>
+        <Skeleton height={36} width={"8rem"} />
+      </div>
+    );
+
+    const NextSessionSkeleton = () => (
+      <div className="mx-0 w-full gap-8 py-12">
+        <div className="flex flex-col items-center">
+          <Skeleton
+            height={150}
+            width="30rem"
+            style={{ marginBottom: 32, marginLeft: "0" }}
+          />
+          <Skeleton
+            height={80}
+            width="20rem"
+            style={{ marginBottom: 32, marginLeft: "0" }}
+          />
+        </div>
+      </div>
+    );
+
+    const UpcomingEventsSkeleton = () => (
+      <div className="flex gap-4 md:justify-evenly pb-4 flex-row md:flex-row lg:flex-row over pl-[2rem]">
+        {Array.from({ length: 3 }).map((_, idx) => (
+          <Skeleton width={"15rem"} height={160} key={idx} />
+        ))}
+      </div>
+    );
+
     return (
       <div className="min-h-screen bg-warmBlack p-4 flex items-start justify-center gap-4 overflow-hidden">
+        <LoaderOverlay />
         <div className="max-w-6xl w-full mx-auto px-4 md:px-8 blur-sm">
           <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
-            {/* Header Skeleton */}
-            <div className="flex flex-row justify-between mt-12 items-start md:items-center w-full gap-4 mb-8">
-              <div className="flex flex-row items-center gap-4 w-full">
-                <Skeleton height={36} width={"8rem"} />
-              </div>
-              <Skeleton height={36} width={"8rem"} />
-            </div>
-            {/* Next session skeleton */}
-            <div className="mx-0 w-full gap-8 py-12">
-              <div className="flex flex-col items-center">
-                <Skeleton
-                  height={150}
-                  width="30rem"
-                  style={{ marginBottom: 32, marginLeft: "0" }}
-                />
-                <Skeleton
-                  height={80}
-                  width="20rem"
-                  style={{ marginBottom: 32, marginLeft: "0" }}
-                />
-              </div>
-              {/* Upcoming Events Skeleton */}
-              <div className="flex gap-4 md:justify-evenly pb-4 flex-row md:flex-row lg:flex-row over pl-[2rem]">
-                {Array.from({ length: 3 }).map((_, idx) => (
-                  <Skeleton width={"15rem"} height={160} key={idx} />
-                ))}
-              </div>
-            </div>
+            <HeaderSkeleton />
+            <NextSessionSkeleton />
+            <UpcomingEventsSkeleton />
           </SkeletonTheme>
         </div>
       </div>
@@ -105,7 +126,10 @@ export function ScheduleContent({ dict }: ScheduleContentProps) {
               <div className="flex flex-col w-full">
                 <span className="text-xl mb-4">{dict.schedule.upnext}</span>
                 <ScrollArea className="w-full">
-                  <Upnext upNextEvents={calendar.groupsByLocation} dict={dict}/>
+                  <Upnext
+                    upNextEvents={calendar.groupsByLocation}
+                    dict={dict}
+                  />
                   <ScrollBar
                     orientation="horizontal"
                     className="bg-gray-700 hidden md:block"

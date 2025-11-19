@@ -1,17 +1,19 @@
 import {
+  ProcessedCapture,
   ProcessedDriver,
   ProcessedSession,
   ProcessedTeamRadio,
 } from "@/processors";
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "./ui/card";
-import { ScrollArea, ScrollBar } from "./ui/scroll-area";
-import { DownloadIcon, PauseIcon, PlayIcon } from "lucide-react";
+import { ScrollArea } from "./ui/scroll-area";
+import { Copy, DownloadIcon, PauseIcon, PlayIcon } from "lucide-react";
 import { toLocaleTime } from "@/utils/calendar";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { useTelemetryAudio, audioUrl } from "@/hooks/use-raceControl";
 import { usePreferences } from "@/context/preferences";
+import { config } from "@/lib/config";
 
 interface SessionAudiosProps {
   teamRadio: ProcessedTeamRadio | undefined;
@@ -20,7 +22,8 @@ interface SessionAudiosProps {
 }
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const AUDIO_DOWNLOAD_URL = process.env.NEXT_PUBLIC_AUDIO_DOWNLOAD_URL;
+
+const AUDIO_DOWNLOAD_URL = config.public + "download-mp3";
 
 export default function SessionAudios({
   teamRadio,
@@ -32,9 +35,9 @@ export default function SessionAudios({
 
   const { playTeamRadioSound, radioAudioRef, stopTeamRadioSound } =
     useTelemetryAudio();
-  const { getPreference } = usePreferences();
 
-  const headshot = getPreference("headshot");
+  const { preferences } = usePreferences();
+  const headshot = preferences.headshot;
 
   const getdriver = (driverNumber: number) => {
     const driver = drivers.find((d) => d?.driver_number === driverNumber);
@@ -59,6 +62,25 @@ export default function SessionAudios({
       });
       const url = audioUrl + session?.path + capturePath;
       playTeamRadioSound(url);
+    }
+  };
+
+  const handleCopyTranscription = async (cap: ProcessedCapture) => {
+    const text = preferences.translate
+      ? cap?.transcriptionEs
+      : cap?.transcription;
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
     }
   };
 
@@ -97,39 +119,41 @@ export default function SessionAudios({
 
   return (
     <Card className="flex w-full bg-transparent border-b-2 border-t-2 border-l-0 border-r-0 rounded-none border-gray-800 md:border-none md:p-0 ">
-      <CardContent className="overflow-x-auto flex-1 max-h-[20rem] w-[20rem] px-6 py-4">
+      <CardContent className="overflow-x-hidden flex-1 max-h-[20rem] max-w-full px-6 py-4">
         <ScrollArea
-          className="overflow-x-auto h-full p-0 min-w-max"
+          className="overflow-x-auto h-full p-0 min-w-full"
           type="scroll"
         >
-          {orderedCaptures && teamRadio ? (
+          {orderedCaptures.length > 0 && teamRadio ? (
             <div className="space-y-2">
               {orderedCaptures.map((capture, idx) => {
                 const driver = getdriver(capture.racingNumber);
                 const progress = progressMap?.get(idx) ?? 80;
+                const hasTranscription =
+                  capture.transcription && capture.transcription !== "";
+                const hasEsTranscription =
+                  capture.transcriptionEs && capture.transcriptionEs !== "";
                 return (
                   <div
                     key={idx}
-                    className="border-none flex flex-col w-full p-0"
+                    className="border-none flex flex-col max-w-full p-0"
                   >
-                    <div className="flex flex-row gap-2 rounded">
+                    <div className="flex flex-row gap-2 rounded max-w-full">
                       {headshot ? (
-                        <>
-                          {driver?.headshot_url && (
+                        <div>
+                          {driver && (
                             <img
-                              src={driver?.headshot_url}
+                              src={
+                                driver.driver_number === 43
+                                  ? config.public.assets.col
+                                  : driver?.headshot_url ||
+                                    config.public.assets.driver
+                              }
                               className="object-cover h-[60px]"
                               alt={`${driver.name_acronym} headshot f1 telemetry`}
                             />
                           )}
-                          {driver?.driver_number === 43 && (
-                            <img
-                              src="/franco-colapinto.png"
-                              className="object-cover h-[60px]"
-                              alt="Franco Colapinto headshot f1 telemetry"
-                            />
-                          )}
-                        </>
+                        </div>
                       ) : (
                         <p
                           className="text-md text-gray-100 h-[3rem] flex items-center"
@@ -141,9 +165,8 @@ export default function SessionAudios({
                           {driver.name_acronym}
                         </p>
                       )}
-
                       <div
-                        className="relative w-full my-2 text-gray-400 border-none items-center border-[2px] rounded border-gray-400 flex justify-start overflow-hidden"
+                        className="relative w-full max-w-full my-2 text-gray-400 border-none items-center border-[2px] rounded border-gray-400 flex justify-start overflow-hidden"
                         onClick={() => handleAudioPlay(idx, capture.path)}
                       >
                         <div
@@ -192,7 +215,7 @@ export default function SessionAudios({
                       </div>
                     </div>
                     <span
-                      className="text-xs flex flex-row gap-2 items-center text-gray-500 mx-[4.5rem]"
+                      className="text-xs flex flex-row gap-2 items-center text-gray-500 mx-[4.5rem] max-w-full"
                       style={mediumGeist.style}
                     >
                       {toLocaleTime(capture.utc)}
@@ -214,7 +237,41 @@ export default function SessionAudios({
                       ) : (
                         <DownloadIcon width={15} />
                       )}
+                      {(hasTranscription || hasEsTranscription) && (
+                        <Copy
+                          width={15}
+                          className="cursor-pointer"
+                          onClick={() => handleCopyTranscription(capture)}
+                        />
+                      )}
                     </span>
+                    {(hasTranscription || hasEsTranscription) && (
+                      <div
+                        className="flex flex-row gap-3 max-w-full w-[80%] mx-[4.5rem] overflow-hidden mt-2 items-stretch rounded-md"
+                        style={{
+                          backgroundColor: "#" + driver.team_color + "20",
+                        }}
+                      >
+                        <div
+                          className="w-[3px] self-stretch"
+                          style={{ backgroundColor: "#" + driver.team_color }}
+                        />
+                        <span
+                          className="text-start py-1.5 whitespace-pre-wrap text-sm italic"
+                          style={{
+                            fontFamily: mediumGeist.style.fontFamily,
+                            color: "#" + driver.team_color,
+                          }}
+                        >
+                          {preferences.translate
+                            ? hasEsTranscription
+                              ? `" ${capture.transcriptionEs} "`
+                              : capture.transcription
+                            : capture.transcription &&
+                              `" ${capture.transcription} "`}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -224,10 +281,13 @@ export default function SessionAudios({
               className="min-h-[20rem] items-center justify-center flex"
               style={mediumGeist.style}
             >
-              <p className="text-xs text-gray-400">No race audios.</p>
+              <p className="text-xs text-gray-400">
+                {preferences.translate
+                  ? "Sin audios de carrera."
+                  : "No team audios."}
+              </p>
             </div>
           )}
-          <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </CardContent>
     </Card>

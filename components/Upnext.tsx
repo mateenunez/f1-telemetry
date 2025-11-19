@@ -5,6 +5,7 @@ import {
   GroupByLocation,
 } from "@/utils/calendar";
 import { Card, CardContent, CardHeader } from "./ui/card";
+import { config } from "@/lib/config";
 
 interface UpNextProps {
   upNextEvents: GroupByLocation[];
@@ -66,10 +67,10 @@ export default function Upnext({ upNextEvents, dict }: UpNextProps) {
               <div className="flex items-center max-w-[10rem]">
                 <img
                   alt={event.location}
-                  src={`https://res.cloudinary.com/dvukvnmqt/image/upload/v1757271442/${event.location.replaceAll(
-                    " ",
-                    ""
-                  )}.png`}
+                  src={
+                    config.public.blobBaseUrl +
+                    `/tracks/${event.location.replaceAll(" ", "")}.png`
+                  }
                 />
               </div>
             </div>

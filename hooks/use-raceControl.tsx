@@ -1,6 +1,7 @@
 import { useRef, useCallback, useState, useEffect } from "react";
 import { MapSector, ProcessedRaceControl } from "@/processors";
 import Cookies from "js-cookie";
+import { config } from "@/lib/config";
 
 export const audioUrl = "https://livetiming.formula1.com/static/";
 
@@ -24,8 +25,6 @@ export const findYellowSectors = (
   for (let i = 0; i < msgs.length; i++) {
     const msg = msgs[i];
     if (msg.scope === "Track" && msg.flag !== "CLEAR") {
-      // Spam with sectors so all sectors are yellow no matter what
-      // number of sectors there really are
       for (let j = 0; j < 100; j++) {
         sectors.add(j);
       }
@@ -80,7 +79,7 @@ export function useTelemetryAudio() {
 
   const createAudio = (
     volumen = 1,
-    audioSrc = "/race-control-notification.mp3"
+    audioSrc = config.public.assets.mp3.raceControl
   ) => {
     if (typeof window === "undefined" || !cookieAudio) return null;
     const audio = new Audio(audioSrc);
@@ -115,12 +114,12 @@ export function useTelemetryAudio() {
       if (audioRef.current) {
         audioRef.current.currentTime = 0;
         audioRef.current.play().catch((error) => {
-          console.error("Error reproduciendo audio:", error);
+          console.error("Error playing audio:", error);
         });
         return true;
       }
     } catch (error) {
-      console.error("Error con el audio:", error);
+      console.error("Error with audio:", error);
     }
 
     return false;
@@ -138,7 +137,7 @@ export function useTelemetryAudio() {
         }
 
         if (radioAudioRef.current) {
-          if (radioAudioRef.current.src !== audioSrc){
+          if (radioAudioRef.current.src !== audioSrc) {
             radioAudioRef.current.pause();
             radioAudioRef.current.src = audioSrc;
             radioAudioRef.current.load();
@@ -149,12 +148,12 @@ export function useTelemetryAudio() {
           };
 
           radioAudioRef.current.play().catch((error) => {
-            console.error("Error reproduciendo audio:", error);
+            console.error("Error playing audio:", error);
           });
           return true;
         }
       } catch (error) {
-        console.error("Error con el audio:", error);
+        console.error("Error with audio:", error);
       }
 
       return false;
@@ -163,15 +162,9 @@ export function useTelemetryAudio() {
   );
 
   const stopTeamRadioSound = useCallback(() => {
-    try {
-      if (radioAudioRef.current) {
-        radioAudioRef.current.onended = null;
-        radioAudioRef.current.pause();
-        // radioAudioRef.current.src = "";
-        // radioAudioRef.current.load();
-      }
-    } finally {
-      //radioAudioRef.current = null;
+    if (radioAudioRef.current) {
+      radioAudioRef.current.onended = null;
+      radioAudioRef.current.pause();
     }
   }, []);
 

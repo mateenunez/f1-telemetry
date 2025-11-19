@@ -215,7 +215,7 @@ export default function PreferencesPanel({
     <>
       {/* Toggle Button */}
       <PanelLeft
-        className="text-gray-600 hover:text-gray-400 hover:cursor-pointer ninth-step"
+        className="text-gray-300 hover:text-gray-400 hover:cursor-pointer ninth-step"
         width={15}
         onClick={() => setOpen((prev) => !prev)}
       />
@@ -242,7 +242,7 @@ export default function PreferencesPanel({
             style={orbitron.style}
           >
             <PanelLeft
-              className="text-gray-600 hover:text-gray-400 hover:cursor-pointer"
+              className="text-gray-300 hover:text-gray-400 hover:cursor-pointer"
               width={15}
               onClick={() => setOpen((prev) => !prev)}
             />
@@ -296,7 +296,7 @@ export default function PreferencesPanel({
               {preferences.translate ? "Idioma" : "Language"}
             </p>
             <div className="flex flex-col gap-2">
-              <p className="text-xs text-gray-400" style={mediumGeist.style}>
+              <p className="text-xs text-gray-500" style={mediumGeist.style}>
                 {preferences.translate
                   ? "Las traducciones al español pueden tardar unos segundos más en llegar."
                   : "The spanish translation may have additional delay."}
