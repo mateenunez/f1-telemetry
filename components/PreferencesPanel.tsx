@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { usePreferences } from "@/context/preferences";
-import { X, Check, PanelLeft, PlayCircle } from "lucide-react";
+import { X, Check, PanelLeft } from "lucide-react";
 import { Geist, Orbitron } from "next/font/google";
 import { ProcessedDriver } from "@/processors";
 import { useTour } from "@reactour/tour";
+import { usePathname } from "next/navigation";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
@@ -34,6 +35,8 @@ export default function PreferencesPanel({
   const [selectedLanguage, setSelectedLanguage] = useState<string>(
     preferences.translate ? "es" : "en"
   );
+  const pathname = usePathname();
+  const isLiveTimingPage = /^\/[^/]+\/live-timing\/?$/.test(pathname ?? "");
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -110,10 +113,9 @@ export default function PreferencesPanel({
   };
 
   const handleRestartTour = () => {
+    if (!isLiveTimingPage) return;
     setOpen(false);
-    setTimeout(() => {
-      setIsOpen(true);
-    }, 300);
+    setTimeout(() => setIsOpen(true), 300);
   };
 
   const preferenceDetails: Record<
@@ -267,11 +269,11 @@ export default function PreferencesPanel({
                 }}
                 onChange={handleDelayChange}
                 value={delay}
-                className="w-[8rem] px-3 h-full text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 transition-all duration-800 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="w-[8rem] px-3 h-full text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
               />
               <button
                 type="button"
-                className="flex justify-center items-center px-3 h-full text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 transition-all duration-800 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="flex justify-center items-center px-3 h-full text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 transition-all hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
                 onClick={handleDelay}
                 style={{
                   boxShadow:
@@ -308,7 +310,7 @@ export default function PreferencesPanel({
                   boxShadow:
                     "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
                 }}
-                className="text-sm py-2 px-2 rounded-md bg-warmBlack text-gray-200 border-2 border-gray-700 transition-all duration-800 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="text-sm py-2 px-2 rounded-md bg-warmBlack text-gray-200 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
               >
                 {options.map((option) => (
                   <option
@@ -329,9 +331,9 @@ export default function PreferencesPanel({
             <p className="text-md text-gray-100" style={orbitron.style}>
               Tutorial
             </p>
-            <p className="text-xs text-gray-400" style={mediumGeist.style}>
+            <p className="text-xs text-gray-500" style={mediumGeist.style}>
               {preferences.translate
-                ? "Vuelve a ver el tutorial de introducción."
+                ? "Volver a ver el tutorial de introducción."
                 : "Show the introduction tutorial again."}
             </p>
             <button
@@ -345,8 +347,8 @@ export default function PreferencesPanel({
             >
               <span>
                 {preferences.translate
-                  ? "Reiniciar Tutorial"
-                  : "Restart Tutorial"}
+                  ? "Reiniciar"
+                  : "Restart"}
               </span>
             </button>
           </div>
@@ -397,7 +399,7 @@ export default function PreferencesPanel({
                     ? "Buscar por piloto o equipo..."
                     : "Search by name or team..."
                 }
-                className="w-full px-3 py-2 text-sm rounded-md bg-warmBlack text-gray-200 border-2 border-gray-700 transition-all duration-800 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="w-full px-3 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
               />
 
               {/* Suggestions dropdown */}
