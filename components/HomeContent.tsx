@@ -27,7 +27,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
     description,
     videoUrl,
   }: InlineVideoCardProps) => (
-    <div className="w-full w-[25rem] flex flex-col items-center">
+    <div className="md:w-[25rem] w-full flex flex-col items-center">
       <div className="rounded-xl border border-gray-700 bg-transparent p-4">
         <h3
           className="text-center text-lg font-semibold mb-3 text-gray-200"
