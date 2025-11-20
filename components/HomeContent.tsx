@@ -1,12 +1,13 @@
 "use client";
 import { ColorShift } from "@/components/ColorShift";
-import { Geist } from "next/font/google";
+import { Geist, Orbitron } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { config } from "@/lib/config";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 const boldGeist = Geist({ subsets: ["latin"], weight: "800" });
+const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 interface HomeContentProps {
   dict: any;
@@ -15,9 +16,43 @@ interface HomeContentProps {
 export default function HomeContent({ dict }: HomeContentProps) {
   const [isVisible, setIsVisible] = useState(false);
 
-  const mapMp4 = config.public.assets.mp4.livemap;
-  const circlesMp4 = config.public.assets.mp4.circles;
-  const audioMp4 = config.public.assets.mp4.audios;
+  type InlineVideoCardProps = {
+    title: string;
+    description: string;
+    videoUrl: string;
+  };
+
+  const InlineVideoCard = ({
+    title,
+    description,
+    videoUrl,
+  }: InlineVideoCardProps) => (
+    <div className="w-full w-[25rem] flex flex-col items-center">
+      <div className="rounded-xl border border-gray-700 bg-transparent p-4">
+        <h3
+          className="text-center text-lg font-semibold mb-3 text-gray-200"
+          style={orbitron.style}
+        >
+          {title}
+        </h3>
+        <div className="w-full overflow-hidden rounded-lg">
+          <video
+            src={videoUrl}
+            loop
+            autoPlay
+            muted
+            className="w-full h-auto rounded-lg"
+          />
+        </div>
+      </div>
+      <p
+        className="mt-3 text-sm text-gray-300 text-center px-2"
+        style={mediumGeist.style}
+      >
+        {description}
+      </p>
+    </div>
+  );
 
   const f1t = config.public.assets.f1t;
 
@@ -48,21 +83,22 @@ export default function HomeContent({ dict }: HomeContentProps) {
         ${isVisible ? "translate-y-0" : "-translate-y-full"}
       `}
       >
-        <div className="flex justify-between items-center mx-auto px-4 py-3">
+        <div className="flex justify-between items-center mx-auto px-4 h-full">
           <Image
             src={f1t}
-            width={50}
-            height={50}
-            alt="Telemetría telemetria Formula 1"
+            width={80}
+            height={80}
+            alt="Telemetría telemetria telemetrics Formula 1 F1 Telemetry logo"
           />
-          <nav className="flex flex-row gap-2">
+          <nav className="flex flex-row gap-2 items-center justify-center">
             <a
-              className="rounded px-3 py-3 text-sm bg-white text-black text-center transition duration-300 ease-in-out 
+              className="rounded px-3 py-3 text-sm bg-white text-black border-2 border-white text-center transition duration-300 ease-in-out 
                 
                 hover:bg-f1Blue
                 hover:shadow-2xl 
                 hover:text-gray-200
                 hover:cursor-pointer
+                hover:border-f1Blue
                 
                 focus:outline-none 
                 focus:ring-4 
@@ -96,9 +132,11 @@ export default function HomeContent({ dict }: HomeContentProps) {
       <div className="h-screen py-5 w-full bg-f1telemetry bg-cover bg-center">
         <div className="flex flex-col justify-evenly h-full justify-center items-center max-w-4xl mx-auto">
           <div className="flex justify-center w-full items-center">
-            <p className="text-gray-300 text-sm" style={mediumGeist.style}>
-              La version 1.4.2 contiene cambios de delay dinamico, tutorial
-              interactivo y cambios en la UI!
+            <p
+              className="text-gray-300 text-sm text-center px-2"
+              style={mediumGeist.style}
+            >
+              {dict.home.version}
             </p>
           </div>
           <div className="flex flex-col items-center">
@@ -112,10 +150,29 @@ export default function HomeContent({ dict }: HomeContentProps) {
               className="text-[2rem] text-gray-200 boldest "
               style={boldGeist.style}
             >
-              {dict.home.title}
+              {Array.from(dict.home.title).map((char, idx) => {
+                if (typeof char !== "string") return;
+                return (
+                  <ColorShift
+                    key={idx}
+                    text={char}
+                    animateLetters={true}
+                    letterDelay={150 * idx}
+                    letterColor={
+                      idx < 3
+                        ? "#3B82F6"
+                        : idx > 2 && idx < 6
+                        ? "#ffe066"
+                        : idx > 9
+                        ? "#b197fc"
+                        : "#51cf66"
+                    }
+                  />
+                );
+              })}
             </h1>
           </div>
-          <div className="flex md:flex-row flex-col justify-center gap-[4rem] w-full">
+          <div className="flex md:flex-row flex-col justify-center items-center gap-[4rem] w-full">
             <a
               className="rounded px-6 w-[15rem] py-3 text-[1.5rem] bg-white text-black text-center transition duration-300 ease-in-out 
                 hover:-translate-y-1 
@@ -157,13 +214,32 @@ export default function HomeContent({ dict }: HomeContentProps) {
         </div>
       </div>
       <div className="py-5 w-full bg-warmBlack">
-        <div className="flex flex-col justify-evenly h-full justify-center items-center max-w-4xl mx-auto">
+        <div className="flex flex-col justify-evenly min-h-screen h-full justify-center items-center max-w-4xl mx-auto">
           <div>
-            <h2 className="text-md text-gray-300 text-center" style={mediumGeist.style}>
+            <h2
+              className="text-md text-gray-300 text-center"
+              style={mediumGeist.style}
+            >
               {dict.home.description}
             </h2>
           </div>
-          <div></div>
+          <div className="flex flex-col gap-[5rem] md:flex-row justify-evenly">
+            <InlineVideoCard
+              title={dict.home.mapTitle}
+              description={dict.home.mapDesc}
+              videoUrl={config.public.assets.mp4.livemap}
+            />
+            <InlineVideoCard
+              title={dict.home.audioTitle}
+              description={dict.home.audioDesc}
+              videoUrl={config.public.assets.mp4.audios}
+            />
+            <InlineVideoCard
+              title={dict.home.circlesTitle}
+              description={dict.home.circlesDesc}
+              videoUrl={config.public.assets.mp4.circles}
+            />
+          </div>
         </div>
       </div>
     </div>

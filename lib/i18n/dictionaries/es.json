@@ -4,20 +4,13 @@
     "description": "F1 Telemetry es un dashboard de telemetría en tiempo real, para que puedas seguir la Fórmula 1 por completo y desde cualquier lado, sin necesidad de ver la transmisión.",
     "dashboardButton": "Telemetría",
     "scheduleButton": "Calendario",
+    "mapTitle": "Mapa en vivo",
+    "mapDesc": "Vista previa del mapa en tiempo real.",
     "audioTitle": "Radio de Equipo + IA",
-    "audioDesc1": "Podés escuchar al instante el mensaje de radio de equipo de cada piloto durante la carrera, y además ",
-    "audioDesc2": "¡usamos IA para la traducción y transcripción!",
+    "audioDesc": "Podés escuchar al instante el mensaje de radio de equipo de cada piloto durante la carrera, y además ¡usamos IA para la traducción y transcripción!",
     "circlesTitle": "Análisis en tiempo real",
-    "circlesDesc1": "Estamos añadiendo constantemente funcionalidades para mejorar el análisis de carreras, como el ",
-    "circlesDesc2": "Circle of Doom ",
-    "circlesDesc3": "que sirve para tomar decisiones de undercut.",
-    "goalTitle": "¿Por qué lo hicimos?",
-    "goalDesc1": "También podés contactarnos en este ",
-    "goalDesc2": "servidor de Discord.",
-    "repoTitle": "Para desarrolladores y diseñadores",
-    "repoDesc1": "Si tenes ideas de funcionalidades o críticas, estás invitado a contribuir en este ",
-    "repoDesc2": "repositorio de GitHub.",
-    "repoDesc4": "🥥🏁"
+    "circlesDesc": "Estamos añadiendo constantemente funcionalidades para mejorar el análisis de carreras, como el Circle of Doom que sirve para tomar decisiones de undercut.",
+    "version": "La version 1.4.2 contiene mejoras por delay dinamico, tutorial interactivo y cambios en la interfaz."
   },
   "footer": {
     "legal": " Este sitio web no está asociado, afiliado, autorizado, respaldado ni conectado oficialmente de ninguna manera con la Fórmula 1, la FIA o cualquiera de sus subsidiarias o afiliadas."

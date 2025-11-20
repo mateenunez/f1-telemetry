@@ -1,23 +1,16 @@
 {
   "home": {
-    "title": "Formula 1 telemetrics",
-    "description": "F1 Telemetry is a real-time telemetry dashboard, follow Formula 1 completely and from anywhere, keep track of the race without having to watch the broadcast.",
-    "dashboardButton": "Dashboard",
+    "title": "Real time dashboard and analytics",
+    "description": "F1 Telemetry is a real-time telemetry dashboard so you can follow Formula 1 completely and from anywhere, without needing to watch the broadcast.",
+    "dashboardButton": "Telemetry",
     "scheduleButton": "Schedule",
+    "mapTitle": "Live Map",
+    "mapDesc": "Real-time preview of the live map.",
     "audioTitle": "Team Radio + AI",
-    "audioDesc1": "You can hear instantly the team radio message of every driver during race, we also ",
-    "audioDesc2": "use AI for translation and transcription!",
-    "circlesTitle": "Real time analysis",
-    "circlesDesc1": "We are constantly adding features to improve race analysis, like the ",
-    "circlesDesc2": "Circle of Doom ",
-    "circlesDesc3": "which is great to take undercut decisions!",
-    "goalTitle": "What is our goal?",
-    "goalDesc1": "And also you can ",
-    "goalDesc2": "reach us on our discord server!",
-    "repoTitle": "To developers and designers",
-    "repoDesc1": "If you have any features ideas or critics you are happily invited to contribute on this ",
-    "repoDesc2": "github repository.",
-    "repoDesc4": "🥥🏁"
+    "audioDesc": "Listen instantly to each driver’s team radio during the race—we also use AI for translation and transcription!",
+    "circlesTitle": "Real-Time Analysis",
+    "circlesDesc": "We keep adding features to boost race analysis, such as the Circle of Doom, perfect for undercut decisions.",
+    "version": "Version 1.4.2 includes dynamic delay changes, an interactive tutorial, and UI updates."
   },
   "footer": {
     "legal": "This website is not associated, affiliated, authorized, endorsed, or officially connected in any way with Formula 1, the FIA, or any of its subsidiaries or affiliates."
