@@ -26,6 +26,8 @@ export const config = {
       col: `${blobBaseUrl}/43.png`,
       discordIcon: `${blobBaseUrl}/discord.svg`,
       driver: `${blobBaseUrl}/driver.png`,
+      f1t_black: `${blobBaseUrl}/f1t_black.png`,
+      f1telemetrybg_v1: `${blobBaseUrl}/f1telemetrybg_v1.png`,
       mp3: {
         raceControl: `${blobBaseUrl}/mp3/race-control-notification.mp3`,
       },

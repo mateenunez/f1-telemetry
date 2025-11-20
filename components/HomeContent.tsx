@@ -39,7 +39,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-warmBlack max-w-4xl mx-auto px-4">
+    <div className="min-h-screen w-full">
       <header
         className={`
         fixed top-0 left-0 w-full gap-4 md:px-[15%] h-[5rem] z-50 
@@ -93,42 +93,31 @@ export default function HomeContent({ dict }: HomeContentProps) {
           </nav>
         </div>
       </header>
-      <div className="flex flex-col gap-[5rem] py-[2rem] justify-center items-center w-full ">
-        <div className="flex flex-col min-h-screen justify-evenly gap-[5rem]">
-          <div className="flex flex-col md:flex-row w-full h-full justify-around gap-8">
-            <div className="flex flex-col md:max-w-[25rem] items-center justify-center text-gray-200 gap-[2rem]  ">
-              <h1
-                className="text-[2rem] text-gray-200 boldest "
-                style={boldGeist.style}
-              >
-                {Array.from("F1Telemetry").map((char, idx) => {
-                  return (
-                    <ColorShift
-                      key={idx}
-                      text={char}
-                      animateLetters={true}
-                      letterDelay={150 * idx}
-                      letterColor={
-                        idx < 3
-                          ? "#3B82F6"
-                          : idx > 2 && idx < 6
-                          ? "#ffe066"
-                          : idx > 9
-                          ? "#b197fc"
-                          : "#51cf66"
-                      }
-                    />
-                  );
-                })}{" "}
-                | {dict.home.title}
-              </h1>
-              <h2 className="text-md text-gray-300" style={mediumGeist.style}>
-                {dict.home.description}
-              </h2>
-            </div>
-            <div className="flex flex-col gap-8 items-center justify-center">
-              <a
-                className="rounded px-6 py-3 text-[1.5rem] bg-white text-black text-center transition duration-300 ease-in-out 
+      <div className="h-screen py-5 w-full bg-f1telemetry bg-cover bg-center">
+        <div className="flex flex-col justify-evenly h-full justify-center items-center max-w-4xl mx-auto">
+          <div className="flex justify-center w-full items-center">
+            <p className="text-gray-300 text-sm" style={mediumGeist.style}>
+              La version 1.4.2 contiene cambios de delay dinamico, tutorial
+              interactivo y cambios en la UI!
+            </p>
+          </div>
+          <div className="flex flex-col items-center">
+            <Image
+              src={config.public.assets.f1t_black}
+              height={150}
+              width={250}
+              alt="F1 Telemetry black logo"
+            />
+            <h1
+              className="text-[2rem] text-gray-200 boldest "
+              style={boldGeist.style}
+            >
+              {dict.home.title}
+            </h1>
+          </div>
+          <div className="flex md:flex-row flex-col justify-center gap-[4rem] w-full">
+            <a
+              className="rounded px-6 w-[15rem] py-3 text-[1.5rem] bg-white text-black text-center transition duration-300 ease-in-out 
                 hover:-translate-y-1 
                 hover:scale-105 
                 hover:bg-f1Blue 
@@ -140,13 +129,13 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 focus:ring-4 
                 focus:ring-gray-500 
                 focus:ring-opacity-50"
-                style={mediumGeist.style}
-                href="/live-timing"
-              >
-                {dict.home.dashboardButton}
-              </a>
-              <a
-                className="rounded px-6 md:w-full py-3 text-[1.5rem] bg-transparent border-2 border-gray-200 text-gray-200 text-center transition duration-300 ease-in-out 
+              style={mediumGeist.style}
+              href="/live-timing"
+            >
+              {dict.home.dashboardButton}
+            </a>
+            <a
+              className="rounded px-6 w-[15rem] py-3 text-[1.5rem] bg-transparent border-2 border-gray-200 text-gray-200 text-center transition duration-300 ease-in-out 
                 hover:-translate-y-1 
                 hover:scale-105 
                 hover:bg-f1Red
@@ -159,107 +148,22 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 focus:ring-4 
                 focus:ring-gray-500 
                 focus:ring-opacity-50"
-                style={mediumGeist.style}
-                href="/schedule"
-              >
-                {dict.home.scheduleButton}
-              </a>
-            </div>
-          </div>
-          <div className="w-full flex justify-center relative">
-            <a
-              href="/live-map"
-              className="inset-0 flex items-center justify-center"
               style={mediumGeist.style}
+              href="/schedule"
             >
-              <video
-                src={mapMp4}
-                loop
-                autoPlay
-                muted
-                className="md:max-h-[20rem]"
-              />
+              {dict.home.scheduleButton}
             </a>
           </div>
-          <div className="flex flex-col md:flex-row gap-[2rem] md:justify-evenly w-full h-full px-[5%]">
-            <div
-              className="flex flex-col md:flex-row gap-[2rem] items-center"
-              style={mediumGeist.style}
-            >
-              <div className="flex flex-col gap-4 w-full max-w-[30rem]">
-                <h5 className="text-xl text-gray-200 ">
-                  {dict.home.audioTitle}
-                </h5>
-                <span className="text-md text-gray-400 text-start">
-                  {dict.home.audioDesc1}
-                  <span className="bold text-gray-200">
-                    {dict.home.audioDesc2}
-                  </span>
-                </span>
-              </div>
-              <video src={audioMp4} loop autoPlay muted className="w-[20rem]" />
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row gap-[2rem] md:justify-evenly w-full h-full px-[5%]">
-            <div
-              className="flex flex-col md:flex-row gap-[2rem] items-center"
-              style={mediumGeist.style}
-            >
-              <div className="flex flex-col gap-4 w-full max-w-[30rem]">
-                <h5 className="text-xl text-gray-200 ">
-                  {dict.home.circlesTitle}
-                </h5>
-                <span className="text-md text-gray-400 text-start">
-                  {dict.home.circlesDesc1}
-                  <span className="bold text-gray-200">
-                    {" "}
-                    {dict.home.circlesDesc2}
-                  </span>
-                  {dict.home.circlesDesc3}
-                </span>
-              </div>
-              <video
-                src={circlesMp4}
-                loop
-                autoPlay
-                muted
-                className="w-[20rem]"
-              />
-            </div>
-          </div>
         </div>
-        <div
-          className="flex flex-col gap-4 md:max-w-[70%]"
-          style={mediumGeist.style}
-        >
-          <h5 className="text-xl text-gray-200 text-center">
-            {dict.home.repoTitle}
-          </h5>
-          <div className="flex flex-col gap-0 text-center items-center">
-            <span className="text-md text-gray-400 text-center items-center">
-              {dict.home.repoDesc1}{" "}
-              <a
-                href={config.public.github}
-                className="bold text-gray-200 relative inline-block transition-all duration-300 hover:text-white group"
-                target="_blank"
-              >
-                <span className="relative z-10">{dict.home.repoDesc2}</span>
-                <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-offWhite transition-all duration-500 group-hover:w-full"></span>
-              </a>{" "}
-              <span className="text-md text-gray-400 text-center">
-                {dict.home.goalDesc1}{" "}
-                <a
-                  href={config.public.discord}
-                  className="bold text-gray-200 relative inline-block transition-all duration-300 hover:text-white group"
-                  target="_blank"
-                >
-                  <span className="relative z-10">{dict.home.goalDesc2}</span>
-                  <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-offWhite transition-all duration-500 group-hover:w-full"></span>
-                </a>
-              </span>
-              <span>{dict.home.repoDesc4}</span>
-            </span>
+      </div>
+      <div className="py-5 w-full bg-warmBlack">
+        <div className="flex flex-col justify-evenly h-full justify-center items-center max-w-4xl mx-auto">
+          <div>
+            <h2 className="text-md text-gray-300 text-center" style={mediumGeist.style}>
+              {dict.home.description}
+            </h2>
           </div>
+          <div></div>
         </div>
       </div>
     </div>
