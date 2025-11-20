@@ -31,11 +31,11 @@
     "loading": "Checking the official schedule..."
   },
   "liveTiming": {
-    "title": "Live Timing",
+    "title": "Live timing",
     "description": "Real-time F1 telemetry dashboard with live timing, driver positions, lap times, and race analytics. Follow Formula 1 races with detailed data."
   },
   "map": {
-    "title": "Live Map",
+    "title": "Live map",
     "description": "F1 Telemetry live map of the Formula 1 race circuit."
   },
   "sessionTypes": {
@@ -49,6 +49,18 @@
   },
   "announce": {
     "error": "Team radio transcriptions are currently in development."
+  },
+  "tourSteps": {
+    "welcome": "Welcome! With this tutorial we're going to show you the telemetry features.",
+    "positions": "Here you can see the current positions, compounds and pit history, differences in seconds, lap times and mini sectors.",
+    "map": "This map shows the real-time location of each driver on the circuit during the session.",
+    "raceControl": "Here you'll see race control messages, that is flags and penalties.",
+    "laps": "Next to the messages are the laps and the current state of the circuit.",
+    "header": "In the header you can see the session status, view weather conditions and the time to sync.",
+    "raceLogs": "You can also listen to audios, read their transcriptions or the session message history.",
+    "doomCircle": "The Circle of Doom helps you visualize pit stop strategies and undercut decisions in real-time. When a driver enters the pit they will be delayed until the PIT mark",
+    "carDataCircle": "This circle shows real-time data from the selected driver, such as speed, RPM and more.",
+    "preferences": "IMPORTANT: This is the preferences panel, you can customize the telemetry here. Enjoy!"
   },
   "loading": "Getting things ready...",
   "delaying": "Applying delay...",

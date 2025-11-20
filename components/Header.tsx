@@ -60,14 +60,14 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
   }, [session?.session_status, telemetryData?.lastUpdateTime]);
 
   return (
-    <Card className="bg-warmBlack1 text-white border-b-2 border-t-0 border-l-0 border-r-0 rounded-none border-gray-800 relative">
+    <Card className="bg-warmBlack1 text-white border-b-2 border-t-0 border-l-0 border-r-0 rounded-none border-gray-800 relative fifth-step">
       <CardHeader>
         <div className="flex flex-col md:flex-row lg:flex-row items-center justify-between gap-1">
           <div className="flex flex-row md:justify-start items-center mx-4">
-            <div
-              className="flex flex-row md:gap-[1rem] w-[20rem] md:w-full justify-between items-center"
-            >
-              <PreferencesPanel driverInfo={telemetryData?.drivers} />
+            <div className="flex flex-row md:gap-[1rem] w-[20rem] md:w-full justify-between items-center">
+              <div className="ninth-step">
+                <PreferencesPanel driverInfo={telemetryData?.drivers} />
+              </div>
               <div className="flex flex-col md:flex-row items-center md:justify-between justify-center">
                 <div className="flex items-center flex-col">
                   <CardTitle
@@ -100,7 +100,10 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
                   "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
               }}
             >
-              <span className="text-xl font-mono text-center w-full" style={orbitron.style}>
+              <span
+                className="text-xl font-mono text-center w-full"
+                style={orbitron.style}
+              >
                 {sessionTime !== undefined ? formatTime(sessionTime) : null}
               </span>
             </div>
@@ -115,9 +118,7 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
               <>
                 {/* Weather Info */}
                 {weather && (
-                  <div
-                    className="flex items-center text-offWhite"
-                  >
+                  <div className="flex items-center text-offWhite">
                     <div className="px-2">{getWeatherIcon()}</div>
                     {/* Air Temperature Bar */}
                     <div className="flex flex-col items-center">

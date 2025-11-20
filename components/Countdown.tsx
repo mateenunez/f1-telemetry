@@ -60,8 +60,15 @@ export function Countdown({
     return () => clearInterval(interval);
   }, [mounted, isActive, remainingSeconds]);
 
-  // Don't render until mounted (prevents hydration mismatch)
-  if (!mounted || !remainingSeconds || !totalSeconds) return null;
+  if (!mounted || !remainingSeconds || !totalSeconds)
+    return (
+      <span
+        className="text-white text-xl text-center"
+        style={mediumGeist.style}
+      >
+        {dict.loading}
+      </span>
+    );
 
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
