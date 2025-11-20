@@ -1,10 +1,6 @@
 "use client";
 
-import { Geist, Aldrich, Oxanium } from "next/font/google";
 import type { ProcessedTiming, ProcessedTimingStats } from "@/processors";
-
-const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
-const oxanium = Oxanium({ subsets: ["latin"], weight: "500" });
 
 interface MinisectorsProps {
   timing: ProcessedTiming | undefined;
@@ -42,7 +38,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
   return (
     <div className="flex flex-row min-w-[13rem] justify-center gap-2">
       {/* Minisectores */}
-      <div className="text-xs text-white" style={aldrich.style}>
+      <div className="text-xs text-white font-f1-regular">
         {(["sector1", "sector2", "sector3"] as const).map(
           (sectorKey, sectorIdx) => {
             const minisectors = timing?.sector_segments[sectorKey] || [];
@@ -78,10 +74,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
       </div>
 
       {/* Tiempos de sector */}
-      <div
-        className="flex items-center flex-col text-xs text-white min-w-[2.5rem]"
-        style={oxanium.style}
-      >
+      <div className="flex items-center flex-col text-[10px] text-white min-w-[2.5rem] font-f1-regular">
         {(["sector1", "sector2", "sector3"] as const).map((sectorKey, idx) => {
           const sector = timing?.sector_times[sectorKey];
           const color = getSectorTimeColor(sector);
@@ -89,24 +82,25 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
             sector?.Value ?? sector?.PreviousValue ?? "--.---";
           return (
             <div className="flex flex-row gap-0" key={sectorKey}>
-              <span className={color}>{sector && displayValue || "--.---"}</span>
+              <span className={color}>
+                {(sector && displayValue) || "--.---"}
+              </span>
             </div>
           );
         })}
       </div>
 
       {/* Mejores tiempos de sector */}
-      <div
-        className="flex items-center flex-col text-xs min-w-[2.5rem]"
-        style={oxanium.style}
-      >
+      <div className="flex items-center flex-col text-[10px] min-w-[2.5rem] font-f1-regular">
         {timingStats?.best_sectors.map((sectorKey, idx) => {
           const sector = timingStats.best_sectors[idx];
           const color = getBestSectorColor(sector);
           const displayValue = sector?.Value ?? "--:--";
           return (
             <div className="flex flex-row gap-0" key={idx}>
-              <span className={color}>{sector && displayValue || "--.---"}</span>
+              <span className={color}>
+                {(sector && displayValue) || "--.---"}
+              </span>
             </div>
           );
         })}

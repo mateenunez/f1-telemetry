@@ -44,10 +44,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
     <Card className="bg-transparent border-none p-0">
       <CardContent className="align-center p-0">
         {lastMessage && (
-          <div
-            className={`rounded text-f1Blue py-0`}
-            style={mediumGeist.style}
-          >
+          <div className={`rounded text-f1Blue py-0 font-f1-regular`}>
             <p className="text-xs text-gray-200 leading-tight">
               {lastMessage.message}
             </p>

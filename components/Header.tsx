@@ -2,7 +2,6 @@
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { CloudRain, Sun, Wind, Droplets, CloudSun } from "lucide-react";
-import { Geist, Orbitron } from "next/font/google";
 import F1Calendar from "@/components/Calendar";
 import type { TelemetryData } from "@/telemetry-manager";
 import { useEffect, useState } from "react";
@@ -15,9 +14,6 @@ import {
 } from "@/utils/calendar";
 import PreferencesPanel from "./PreferencesPanel";
 import { usePreferences } from "@/context/preferences";
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 interface HeaderProps {
   telemetryData: TelemetryData | null;
@@ -70,22 +66,15 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
               </div>
               <div className="flex flex-col md:flex-row items-center md:justify-between justify-center">
                 <div className="flex items-center flex-col">
-                  <CardTitle
-                    className="flex flex-row items-center gap-4 text-xl sm:text-2xl"
-                    style={orbitron.style}
-                  >
+                  <CardTitle className="flex flex-row items-center gap-4 text-xl sm:text-2xl font-f1-bold">
                     {preferences.translate
                       ? translateSessionName(session?.session_name)
-                      : session?.session_name}
-                    :{" "}
+                      : session?.session_name}{" "}
                     {preferences.translate
                       ? translateSessionStatus(session?.session_status)
                       : session?.session_status}
                   </CardTitle>
-                  <div
-                    className="text-gray-600 text-sm flex flex-col justify-center items-center"
-                    style={mediumGeist.style}
-                  ></div>
+                  <div className="text-gray-600 text-sm flex flex-col justify-center items-center"></div>
                 </div>
               </div>
               <div></div>
@@ -94,24 +83,18 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
           {session?.session_status !== "Finalised" && (
             /* Countdown */
             <div
-              className="flex items-center py-2 px-4 w-[8.5rem] text-center items-center text-offWhite flex-row text-xl sm:text-2xl border-2 border-gray-800 rounded-full px-4 py-2 transition-all duration-800 ease-in-out"
+              className="flex w-[8.5rem] text-center items-center text-offWhite flex-row text-xl sm:text-2xl border-2 border-gray-800 rounded-full px-4 py-2 transition-all duration-800 ease-in-out"
               style={{
                 boxShadow:
                   "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
               }}
             >
-              <span
-                className="text-xl font-mono text-center w-full"
-                style={orbitron.style}
-              >
+              <span className="text-xl font-mono text-center w-full">
                 {sessionTime !== undefined ? formatTime(sessionTime) : null}
               </span>
             </div>
           )}
-          <div
-            className="flex items-center text-nowrap flex-col md:flex-row text-xs md:text-sm"
-            style={mediumGeist.style}
-          >
+          <div className="flex items-center text-nowrap flex-col md:flex-row text-xs md:text-sm font-geist">
             {session?.session_status === "Finalised" ? (
               <F1Calendar dict={dict} />
             ) : (

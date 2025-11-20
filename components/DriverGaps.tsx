@@ -1,11 +1,7 @@
 "use client";
 
-import { Aldrich, Oxanium } from "next/font/google";
 import type { ProcessedSession, ProcessedTiming } from "@/processors";
 import { useRef } from "react";
-
-const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
-const oxanium = Oxanium({ subsets: ["latin"], weight: "500" });
 
 interface DriverGapsProps {
   timing: ProcessedTiming | undefined;
@@ -50,20 +46,14 @@ export default function DriverGaps({ timing, session }: DriverGapsProps) {
 
   return (
     <div className="flex flex-row justify-around w-full gap-2 items-center">
-      <div
-        className="flex flex-row text-sm text-white w-[3rem]"
-        style={aldrich.style}
-      >
-        <p style={oxanium.style} className="text-center w-full">
+      <div className="flex flex-row text-xs text-white w-[3rem] font-f1-regular">
+        <p className="text-center w-full font-f1-regular">
           {gap1Value || "-.---"}
         </p>
       </div>
-      
-      <div
-        className="flex text-sm text-white w-[3rem]"
-        style={aldrich.style}
-      >
-        <p style={oxanium.style} className="text-center w-full">
+
+      <div className="flex text-xs text-white w-[3rem] font-f1-regular">
+        <p className="text-center w-full font-f1-regular">
           {gap2Value || "-.---"}
         </p>
       </div>

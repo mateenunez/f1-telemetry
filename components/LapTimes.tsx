@@ -1,10 +1,7 @@
 "use client";
 
-import { Aldrich, Oxanium } from "next/font/google";
 import type { ProcessedTiming, ProcessedTimingStats } from "@/processors";
-
-const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
-const oxanium = Oxanium({ subsets: ["latin"], weight: "500" });
+import { cn } from "@/lib/utils";
 
 interface LapTimesProps {
   timing: ProcessedTiming | undefined;
@@ -15,29 +12,23 @@ export default function LapTimes({ timing, timingStats }: LapTimesProps) {
   return (
     <div className="flex items-center flex-col text-white w-[5rem]">
       {/* Último tiempo de vuelta */}
-      <div
-        className="flex items-center flex-row gap-1 text-sm text-white"
-        style={aldrich.style}
-      >
-        <p style={oxanium.style}>{timing?.last_lap_time || ""}</p>
+      <div className="flex items-center flex-row gap-1 text-xs text-white font-f1-regular">
+        <p className="font-f1-regular">{timing?.last_lap_time || ""}</p>
       </div>
       {/* Mejor tiempo de vuelta */}
       <div className="flex flex-row gap-0">
-        <div
-          className="flex items-center flex-row gap-1 text-white"
-          style={aldrich.style}
-        >
+        <div className="flex items-center flex-row gap-1 text-white font-f1-regular">
           {" "}
           <span className="text-xxs text-gray-500">
             {timingStats?.personal_best_lap_time.Lap}
           </span>
           <p
-            className={
+            className={cn(
+              "font-f1-regular text-[10px]",
               timingStats?.personal_best_lap_time.Position === 1
-                ? "text-purple-500 text-xs"
-                : "text-green-400 text-xs"
-            }
-            style={oxanium.style}
+                ? "text-purple-500"
+                : "text-green-400"
+            )}
           >
             {timingStats?.personal_best_lap_time.Value || ""}
           </p>

@@ -1,20 +1,11 @@
 import { usePreferences } from "@/context/preferences";
-import {
-  ProcessedCarData,
-  ProcessedDriver,
-  ProcessedPosition,
-  ProcessedTiming,
-} from "@/processors";
-import { Geist } from "next/font/google";
-import { useEffect, useMemo, useState } from "react";
+import { ProcessedCarData, ProcessedDriver } from "@/processors";
 
 interface CircleCarDataProps {
   driverInfo: (ProcessedDriver | undefined)[];
   carData: ProcessedCarData | undefined;
   size?: number;
 }
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
 export function CircleCarData({
   driverInfo,
@@ -68,7 +59,7 @@ export function CircleCarData({
   const speedMarks = [0, 60, 120, 180, 240, 300, 360];
 
   return (
-    <div className="flex items-center flex justify-center w-full eighth-step">
+    <div className="flex items-center justify-center w-full eighth-step">
       <div>
         <svg viewBox="0 0 100 100" className="w-full h-full">
           {/* Outer speed circle background */}
@@ -157,7 +148,7 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
-              style={mediumGeist.style}
+              className="font-f1-regular"
             >
               {speed}
             </text>
@@ -169,7 +160,7 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
-              style={mediumGeist.style}
+              className="font-f1-regular"
             >
               km/h
             </text>
@@ -181,7 +172,7 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
-              style={mediumGeist.style}
+              className="font-f1-regular"
             >
               {preferences.translate ? "MARCHA" : "GEAR"} {gear}
             </text>
@@ -192,8 +183,8 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
+              className="font-f1-bold tracking-wide"
               style={{
-                fontFamily: mediumGeist.style.fontFamily,
                 fill: driver ? "#" + driver.team_colour : "rgb(201, 199, 199)",
               }}
             >
@@ -211,7 +202,7 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
-              style={mediumGeist.style}
+              className="font-f1-regular"
             >
               {rpm}
             </text>
@@ -223,7 +214,7 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
-              style={mediumGeist.style}
+              className="font-f1-regular"
             >
               RPM
             </text>
@@ -235,8 +226,8 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
+              className="font-f1-regular"
               style={{
-                fontFamily: mediumGeist.style.fontFamily,
                 fill: drs ? "#51cf66" : "rgb(40,40,40)",
               }}
             >
@@ -250,7 +241,7 @@ export function CircleCarData({
             const speedFraction = Math.min(Math.max(speed, 0), 360) / 300;
             const speedProgressDistance = speedFraction * blueArcLength;
             const speedStrokeDashoffset = blueArcLength - speedProgressDistance;
-            const labelPos = polar(-speedStrokeDashoffset, -r+10);
+            const labelPos = polar(-speedStrokeDashoffset, -r + 10);
             return (
               <g key={idx}>
                 <text
@@ -260,7 +251,7 @@ export function CircleCarData({
                   fill={"rgb(201, 199, 199)"}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  style={mediumGeist.style}
+                  className="font-f1-regular"
                 >
                   {mark}
                 </text>

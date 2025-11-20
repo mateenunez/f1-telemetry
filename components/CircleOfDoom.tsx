@@ -4,7 +4,6 @@ import {
   ProcessedPosition,
   ProcessedTiming,
 } from "@/processors";
-import { Geist } from "next/font/google";
 import { useMemo } from "react";
 
 interface CircleOfDoomProps {
@@ -14,8 +13,6 @@ interface CircleOfDoomProps {
   currentLap: number | undefined;
   refDriver: number | undefined;
 }
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
 export default function CircleOfDoom({
   currentPositions,
@@ -139,7 +136,7 @@ export default function CircleOfDoom({
   const pitInner = polarToCartesian(adjusted(pitStopDeg || 60), r);
 
   return (
-    <div className="flex items-center flex justify-center w-full seventh-step">
+    <div className="flex items-center justify-center w-full seventh-step">
       <div>
         <svg
           viewBox="0 0 100 100"
@@ -174,7 +171,7 @@ export default function CircleOfDoom({
                 textAnchor="middle"
                 dominantBaseline="middle"
                 strokeLinecap="round"
-                style={mediumGeist.style}
+                className="font-f1-regular"
               >
                 {preferences.translate ? "PARADA " : "AFTER PIT"}
               </text>
@@ -192,7 +189,7 @@ export default function CircleOfDoom({
                     fill="#e5e7eb" // gray-200
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    style={mediumGeist.style}
+                    className="font-f1-regular"
                   >
                     {preferences.translate ? "VUELTA" : "LAP"} {currentLap}
                   </text>
@@ -204,7 +201,7 @@ export default function CircleOfDoom({
                   fill="#9ca3af" // gray-400
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  style={mediumGeist.style}
+                  className="font-f1-regular"
                 >
                   {preferences.translate ? "ÚLTIMA VUELTA" : "LAST LAP TIME"}
                 </text>
@@ -215,7 +212,7 @@ export default function CircleOfDoom({
                   fill="#e5e7eb"
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  style={mediumGeist.style}
+                  className="font-f1-regular"
                 >
                   {pilotRef?.last_lap_time}
                 </text>
@@ -229,7 +226,7 @@ export default function CircleOfDoom({
               fill={"#" + (pilotRef?.team_colour || "e5e7eb")}
               textAnchor="middle"
               dominantBaseline="middle"
-              style={mediumGeist.style}
+              className="font-f1-bold tracking-wide"
             >
               {pilotRef?.name_acronym ? pilotRef.name_acronym : "PICK DRIVER"}
             </text>
@@ -271,8 +268,8 @@ export default function CircleOfDoom({
                       angle > 90 && angle < 270 ? angle - 180 : angle; // keep text upright
                     return `rotate(${finalAngle} ${labelPos.x} ${labelPos.y})`;
                   })()}
+                  className="font-f1-regular tracking-wide"
                   style={{
-                    fontFamily: mediumGeist.style.fontFamily,
                     opacity: deg > 360 ? 0.6 : 1,
                   }}
                 >

@@ -472,11 +472,10 @@ const CarDot = ({
       />
       <text
         id={`map.driver.text`}
-        fontWeight="bold"
-        fontSize={favorite ? 120 * 3.5 : 120 * 3}
+        fontSize={favorite ? 120 * 2.5 : 120 * 2}
         strokeWidth={0}
+        className="font-f1-bold tracking-wide"
         style={{
-          fontFamily: oxanium.style.fontFamily,
           transform: "translateX(0px) translateY(-400px)",
           textAnchor: "middle",
           dominantBaseline: "middle",

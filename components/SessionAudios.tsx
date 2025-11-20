@@ -21,8 +21,6 @@ interface SessionAudiosProps {
   session: ProcessedSession | null | undefined;
 }
 
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-
 const AUDIO_DOWNLOAD_URL = config.public + "download-mp3";
 
 export default function SessionAudios({
@@ -156,9 +154,8 @@ export default function SessionAudios({
                         </div>
                       ) : (
                         <p
-                          className="text-md text-gray-100 h-[3rem] flex items-center"
+                          className="text-md text-gray-100 h-[3rem] flex items-center font-f1-bold"
                           style={{
-                            fontFamily: mediumGeist.style.fontFamily,
                             color: "#" + driver.team_color,
                           }}
                         >
@@ -214,10 +211,7 @@ export default function SessionAudios({
                         </div>
                       </div>
                     </div>
-                    <span
-                      className="text-xs flex flex-row gap-2 items-center text-gray-500 mx-[4.5rem] max-w-full"
-                      style={mediumGeist.style}
-                    >
+                    <span className="text-xs flex flex-row gap-2 items-center text-gray-500 mx-[4.5rem] max-w-full font-f1-regular">
                       {toLocaleTime(capture.utc)}
 
                       {AUDIO_DOWNLOAD_URL ? (
@@ -257,9 +251,8 @@ export default function SessionAudios({
                           style={{ backgroundColor: "#" + driver.team_color }}
                         />
                         <span
-                          className="text-start py-1.5 whitespace-pre-wrap text-sm italic"
+                          className="text-start py-1.5 whitespace-pre-wrap text-sm italic font-f1-regular"
                           style={{
-                            fontFamily: mediumGeist.style.fontFamily,
                             color: "#" + driver.team_color,
                           }}
                         >
@@ -277,10 +270,7 @@ export default function SessionAudios({
               })}
             </div>
           ) : (
-            <div
-              className="min-h-[20rem] items-center justify-center flex"
-              style={mediumGeist.style}
-            >
+            <div className="min-h-[20rem] items-center justify-center flex font-f1-regular">
               <p className="text-xs text-gray-400">
                 {preferences.translate
                   ? "Sin audios de carrera."

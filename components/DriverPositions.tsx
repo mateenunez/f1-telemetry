@@ -17,7 +17,6 @@ import {
   ProcessedSession,
 } from "@/processors";
 import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Orbitron } from "next/font/google";
 import { audioUrl, useTelemetryAudio } from "@/hooks/use-raceControl";
 import { usePreferences } from "@/context/preferences";
 
@@ -33,8 +32,6 @@ interface DriverPositionsProps {
   session: ProcessedSession | null | undefined;
   aboutToBeEliminated: number[];
 }
-
-const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 const DriverPositions = memo(function DriverPositions({
   positions,
@@ -109,10 +106,7 @@ const DriverPositions = memo(function DriverPositions({
             className="table-auto min-w-max w-full text-[0.6rem] text-gray-500"
             style={{ borderCollapse: "separate", borderSpacing: "0 0.5rem" }}
           >
-            <thead
-              style={orbitron.style}
-              className="sticky top-0 z-30 bg-warmBlack h-[2rem]"
-            >
+            <thead className="sticky top-0 z-30 bg-warmBlack h-[2rem] f1-font-regular">
               <tr className="text-center">
                 <th
                   className={`text-center ${

@@ -4,6 +4,21 @@ import { Analytics } from "@vercel/analytics/next";
 import { PreferencesProvider } from "@/context/preferences";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import Script from "next/script";
+import localFont from "next/font/local";
+
+const f1RegularfFont = localFont({
+  src: "../public/fonts/Formula1-Regular.otf",
+  weight: "400",
+  style: "normal",
+  variable: "--font-f1-regular",
+});
+
+const f1BoldFont = localFont({
+  src: "../public/fonts/Formula1-Bold.otf",
+  weight: "400",
+  style: "normal",
+  variable: "--font-f1-bold",
+});
 
 export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }));
@@ -93,7 +108,7 @@ export default async function RootLayout({
         `}
         </Script>
       </head>
-      <body>
+      <body className={`${f1RegularfFont.variable} ${f1BoldFont.variable}`}>
         <PreferencesProvider>{children}</PreferencesProvider>
         <Analytics />
       </body>

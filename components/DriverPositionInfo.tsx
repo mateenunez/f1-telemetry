@@ -1,14 +1,11 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Geist, Aldrich } from "next/font/google";
 import type { ProcessedPosition, ProcessedDriver } from "@/processors";
 import SoundWave from "./SoundWave";
 import { usePreferences } from "@/context/preferences";
 import { config } from "@/lib/config";
 
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
 interface DriverPositionInfoProps {
   position: ProcessedPosition;
   driver: ProcessedDriver | undefined;
@@ -39,7 +36,6 @@ export default function DriverPositionInfo({
           className="w-[2rem] text-[1rem] items-center font-bold pr-[0px] pl-4"
           style={{
             backgroundColor: `transparent`,
-            fontFamily: aldrich.style.fontFamily,
           }}
         >
           {position.position}
@@ -63,32 +59,23 @@ export default function DriverPositionInfo({
       </div>
 
       {/* Info del piloto */}
-      <div className="flex justify-evenly flex-row " style={aldrich.style}>
+      <div className="flex justify-evenly flex-row">
         <div className="flex flex-col self-start">
           <div className="flex items-center gap-1">
-            <span
-              className="text-xs text-gray-400 self-center"
-              style={mediumGeist.style}
-            >
+            <span className="font-f1-bold tracking-wide text-sm text-white flex flex-row items-center">
+              {driver?.name_acronym}{" "}
+            </span>
+            <span className="text-xs text-gray-400 self-center">
               #{position.driver_number}
             </span>
-            <span
-              className="font-semibold text-sm text-white flex flex-row items-center"
-              style={mediumGeist.style}
-            >
-              {driver?.name_acronym}{" "}
-              {isPlaying === driver?.driver_number && (
-                <span className="ml-2">
-                  <SoundWave
-                    teamColor={driver?.team_colour}
-                    width={undefined}
-                  />
-                </span>
-              )}
-            </span>
+            {isPlaying === driver?.driver_number && (
+              <span className="ml-2">
+                <SoundWave teamColor={driver?.team_colour} width={undefined} />
+              </span>
+            )}
           </div>
           <p
-            className="text-xs text-gray-100 truncate"
+            className="text-xs text-gray-100 truncate font-f1-regular"
             style={
               headshot
                 ? { color: "white" }
