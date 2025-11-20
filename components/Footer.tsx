@@ -1,6 +1,7 @@
 import { Github } from "lucide-react";
 import { Geist } from "next/font/google";
 import { config } from "@/lib/config";
+import Image from "next/image";
 
 const mediumGeist = Geist({ weight: "400", subsets: ["latin"] });
 
@@ -10,31 +11,37 @@ interface FooterProps {
 
 export default function Footer({ dict }: FooterProps) {
   return (
-    <div className="flex flex-col justify-center py-2">
-      <div className="w-full flex flex-row justify-center py-2 px-4 bg-transparent gap-4 ">
-        <div className="flex flex-row gap-2 text-gray-500 text-bottom align-bottom flex-wrap justify-evenly">
+    <div className="flex flex-row items-center justify-between gap-[2rem] py-2 px-4 max-w-5xl mx-auto text-gray-500">
+      <div className="flex items-center gap-2">
+        <Image
+          src={config.public.assets.f1t}
+          width={80}
+          height={80}
+          alt="F1 Telemetry logo"
+        />
+        <div className="flex items-center gap-2">
           <a
             href={config.public.github}
             target="_blank"
-            className="decoration-none"
+            className="text-gray-400 hover:text-gray-200"
           >
             <Github size={16} />
           </a>
           <a
             href={config.public.discord}
             target="_blank"
-            className="text-xs text-gray-500 inline-block align-bottom text-bottom align-text-bottom"
+            className="text-gray-400 hover:text-gray-200"
           >
             <img
               src={config.public.assets.discordIcon}
               width={15}
-              className="h-full"
+              alt="Discord"
             />
           </a>
         </div>
-      </div>
-      <div className="text-center text-gray-500 text-xs">
-        <p style={mediumGeist.style}>{dict.footer.legal}</p>
+        <p className="text-xs text-center" style={mediumGeist.style}>
+          {dict.footer.legal}
+        </p>
       </div>
     </div>
   );
