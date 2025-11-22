@@ -27,8 +27,8 @@ export default function HomeContent({ dict }: HomeContentProps) {
     description,
     videoUrl,
   }: InlineVideoCardProps) => (
-    <div className="md:w-[25rem] w-full flex flex-col items-center">
-      <div className="rounded-xl border border-gray-700 bg-transparent p-4">
+    <div className="md:w-[25rem] w-full flex flex-col items-center px-1">
+      <div className="rounded-xl border-2 border-gray-400 bg-transparent p-4">
         <h3
           className="text-center text-lg font-semibold mb-3 text-gray-200"
           style={orbitron.style}
@@ -172,7 +172,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
               })}
             </h1>
           </div>
-          <div className="flex md:flex-row flex-col justify-center items-center gap-[4rem] w-full">
+          <div className="flex md:flex-row flex-col justify-center items-center md:gap-[4rem] gap-[2rem] w-full">
             <a
               className="rounded px-6 w-[15rem] py-3 text-[1.5rem] bg-white text-black text-center transition duration-300 ease-in-out 
                 hover:-translate-y-1 
@@ -214,7 +214,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
         </div>
       </div>
       <div className="py-5 w-full bg-warmBlack">
-        <div className="flex flex-col justify-evenly min-h-screen h-full justify-center items-center max-w-4xl mx-auto">
+        <div className="flex flex-col justify-evenly min-h-screen h-full gap-[2rem] justify-center items-center max-w-4xl mx-auto">
           <div>
             <h2
               className="text-md text-gray-300 text-center"

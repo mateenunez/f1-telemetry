@@ -10,7 +10,7 @@
     "audioDesc": "Listen instantly to each driver’s team radio during the race—we also use AI for translation and transcription!",
     "circlesTitle": "Real-Time Analysis",
     "circlesDesc": "We keep adding features to boost race analysis, such as the Circle of Doom, perfect for undercut decisions.",
-    "version": "Version 1.4.2 includes dynamic delay changes, an interactive tutorial, and UI updates."
+    "version": "Version 1.4.3 includes a new header with two options: simple and detailed. We also fix some bugs."
   },
   "footer": {
     "legal": "This website is not associated, affiliated, authorized, endorsed, or officially connected in any way with Formula 1, the FIA, or any of its subsidiaries or affiliates."
