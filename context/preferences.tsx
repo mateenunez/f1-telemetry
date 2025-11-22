@@ -25,6 +25,7 @@ export interface Preferences {
   delay: number;
   translate: boolean;
   hasSeenTour: boolean;
+  weatherDetailed: boolean; 
 }
 
 const DEFAULT_CONFIG: Preferences = {
@@ -40,6 +41,7 @@ const DEFAULT_CONFIG: Preferences = {
   delay: 0,
   translate: false,
   hasSeenTour: false,
+  weatherDetailed: false,
 };
 
 interface PreferencesContextValue {
@@ -74,6 +76,7 @@ function isPreferences(obj: any): obj is Preferences {
     "favoriteDrivers",
     "delay",
     "hasSeenTour",
+    "weatherDetailed",
   ];
 
   for (const key of requiredKeys) {
@@ -92,6 +95,7 @@ function isPreferences(obj: any): obj is Preferences {
         "circleOfDoom",
         "circleCarData",
         "hasSeenTour",
+        "weatherDetailed",
       ].includes(key)
     ) {
       if (typeof obj[key] !== "boolean") return false;

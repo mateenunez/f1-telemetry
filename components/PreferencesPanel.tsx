@@ -162,6 +162,11 @@ export default function PreferencesPanel({
           description:
             "Mostrar la velocidad, marcha, acelerador y frenos de un piloto.",
         },
+        weatherDetailed: {
+          title: "Clima detallado",
+          description:
+            "Mostrar información completa del clima (lluvia, humedad, viento, presión).",
+        },
       }
     : {
         sectors: {
@@ -198,6 +203,11 @@ export default function PreferencesPanel({
         circleCarData: {
           title: "Circle Car-Data",
           description: "Show speed, gear, throttle and brakes of one driver.",
+        },
+        weatherDetailed: {
+          title: "Detailed Weather",
+          description:
+            "Show complete weather information (rain, humidity, wind, pressure).",
         },
       };
 
@@ -345,11 +355,7 @@ export default function PreferencesPanel({
                   "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
               }}
             >
-              <span>
-                {preferences.translate
-                  ? "Reiniciar"
-                  : "Restart"}
-              </span>
+              <span>{preferences.translate ? "Reiniciar" : "Restart"}</span>
             </button>
           </div>
 
