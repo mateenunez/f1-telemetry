@@ -1,4 +1,3 @@
-import { usePreferences } from "@/context/preferences";
 import {
   ProcessedDriver,
   ProcessedPosition,
@@ -11,7 +10,6 @@ interface CircleOfDoomProps {
   currentPositions: (ProcessedPosition | undefined)[];
   timings: (ProcessedTiming | undefined)[];
   driverInfos: (ProcessedDriver | undefined)[];
-  currentLap: number | undefined;
   refDriver: number | undefined;
 }
 
@@ -21,11 +19,8 @@ export default function CircleOfDoom({
   currentPositions,
   timings,
   driverInfos,
-  currentLap,
   refDriver = 1,
 }: CircleOfDoomProps) {
-  const { preferences } = usePreferences();
-
   const ANGLE_OFFSET = 90;
   const CLOCKWISE = true;
   const tickLength = 2;
@@ -55,26 +50,12 @@ export default function CircleOfDoom({
   };
 
   const gapToNumber = (gap: string | undefined): number => {
-    if (gap === undefined || gap.includes("LAP")) return 0;
+    if (gap === undefined || gap.includes("LAP") || !gap) return 0;
     const string = gap.slice(1);
-    const number = Number(string);
+    const number = Number(string) || 0;
     return number;
   };
 
-  const laptimeToNumber = (laptime: string): number => {
-    const parts = laptime.trim().split(":");
-    if (parts.length !== 2) return 0;
-
-    const [mStr, sStr] = parts;
-    const m = parseInt(mStr, 10);
-    const sec = Number(sStr);
-
-    if (Number.isNaN(m) || Number.isNaN(sec)) {
-      throw new Error("Formato inválido. Usa números en M:SS:ms");
-    }
-
-    return m * 60 + sec;
-  };
   const adjusted = (deg: number) => (CLOCKWISE ? -deg : deg) + ANGLE_OFFSET;
 
   const cleanTimings = useMemo(
@@ -85,12 +66,73 @@ export default function CircleOfDoom({
   const pilotRef = useMemo(() => {
     const info = driverInfos.find((d) => d?.driver_number === refDriver);
     const timing = cleanTimings.find((d) => d.driver_number === refDriver);
+    const refIndex = currentPositions.findIndex(
+      (pos) => pos?.driver_number === refDriver
+    );
+    const gapToAhead = timing?.time_diff_to_ahead || timing?.interval_to_ahead;
     return {
       name_acronym: info?.name_acronym,
       team_colour: info?.team_colour,
       last_lap_time: timing?.last_lap_time,
+      position: refIndex + 1,
+      gapToAhead: gapToAhead,
     };
   }, [driverInfos, cleanTimings, refDriver]);
+
+  const adjacentDrivers = useMemo(() => {
+    const refIndex = pilotRef.position;
+
+    if (refIndex === -1) return { ahead: null, behind: null };
+
+    const aheadPosition = currentPositions[refIndex - 2];
+    const behindPosition = currentPositions[refIndex];
+
+    const aheadTiming = aheadPosition
+      ? timings.find((t) => t?.driver_number === aheadPosition.driver_number)
+      : null;
+
+    const behindTiming = behindPosition
+      ? timings.find((t) => t?.driver_number === behindPosition.driver_number)
+      : null;
+
+    const isAheadOutOfCompetition = aheadTiming
+      ? aheadTiming.retired || aheadTiming.knockedOut || aheadTiming.stopped
+      : true;
+
+    const isBehindOutOfCompetition = behindTiming
+      ? behindTiming.retired || behindTiming.knockedOut || behindTiming.stopped
+      : true;
+
+    const aheadGapToRef = pilotRef.gapToAhead?.replace("+", "-");
+
+    const behindGapToRef =
+      behindTiming?.time_diff_to_ahead || behindTiming?.interval_to_ahead;
+
+    return {
+      ahead:
+        aheadPosition && !isAheadOutOfCompetition
+          ? {
+              position: refIndex,
+              driver: aheadPosition,
+              driverInfo: driverInfos.find(
+                (d) => d?.driver_number === aheadPosition.driver_number
+              ),
+              gap: aheadGapToRef,
+            }
+          : null,
+      behind:
+        behindPosition && !isBehindOutOfCompetition
+          ? {
+              position: refIndex + 2,
+              driver: behindPosition,
+              driverInfo: driverInfos.find(
+                (d) => d?.driver_number === behindPosition.driver_number
+              ),
+              gap: behindGapToRef,
+            }
+          : null,
+    };
+  }, [currentPositions, timings, driverInfos, refDriver, pilotRef]);
 
   const markersDeg = useMemo(() => {
     const map = new Map<number, number>();
@@ -102,17 +144,11 @@ export default function CircleOfDoom({
       refPilot.stopped
     )
       return map;
-    const lastLapTime = laptimeToNumber(refPilot.last_lap_time);
-    if (!lastLapTime) return map;
-
-    const pitStopTime = 24; // Segundos que tarda un pit stop promedio
-    const pitAngularPos = (pitStopTime / lastLapTime) * 360; // Posición angular del pit
-    map.set(924, pitAngularPos); // 924 key arbitraria seleccionada por dejar caer la mano en el teclado.
 
     let gtl = 0;
     let gapToLeaders = new Map();
 
-    currentPositions.map((d) => {
+    currentPositions.forEach((d, idx) => {
       const driverTimings = timings.find(
         (dt) => dt?.driver_number === d?.driver_number
       );
@@ -122,6 +158,13 @@ export default function CircleOfDoom({
       gtl = gtl + gapTime;
       gapToLeaders.set(d?.driver_number, gtl);
     });
+
+    const lastLapTime = gtl + 5; // 5 segundos agregados arbitrariamente.
+    if (!lastLapTime) return map;
+
+    const pitStopTime = 24; // Segundos que tarda un pit stop promedio
+    const pitAngularPos = (pitStopTime / lastLapTime) * 360; // Posición angular del pit
+    map.set(924, pitAngularPos); // 924 key arbitraria seleccionada por dejar caer la mano en el teclado.
 
     const refTime = gapToLeaders.get(refPilot.driver_number);
 
@@ -136,7 +179,9 @@ export default function CircleOfDoom({
   }, [cleanTimings, refDriver]);
 
   const pitStopDeg = markersDeg.get(924);
-  const pitInner = polarToCartesian(adjusted(pitStopDeg || 60), r);
+  const pitOuter = polarToCartesian(adjusted(pitStopDeg || 60), r + tickLength);
+  const pitInner = polarToCartesian(adjusted(pitStopDeg || 60), r - tickLength);
+  const pitLabelPos = polar(adjusted(pitStopDeg || 60), r - 7);
 
   return (
     <div className="flex items-center flex justify-center w-full seventh-step">
@@ -155,63 +200,91 @@ export default function CircleOfDoom({
             strokeWidth={strokeWidth}
           />
 
-          {
+          {pitStopDeg !== undefined && (
             <g>
               <line
-                x1={pitInner.x - tickLength}
+                x1={pitInner.x}
                 y1={pitInner.y}
-                x2={pitInner.x + tickLength}
-                y2={pitInner.y}
-                stroke={"#3B82F6"}
-                strokeWidth={2}
-                strokeLinecap="round"
+                x2={pitOuter.x}
+                y2={pitOuter.y}
+                stroke={"#b197fc"}
+                strokeWidth={4}
               />
               <text
-                x={pitInner.x + 10}
-                y={pitInner.y}
-                fontSize={3}
-                fill="#3B82F6"
+                x={pitLabelPos.x}
+                y={pitLabelPos.y}
+                fontSize={4}
+                fill="#b197fc"
                 textAnchor="middle"
                 dominantBaseline="middle"
-                strokeLinecap="round"
-                style={mediumGeist.style}
+                transform={(() => {
+                  const angle = adjusted(pitStopDeg) + 90; // tangent to the circle
+                  const finalAngle =
+                    angle > 90 && angle < 270 ? angle - 180 : angle; // keep text upright
+                  return `rotate(${finalAngle} ${pitLabelPos.x} ${pitLabelPos.y})`;
+                })()}
+                style={{
+                  fontFamily: mediumGeist.style.fontFamily,
+                }}
               >
-                {preferences.translate ? "PARADA " : "AFTER PIT"}
+                PIT
               </text>
             </g>
-          }
+          )}
 
           <g transform={`translate(${50}, ${45})`}>
-            {refDriver && (
+            {adjacentDrivers.ahead && (
               <g>
-                {currentLap && (
-                  <text
-                    x={0}
-                    y={-2} // pequeño ajuste vertical
-                    fontSize={10} // más grande
-                    fill="#e5e7eb" // gray-200
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    style={mediumGeist.style}
-                  >
-                    {preferences.translate ? "VUELTA" : "LAP"} {currentLap}
-                  </text>
-                )}
                 <text
                   x={0}
-                  y={8} // debajo de "LAP"
-                  fontSize={4} // más pequeño
-                  fill="#9ca3af" // gray-400
+                  y={-20}
+                  fontSize={6}
+                  fill={
+                    "#" +
+                    (adjacentDrivers.ahead.driverInfo?.team_colour || "e5e7eb")
+                  }
                   textAnchor="middle"
                   dominantBaseline="middle"
                   style={mediumGeist.style}
                 >
-                  {preferences.translate ? "ÚLTIMA VUELTA" : "LAST LAP TIME"}
+                  {"P" +
+                    adjacentDrivers.ahead.driver.position +
+                    " " +
+                    adjacentDrivers.ahead.driverInfo?.name_acronym}
                 </text>
                 <text
                   x={0}
-                  y={16} // debajo de "LAST LAP TIME"
-                  fontSize={6} // más pequeño
+                  y={-13}
+                  fontSize={5}
+                  fill={"#e5e7eb"}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  style={mediumGeist.style}
+                >
+                  {adjacentDrivers.ahead.gap}
+                </text>
+              </g>
+            )}
+
+            {refDriver && (
+              <g>
+                <text
+                  x={0}
+                  y={0}
+                  fontSize={7}
+                  fill={"#" + (pilotRef?.team_colour || "e5e7eb")}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  style={mediumGeist.style}
+                >
+                  {pilotRef?.name_acronym
+                    ? "P" + pilotRef.position + " " + pilotRef.name_acronym
+                    : "PICK DRIVER"}
+                </text>
+                <text
+                  x={0}
+                  y={8}
+                  fontSize={6}
                   fill="#e5e7eb"
                   textAnchor="middle"
                   dominantBaseline="middle"
@@ -222,17 +295,38 @@ export default function CircleOfDoom({
               </g>
             )}
 
-            <text
-              x={0}
-              y={24} // debajo de laptime
-              fontSize={7} // más pequeño
-              fill={"#" + (pilotRef?.team_colour || "e5e7eb")}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              style={mediumGeist.style}
-            >
-              {pilotRef?.name_acronym ? pilotRef.name_acronym : "PICK DRIVER"}
-            </text>
+            {adjacentDrivers.behind && (
+              <g>
+                <text
+                  x={0}
+                  y={20}
+                  fontSize={6}
+                  fill={
+                    "#" +
+                    (adjacentDrivers.behind.driverInfo?.team_colour || "e5e7eb")
+                  }
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  style={mediumGeist.style}
+                >
+                  {"P" +
+                    adjacentDrivers.behind.driver.position +
+                    " " +
+                    adjacentDrivers.behind.driverInfo?.name_acronym}
+                </text>
+                <text
+                  x={0}
+                  y={27}
+                  fontSize={5}
+                  fill={"#e5e7eb"}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  style={mediumGeist.style}
+                >
+                  {adjacentDrivers.behind.gap}
+                </text>
+              </g>
+            )}
           </g>
 
           {currentPositions.map((dri, i) => {
@@ -273,7 +367,6 @@ export default function CircleOfDoom({
                   })()}
                   style={{
                     fontFamily: mediumGeist.style.fontFamily,
-                    opacity: deg > 360 ? 0.6 : 1,
                   }}
                 >
                   {driverInfo?.name_acronym}

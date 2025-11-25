@@ -13,7 +13,7 @@ import RaceControlList from "@/components/RaceControlList";
 import CircleOfDoom from "@/components/CircleOfDoom";
 import { usePreferences } from "@/context/preferences";
 import { CircleCarData } from "@/components/CircleCarData";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useTour } from "@reactour/tour";
 import { Countdown } from "./Countdown";
 
@@ -78,8 +78,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
 
     const HeaderSkeleton = () => (
       <div className="flex flex-col md:flex-row gap-4 md:gap-0 justify-between items-center w-full px-6 py-4 mb-4">
-        <Skeleton height={60} width="20rem" className="w-[40vw] md:w-[20vw]" />
-        <Skeleton height={60} width="15rem" />
+        <Skeleton height={60} width={450} />
+        <Skeleton height={60} width={300} />
       </div>
     );
 
@@ -97,9 +97,9 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
 
     const MapAndRaceSkeleton = () => (
       <Card className="lg:col-span-5 bg-warmBlack1 border-none flex flex-col p-0 m-0">
-        <CardHeader className="pb-3 flex flex-row items-center justify-between">
-          <Skeleton height={32} width={180} />
-          <Skeleton height={32} width={120} />
+        <CardHeader className="pb-6 flex flex-row items-center justify-between">
+          <Skeleton height={50} width={200} />
+          <Skeleton height={50} width={120} />
         </CardHeader>
         <CardContent className="flex flex-col justify-center h-full">
           <div className="overflow-hidden h-fit">
@@ -110,13 +110,14 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     );
 
     const CardsRowSkeleton = () => (
-      <div className="flex flex-col md:flex-row gap-8 md:px-0 py-[2rem] md:mx-[1rem] justify-between md:mr-[6rem]">
-        <div className="flex flex-col md:flex-row gap-8 justify-around">
+      <div className="flex flex-col md:flex-row gap-8 md:px-0 py-[2rem] md:mx-[1rem] md:justify-around items-center ">
+        <div className="flex flex-col md:flex-row gap-[3rem]">
           {Array.from({ length: 2 }).map((_, idx) => (
-            <Skeleton key={idx} className="gap-2" width={400} height={250} />
+            <Skeleton key={idx} className="gap-2" width={320} height={250} />
           ))}
         </div>
-        <Skeleton className="md:ml-2" height={250} width={400} />
+        <Skeleton circle height={280} width={280} />
+        <Skeleton circle height={280} width={280} />
       </div>
     );
 
@@ -178,6 +179,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                 teamRadio={teamRadioCaptures}
                 drivers={driverInfos}
                 session={session}
+                driverInfos={telemetryData?.drivers}
               />
             )}
             {raceControlLog && (
@@ -187,6 +189,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                     ? telemetryData?.raceControlEs
                     : telemetryData?.raceControl
                 }
+                driverInfos={telemetryData?.drivers}
               />
             )}
           </div>
@@ -194,7 +197,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
           <div className="flex md:flex-row flex-col gap-12 md:gap-2 w-full justify-evenly">
             {circleOfDoom && (
               <CircleOfDoom
-                currentLap={session?.current_lap}
                 driverInfos={driverInfos}
                 timings={driverTimings}
                 currentPositions={currentPositions}

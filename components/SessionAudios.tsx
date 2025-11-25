@@ -19,6 +19,7 @@ interface SessionAudiosProps {
   teamRadio: ProcessedTeamRadio | undefined;
   drivers: (ProcessedDriver | undefined)[];
   session: ProcessedSession | null | undefined;
+  driverInfos?: (ProcessedDriver | undefined)[];
 }
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
@@ -29,6 +30,7 @@ export default function SessionAudios({
   teamRadio,
   drivers,
   session,
+  driverInfos,
 }: SessionAudiosProps) {
   const [playingAudio, setPlayingAudio] = useState<number | undefined>();
   const [progressMap, setProgressMap] = useState<Map<number, number>>();
@@ -38,6 +40,27 @@ export default function SessionAudios({
 
   const { preferences } = usePreferences();
   const headshot = preferences.headshot;
+
+  const getMessageStyle = (msg: ProcessedCapture) => {
+    const racingNumber = msg.racingNumber;
+    if (!racingNumber || !driverInfos) return {};
+
+    if (isNaN(racingNumber)) return {};
+
+    const driver = driverInfos.find((d) => d?.driver_number === racingNumber);
+    if (!driver) return {};
+
+    const isFavorite = preferences.favoriteDrivers.some(
+      (fav) => fav.driver_number === driver.driver_number
+    );
+
+    if (!isFavorite) return {};
+
+    return {
+      backgroundColor: `#${driver.team_colour}30`,
+      borderColor: `#${driver.team_colour}60`,
+    };
+  };
 
   const getdriver = (driverNumber: number) => {
     const driver = drivers.find((d) => d?.driver_number === driverNumber);
@@ -133,12 +156,14 @@ export default function SessionAudios({
                   capture.transcription && capture.transcription !== "";
                 const hasEsTranscription =
                   capture.transcriptionEs && capture.transcriptionEs !== "";
+                const messageStyle = getMessageStyle(capture);
                 return (
                   <div
                     key={idx}
-                    className="border-none flex flex-col max-w-full p-0"
+                    className="border-none flex flex-col max-w-full p-0 rounded"
+                    style={{ ...messageStyle }}
                   >
-                    <div className="flex flex-row gap-2 rounded max-w-full">
+                    <div className="flex flex-row gap-2 rounded max-w-full px-1">
                       {headshot ? (
                         <div>
                           {driver && (

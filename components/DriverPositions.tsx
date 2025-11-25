@@ -56,11 +56,12 @@ const DriverPositions = memo(function DriverPositions({
   const scrollPosition = useRef(0);
   const { playNotificationSound } = useTelemetryAudio();
   const { playTeamRadioSound, radioAudioRef } = useTelemetryAudio();
-  const { getPreference, preferences } = usePreferences();
-  const headshot = getPreference("headshot");
+  const { preferences } = usePreferences();
+  const headshot = preferences.headshot;
+  const popup = preferences.audio;
 
   useEffect(() => {
-    if (!lastCapture) return;
+    if (!lastCapture || !popup) return;
     if (session?.session_status === "Finalised") return;
     if (lastPlayedUtcRef.current !== lastCapture.utc) {
       const url = audioUrl + session?.path + lastCapture.path;

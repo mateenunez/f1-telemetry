@@ -164,7 +164,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
                         : idx > 2 && idx < 6
                         ? "#ffe066"
                         : idx > 9
-                        ? "#b197fc"
+                        ? "#A855F7"
                         : "#51cf66"
                     }
                   />

@@ -1,6 +1,5 @@
-import { useRef, useCallback, useState, useEffect } from "react";
+import { useRef, useCallback } from "react";
 import { MapSector, ProcessedRaceControl } from "@/processors";
-import Cookies from "js-cookie";
 import { config } from "@/lib/config";
 
 export const audioUrl = "https://livetiming.formula1.com/static/";
@@ -68,20 +67,12 @@ export function useTelemetryAudio() {
   const lastPlayTime = useRef<number>(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const radioAudioRef = useRef<HTMLAudioElement | null>(null);
-  const [cookieAudio, setAudio] = useState<boolean>(true);
-
-  useEffect(() => {
-    const cookieAudio = Cookies.get("audio");
-    if (cookieAudio !== undefined) {
-      setAudio(cookieAudio === "true");
-    }
-  }, []);
 
   const createAudio = (
     volumen = 1,
     audioSrc = config.public.assets.mp3.raceControl
   ) => {
-    if (typeof window === "undefined" || !cookieAudio) return null;
+    if (typeof window === "undefined") return null;
     const audio = new Audio(audioSrc);
     audio.volume = volumen;
     audio.preload = "auto";
@@ -89,26 +80,10 @@ export function useTelemetryAudio() {
     return audio;
   };
 
-  const updateAudio = (newAudio: boolean) => {
-    setAudio(newAudio);
-    Cookies.set("audio", newAudio.toString(), {
-      expires: 365,
-      sameSite: "strict",
-    });
-  };
-
-  const toggleAudio = () => {
-    updateAudio(!cookieAudio);
-  };
-
   const playNotificationSound = useCallback(() => {
     try {
       if (!audioRef.current) {
         audioRef.current = createAudio(1);
-      }
-
-      if (!cookieAudio) {
-        return false;
       }
 
       if (audioRef.current) {
@@ -128,10 +103,6 @@ export function useTelemetryAudio() {
   const playTeamRadioSound = useCallback(
     (audioSrc: string) => {
       try {
-        if (!cookieAudio) {
-          return false;
-        }
-
         if (!radioAudioRef.current) {
           radioAudioRef.current = createAudio(1, audioSrc);
         }
@@ -169,9 +140,6 @@ export function useTelemetryAudio() {
   }, []);
 
   return {
-    cookieAudio,
-    updateAudio,
-    toggleAudio,
     playNotificationSound,
     playTeamRadioSound,
     lastPlayTime: lastPlayTime.current,

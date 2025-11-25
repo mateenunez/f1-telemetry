@@ -6,6 +6,7 @@ import { ProcessedRaceControl } from "@/processors";
 import { Geist } from "next/font/google";
 import { toLocaleTime } from "@/utils/calendar";
 import { useTelemetryAudio } from "@/hooks/use-raceControl";
+import { usePreferences } from "@/context/preferences";
 
 const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
@@ -19,24 +20,22 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
   );
 
   const { playNotificationSound } = useTelemetryAudio();
+  const { preferences } = usePreferences();
+  const popup = preferences.audio;
 
   useEffect(() => {
     if (!raceControl || raceControl.length === 0) return;
-
     const newest = raceControl[0];
-
     if (!lastMessage) {
       setLastMessage(newest);
       return;
     }
-
     const isNew =
       newest.date !== lastMessage.date ||
       newest.message !== lastMessage.message;
-
     if (isNew) {
       setLastMessage(newest);
-      playNotificationSound();
+      if (popup) playNotificationSound();
     }
   }, [raceControl]);
 
@@ -44,10 +43,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
     <Card className="bg-transparent border-none p-0">
       <CardContent className="align-center p-0">
         {lastMessage && (
-          <div
-            className={`rounded text-f1Blue py-0`}
-            style={mediumGeist.style}
-          >
+          <div className={`rounded text-f1Blue py-0`} style={mediumGeist.style}>
             <p className="text-xs text-gray-200 leading-tight">
               {lastMessage.message}
             </p>

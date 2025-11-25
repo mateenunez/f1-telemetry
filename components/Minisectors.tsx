@@ -21,7 +21,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
     )
       return "#ffdd54ff"; // Amarillo
     if (segment === 2049) return "#51cf66"; // Verde
-    if (segment === 2051) return "#b197fc"; // Violeta
+    if (segment === 2051) return "#A855F7"; // Violeta
     if (segment === 2064) return "#2b7fff"; // Azul
     return "#636363"; // Gris por defecto
   };

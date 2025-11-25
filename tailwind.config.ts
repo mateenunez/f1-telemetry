@@ -72,7 +72,7 @@ const config: Config = {
         f1Red: "#A6051A",
         f1DarkerRed: "#a6051ae6",
         f1Yellow: "#ffe066",
-        f1Purple: "#b197fc",
+        f1Purple: "#A855F7",
         f1Green: "#51cf66",
         f1Blue: "#3B82F6",
         warmBlack: "#0a0a0a",
