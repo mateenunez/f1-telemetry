@@ -1,15 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Geist } from "next/font/google";
-import {
-  ProcessedDriver,
-  ProcessedRaceControl,
-} from "@/processors";
+import { ProcessedDriver, ProcessedRaceControl } from "@/processors";
 import { toLocaleTime } from "@/utils/calendar";
 import { usePreferences } from "@/context/preferences";
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-
 interface RaceControlListProps {
   raceControl: ProcessedRaceControl[] | undefined;
   driverInfos?: (ProcessedDriver | undefined)[];
@@ -59,8 +52,8 @@ export default function RaceControlList({
                     >
                       <div className="flex flex-row gap-2 rounded">
                         <div
-                          className="relative w-full max-w-full my-2 text-gray-400 border-none items-start border-[2px] rounded border-gray-400 flex flex-col px-2 py-1"
-                          style={{ ...mediumGeist.style, ...messageStyle }}
+                          className="relative w-full max-w-full my-2 font-geist font-medium text-gray-400 border-none items-start border-[2px] rounded border-gray-400 flex flex-col px-2 py-1"
+                          style={{ ...messageStyle }}
                         >
                           <div className="pr-2 w-full max-w-full">
                             <p className="text-xs text-gray-200 leading-tight w-full max-w-full whitespace-normal break-words">
@@ -83,10 +76,7 @@ export default function RaceControlList({
                   );
                 })
               ) : (
-                <div
-                  className="min-h-[20rem] justify-center items-center flex"
-                  style={mediumGeist.style}
-                >
+                <div className="min-h-[20rem] justify-center items-center flex font-geist font-medium">
                   <p className="text-xs text-gray-400">
                     {preferences.translate
                       ? "Sin mensajes de carrera."

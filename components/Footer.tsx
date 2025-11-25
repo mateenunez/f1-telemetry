@@ -3,8 +3,6 @@ import { Geist } from "next/font/google";
 import { config } from "@/lib/config";
 import Image from "next/image";
 
-const mediumGeist = Geist({ weight: "400", subsets: ["latin"] });
-
 interface FooterProps {
   dict: any;
 }
@@ -39,7 +37,7 @@ export default function Footer({ dict }: FooterProps) {
             />
           </a>
         </div>
-        <p className="text-xs text-center" style={mediumGeist.style}>
+        <p className="text-xs text-center font-geist">
           {dict.footer.legal}
         </p>
       </div>

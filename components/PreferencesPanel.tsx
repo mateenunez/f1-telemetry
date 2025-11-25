@@ -3,13 +3,9 @@
 import { useState } from "react";
 import { usePreferences } from "@/context/preferences";
 import { X, Check, PanelLeft } from "lucide-react";
-import { Geist, Orbitron } from "next/font/google";
 import { ProcessedDriver } from "@/processors";
 import { useTour } from "@reactour/tour";
 import { usePathname } from "next/navigation";
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 interface PreferencesPanelProps {
   driverInfo: ProcessedDriver[] | undefined;
@@ -232,11 +228,10 @@ export default function PreferencesPanel({
 
       {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300 font-geist ${
           open ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
         onClick={() => setOpen(false)}
-        style={mediumGeist.style}
       />
 
       {/* Slide Panel */}
@@ -247,10 +242,7 @@ export default function PreferencesPanel({
       >
         <div className="p-8 overflow-y-auto h-full">
           {/* Panel button */}
-          <span
-            className="text-xl font-semibold mb-6 text-center flex gap-6 items-center"
-            style={orbitron.style}
-          >
+          <span className="text-xl font-semibold mb-6 text-center flex gap-6 items-center font-orbitron">
             <PanelLeft
               className="text-gray-300 hover:text-gray-400 hover:cursor-pointer"
               width={15}
@@ -261,9 +253,7 @@ export default function PreferencesPanel({
 
           {/* Delay */}
           <div className="flex flex-col gap-4 pb-4">
-            <p className="text-md text-gray-100" style={orbitron.style}>
-              Delay
-            </p>
+            <p className="text-md text-gray-100 font-orbitron">Delay</p>
             <div className="flex flex-row w-full justify-around gap-2 h-[2.5rem] items-center">
               <input
                 type="number"
@@ -273,13 +263,12 @@ export default function PreferencesPanel({
                     : "Delay in seconds..."
                 }
                 style={{
-                  fontFamily: mediumGeist.style.fontFamily,
                   boxShadow:
                     "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
                 }}
                 onChange={handleDelayChange}
                 value={delay}
-                className="w-[8rem] px-3 h-full text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="w-[8rem] px-3 h-full text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200 font-geist font-medium"
               />
               <button
                 type="button"
@@ -292,7 +281,7 @@ export default function PreferencesPanel({
               >
                 <Check width={15} />
               </button>
-              <p className="text-xs text-gray-500" style={mediumGeist.style}>
+              <p className="text-xs text-gray-500 font-geist font-medium">
                 {preferences.translate
                   ? "Ajustar delay en segundos (máx 600s)."
                   : "Set delay on seconds (máx 600s)."}
@@ -302,11 +291,11 @@ export default function PreferencesPanel({
 
           {/* Language */}
           <div className="flex flex-col gap-2 pb-4">
-            <p className="text-md text-gray-100" style={orbitron.style}>
+            <p className="text-md text-gray-100 font-orbitron">
               {preferences.translate ? "Idioma" : "Language"}
             </p>
             <div className="flex flex-col gap-2">
-              <p className="text-xs text-gray-500" style={mediumGeist.style}>
+              <p className="text-xs text-gray-500 font-geist font-medium">
                 {preferences.translate
                   ? "Las traducciones al español pueden tardar unos segundos más en llegar."
                   : "The spanish translation may have additional delay."}
@@ -316,18 +305,16 @@ export default function PreferencesPanel({
                 value={selectedLanguage}
                 onChange={handleSelectChange}
                 style={{
-                  fontFamily: mediumGeist.style.fontFamily,
                   boxShadow:
                     "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
                 }}
-                className="text-sm py-2 px-2 rounded-md bg-warmBlack text-gray-200 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="text-sm py-2 px-2 rounded-md bg-warmBlack text-gray-200 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200 font-geist font-medium"
               >
                 {options.map((option) => (
                   <option
                     key={option.value}
                     value={option.value}
                     className="bg-warmBlack px-2 text-gray-200 border-none"
-                    style={mediumGeist.style}
                   >
                     {option.label}
                   </option>
@@ -338,19 +325,16 @@ export default function PreferencesPanel({
 
           {/* Tutorial Button */}
           <div className="flex flex-col gap-2 pb-4">
-            <p className="text-md text-gray-100" style={orbitron.style}>
-              Tutorial
-            </p>
-            <p className="text-xs text-gray-500" style={mediumGeist.style}>
+            <p className="text-md text-gray-100 font-orbitron">Tutorial</p>
+            <p className="text-xs text-gray-500 font-geist font-medium">
               {preferences.translate
                 ? "Volver a ver el tutorial de introducción."
                 : "Show the introduction tutorial again."}
             </p>
             <button
               onClick={handleRestartTour}
-              className="flex items-start justify-start gap-2 px-4 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue"
+              className="flex items-start justify-start gap-2 px-4 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist font-medium"
               style={{
-                fontFamily: mediumGeist.style.fontFamily,
                 boxShadow:
                   "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
               }}
@@ -361,10 +345,7 @@ export default function PreferencesPanel({
 
           {/* Favorite Drivers */}
           <div className="flex flex-col gap-2 pb-4">
-            <p
-              className="text-md text-gray-100 font-semibold"
-              style={orbitron.style}
-            >
+            <p className="text-md text-gray-100 font-semibold font-orbitron">
               {preferences.translate
                 ? "Pilotos Favoritos"
                 : "Favorites Drivers"}
@@ -376,9 +357,8 @@ export default function PreferencesPanel({
                 favorites.map((driver, idx) => (
                   <span
                     key={idx}
-                    className="font-bold text-gray-200 border-2 border-gray-400 p-1 rounded flex flex-row gap-1 w-[4rem] items-center hover:cursor-pointer"
+                    className="font-bold text-gray-200 border-2 border-gray-400 p-1 rounded flex flex-row gap-1 w-[4rem] items-center hover:cursor-pointer font-geist font-medium"
                     style={{
-                      fontFamily: mediumGeist.style.fontFamily,
                       color: "#" + driver.team_colour,
                     }}
                     onClick={() => handleDeleteDriver(driver)}
@@ -394,7 +374,6 @@ export default function PreferencesPanel({
               <input
                 type="text"
                 style={{
-                  fontFamily: mediumGeist.style.fontFamily,
                   boxShadow:
                     "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
                 }}
@@ -405,7 +384,7 @@ export default function PreferencesPanel({
                     ? "Buscar por piloto o equipo..."
                     : "Search by name or team..."
                 }
-                className="w-full px-3 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="w-full px-3 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200 font-geist font-medium"
               />
 
               {/* Suggestions dropdown */}
@@ -417,13 +396,10 @@ export default function PreferencesPanel({
                       onClick={() => handleSelectDriver(driver)}
                       className="px-3 py-2 text-sm text-gray-200 hover:cursor-pointer"
                     >
-                      <div className="font-medium" style={mediumGeist.style}>
+                      <div className="font-medium font-geist font-medium">
                         {driver.full_name}
                       </div>
-                      <div
-                        className="text-xs text-gray-400"
-                        style={mediumGeist.style}
-                      >
+                      <div className="text-xs text-gray-400 font-geist font-medium">
                         {driver.team_name}
                       </div>
                     </li>
@@ -435,23 +411,19 @@ export default function PreferencesPanel({
 
           {/* Visuals */}
           <div className="flex flex-col justify-evenly pb-4">
-            <p className="text-md text-gray-100" style={orbitron.style}>
+            <p className="text-md text-gray-100 font-orbitron">
               {preferences.translate ? "Vista" : "Visuals"}
             </p>
             {Object.entries(preferences).map(([key, value]) => (
-              <div
-                key={key}
-                className="flex items-center justify-between"
-                style={mediumGeist.style}
-              >
+              <div key={key} className="flex items-center justify-between">
                 {preferenceDetails[key as string] ? (
                   <>
                     {" "}
                     <div className="flex flex-col px-2 py-2">
-                      <span className="text-xs" style={mediumGeist.style}>
+                      <span className="text-xs font-geist font-medium">
                         {preferenceDetails[key as string].title}
                       </span>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-500 font-geist font-medium">
                         {preferenceDetails[key as string].description}
                       </span>
                     </div>
@@ -477,19 +449,6 @@ export default function PreferencesPanel({
               </div>
             ))}
           </div>
-
-          {/* Help tutorial */}
-          {/* <div className="flex flex-col gap-2">
-              <p className="text-lg text-gray-100" style={mediumGeist.style}>
-                Help!
-              </p>
-              <div className="flex flex-row gap-1">
-                <p className="text-sm text-gray-400"> Click here to a quick </p>
-                <p className="text-sm text-blue-500 hover:cursor-pointer">
-                  dashboard tutorial!
-                </p>
-              </div>
-            </div> */}
         </div>
       </div>
     </>

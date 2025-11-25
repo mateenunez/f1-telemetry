@@ -1,10 +1,6 @@
 "use client";
 
-import { Geist } from "next/font/google";
 import { useState, useEffect } from "react";
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-
 interface CountdownProps {
   totalSeconds?: number;
   size?: number;
@@ -62,10 +58,7 @@ export function Countdown({
 
   if (!mounted || !remainingSeconds || !totalSeconds)
     return (
-      <span
-        className="text-white text-xl text-center"
-        style={mediumGeist.style}
-      >
+      <span className="text-white text-xl text-center font-geist font-medium">
         {dict.loading}
       </span>
     );
@@ -80,10 +73,7 @@ export function Countdown({
 
   return (
     <div className="flex flex-col items-center justify-center gap-2 bg-none">
-      <span
-        className="text-white text-xl text-center"
-        style={mediumGeist.style}
-      >
+      <span className="text-white text-xl text-center font-geist font-medium">
         {dict.delaying}
       </span>
       <style>{`
@@ -132,10 +122,7 @@ export function Countdown({
         </svg>
 
         <div className="absolute inset-0 flex items-center justify-center">
-          <span
-            className="text-md font-bold font-mono text-offWhite"
-            style={mediumGeist.style}
-          >
+          <span className="text-md font-bold font-mono text-offWhite font-geist font-medium">
             {remainingSeconds}
           </span>
         </div>

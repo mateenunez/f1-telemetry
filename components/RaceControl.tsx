@@ -3,12 +3,9 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProcessedRaceControl } from "@/processors";
-import { Geist } from "next/font/google";
 import { toLocaleTime } from "@/utils/calendar";
 import { useTelemetryAudio } from "@/hooks/use-raceControl";
 import { usePreferences } from "@/context/preferences";
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
 interface RaceControlProps {
   raceControl: ProcessedRaceControl[];
@@ -43,7 +40,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
     <Card className="bg-transparent border-none p-0">
       <CardContent className="align-center p-0">
         {lastMessage && (
-          <div className={`rounded text-f1Blue py-0`} style={mediumGeist.style}>
+          <div className="rounded text-f1Blue py-0 font-geist font-medium">
             <p className="text-xs text-gray-200 leading-tight">
               {lastMessage.message}
             </p>

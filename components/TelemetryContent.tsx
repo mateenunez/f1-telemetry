@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Geist } from "next/font/google";
 import Header from "@/components/Header";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -16,8 +15,6 @@ import { CircleCarData } from "@/components/CircleCarData";
 import { useEffect } from "react";
 import { useTour } from "@reactour/tour";
 import { Countdown } from "./Countdown";
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
 interface TelemetryContentProps {
   dict: any;
@@ -66,10 +63,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
         {delayed ? (
           <Countdown totalSeconds={Math.max(secondsDelay, 0)} dict={dict} />
         ) : (
-          <span
-            className="text-white text-xl text-center"
-            style={mediumGeist.style}
-          >
+          <span className="text-white text-xl text-center font-geist">
             {dict.loading}
           </span>
         )}

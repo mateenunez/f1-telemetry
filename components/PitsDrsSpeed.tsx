@@ -1,6 +1,5 @@
 "use client";
 
-import { Geist, Orbitron } from "next/font/google";
 import type {
   ProcessedTiming,
   ProcessedCarData,
@@ -8,9 +7,6 @@ import type {
 } from "@/processors";
 import { JSX, useMemo } from "react";
 import { getCompoundSvg } from "@/hooks/use-telemetry";
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 interface PitsDrsSpeedProps {
   timing: ProcessedTiming | undefined;
@@ -44,10 +40,7 @@ export default function PitsDrsSpeed({
     <div className="flex flex-row gap-2 w-[6rem] justify-around">
       {/* DRS & Speed */}
       <div className="flex flex-col w-[3rem]">
-        <span
-          className="text-xs text-white self-center"
-          style={mediumGeist.style}
-        >
+        <span className="text-xs text-white self-center font-f1-regular">
           {carData?.drs ? (
             <p className="text-green-400">DRS</p>
           ) : (
@@ -57,8 +50,7 @@ export default function PitsDrsSpeed({
 
         {/* Velocidad */}
         <p
-          style={mediumGeist.style}
-          className={`text-[0.6rem] text-white ${getSpeedColor(
+          className={`text-[0.6rem] text-white font-geist ${getSpeedColor(
             carData?.speed
           )}`}
         >
@@ -68,22 +60,16 @@ export default function PitsDrsSpeed({
         </p>
       </div>
       {/* En PIT */}
-      <div
-        className="text-xs text-white self-center m-0 p-0 min-w-[2rem]"
-        style={orbitron.style}
-      >
+      <div className="text-xs text-white self-center m-0 p-0 min-w-[2rem] font-orbitron">
         {timing?.in_pit ? (
-          <span className="flex flex-col" style={mediumGeist.style}>
+          <span className="flex flex-col font-geist">
             <p className="text-f1Blue text-nowrap flex flex-nowrap">IN PIT</p>
-            <span
-              style={mediumGeist.style}
-              className="text-[0.6rem] text-white text-center"
-            >
+            <span className="text-[0.6rem] text-white text-center font-geist">
               {timing?.number_of_pit_stops} PIT
             </span>
           </span>
         ) : (
-          <span style={mediumGeist.style}>
+          <span className="font-geist">
             {driverStints && (
               <div className="flex flex-row gap-0 justify-start flex-wrap">
                 {previousStintCompounds}

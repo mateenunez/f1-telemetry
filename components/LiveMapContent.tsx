@@ -5,9 +5,6 @@ import Map from "./Map";
 import { useTelemetryManager } from "@/hooks/use-telemetry";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import Header from "./Header";
-import { Geist } from "next/font/google";
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
 export function LiveMapContent({ dict }: { dict: any }) {
   const { telemetryData, yellowSectors, loading } = useTelemetryManager();
@@ -23,10 +20,7 @@ export function LiveMapContent({ dict }: { dict: any }) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 px-2 relative">
         <div className="fixed inset-0 z-20 flex items-center justify-center bg-warmBlack/40 backdrop-blur-sm">
-          <span
-            className="text-white text-xl text-center"
-            style={mediumGeist.style}
-          >
+          <span className="text-white text-xl text-center font-geist">
             {dict.loading}
           </span>
         </div>

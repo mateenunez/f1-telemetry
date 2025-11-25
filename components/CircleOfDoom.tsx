@@ -3,7 +3,6 @@ import {
   ProcessedPosition,
   ProcessedTiming,
 } from "@/processors";
-import { Geist } from "next/font/google";
 import { useMemo } from "react";
 
 interface CircleOfDoomProps {
@@ -13,7 +12,6 @@ interface CircleOfDoomProps {
   refDriver: number | undefined;
 }
 
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
 export default function CircleOfDoom({
   currentPositions,
@@ -223,9 +221,7 @@ export default function CircleOfDoom({
                     angle > 90 && angle < 270 ? angle - 180 : angle; // keep text upright
                   return `rotate(${finalAngle} ${pitLabelPos.x} ${pitLabelPos.y})`;
                 })()}
-                style={{
-                  fontFamily: mediumGeist.style.fontFamily,
-                }}
+                className="font-f1-regular"
               >
                 PIT
               </text>
@@ -245,7 +241,7 @@ export default function CircleOfDoom({
                   }
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  style={mediumGeist.style}
+                  className="font-f1-regular"
                 >
                   {"P" +
                     adjacentDrivers.ahead.driver.position +
@@ -259,7 +255,7 @@ export default function CircleOfDoom({
                   fill={"#e5e7eb"}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  style={mediumGeist.style}
+                  className="font-geist font-medium"
                 >
                   {adjacentDrivers.ahead.gap}
                 </text>
@@ -275,11 +271,10 @@ export default function CircleOfDoom({
                   fill={"#" + (pilotRef?.team_colour || "e5e7eb")}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  style={mediumGeist.style}
+                  className="font-f1-regular"
                 >
-                  {pilotRef?.name_acronym
-                    ? "P" + pilotRef.position + " " + pilotRef.name_acronym
-                    : "PICK DRIVER"}
+                  {pilotRef?.name_acronym &&
+                    "P" + pilotRef.position + " " + pilotRef.name_acronym}
                 </text>
                 <text
                   x={0}
@@ -288,7 +283,7 @@ export default function CircleOfDoom({
                   fill="#e5e7eb"
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  style={mediumGeist.style}
+                  className="font-geist font-medium"
                 >
                   {pilotRef?.last_lap_time}
                 </text>
@@ -307,7 +302,7 @@ export default function CircleOfDoom({
                   }
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  style={mediumGeist.style}
+                  className="font-f1-regular"
                 >
                   {"P" +
                     adjacentDrivers.behind.driver.position +
@@ -321,7 +316,7 @@ export default function CircleOfDoom({
                   fill={"#e5e7eb"}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  style={mediumGeist.style}
+                  className="font-geist font-medium"
                 >
                   {adjacentDrivers.behind.gap}
                 </text>
@@ -365,9 +360,7 @@ export default function CircleOfDoom({
                       angle > 90 && angle < 270 ? angle - 180 : angle; // keep text upright
                     return `rotate(${finalAngle} ${labelPos.x} ${labelPos.y})`;
                   })()}
-                  style={{
-                    fontFamily: mediumGeist.style.fontFamily,
-                  }}
+                  className="font-f1-regular"
                 >
                   {driverInfo?.name_acronym}
                 </text>

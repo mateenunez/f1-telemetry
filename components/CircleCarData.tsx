@@ -2,19 +2,13 @@ import { usePreferences } from "@/context/preferences";
 import {
   ProcessedCarData,
   ProcessedDriver,
-  ProcessedPosition,
-  ProcessedTiming,
 } from "@/processors";
-import { Geist } from "next/font/google";
-import { useEffect, useMemo, useState } from "react";
 
 interface CircleCarDataProps {
   driverInfo: (ProcessedDriver | undefined)[];
   carData: ProcessedCarData | undefined;
   size?: number;
 }
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
 export function CircleCarData({
   driverInfo,
@@ -157,7 +151,7 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
-              style={mediumGeist.style}
+              className="font-geist font-medium"
             >
               {speed}
             </text>
@@ -169,7 +163,7 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
-              style={mediumGeist.style}
+              className="font-geist font-medium"
             >
               km/h
             </text>
@@ -181,7 +175,7 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
-              style={mediumGeist.style}
+              className="font-geist font-medium"
             >
               {preferences.translate ? "MARCHA" : "GEAR"} {gear}
             </text>
@@ -193,14 +187,14 @@ export function CircleCarData({
               textAnchor="middle"
               dominantBaseline="middle"
               style={{
-                fontFamily: mediumGeist.style.fontFamily,
                 fill: driver ? "#" + driver.team_colour : "rgb(201, 199, 199)",
               }}
+              className="font-f1-regular"
             >
               {driver ? (
                 driver.name_acronym
               ) : (
-                <>{preferences ? "ELEGIR PILOTO" : "PICK DRIVER"}</>
+                <>{preferences ? "PILOTO" : "DRIVER"}</>
               )}
             </text>
             <text
@@ -211,7 +205,7 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
-              style={mediumGeist.style}
+              className="font-geist font-medium"
             >
               {rpm}
             </text>
@@ -223,7 +217,7 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
-              style={mediumGeist.style}
+              className="font-geist font-medium"
             >
               RPM
             </text>
@@ -236,9 +230,9 @@ export function CircleCarData({
               textAnchor="middle"
               dominantBaseline="middle"
               style={{
-                fontFamily: mediumGeist.style.fontFamily,
                 fill: drs ? "#51cf66" : "rgb(40,40,40)",
               }}
+              className="font-f1-regular"
             >
               DRS
             </text>
@@ -250,7 +244,7 @@ export function CircleCarData({
             const speedFraction = Math.min(Math.max(speed, 0), 360) / 300;
             const speedProgressDistance = speedFraction * blueArcLength;
             const speedStrokeDashoffset = blueArcLength - speedProgressDistance;
-            const labelPos = polar(-speedStrokeDashoffset, -r+10);
+            const labelPos = polar(-speedStrokeDashoffset, -r + 10);
             return (
               <g key={idx}>
                 <text
@@ -260,7 +254,7 @@ export function CircleCarData({
                   fill={"rgb(201, 199, 199)"}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  style={mediumGeist.style}
+                  className="font-geist font-medium"
                 >
                   {mark}
                 </text>

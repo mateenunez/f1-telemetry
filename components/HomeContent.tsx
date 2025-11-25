@@ -1,13 +1,8 @@
 "use client";
 import { ColorShift } from "@/components/ColorShift";
-import { Geist, Orbitron } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { config } from "@/lib/config";
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const boldGeist = Geist({ subsets: ["latin"], weight: "800" });
-const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 interface HomeContentProps {
   dict: any;
@@ -29,10 +24,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
   }: InlineVideoCardProps) => (
     <div className="md:w-[25rem] w-full flex flex-col items-center px-1">
       <div className="rounded-xl border-2 border-gray-400 bg-transparent p-4">
-        <h3
-          className="text-center text-lg font-semibold mb-3 text-gray-200"
-          style={orbitron.style}
-        >
+        <h3 className="text-center text-lg mb-3 text-gray-200 font-orbitron">
           {title}
         </h3>
         <div className="w-full overflow-hidden rounded-lg">
@@ -45,10 +37,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
           />
         </div>
       </div>
-      <p
-        className="mt-3 text-sm text-gray-300 text-center px-2"
-        style={mediumGeist.style}
-      >
+      <p className="mt-3 text-sm text-gray-300 text-center px-2 font-geist font-medium">
         {description}
       </p>
     </div>
@@ -93,7 +82,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
           <nav className="flex flex-row gap-2 items-center justify-center">
             <a
               className="rounded px-3 py-3 text-sm bg-white text-black border-2 border-white text-center transition duration-300 ease-in-out 
-                
+                font-geist font-medium
                 hover:bg-f1Blue
                 hover:shadow-2xl 
                 hover:text-gray-200
@@ -104,14 +93,13 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 focus:ring-4 
                 focus:ring-gray-500 
                 focus:ring-opacity-50"
-              style={mediumGeist.style}
               href="/live-timing"
             >
               {dict.home.dashboardButton}
             </a>
             <a
               className="rounded w-full py-3 px-3 text-sm bg-transparent border-2 border-gray-200 text-gray-200 text-center transition duration-300 ease-in-out 
-             
+                font-geist font-medium
                 hover:bg-f1Red
                 hover:text-gray-200
                 hover:border-f1Red
@@ -121,7 +109,6 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 focus:ring-4 
                 focus:ring-gray-500 
                 focus:ring-opacity-50"
-              style={mediumGeist.style}
               href="/schedule"
             >
               {dict.home.scheduleButton}
@@ -132,10 +119,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
       <div className="h-screen py-5 w-full bg-f1telemetry bg-cover bg-center">
         <div className="flex flex-col justify-evenly h-full justify-center items-center max-w-4xl mx-auto">
           <div className="flex justify-center w-full items-center">
-            <p
-              className="text-gray-300 text-sm text-center px-2"
-              style={mediumGeist.style}
-            >
+            <p className="text-gray-300 text-sm text-center px-2 font-geist font-medium">
               {dict.home.version}
             </p>
           </div>
@@ -146,10 +130,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
               width={250}
               alt="F1 Telemetry black logo"
             />
-            <h1
-              className="text-[2rem] text-gray-200 boldest "
-              style={boldGeist.style}
-            >
+            <h1 className="text-[2rem] text-gray-200 font-geist font-extrabold">
               {Array.from(dict.home.title).map((char, idx) => {
                 if (typeof char !== "string") return;
                 return (
@@ -181,12 +162,12 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 hover:shadow-2xl 
                 hover:text-gray-200
                 hover:cursor-pointer
+                font-geist font-medium
                 
                 focus:outline-none 
                 focus:ring-4 
                 focus:ring-gray-500 
                 focus:ring-opacity-50"
-              style={mediumGeist.style}
               href="/live-timing"
             >
               {dict.home.dashboardButton}
@@ -200,12 +181,12 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 hover:text-gray-200
                 hover:border-none
                 hover:cursor-pointer
+                font-geist font-medium
                 
                 focus:outline-none 
                 focus:ring-4 
                 focus:ring-gray-500 
                 focus:ring-opacity-50"
-              style={mediumGeist.style}
               href="/schedule"
             >
               {dict.home.scheduleButton}
@@ -216,10 +197,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
       <div className="py-5 w-full bg-warmBlack">
         <div className="flex flex-col justify-evenly min-h-screen h-full gap-[2rem] justify-center items-center max-w-4xl mx-auto">
           <div>
-            <h2
-              className="text-md text-gray-300 text-center"
-              style={mediumGeist.style}
-            >
+            <h2 className="text-md text-gray-300 text-center font-geist font-medium">
               {dict.home.description}
             </h2>
           </div>

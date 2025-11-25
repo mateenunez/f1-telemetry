@@ -476,11 +476,11 @@ const CarDot = ({
         fontSize={favorite ? 120 * 3.5 : 120 * 3}
         strokeWidth={0}
         style={{
-          fontFamily: oxanium.style.fontFamily,
           transform: "translateX(0px) translateY(-400px)",
           textAnchor: "middle",
           dominantBaseline: "middle",
         }}
+        className="font-f1-regular"
       >
         {name}
       </text>

@@ -1,11 +1,8 @@
 "use client";
 
-import { Geist } from "next/font/google";
 import type { ProcessedWeather } from "@/processors/weather-processor";
 import { usePreferences } from "@/context/preferences";
-import { CloudRain, Sun, Wind, Droplets, CloudSun } from "lucide-react";
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
+import { CloudRain, Sun, CloudSun } from "lucide-react";
 
 interface WeatherProps {
   weather: ProcessedWeather;
@@ -32,12 +29,7 @@ const ClimateCondition = ({
 }: ClimateConditionProps) => {
   return (
     <div className="flex flex-col items-center">
-      <span
-        className="text-gray-400 text-md"
-        style={{ fontFamily: mediumGeist.style.fontFamily }}
-      >
-        {label}
-      </span>
+      <span className="text-gray-400 text-md font-geist">{label}</span>
       <span className="text-md text-offWhite">
         {value}
         {unit}
@@ -136,7 +128,7 @@ const ClimateCircle = ({
             strokeWidth={strokeWidth}
             strokeDasharray={`${arcLength} ${circumference}`}
             transform={`rotate(135 50 50)`}
-            style={{ filter: 'brightness(1.1) saturate(1.2)' }}
+            style={{ filter: "brightness(1.1) saturate(1.2)" }}
           />
 
           {/* White marker (rectangle) at the current value position */}
@@ -162,7 +154,7 @@ const ClimateCircle = ({
             fontFamily="monospace"
             textAnchor="middle"
             dominantBaseline="middle"
-            style={mediumGeist.style}
+            className="font-geist"
           >
             {Math.round(value)}
             {unit}
@@ -175,7 +167,7 @@ const ClimateCircle = ({
             fontFamily="monospace"
             textAnchor="middle"
             dominantBaseline="middle"
-            style={mediumGeist.style}
+            className="font-geist"
           >
             {label}
           </text>

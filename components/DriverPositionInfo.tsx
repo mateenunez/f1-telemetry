@@ -1,14 +1,10 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Geist, Aldrich } from "next/font/google";
 import type { ProcessedPosition, ProcessedDriver } from "@/processors";
 import SoundWave from "./SoundWave";
 import { usePreferences } from "@/context/preferences";
 import { config } from "@/lib/config";
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
 interface DriverPositionInfoProps {
   position: ProcessedPosition;
   driver: ProcessedDriver | undefined;
@@ -36,10 +32,9 @@ export default function DriverPositionInfo({
         }`}
       >
         <Badge
-          className="w-[2rem] text-[1rem] items-center font-bold pr-[0px] pl-4"
+          className="w-[2rem] text-[1rem] items-center font-bold pr-[0px] pl-4 font-aldrich"
           style={{
             backgroundColor: `transparent`,
-            fontFamily: aldrich.style.fontFamily,
           }}
         >
           {position.position}
@@ -63,19 +58,15 @@ export default function DriverPositionInfo({
       </div>
 
       {/* Info del piloto */}
-      <div className="flex justify-evenly flex-row " style={aldrich.style}>
+      <div className="flex justify-evenly flex-row font-f1-regular">
         <div className="flex flex-col self-start">
           <div className="flex items-center gap-1">
             <span
-              className="text-xs text-gray-400 self-center"
-              style={mediumGeist.style}
+              className="text-xs text-gray-400 self-center font-geist"
             >
               #{position.driver_number}
             </span>
-            <span
-              className="font-semibold text-sm text-white flex flex-row items-center"
-              style={mediumGeist.style}
-            >
+            <span className="text-xs text-white flex flex-row items-center font-f1-regular">
               {driver?.name_acronym}{" "}
               {isPlaying === driver?.driver_number && (
                 <span className="ml-2">

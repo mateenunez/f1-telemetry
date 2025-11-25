@@ -120,6 +120,13 @@ const config: Config = {
       backgroundImage: {
         f1telemetry: "url('/assets/f1telemetrybg_v1.png')",
       },
+      fontFamily: {
+        "f1-regular": ["var(--font-f1-regular)"],
+        geist: ["var(--font-geist)"],
+        orbitron: ["var(--font-orbitron)"],
+        aldrich: ["var(--font-aldrich)"],
+        oxanium: ["var(--font-oxanium)"],
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

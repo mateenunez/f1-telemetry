@@ -4,6 +4,40 @@ import { Analytics } from "@vercel/analytics/next";
 import { PreferencesProvider } from "@/context/preferences";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import Script from "next/script";
+import localFont from "next/font/local";
+import { Geist, Orbitron, Aldrich, Oxanium } from "next/font/google";
+
+
+const f1RegularfFont = localFont({
+  src: "../public/fonts/Formula1-Regular.otf",
+  weight: "300",
+  style: "normal",
+  variable: "--font-f1-regular",
+});
+
+const geist = Geist({
+  subsets: ["latin"],
+  weight: ["400", "500", "800"],
+  variable: "--font-geist",
+});
+
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-orbitron",
+});
+
+const aldrich = Aldrich({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-aldrich",
+});
+
+const oxanium = Oxanium({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-oxanium",
+});
 
 export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }));
@@ -93,7 +127,7 @@ export default async function RootLayout({
         `}
         </Script>
       </head>
-      <body>
+      <body className={`${f1RegularfFont.variable} ${geist.variable} ${orbitron.variable} ${aldrich.variable} ${oxanium.variable}`}>
         <PreferencesProvider>{children}</PreferencesProvider>
         <Analytics />
       </body>

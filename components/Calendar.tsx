@@ -6,11 +6,6 @@ import {
   formatTimeUntil,
   translateSessionType,
 } from "@/utils/calendar";
-import { Geist, Orbitron } from "next/font/google";
-import { usePreferences } from "@/context/preferences";
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 export default function F1Calendar({ dict }: { dict: any }) {
   const [upcoming, setUpcoming] = useState<F1UpcomingResponse | null>(null);
@@ -39,16 +34,15 @@ export default function F1Calendar({ dict }: { dict: any }) {
 
       >
         <div
-          className="flex flex-row lg:flex-row text-xs md:text-sm lg:text-sm text-gray-500 gap-1"
-          style={mediumGeist.style}
+          className="flex flex-row font-geist lg:flex-row text-xs md:text-sm lg:text-sm text-gray-500 gap-1"
+       
         >
           <p>{dict.schedule.next}:</p>
           <p>{upcoming?.nextEvent.location} - </p>
           <p>{translateSessionType(upcoming?.nextEvent.type, dict)}</p>
         </div>
         <a
-          style={orbitron.style}
-          className="flex flex-row gap-2 hover:cursor-pointer text-md font-regular"
+          className="flex flex-row gap-2 font-orbitron hover:cursor-pointer text-md font-regular"
           href="/schedule"
         >
           {formatTimeUntil(

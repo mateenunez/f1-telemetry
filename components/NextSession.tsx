@@ -10,7 +10,6 @@ import {
   TimeUntilNext,
   translateSessionType,
 } from "@/utils/calendar";
-import { Geist } from "next/font/google";
 import { useEffect, useState } from "react";
 
 interface NextSessionProps {
@@ -18,8 +17,6 @@ interface NextSessionProps {
   timeUntil: TimeUntilNext;
   dict: any;
 }
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
 export default function NextSession({
   session,
@@ -58,10 +55,7 @@ export default function NextSession({
   }, []);
 
   return (
-    <div
-      className="flex md:flex-col py-4 max-w-fulljustify-center"
-      style={mediumGeist.style}
-    >
+    <div className="flex md:flex-col py-4 max-w-fulljustify-center font-geist">
       <div className="flex flex-col max-w-full justify-between items-center text-center">
         {/* Countdown Timer */}
         <div className="gap-4 tracking-wide md:tracking-widest flex md:flex-row text-[5rem]">
@@ -96,7 +90,9 @@ export default function NextSession({
         {/* Session Details */}
         <div className="my-8 mx-8 flex flex-col">
           <span className="font-semibol text-xl tracking-wide mb-4 w-full">
-            {session.track + " " + translateSessionType(session.type, dict).toUpperCase()}
+            {session.track +
+              " " +
+              translateSessionType(session.type, dict).toUpperCase()}
           </span>
 
           <div className="flex md:flex-row justify-center gap-4">
@@ -110,7 +106,8 @@ export default function NextSession({
             {/* Time Information */}
             <div className="flex flex-col text-left gap-0">
               <p className="text-xl">
-                {getDayOfWeek(session.start, dict.locale).toUpperCase()} {getRelativeDate(session.start, dict)}
+                {getDayOfWeek(session.start, dict.locale).toUpperCase()}{" "}
+                {getRelativeDate(session.start, dict)}
               </p>
               <div className="items-center text-gray-300">
                 {getTimeOnly(session.start)} - {getTimeOnly(session.end || "")}

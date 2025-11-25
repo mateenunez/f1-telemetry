@@ -9,7 +9,6 @@ import { Card, CardContent } from "./ui/card";
 import { ScrollArea } from "./ui/scroll-area";
 import { Copy, DownloadIcon, PauseIcon, PlayIcon } from "lucide-react";
 import { toLocaleTime } from "@/utils/calendar";
-import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { useTelemetryAudio, audioUrl } from "@/hooks/use-raceControl";
 import { usePreferences } from "@/context/preferences";
@@ -21,8 +20,6 @@ interface SessionAudiosProps {
   session: ProcessedSession | null | undefined;
   driverInfos?: (ProcessedDriver | undefined)[];
 }
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
 const AUDIO_DOWNLOAD_URL = config.public + "download-mp3";
 
@@ -142,11 +139,8 @@ export default function SessionAudios({
 
   return (
     <Card className="flex w-full bg-transparent border-b-2 border-t-2 border-l-0 border-r-0 rounded-none border-gray-800 md:border-none md:p-0 ">
-      <CardContent className="overflow-x-hidden flex-1 max-h-[20rem] max-w-full px-6 py-4">
-        <ScrollArea
-          className="overflow-x-auto h-full p-0 min-w-full"
-          type="scroll"
-        >
+      <CardContent className="overflow-x-hidden flex-1 max-h-[20rem] px-6 py-4">
+        <ScrollArea className="overflow-x-auto h-full p-0" type="scroll">
           {orderedCaptures.length > 0 && teamRadio ? (
             <div className="space-y-2">
               {orderedCaptures.map((capture, idx) => {
@@ -181,9 +175,8 @@ export default function SessionAudios({
                         </div>
                       ) : (
                         <p
-                          className="text-md text-gray-100 h-[3rem] flex items-center"
+                          className="text-md text-gray-100 h-[3rem] flex items-center font-f1-regular"
                           style={{
-                            fontFamily: mediumGeist.style.fontFamily,
                             color: "#" + driver.team_color,
                           }}
                         >
@@ -206,10 +199,10 @@ export default function SessionAudios({
                             className="mx-1 hover:cursor-pointer transition fill-gray-400"
                             width={15}
                           />
-                          <div className="flex flex-col gap-4 w-full">
-                            <div className="w-full h-[2px] mx-1 rounded overflow-hidden">
+                          <div className="flex flex-col gap-0 w-full">
+                            <div className="w-full h-[2px] rounded overflow-hidden">
                               <div
-                                className="h-full max-w-[90%] transition-[width] duration-150 ease-linear"
+                                className="h-full w-full transition-[width] duration-150 ease-linear"
                                 style={{
                                   width: `${progress}%`,
                                   background: "#" + driver.team_color,
@@ -230,7 +223,7 @@ export default function SessionAudios({
                             width={15}
                           />
                           <div
-                            className="w-[80%] h-[2px] mx-1 rounded"
+                            className="w-full h-[2px] rounded"
                             style={{
                               width: `${progress}%`,
                               background: "#" + driver.team_color,
@@ -239,10 +232,7 @@ export default function SessionAudios({
                         </div>
                       </div>
                     </div>
-                    <span
-                      className="text-xs flex flex-row gap-2 items-center text-gray-500 mx-[4.5rem] max-w-full"
-                      style={mediumGeist.style}
-                    >
+                    <span className="text-xs flex flex-row gap-2 items-center text-gray-500 mx-[4.5rem] max-w-full font-geist font-medium">
                       {toLocaleTime(capture.utc)}
 
                       {AUDIO_DOWNLOAD_URL ? (
@@ -282,9 +272,8 @@ export default function SessionAudios({
                           style={{ backgroundColor: "#" + driver.team_color }}
                         />
                         <span
-                          className="text-start py-1.5 whitespace-pre-wrap text-sm italic"
+                          className="text-start py-1.5 whitespace-pre-wrap text-sm italic font-geist font-medium"
                           style={{
-                            fontFamily: mediumGeist.style.fontFamily,
                             color: "#" + driver.team_color,
                           }}
                         >
@@ -302,10 +291,7 @@ export default function SessionAudios({
               })}
             </div>
           ) : (
-            <div
-              className="min-h-[20rem] items-center justify-center flex"
-              style={mediumGeist.style}
-            >
+            <div className="min-h-[20rem] items-center justify-center flex">
               <p className="text-xs text-gray-400">
                 {preferences.translate
                   ? "Sin audios de carrera."

@@ -4,12 +4,9 @@ import { useState, useEffect } from "react";
 import { F1CalendarResponse, fetchCalendar } from "@/utils/calendar";
 import NextSession from "@/components/NextSession";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Geist } from "next/font/google";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Upnext from "@/components/Upnext";
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
 
 interface ScheduleContentProps {
   dict: any;
@@ -34,10 +31,7 @@ export function ScheduleContent({ dict }: ScheduleContentProps) {
   if (!calendar) {
     const LoaderOverlay = () => (
       <div className="fixed inset-0 z-20 flex items-center justify-center bg-warmBlack/40 backdrop-blur-sm">
-        <div
-          className="rounded-xl text-white text-xl text-center"
-          style={mediumGeist.style}
-        >
+        <div className="rounded-xl text-white text-xl text-center font-geist">
           {dict.schedule.loading}
         </div>
       </div>
@@ -93,10 +87,7 @@ export function ScheduleContent({ dict }: ScheduleContentProps) {
 
   if (calendar)
     return (
-      <div
-        className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 text-white overflow-hidden"
-        style={mediumGeist.style}
-      >
+      <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 text-white overflow-hidden font-geist">
         <div className="max-w-6xl mx-auto mt-12 px-4 md:px-8">
           <div className="flex flex-row justify-between items-center w-full gap-4 mb-8">
             <a

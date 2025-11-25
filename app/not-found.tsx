@@ -3,15 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Geist } from "next/font/google";
 
 const LOST_GIFS = [
   "https://media.tenor.com/nEP6ovplEd8AAAAi/so-really.gif",
   "https://media1.tenor.com/m/CbhnRg0n7ksAAAAC/kermit-the-frog-looking-for-directions.gif",
   "https://media1.tenor.com/m/PPOe9MawAvsAAAAd/404-not-found.gif",
 ];
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const boldGeist = Geist({ subsets: ["latin"], weight: "800" });
 
 export default function NotFound() {
   const [selectedGif, setSelectedGif] = useState("");
@@ -36,19 +33,14 @@ export default function NotFound() {
           )}
         </div>
 
-        {/* Text */}
-        <h1
-          className="text-4xl md:text-5xl font-medium text-white text-center"
-          style={boldGeist.style}
-        >
+        <h1 className="text-4xl md:text-5xl font-geist font-extrabold text-white text-center">
           Te perdiste?
         </h1>
 
         <Link href="/">
           <Button
             size="sm"
-            style={mediumGeist.style}
-            className="bg-transparent border border-f1Yellow rounded hover:bg-f1Yellow/90 text-gray-200 hover:text-warmBlack hover:border-warmBlack"
+            className="bg-transparent font-geist  border border-f1Yellow rounded hover:bg-f1Yellow/90 text-gray-200 hover:text-warmBlack hover:border-warmBlack"
           >
             Box Box!
           </Button>

@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { Geist, Orbitron } from "next/font/google";
 import F1Calendar from "@/components/Calendar";
 import type { TelemetryData } from "@/telemetry-manager";
 import { useEffect, useState } from "react";
@@ -16,9 +15,6 @@ import {
 import PreferencesPanel from "./PreferencesPanel";
 import { usePreferences } from "@/context/preferences";
 import Weather from "./Weather";
-
-const mediumGeist = Geist({ subsets: ["latin"], weight: "500" });
-const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 interface HeaderProps {
   telemetryData: TelemetryData | null;
@@ -62,10 +58,7 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
               </div>
               <div className="flex flex-col md:flex-row items-center justify-center">
                 <div className="flex items-center flex-col">
-                  <CardTitle
-                    className="flex flex-row items-center gap-4 text-md sm:text-xl"
-                    style={orbitron.style}
-                  >
+                  <CardTitle className="flex flex-row items-center gap-4 text-md sm:text-xl font-orbitron font-normal">
                     <img
                       src={`https://flagsapi.com/${getCountryCode(
                         session?.location || ""
@@ -84,17 +77,14 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
                           : session?.session_name}
                       </div>
                       <div className="flex flex-row items-center gap-4 text-md tracking-wide">
-                        <span style={orbitron.style}>
+                        <span className="font-orbitron">
                           {preferences.translate
                             ? translateSessionStatus(session?.session_status)
                             : session?.session_status}
                         </span>
                         {session?.session_status !== "Finalised" &&
                           sessionTime !== undefined && (
-                            <span
-                              className="text-xl text-offWhite"
-                              style={mediumGeist.style}
-                            >
+                            <span className="text-xl text-offWhite font-orbitron">
                               {formatTime(sessionTime)}
                             </span>
                           )}
@@ -105,10 +95,7 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
               </div>
             </div>
           </div>
-          <div
-            className="flex items-center text-nowrap flex-col md:flex-row text-xs md:text-sm "
-            style={mediumGeist.style}
-          >
+          <div className="flex items-center text-nowrap flex-col md:flex-row text-xs md:text-sm font-orbitron">
             {session?.session_status === "Finalised" ? (
               <F1Calendar dict={dict} />
             ) : (
