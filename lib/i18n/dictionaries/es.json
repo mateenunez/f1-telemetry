@@ -10,7 +10,8 @@
     "audioDesc": "Podés escuchar al instante el mensaje de radio de equipo de cada piloto durante la carrera, y además ¡usamos IA para la traducción y transcripción!",
     "circlesTitle": "Análisis en tiempo real",
     "circlesDesc": "Estamos añadiendo constantemente funcionalidades para mejorar el análisis de carreras, como el Circle of Doom que sirve para tomar decisiones de undercut.",
-    "version": "La version 1.4.3 trae un nuevo encabezado con dos formas de mostrar el clima: simple y detallada. Además arreglamos bugs."
+    "version": "La version 1.4.3 trae un nuevo encabezado con dos formas de mostrar el clima: simple y detallada. Además arreglamos bugs.",
+    "announce": "Estamos trabajando en migrar a un nuevo servidor, la telemetría puede no funcionar correctamente hasta que finalice el proceso. ¡Te esperamos en marzo!"
   },
   "footer": {
     "legal": " Este sitio web no está asociado, afiliado, autorizado, respaldado ni conectado oficialmente de ninguna manera con la Fórmula 1, la FIA o cualquiera de sus subsidiarias o afiliadas."

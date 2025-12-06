@@ -196,10 +196,13 @@ export default function HomeContent({ dict }: HomeContentProps) {
       </div>
       <div className="py-5 w-full bg-warmBlack">
         <div className="flex flex-col justify-evenly min-h-screen h-full gap-[2rem] justify-center items-center max-w-4xl mx-auto">
-          <div>
+          <div className="flex flex-col gap-[1rem]">
             <h2 className="text-md text-gray-300 text-center font-geist font-medium">
               {dict.home.description}
             </h2>
+            <p className="text-md text-f1Red text-center font-geist font-medium">
+              {dict.home.announce}
+            </p>
           </div>
           <div className="flex flex-col gap-[5rem] md:flex-row justify-evenly">
             <InlineVideoCard
