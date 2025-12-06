@@ -21,18 +21,19 @@ export default function Footer({ dict }: FooterProps) {
           <a
             href={config.public.github}
             target="_blank"
-            className="text-gray-400 hover:text-gray-200"
+            className="text-gray-500"
           >
-            <Github size={16} />
+            <Github size={18} />
           </a>
           <a
             href={config.public.discord}
             target="_blank"
-            className="text-gray-400 hover:text-gray-200"
+            className="text-gray-400"
           >
             <img
               src={config.public.assets.discordIcon}
-              width={15}
+              width={20}
+              height={"auto"}
               alt="Discord"
             />
           </a>

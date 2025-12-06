@@ -33,13 +33,47 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
 
     const offset = parseTimeOffset(session.gmt_offset);
     const endTime = new Date(ensureUtc(session.date_end)).getTime() - offset;
+
     if (session.session_status === "Finalised") return;
 
     const update = () => {
       const now = telemetryData?.lastUpdateTime.getTime();
       if (!now) return;
-      const remaining = Math.max(0, endTime - now);
-      setSessionTime(remaining);
+
+      // Qualy
+      if (session.series && session.series.length > 0) {
+        const activePart = session.series.slice(-1)[0];
+        if (activePart) {
+          const partNumber = activePart.QualifyingPart;
+          let durationMinutes: number;
+          switch (partNumber) {
+            case 1: // Q1
+              durationMinutes = 18;
+              break;
+            case 2: // Q2
+              durationMinutes = 15;
+              break;
+            case 3: // Q3
+              durationMinutes = 12;
+              break;
+            default:
+              durationMinutes = 60;
+              return;
+          }
+
+          const partStartTime =
+            new Date(ensureUtc(activePart.Utc)).getTime() - offset;
+          const partEndTime = partStartTime + durationMinutes * 60 * 1000;
+          const remaining = Math.max(0, partEndTime - now);
+          setSessionTime(remaining);
+        } else {
+          setSessionTime(0);
+        }
+      } else {
+        // Race
+        const remaining = Math.max(0, endTime - now);
+        setSessionTime(remaining);
+      }
     };
 
     update();
@@ -53,7 +87,7 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
         <div className="flex flex-col md:flex-row lg:flex-row items-center justify-between gap-1">
           <div className="flex flex-row md:justify-start items-center mx-4">
             <div className="flex flex-row gap-4 w-full justify-center items-center">
-              <div className="ninth-step ">
+              <div className="ninth-step">
                 <PreferencesPanel driverInfo={telemetryData?.drivers} />
               </div>
               <div className="flex flex-col md:flex-row items-center justify-center">
@@ -75,6 +109,7 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
                         {preferences.translate
                           ? translateSessionName(session?.session_name)
                           : session?.session_name}
+                        {" " + (session?.series.slice(-1)[0]?.QualifyingPart || "")}
                       </div>
                       <div className="flex flex-row items-center gap-4 text-md tracking-wide">
                         <span className="font-orbitron">
