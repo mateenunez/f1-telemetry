@@ -20,11 +20,10 @@ jobs:
           key: ${{ secrets.VPS_KEY }}         
           script: |
             # 1. Ruta de frontend
-            APP_DIR=/hombe/vboxuser/f1t-dock/f1-telemetry
-            DOCKER_NAME=nextjs_f1-telemetry 
+            APP_DIR=/home/vboxuser/f1t-dock/f1-telemetry
+            DOCKER_IMAGE=web-service 
 
             # 2. Navegar al directorio
-            echo "Navegando a $APP_DIR y actualizando código (rama master)..."
             cd $APP_DIR
             
             # 3. Obtener la versión más reciente del código
@@ -34,6 +33,6 @@ jobs:
             # Vamos a /f1t-dock
             cd ..
             # Construimos el contenedor del frontend
-            docker compose up -d --build $DOCKER_NAME
+            docker compose up -d --build $DOCKER_IMAGE
             
             echo "Despliegue con Docker Compose completado."
