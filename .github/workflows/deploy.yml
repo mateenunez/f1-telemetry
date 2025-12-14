@@ -15,11 +15,9 @@ jobs:
       - name: Deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
-          # --- SECRETOS DEL SERVIDOR (Configurados en GitHub Repository Secrets) ---
-          host: ${{ secrets.VPS_HOST }}       # IP de tu servidor
-          username: ${{ secrets.VPS_USER }}   # Usuario SSH
-          key: ${{ secrets.VPS_KEY }}         # Clave privada SSH
-          # -------------------------------------------------------------
+          host: ${{ secrets.VPS_HOST }}       
+          username: ${{ secrets.VPS_USER }}   
+          key: ${{ secrets.VPS_KEY }}         
           script: |
             # 1. Ruta de frontend
             APP_DIR=/hombe/vboxuser/f1t-dock/f1-telemetry
