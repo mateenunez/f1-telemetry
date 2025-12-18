@@ -1,8 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { usePreferences } from "@/context/preferences";
-import { X, Check, PanelLeft } from "lucide-react";
+import {
+  Preferences,
+  WidgetConfig,
+  WidgetId,
+  usePreferences,
+} from "@/context/preferences";
+import { X, Check, PanelLeft, Pencil } from "lucide-react";
 import { ProcessedDriver } from "@/processors";
 import { useTour } from "@reactour/tour";
 import { usePathname } from "next/navigation";
@@ -19,7 +24,8 @@ type LanguageOptions = {
 export default function PreferencesPanel({
   driverInfo,
 }: PreferencesPanelProps) {
-  const { preferences, setPreference } = usePreferences();
+  const { preferences, setPreference, isEditMode, setIsEditMode, widgets } =
+    usePreferences();
   const { setIsOpen } = useTour();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -112,6 +118,38 @@ export default function PreferencesPanel({
     if (!isLiveTimingPage) return;
     setOpen(false);
     setTimeout(() => setIsOpen(true), 300);
+  };
+
+  // Helper para mapear widget id a la key de preferences
+  function widgetIdToPrefKey(id: WidgetId): keyof Preferences | null {
+    const map: Record<WidgetId, keyof Preferences> = {
+      "driver-positions": "driverPositions",
+      "map-and-messages": "mapAndMessages",
+      "session-audios": "audioLog",
+      "race-control-list": "raceControlLog",
+      "circle-of-doom": "circleOfDoom",
+      "circle-car-data": "circleCarData",
+    };
+    return map[id] ?? null;
+  }
+
+  const handleEditMode = () => {
+    if (isEditMode) {
+      widgets.forEach((w) => {
+        const prefKey = widgetIdToPrefKey(w.id);
+        if (prefKey) {
+          setPreference(prefKey, {
+            enabled: w.enabled,
+            x: w.x,
+            y: w.y,
+            width: w.width,
+            height: w.height,
+          });
+        }
+      });
+    }
+    setIsEditMode(!isEditMode);
+    setOpen(false);
   };
 
   const preferenceDetails: Record<
@@ -224,6 +262,16 @@ export default function PreferencesPanel({
         className="text-gray-300 hover:text-gray-400 hover:cursor-pointer ninth-step"
         width={15}
         onClick={() => setOpen((prev) => !prev)}
+      />
+
+      <Pencil
+        width={15}
+        className={`hover:cursor-pointer transition-colors ${
+          isEditMode
+            ? "text-green-600 hover:text-green-700"
+            : "text-gray-300 hover:text-gray-400"
+        }`}
+        onClick={handleEditMode}
       />
 
       {/* Overlay */}
@@ -343,6 +391,40 @@ export default function PreferencesPanel({
             </button>
           </div>
 
+          {/* Edit Canvas Button */}
+          <div className="flex flex-col gap-2 pb-4">
+            <p className="text-md text-gray-100 font-orbitron">
+              {preferences.translate ? "Editar widgets" : "Edit canvas"}
+            </p>
+            <p className="text-xs text-gray-500 font-geist font-medium">
+              {preferences.translate
+                ? "Habilitar el modo de edición para mover o redimensionar los widgets."
+                : "Enable edit mode to move or redimension widgets."}
+            </p>
+            <button
+              onClick={handleEditMode}
+              className="flex items-start justify-start gap-2 px-4 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist font-medium"
+              style={{
+                boxShadow:
+                  "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
+              }}
+            >
+              <span>
+                {isEditMode ? (
+                  <>
+                    {preferences.translate ? "Guardar cambios" : "Save changes"}
+                  </>
+                ) : (
+                  <>
+                    {preferences.translate
+                      ? "Activar modo edición"
+                      : "Enable edit mode"}
+                  </>
+                )}
+              </span>
+            </button>
+          </div>
+
           {/* Favorite Drivers */}
           <div className="flex flex-col gap-2 pb-4">
             <p className="text-md text-gray-100 font-semibold font-orbitron">
@@ -414,40 +496,75 @@ export default function PreferencesPanel({
             <p className="text-md text-gray-100 font-orbitron">
               {preferences.translate ? "Vista" : "Visuals"}
             </p>
-            {Object.entries(preferences).map(([key, value]) => (
-              <div key={key} className="flex items-center justify-between">
-                {preferenceDetails[key as string] ? (
-                  <>
-                    {" "}
-                    <div className="flex flex-col px-2 py-2">
-                      <span className="text-xs font-geist font-medium">
-                        {preferenceDetails[key as string].title}
-                      </span>
-                      <span className="text-xs text-gray-500 font-geist font-medium">
-                        {preferenceDetails[key as string].description}
-                      </span>
-                    </div>
-                    <label className="relative inline-flex items-start cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="sr-only peer"
-                        checked={value}
-                        onChange={(e) =>
-                          setPreference(
-                            key as keyof typeof preferences,
-                            e.target.checked
-                          )
-                        }
-                      />
-                      <div className="w-10 h-5 bg-gray-800 rounded-full peer-checked:bg-f1Blue/80 transition-colors peer-checked:shadow-f1Blue-md"></div>
-                      <div className="absolute left-1 top-1 bg-f1Blue peer-checked:bg-white w-3 h-3 rounded-full transition-transform peer-checked:translate-x-5 "></div>
-                    </label>
-                  </>
-                ) : (
-                  ""
-                )}
-              </div>
-            ))}
+            {Object.entries(preferences).map(([key, value]) => {
+              const handleWidgetToggle = (
+                key: keyof Preferences,
+                enabled: boolean
+              ) => {
+                const currentValue = preferences[key];
+                if (
+                  typeof currentValue === "object" &&
+                  currentValue !== null &&
+                  "enabled" in currentValue &&
+                  "x" in currentValue &&
+                  "y" in currentValue &&
+                  "width" in currentValue &&
+                  "height" in currentValue
+                ) {
+                  setPreference(key, {
+                    ...currentValue,
+                    enabled,
+                  } as Preferences[keyof Preferences]);
+                } else {
+                  setPreference(key, enabled as Preferences[keyof Preferences]);
+                }
+              };
+
+              const isWidgetConfig =
+                typeof value === "object" &&
+                value !== null &&
+                "enabled" in value &&
+                "x" in value;
+
+              const checked = isWidgetConfig
+                ? (value as WidgetConfig).enabled
+                : (value as boolean);
+
+              return (
+                <div key={key} className="flex items-center justify-between">
+                  {preferenceDetails[key as string] ? (
+                    <>
+                      {" "}
+                      <div className="flex flex-col px-2 py-2">
+                        <span className="text-xs font-geist font-medium">
+                          {preferenceDetails[key as string].title}
+                        </span>
+                        <span className="text-xs text-gray-500 font-geist font-medium">
+                          {preferenceDetails[key as string].description}
+                        </span>
+                      </div>
+                      <label className="relative inline-flex items-start cursor-pointer">
+                        <input
+                          type="checkbox"
+                          className="sr-only peer"
+                          checked={checked}
+                          onChange={(e) =>
+                            handleWidgetToggle(
+                              key as keyof Preferences,
+                              e.target.checked
+                            )
+                          }
+                        />
+                        <div className="w-10 h-5 bg-gray-800 rounded-full peer-checked:bg-f1Blue/80 transition-colors peer-checked:shadow-f1Blue-md"></div>
+                        <div className="absolute left-1 top-1 bg-f1Blue peer-checked:bg-white w-3 h-3 rounded-full transition-transform peer-checked:translate-x-5 "></div>
+                      </label>
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

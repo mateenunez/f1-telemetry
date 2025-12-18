@@ -138,7 +138,7 @@ export default function SessionAudios({
   }, [radioAudioRef.current, playingAudio]);
 
   return (
-    <Card className="flex w-full bg-transparent border-b-2 border-t-2 border-l-0 border-r-0 rounded-none border-gray-800 md:border-none md:p-0 ">
+    <Card className="flex w-full bg-warmBlack border-b-2 border-t-2 border-l-0 border-r-0 rounded-none border-gray-800 md:border-none md:p-0 ">
       <CardContent className="overflow-x-hidden flex-1 max-h-[20rem] px-6 py-4">
         <ScrollArea className="overflow-x-auto h-full p-0" type="scroll">
           {orderedCaptures.length > 0 && teamRadio ? (

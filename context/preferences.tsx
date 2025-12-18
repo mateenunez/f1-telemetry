@@ -12,20 +12,46 @@ import React, {
 import Cookies from "js-cookie";
 import { ProcessedDriver } from "@/processors";
 
+export type WidgetId =
+  | "driver-positions"
+  | "map-and-messages"
+  | "session-audios"
+  | "race-control-list"
+  | "circle-of-doom"
+  | "circle-car-data";
+
+export type Widget = {
+  id: WidgetId;
+  enabled: boolean;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+export interface WidgetConfig {
+  enabled: boolean;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
 export interface Preferences {
   sectors: boolean;
   corners: boolean;
   audio: boolean;
   headshot: boolean;
-  audioLog: boolean;
-  raceControlLog: boolean;
-  circleOfDoom: boolean;
-  circleCarData: boolean;
+  audioLog: WidgetConfig;
+  raceControlLog: WidgetConfig;
+  circleOfDoom: WidgetConfig;
+  circleCarData: WidgetConfig;
+  driverPositions: WidgetConfig;
+  mapAndMessages: WidgetConfig;
   favoriteDrivers: ProcessedDriver[];
   delay: number;
   translate: boolean;
   hasSeenTour: boolean;
-  weatherDetailed: boolean; 
+  weatherDetailed: boolean;
 }
 
 const DEFAULT_CONFIG: Preferences = {
@@ -33,10 +59,12 @@ const DEFAULT_CONFIG: Preferences = {
   corners: false,
   audio: true,
   headshot: false,
-  audioLog: true,
-  raceControlLog: true,
-  circleOfDoom: true,
-  circleCarData: true,
+  driverPositions: { enabled: true, x: 0, y: 0, width: 800, height: 400 },
+  mapAndMessages: { enabled: true, x: 800, y: 0, width: 700, height: 600 },
+  audioLog: { enabled: true, x: 0, y: 700, width: 400, height: 300 },
+  raceControlLog: { enabled: true, x: 350, y: 700, width: 450, height: 300 },
+  circleOfDoom: { enabled: true, x: 850, y: 700, width: 300, height: 300 },
+  circleCarData: { enabled: true, x: 1200, y: 700, width: 300, height: 300 },
   favoriteDrivers: [],
   delay: 0,
   translate: false,
@@ -51,6 +79,12 @@ interface PreferencesContextValue {
     key: K,
     value: Preferences[K]
   ) => void;
+  isEditMode: boolean;
+  setIsEditMode: (value: boolean) => void;
+  widgets: Widget[];
+  updateWidget: (id: WidgetId, updates: Partial<Widget>) => void;
+  updateWidgets: (updates: Widget[]) => void;
+  syncWidgetsFromPreferences: () => void;
 }
 
 const PreferencesContext = createContext<PreferencesContextValue | null>(null);
@@ -90,15 +124,35 @@ function isPreferences(obj: any): obj is Preferences {
         "corners",
         "audio",
         "headshot",
+        "hasSeenTour",
+        "weatherDetailed",
+        "translate",
+      ].includes(key)
+    ) {
+      if (typeof obj[key] !== "boolean") return false;
+    }
+
+    if (
+      [
         "audioLog",
         "raceControlLog",
         "circleOfDoom",
         "circleCarData",
-        "hasSeenTour",
-        "weatherDetailed",
+        "driverPositions",
+        "mapAndMessages",
       ].includes(key)
     ) {
-      if (typeof obj[key] !== "boolean") return false;
+      const widgetConfig = obj[key];
+      if (
+        typeof widgetConfig !== "object" ||
+        typeof widgetConfig.enabled !== "boolean" ||
+        typeof widgetConfig.x !== "number" ||
+        typeof widgetConfig.y !== "number" ||
+        typeof widgetConfig.width !== "number" ||
+        typeof widgetConfig.height !== "number"
+      ) {
+        return false;
+      }
     }
 
     if (key === "favoriteDrivers" && !Array.isArray(obj[key])) {
@@ -127,6 +181,45 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
       return DEFAULT_CONFIG;
     }
   });
+
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  const buildWidgetsFromPreferences = useCallback(
+    (prefs: Preferences): Widget[] => {
+      return [
+        { id: "driver-positions", ...prefs.driverPositions },
+        { id: "map-and-messages", ...prefs.mapAndMessages },
+        { id: "session-audios", ...prefs.audioLog },
+        { id: "race-control-list", ...prefs.raceControlLog },
+        { id: "circle-of-doom", ...prefs.circleOfDoom },
+        { id: "circle-car-data", ...prefs.circleCarData },
+      ];
+    },
+    []
+  );
+
+  useEffect(() => {
+    setWidgets(buildWidgetsFromPreferences(preferences));
+  }, [preferences, buildWidgetsFromPreferences]);
+
+  const [widgets, setWidgets] = useState<Widget[]>(() =>
+    buildWidgetsFromPreferences(preferences)
+  );
+
+  const updateWidgets = useCallback((newWidgets: Widget[]) => {
+    setWidgets(newWidgets);
+  }, []);
+
+  // Función para actualizar un widget específico
+  const updateWidget = useCallback((id: WidgetId, updates: Partial<Widget>) => {
+    setWidgets((prev) =>
+      prev.map((w) => (w.id === id ? { ...w, ...updates } : w))
+    );
+  }, []);
+
+  const syncWidgetsFromPreferences = useCallback(() => {
+    setWidgets(buildWidgetsFromPreferences(preferences));
+  }, [preferences, buildWidgetsFromPreferences]);
 
   const getPreference = useCallback(
     <K extends keyof Preferences>(key: K): Preferences[K] => preferences[key],
@@ -162,8 +255,27 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
   }, [preferences]);
 
   const contextValue = useMemo(
-    () => ({ preferences, getPreference, setPreference }),
-    [preferences, getPreference, setPreference]
+    () => ({
+      preferences,
+      getPreference,
+      setPreference,
+      isEditMode,
+      setIsEditMode,
+      widgets,
+      updateWidget,
+      updateWidgets,
+      syncWidgetsFromPreferences,
+    }),
+    [
+      preferences,
+      getPreference,
+      setPreference,
+      isEditMode,
+      widgets,
+      updateWidget,
+      updateWidgets,
+      syncWidgetsFromPreferences,
+    ]
   );
 
   return (

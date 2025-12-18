@@ -10,14 +10,105 @@ import { useTelemetryManager } from "@/hooks/use-telemetry";
 import SessionAudios from "@/components/SessionAudios";
 import RaceControlList from "@/components/RaceControlList";
 import CircleOfDoom from "@/components/CircleOfDoom";
-import { usePreferences } from "@/context/preferences";
+import { Widget, WidgetId, usePreferences } from "@/context/preferences";
 import { CircleCarData } from "@/components/CircleCarData";
-import { useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useTour } from "@reactour/tour";
 import { Countdown } from "./Countdown";
+import { DndContext, useDraggable, DragEndEvent } from "@dnd-kit/core";
+import { SortableContext, useSortable, arrayMove } from "@dnd-kit/sortable";
+import { createSnapModifier } from "@dnd-kit/modifiers";
+import { CSS } from "@dnd-kit/utilities";
 
 interface TelemetryContentProps {
   dict: any;
+}
+
+function DraggableWidget({
+  widget,
+  children,
+  isEditMode,
+}: {
+  widget: Widget;
+  children: React.ReactNode;
+  isEditMode: boolean;
+}) {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: widget.id,
+    disabled: !isEditMode, // clave: desactiva el drag cuando no estás en modo edición
+  });
+
+  const style = {
+    position: "absolute" as const,
+    left: widget.x,
+    top: widget.y,
+    width: widget.width,
+    height: widget.height,
+    transform: transform ? CSS.Translate.toString(transform) : undefined,
+    cursor: isEditMode ? "grab" : "default",
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...(isEditMode ? listeners : {})} // no pasamos listeners si no hay edición
+    >
+      {children}
+    </div>
+  );
+}
+
+function SortableItem({
+  id,
+  children,
+  className,
+}: {
+  id: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id });
+
+  const style = {
+    transform: transform ? CSS.Transform.toString(transform) : undefined,
+    transition,
+    opacity: isDragging ? 0.8 : 1,
+    cursor: "grab",
+  } as React.CSSProperties;
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={className}
+      {...attributes}
+      {...listeners}
+    >
+      {children}
+    </div>
+  );
+}
+
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < breakpoint);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [breakpoint]);
+
+  return isMobile;
 }
 
 export function TelemetryContent({ dict }: TelemetryContentProps) {
@@ -39,7 +130,48 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     aboutToBeEliminated,
   } = useTelemetryManager();
   const { setIsOpen } = useTour();
-  const { preferences, setPreference } = usePreferences();
+  const { preferences, isEditMode, widgets, updateWidget, updateWidgets } =
+    usePreferences();
+  const isMobile = useIsMobile();
+  const GRID_SIZE = 20;
+  const snapToGrid = createSnapModifier(GRID_SIZE);
+  const gridStyle = isEditMode
+    ? {
+        backgroundImage: `
+        linear-gradient(to right, rgba(255, 255, 255, 0.23) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.23) 1px, transparent 1px)
+      `,
+        backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`,
+        backgroundColor: "#050505",
+      }
+    : {};
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, delta } = event;
+    const widgetId = active.id as WidgetId;
+
+    updateWidget(widgetId, {
+      x: widgets.find((w) => w.id === widgetId)!.x + delta.x,
+      y: widgets.find((w) => w.id === widgetId)!.y + delta.y,
+    });
+  };
+
+  const handleMobileDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const activeId = active.id as WidgetId;
+    const overId = over.id as WidgetId;
+
+    const currentIds = widgets.map((w) => w.id);
+    const oldIndex = currentIds.indexOf(activeId);
+    const newIndex = currentIds.indexOf(overId);
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    const reordered = arrayMove(currentIds, oldIndex, newIndex);
+    const newWidgets = reordered.map((id) => widgets.find((w) => w.id === id)!);
+    updateWidgets(newWidgets);
+  };
 
   useEffect(() => {
     if (!preferences.hasSeenTour && !loading && !delayed) {
@@ -50,10 +182,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     }
   }, [preferences.hasSeenTour, loading, delayed, setIsOpen]);
 
-  const audioLog = preferences.audioLog;
-  const raceControlLog = preferences.raceControlLog;
-  const circleOfDoom = preferences.circleOfDoom;
-  const circleCarData = preferences.circleCarData;
   const secondsDelay = (deltaDelay * -1) / 1000;
   const session = telemetryData?.session;
 
@@ -133,92 +261,298 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   }
 
   return (
-    <div className="min-h-screen bg-warmBlack px-2">
+    <div className="min-h-screen bg-warmBlack">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
         {/* Header */}
         <Header telemetryData={telemetryData} dict={dict} />
-        {/* Cards */}
-        <div
-          className={`!mt-0 grid grid-cols-1 lg:grid-cols-10 lg:border-b-2 lg:border-t-0 lg:border-l-0 lg:border-r-0 lg:rounded-none lg:border-gray-800 welcome-step`}
-        >
-          {/* Posiciones Actuales */}
-          <DriverPositions
-            positions={currentPositions}
-            driverInfos={driverInfos}
-            driverTimings={driverTimings}
-            driverTimingStats={driverTimingStats}
-            driverCarData={driverCarData}
-            driverStints={driverStints}
-            lastCapture={teamRadioCaptures?.captures.findLast((c) => c)}
-            handlePinnedDriver={handlePinnedDriver}
-            session={session}
-            aboutToBeEliminated={aboutToBeEliminated}
-          />
 
-          {/* Mapa en tiempo real y race control */}
-          <MapAndMessages
-            telemetryData={telemetryData}
-            session={session}
-            yellowSectors={yellowSectors}
-          />
-        </div>
-        <div className="flex flex-col-reverse md:flex-row items-center justify-evenly md:py-[2rem] gap-4 w-full">
-          <div
-            className={`flex flex-col md:flex-row justify-center md:justify-evenly items-center ${
-              audioLog || raceControlLog ? "w-full sixth-step" : "hidden"
-            }`}
-          >
-            {audioLog && (
-              <SessionAudios
-                teamRadio={teamRadioCaptures}
-                drivers={driverInfos}
-                session={session}
-                driverInfos={telemetryData?.drivers}
-              />
-            )}
-            {raceControlLog && (
-              <RaceControlList
-                raceControl={
-                  preferences.translate
-                    ? telemetryData?.raceControlEs
-                    : telemetryData?.raceControl
-                }
-                driverInfos={telemetryData?.drivers}
-              />
-            )}
-          </div>
+        {isMobile ? (
+          <DndContext onDragEnd={handleMobileDragEnd}>
+            <SortableContext items={widgets}>
+              <div className="grid h-full w-full grid-cols-12 gap-8">
+                {widgets.map((w) => {
+                  // 1) Posiciones
+                  if (w.id === "driver-positions") {
+                    return (
+                      <SortableItem
+                        key={w.id}
+                        id={w.id}
+                        className="col-span-12 lg:col-span-5"
+                      >
+                        <DriverPositions
+                          positions={currentPositions}
+                          driverInfos={driverInfos}
+                          driverTimings={driverTimings}
+                          driverTimingStats={driverTimingStats}
+                          driverCarData={driverCarData}
+                          driverStints={driverStints}
+                          lastCapture={teamRadioCaptures?.captures.findLast(
+                            (c) => c
+                          )}
+                          handlePinnedDriver={handlePinnedDriver}
+                          session={session}
+                          aboutToBeEliminated={aboutToBeEliminated}
+                        />
+                      </SortableItem>
+                    );
+                  }
 
-          <div className="flex md:flex-row flex-col gap-12 md:gap-2 w-full justify-evenly">
-            {circleOfDoom && (
-              <CircleOfDoom
-                driverInfos={driverInfos}
-                timings={driverTimings}
-                currentPositions={currentPositions}
-                refDriver={
-                  pinnedDriver
-                    ? pinnedDriver
-                    : currentPositions.at(0)?.driver_number
-                }
-              />
-            )}
-            {circleCarData && (
-              <CircleCarData
-                carData={
-                  pinnedDriver
-                    ? telemetryData?.carData.find(
-                        (c) => c.driver_number === pinnedDriver
-                      )
-                    : telemetryData?.carData.find(
-                        (c) =>
-                          c.driver_number ===
-                          currentPositions.at(0)?.driver_number
-                      )
-                }
-                driverInfo={driverInfos}
-              />
-            )}
+                  // 2) Mapa + mensajes
+                  if (w.id === "map-and-messages") {
+                    return (
+                      <SortableItem
+                        key={w.id}
+                        id={w.id}
+                        className="col-span-12 lg:col-span-7"
+                      >
+                        <MapAndMessages
+                          telemetryData={telemetryData}
+                          session={session}
+                          yellowSectors={yellowSectors}
+                        />
+                      </SortableItem>
+                    );
+                  }
+
+                  // 3) Audios sesión
+                  if (
+                    w.id === "session-audios" &&
+                    preferences.audioLog.enabled
+                  ) {
+                    return (
+                      <SortableItem
+                        key={w.id}
+                        id={w.id}
+                        className="col-span-12 md:col-span-6 lg:col-span-4"
+                      >
+                        <SessionAudios
+                          teamRadio={teamRadioCaptures}
+                          drivers={driverInfos}
+                          session={session}
+                          driverInfos={telemetryData?.drivers}
+                        />
+                      </SortableItem>
+                    );
+                  }
+
+                  // 4) Race control
+                  if (
+                    w.id === "race-control-list" &&
+                    preferences.raceControlLog.enabled
+                  ) {
+                    return (
+                      <SortableItem
+                        key={w.id}
+                        id={w.id}
+                        className="col-span-12 md:col-span-6 lg:col-span-4"
+                      >
+                        <RaceControlList
+                          raceControl={
+                            preferences.translate
+                              ? telemetryData?.raceControlEs
+                              : telemetryData?.raceControl
+                          }
+                          driverInfos={telemetryData?.drivers}
+                        />
+                      </SortableItem>
+                    );
+                  }
+
+                  // 5) Circle of Doom
+                  if (
+                    w.id === "circle-of-doom" &&
+                    preferences.circleOfDoom.enabled
+                  ) {
+                    return (
+                      <SortableItem
+                        key={w.id}
+                        id={w.id}
+                        className="col-span-12 md:col-span-6 lg:col-span-4"
+                      >
+                        <CircleOfDoom
+                          driverInfos={driverInfos}
+                          timings={driverTimings}
+                          currentPositions={currentPositions}
+                          refDriver={
+                            pinnedDriver
+                              ? pinnedDriver
+                              : currentPositions.at(0)?.driver_number
+                          }
+                        />
+                      </SortableItem>
+                    );
+                  }
+
+                  // 6) Circle Car Data
+                  if (
+                    w.id === "circle-car-data" &&
+                    preferences.circleCarData.enabled
+                  ) {
+                    return (
+                      <SortableItem
+                        key={w.id}
+                        id={w.id}
+                        className="col-span-12 md:col-span-6 lg:col-span-4"
+                      >
+                        <CircleCarData
+                          carData={
+                            pinnedDriver
+                              ? telemetryData?.carData.find(
+                                  (c) => c.driver_number === pinnedDriver
+                                )
+                              : telemetryData?.carData.find(
+                                  (c) =>
+                                    c.driver_number ===
+                                    currentPositions.at(0)?.driver_number
+                                )
+                          }
+                          driverInfo={driverInfos}
+                        />
+                      </SortableItem>
+                    );
+                  }
+
+                  return null;
+                })}
+              </div>
+            </SortableContext>
+          </DndContext>
+        ) : (
+          <div className="w-full lg:h-[150vh]">
+            <DndContext
+              modifiers={isEditMode ? [snapToGrid] : []}
+              onDragEnd={isEditMode ? handleDragEnd : undefined}
+            >
+              <div className="relative w-full h-full" style={gridStyle}>
+                {widgets.map((w) => {
+                  if (w.id === "driver-positions") {
+                    return (
+                      <DraggableWidget
+                        key={w.id}
+                        widget={w}
+                        isEditMode={isEditMode}
+                      >
+                        <DriverPositions
+                          positions={currentPositions}
+                          driverInfos={driverInfos}
+                          driverTimings={driverTimings}
+                          driverTimingStats={driverTimingStats}
+                          driverCarData={driverCarData}
+                          driverStints={driverStints}
+                          lastCapture={teamRadioCaptures?.captures.findLast(
+                            (c) => c
+                          )}
+                          handlePinnedDriver={handlePinnedDriver}
+                          session={session}
+                          aboutToBeEliminated={aboutToBeEliminated}
+                        />
+                      </DraggableWidget>
+                    );
+                  }
+
+                  if (w.id === "map-and-messages") {
+                    return (
+                      <DraggableWidget
+                        key={w.id}
+                        widget={w}
+                        isEditMode={isEditMode}
+                      >
+                        <MapAndMessages
+                          telemetryData={telemetryData}
+                          session={session}
+                          yellowSectors={yellowSectors}
+                        />
+                      </DraggableWidget>
+                    );
+                  }
+
+                  if (w.id === "session-audios" && w.enabled) {
+                    return (
+                      <DraggableWidget
+                        key={w.id}
+                        widget={w}
+                        isEditMode={isEditMode}
+                      >
+                        <SessionAudios
+                          teamRadio={teamRadioCaptures}
+                          drivers={driverInfos}
+                          session={session}
+                          driverInfos={telemetryData?.drivers}
+                        />
+                      </DraggableWidget>
+                    );
+                  }
+
+                  if (w.id === "race-control-list" && w.enabled) {
+                    return (
+                      <DraggableWidget
+                        key={w.id}
+                        widget={w}
+                        isEditMode={isEditMode}
+                      >
+                        <RaceControlList
+                          raceControl={
+                            preferences.translate
+                              ? telemetryData?.raceControlEs
+                              : telemetryData?.raceControl
+                          }
+                          driverInfos={telemetryData?.drivers}
+                        />
+                      </DraggableWidget>
+                    );
+                  }
+
+                  if (w.id === "circle-of-doom" && w.enabled) {
+                    return (
+                      <DraggableWidget
+                        key={w.id}
+                        widget={w}
+                        isEditMode={isEditMode}
+                      >
+                        <CircleOfDoom
+                          driverInfos={driverInfos}
+                          timings={driverTimings}
+                          currentPositions={currentPositions}
+                          refDriver={
+                            pinnedDriver
+                              ? pinnedDriver
+                              : currentPositions.at(0)?.driver_number
+                          }
+                        />
+                      </DraggableWidget>
+                    );
+                  }
+
+                  if (w.id === "circle-car-data" && w.enabled) {
+                    return (
+                      <DraggableWidget
+                        key={w.id}
+                        widget={w}
+                        isEditMode={isEditMode}
+                      >
+                        <CircleCarData
+                          carData={
+                            pinnedDriver
+                              ? telemetryData?.carData.find(
+                                  (c) => c.driver_number === pinnedDriver
+                                )
+                              : telemetryData?.carData.find(
+                                  (c) =>
+                                    c.driver_number ===
+                                    currentPositions.at(0)?.driver_number
+                                )
+                          }
+                          driverInfo={driverInfos}
+                        />
+                      </DraggableWidget>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+            </DndContext>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
