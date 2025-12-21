@@ -12,7 +12,6 @@ interface CircleOfDoomProps {
   refDriver: number | undefined;
 }
 
-
 export default function CircleOfDoom({
   currentPositions,
   timings,
@@ -182,13 +181,9 @@ export default function CircleOfDoom({
   const pitLabelPos = polar(adjusted(pitStopDeg || 60), r - 7);
 
   return (
-    <div className="flex items-center bg-warmBlack  flex justify-center w-full seventh-step">
-      <div>
-        <svg
-          viewBox="0 0 100 100"
-          className="w-full h-full"
-          preserveAspectRatio="xMidYMid meet"
-        >
+    <div className="flex items-center bg-warmBlack justify-center w-full h-full seventh-step">
+      <div className="w-full h-full">
+        <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
           <circle
             cx={50}
             cy={50}

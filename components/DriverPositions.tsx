@@ -103,10 +103,10 @@ const DriverPositions = memo(function DriverPositions({
   });
 
   return (
-    <Card className="lg:col-span-5 bg-warmBlack border-none">
-      <CardContent className="overflow-x-auto flex-1 h-[90vh] p-0 first-step">
+    <Card className="w-full h-full bg-warmBlack border-none">
+      <CardContent className="flex-1 h-full p-0 first-step">
         <ScrollArea
-          className="overflow-x-auto min-w-max h-full"
+          className="w-full h-full"
           type="scroll"
           ref={scrollRef}
         >
