@@ -1,10 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import DriverPositionInfo from "@/components/DriverPositionInfo";
-import PitsDrsSpeed from "@/components/PitsDrsSpeed";
+import PitsDrsSpeed from "@/components/DrsSpeed";
 import Minisectors from "@/components/Minisectors";
 import LapTimes from "@/components/LapTimes";
-import DriverGaps from "@/components/DriverGaps";
+import DriverGaps from "@/components/DriverGap1";
 import Tyres from "@/components/Tyres";
 import {
   ProcessedPosition,
@@ -20,6 +20,10 @@ import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Orbitron } from "next/font/google";
 import { audioUrl, useTelemetryAudio } from "@/hooks/use-raceControl";
 import { usePreferences } from "@/context/preferences";
+import DrsSpeed from "@/components/DrsSpeed";
+import Pits from "./Pits";
+import DriverGap2 from "./DriverGap2";
+import DriverGap1 from "@/components/DriverGap1";
 
 interface DriverPositionsProps {
   positions: ProcessedPosition[];
@@ -99,17 +103,14 @@ const DriverPositions = memo(function DriverPositions({
   });
 
   return (
-    <Card className="lg:col-span-5 bg-warmBlack border-none max-h-screen">
-      <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0 first-step">
+    <Card className="lg:col-span-5 bg-warmBlack border-none">
+      <CardContent className="overflow-x-auto flex-1 h-[90vh] p-0 first-step">
         <ScrollArea
           className="overflow-x-auto min-w-max h-full"
           type="scroll"
           ref={scrollRef}
         >
-          <table
-            className="table-auto min-w-max w-full text-[0.6rem] text-gray-500"
-            style={{ borderCollapse: "separate", borderSpacing: "0 0.5rem" }}
-          >
+          <table className="table-auto min-w-max w-full text-[0.6rem] text-gray-500">
             <thead
               style={orbitron.style}
               className="sticky top-0 z-30 bg-warmBlack h-[2rem]"
@@ -117,42 +118,34 @@ const DriverPositions = memo(function DriverPositions({
               <tr className="text-center">
                 <th
                   className={`text-center ${
-                    headshot ? "min-w-[11.5rem]" : "min-w-[9rem]"
+                    headshot ? "w-[11.5rem]" : "w-[9rem]"
                   }`}
                 >
                   {preferences.translate ? "PILOTO" : "DRIVER"}
                 </th>
-                <th className="min-w-[3rem] font-normal">
+                <th className="w-[3rem] font-normal">
                   {preferences.translate ? "NEUM." : "TYRES"}
                 </th>
-                <th className="w-[6rem] font-normal">
-                  <div className="flex flex-row justify-around">
-                    <div className="min-w-[3rem] text-center">
-                      {preferences.translate ? "DRS" : "SPEED"}
-                    </div>
-                    <div className="min-w-[3rem] text-center">PITS</div>
-                  </div>
+                <th className="w-[5rem] font-normal">
+                  {preferences.translate ? "DRS" : "SPEED"}
                 </th>
-                <th className="w-[7rem] font-normal">
-                  <div className="flex flex-row items-center gap-4 justify-around">
-                    <div className="text-center min-w-[2.5rem]">
-                      {session?.session_type === "Race"
-                        ? preferences.translate
-                          ? "LÍDER"
-                          : "LEADER"
-                        : preferences.translate
-                        ? "MEJOR VUELTA"
-                        : "FASTEST"}
-                    </div>
-                    <div className="text-start min-w-[2.5rem]">
-                      {session?.session_type === "Race" ? "POS" : "INT"}
-                    </div>
-                  </div>
+                <th className="w-[3rem] font-normal">PITS</th>
+                <th className="w-[3rem] font-normal">
+                  {session?.session_type === "Race"
+                    ? preferences.translate
+                      ? "LÍDER"
+                      : "LEADER"
+                    : preferences.translate
+                    ? "MEJOR VUELTA"
+                    : "FASTEST"}
+                </th>
+                <th className="w-[3rem] font-normal">
+                  {session?.session_type === "Race" ? "POS" : "INT"}
                 </th>
                 <th className="w-[5rem] text-center font-normal">
                   {preferences.translate ? "VUELTAS" : "LAP TIMES"}
                 </th>
-                <th className="min-w-[13rem] text-center font-normal">
+                <th className="w-[13rem] text-center font-normal">
                   {preferences.translate
                     ? "MINISECTORES Y TIEMPOS"
                     : "MINISECTORS & TIMES"}
@@ -203,7 +196,11 @@ const DriverPositions = memo(function DriverPositions({
                     onDoubleClick={() => handlePinnedDriver(pos.driver_number)}
                     style={baseStyle}
                   >
-                    <td className="rounded-l-md">
+                    <td
+                      className={`rounded-l-md ${
+                        headshot ? "w-[11.5rem]" : "w-[9rem]"
+                      }`}
+                    >
                       <DriverPositionInfo
                         position={pos}
                         driver={driver}
@@ -211,37 +208,32 @@ const DriverPositions = memo(function DriverPositions({
                       />
                     </td>
 
-                    <td>
+                    <td className="w-[3rem]">
                       <Tyres driverStints={currentStints} />
                     </td>
 
-                    <td>
-                      <div className="flex flex-row w-[6rem]">
-                        <PitsDrsSpeed
-                          timing={timing}
-                          carData={carData}
-                          driverStints={currentStints}
-                        />
-                      </div>
+                    <td className="w-[5rem]">
+                      <DrsSpeed carData={carData} />
                     </td>
 
-                    <td>
-                      <div className="w-[7.5rem] flex flex-row items-center gap-4 justify-around">
-                        <DriverGaps timing={timing} session={session} />
-                      </div>
+                    <td className="w-[3rem]">
+                      <Pits timing={timing} driverStints={currentStints} />
                     </td>
 
-                    <td>
+                    <td className="w-[3rem]">
+                      <DriverGap1 timing={timing} session={session} />
+                    </td>
+
+                    <td className="w-[3rem]">
+                      <DriverGap2 timing={timing} session={session} />
+                    </td>
+
+                    <td className="w-[5rem]">
                       <LapTimes timing={timing} timingStats={timingStats} />
                     </td>
 
-                    <td className="rounded-r-md">
-                      <div className="min-w-[13rem]">
-                        <Minisectors
-                          timing={timing}
-                          timingStats={timingStats}
-                        />
-                      </div>
+                    <td className="w-[13rem]">
+                      <Minisectors timing={timing} timingStats={timingStats} />
                     </td>
                   </tr>
                 );

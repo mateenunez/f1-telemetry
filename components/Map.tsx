@@ -189,7 +189,7 @@ export default function Map({
   if (!points || !minX || !minY || !widthX || !widthY) {
     return (
       <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
-        <Card className="lg:col-span-4 bg-warmBlack1 border-none border-2 flex flex-col mt-8">
+        <Card className="lg:col-span-4 bg-warmBlack1 border-none flex flex-col mt-8">
           <CardContent className="flex flex-col justify-center h-full">
             <div className="overflow-hidden h-fit">
               <Skeleton height={400} width="100%" />

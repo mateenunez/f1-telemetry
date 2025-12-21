@@ -6,11 +6,14 @@ import {
   WidgetConfig,
   WidgetId,
   usePreferences,
+  DEFAULT_CONFIG,
+  Widget,
 } from "@/context/preferences";
 import { X, Check, PanelLeft, Pencil } from "lucide-react";
 import { ProcessedDriver } from "@/processors";
 import { useTour } from "@reactour/tour";
 import { usePathname } from "next/navigation";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface PreferencesPanelProps {
   driverInfo: ProcessedDriver[] | undefined;
@@ -24,9 +27,16 @@ type LanguageOptions = {
 export default function PreferencesPanel({
   driverInfo,
 }: PreferencesPanelProps) {
-  const { preferences, setPreference, isEditMode, setIsEditMode, widgets } =
-    usePreferences();
+  const {
+    preferences,
+    setPreference,
+    isEditMode,
+    setIsEditMode,
+    widgets,
+    setWidgetsPreferences,
+  } = usePreferences();
   const { setIsOpen } = useTour();
+  const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
@@ -120,33 +130,24 @@ export default function PreferencesPanel({
     setTimeout(() => setIsOpen(true), 300);
   };
 
-  // Helper para mapear widget id a la key de preferences
-  function widgetIdToPrefKey(id: WidgetId): keyof Preferences | null {
-    const map: Record<WidgetId, keyof Preferences> = {
-      "driver-positions": "driverPositions",
-      "map-and-messages": "mapAndMessages",
-      "session-audios": "audioLog",
-      "race-control-list": "raceControlLog",
-      "circle-of-doom": "circleOfDoom",
-      "circle-car-data": "circleCarData",
-    };
-    return map[id] ?? null;
-  }
+  const handleResetWidgets = () => {
+    const widgetKeys: Array<keyof Preferences> = [
+      "driverPositions",
+      "mapAndMessages",
+      "audioLog",
+      "raceControlLog",
+      "circleOfDoom",
+      "circleCarData",
+    ];
+
+    widgetKeys.forEach((key) => {
+      setPreference(key, DEFAULT_CONFIG[key]);
+    });
+  };
 
   const handleEditMode = () => {
     if (isEditMode) {
-      widgets.forEach((w) => {
-        const prefKey = widgetIdToPrefKey(w.id);
-        if (prefKey) {
-          setPreference(prefKey, {
-            enabled: w.enabled,
-            x: w.x,
-            y: w.y,
-            width: w.width,
-            height: w.height,
-          });
-        }
-      });
+      setWidgetsPreferences(widgets);
     }
     setIsEditMode(!isEditMode);
     setOpen(false);
@@ -264,15 +265,17 @@ export default function PreferencesPanel({
         onClick={() => setOpen((prev) => !prev)}
       />
 
-      <Pencil
-        width={15}
-        className={`hover:cursor-pointer transition-colors ${
-          isEditMode
-            ? "text-green-600 hover:text-green-700"
-            : "text-gray-300 hover:text-gray-400"
-        }`}
-        onClick={handleEditMode}
-      />
+      {!isMobile && (
+        <Pencil
+          width={15}
+          className={`hover:cursor-pointer transition-colors ${
+            isEditMode
+              ? "text-green-600 hover:text-green-700"
+              : "text-gray-300 hover:text-gray-400"
+          }`}
+          onClick={handleEditMode}
+        />
+      )}
 
       {/* Overlay */}
       <div
@@ -392,38 +395,42 @@ export default function PreferencesPanel({
           </div>
 
           {/* Edit Canvas Button */}
-          <div className="flex flex-col gap-2 pb-4">
-            <p className="text-md text-gray-100 font-orbitron">
-              {preferences.translate ? "Editar widgets" : "Edit canvas"}
-            </p>
-            <p className="text-xs text-gray-500 font-geist font-medium">
-              {preferences.translate
-                ? "Habilitar el modo de edición para mover o redimensionar los widgets."
-                : "Enable edit mode to move or redimension widgets."}
-            </p>
-            <button
-              onClick={handleEditMode}
-              className="flex items-start justify-start gap-2 px-4 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist font-medium"
-              style={{
-                boxShadow:
-                  "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
-              }}
-            >
-              <span>
-                {isEditMode ? (
-                  <>
-                    {preferences.translate ? "Guardar cambios" : "Save changes"}
-                  </>
-                ) : (
-                  <>
-                    {preferences.translate
-                      ? "Activar modo edición"
-                      : "Enable edit mode"}
-                  </>
-                )}
-              </span>
-            </button>
-          </div>
+          {!isMobile && (
+            <div className="flex flex-col gap-2 pb-4">
+              <p className="text-md text-gray-100 font-orbitron">
+                {preferences.translate ? "Editar widgets" : "Edit canvas"}
+              </p>
+              <p className="text-xs text-gray-500 font-geist font-medium">
+                {preferences.translate
+                  ? "Habilitar el modo de edición para mover o redimensionar los widgets."
+                  : "Enable edit mode to move or redimension widgets."}
+              </p>
+              <button
+                onClick={handleEditMode}
+                className="flex items-start justify-start gap-2 px-4 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist font-medium"
+                style={{
+                  boxShadow:
+                    "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
+                }}
+              >
+                <span>
+                  {isEditMode ? (
+                    <>
+                      {preferences.translate
+                        ? "Guardar cambios"
+                        : "Save changes"}
+                    </>
+                  ) : (
+                    <>
+                      {preferences.translate
+                        ? "Activar modo edición"
+                        : "Enable edit mode"}
+                    </>
+                  )}
+                </span>
+              </button>
+            </div>
+          )}
 
           {/* Favorite Drivers */}
           <div className="flex flex-col gap-2 pb-4">
@@ -565,6 +572,29 @@ export default function PreferencesPanel({
                 </div>
               );
             })}
+          </div>
+
+          {/* Reset config */}
+          <div className="flex flex-col gap-2 pb-4 border-t border-gray-700 pt-4">
+            <p className="text-xs text-gray-500 font-geist font-medium">
+              {preferences.translate
+                ? "Restablecer todos los widgets a sus posiciones y tamaños por defecto. Esta acción no se puede deshacer."
+                : "Reset all widgets to their default positions and sizes. This action cannot be undone."}
+            </p>
+            <button
+              onClick={handleResetWidgets}
+              className="flex items-center justify-center gap-2 px-4 py-2 text-sm rounded-md text-red-600 hover:text-red-700 text-white border-2 border-red-700 hover:border-red-800 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 font-geist font-medium"
+              style={{
+                boxShadow:
+                  "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
+              }}
+            >
+              <span>
+                {preferences.translate
+                  ? "Restablecer widgets"
+                  : "Reset widgets"}
+              </span>
+            </button>
           </div>
         </div>
       </div>

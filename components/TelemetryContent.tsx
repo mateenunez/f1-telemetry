@@ -12,13 +12,33 @@ import RaceControlList from "@/components/RaceControlList";
 import CircleOfDoom from "@/components/CircleOfDoom";
 import { Widget, WidgetId, usePreferences } from "@/context/preferences";
 import { CircleCarData } from "@/components/CircleCarData";
-import { ReactNode, useEffect, useState } from "react";
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTour } from "@reactour/tour";
 import { Countdown } from "./Countdown";
-import { DndContext, useDraggable, DragEndEvent } from "@dnd-kit/core";
+import {
+  DndContext,
+  useDraggable,
+  DragEndEvent,
+  useSensor,
+  useSensors,
+  TouchSensor,
+  MouseSensor,
+} from "@dnd-kit/core";
 import { SortableContext, useSortable, arrayMove } from "@dnd-kit/sortable";
 import { createSnapModifier } from "@dnd-kit/modifiers";
 import { CSS } from "@dnd-kit/utilities";
+import { Resizable } from "react-resizable";
+import "react-resizable/css/styles.css";
+import { X } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface TelemetryContentProps {
   dict: any;
@@ -28,34 +48,112 @@ function DraggableWidget({
   widget,
   children,
   isEditMode,
+  updateWidget,
 }: {
   widget: Widget;
   children: React.ReactNode;
   isEditMode: boolean;
+  updateWidget: (id: WidgetId, updates: Partial<Widget>) => void;
 }) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: widget.id,
-    disabled: !isEditMode, // clave: desactiva el drag cuando no estás en modo edición
+    disabled: !isEditMode,
   });
+
+  const handleResize = useCallback(
+    (
+      e: React.SyntheticEvent,
+      data: { size: { width: number; height: number } }
+    ) => {
+      updateWidget(widget.id, {
+        width: data.size.width,
+        height: data.size.height,
+      });
+    },
+    [widget.id, updateWidget]
+  );
 
   const style = {
     position: "absolute" as const,
     left: widget.x,
     top: widget.y,
-    width: widget.width,
-    height: widget.height,
     transform: transform ? CSS.Translate.toString(transform) : undefined,
     cursor: isEditMode ? "grab" : "default",
   };
 
+  // Si no está en edit mode, renderizar sin Resizable
+  if (!isEditMode) {
+    return (
+      <div
+        ref={setNodeRef}
+        style={{
+          ...style,
+          width: widget.width,
+          height: widget.height,
+        }}
+        {...attributes}
+      >
+        {children}
+      </div>
+    );
+  }
+
+  // En edit mode, usar Resizable
   return (
     <div
       ref={setNodeRef}
       style={style}
       {...attributes}
-      {...(isEditMode ? listeners : {})} // no pasamos listeners si no hay edición
+      {...listeners}
+      className="relative"
     >
-      {children}
+      {isEditMode &&
+        widget.id !== "driver-positions" &&
+        widget.id !== "map-and-messages" && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              updateWidget(widget.id, { enabled: false });
+            }}
+            onMouseDownCapture={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              updateWidget(widget.id, { enabled: false });
+            }}
+            className="absolute -top-0 -right-0 z-[9999] text-gray-400 hover:text-f1Red p-2 shadow-lg transition-colors pointer-events-auto w-[2rem] text-md"
+          >
+            <X size={18} />
+          </button>
+        )}
+
+      {/* Widget redimensionable */}
+      <Resizable
+        width={widget.width}
+        height={widget.height}
+        onResize={handleResize}
+        minConstraints={[100, 100]} // Tamaño mínimo
+        maxConstraints={[Infinity, Infinity]}
+        handle={
+          <div
+            className="absolute bottom-0 right-0 w-4 h-4 bg-f1Blue/60 hover:bg-f1Blue border border-white/50 cursor-se-resize"
+            style={{
+              zIndex: 1000,
+            }}
+          />
+        }
+        resizeHandles={["se"]} // Solo esquina inferior derecha, o puedes usar ["n", "s", "e", "w"] para laterales
+      >
+        <div
+          style={{
+            width: widget.width,
+            height: widget.height,
+            overflow: "hidden",
+          }}
+        >
+          {children}
+        </div>
+      </Resizable>
     </div>
   );
 }
@@ -98,19 +196,6 @@ function SortableItem({
   );
 }
 
-function useIsMobile(breakpoint = 768) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < breakpoint);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, [breakpoint]);
-
-  return isMobile;
-}
-
 export function TelemetryContent({ dict }: TelemetryContentProps) {
   const {
     telemetryData,
@@ -134,6 +219,9 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     usePreferences();
   const isMobile = useIsMobile();
   const GRID_SIZE = 20;
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+
   const snapToGrid = createSnapModifier(GRID_SIZE);
   const gridStyle = isEditMode
     ? {
@@ -149,10 +237,20 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, delta } = event;
     const widgetId = active.id as WidgetId;
+    const widget = widgets.find((w) => w.id === widgetId);
+    if (!widget || canvasSize.width === 0 || canvasSize.height === 0) return;
+
+    let newX = widget.x + delta.x;
+    let newY = widget.y + delta.y;
+    const maxX = canvasSize.width - widget.width - 2;
+    const maxY = canvasSize.height - widget.height;
+
+    newX = Math.max(0, Math.min(maxX, newX));
+    newY = Math.max(0, Math.min(maxY, newY));
 
     updateWidget(widgetId, {
-      x: widgets.find((w) => w.id === widgetId)!.x + delta.x,
-      y: widgets.find((w) => w.id === widgetId)!.y + delta.y,
+      x: newX,
+      y: newY,
     });
   };
 
@@ -181,6 +279,33 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
       return () => clearTimeout(timer);
     }
   }, [preferences.hasSeenTour, loading, delayed, setIsOpen]);
+
+  useLayoutEffect(() => {
+    if (!canvasRef.current) return;
+
+    const updateSize = () => {
+      if (canvasRef.current) {
+        setCanvasSize({
+          width: canvasRef.current.clientWidth,
+          height: canvasRef.current.clientHeight,
+        });
+      }
+    };
+
+    updateSize();
+
+    const resizeObserver = new ResizeObserver(updateSize);
+    resizeObserver.observe(canvasRef.current);
+
+    return () => resizeObserver.disconnect();
+  }, [loading]);
+
+  const sensors = useSensors(
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 200, tolerance: 5 },
+    }),
+    useSensor(MouseSensor)
+  );
 
   const secondsDelay = (deltaDelay * -1) / 1000;
   const session = telemetryData?.session;
@@ -260,6 +385,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     );
   }
 
+  console.log(widgets)
+
   return (
     <div className="min-h-screen bg-warmBlack">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
@@ -267,7 +394,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
         <Header telemetryData={telemetryData} dict={dict} />
 
         {isMobile ? (
-          <DndContext onDragEnd={handleMobileDragEnd}>
+          <DndContext onDragEnd={handleMobileDragEnd} sensors={sensors}>
             <SortableContext items={widgets}>
               <div className="grid h-full w-full grid-cols-12 gap-8">
                 {widgets.map((w) => {
@@ -423,7 +550,11 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
               modifiers={isEditMode ? [snapToGrid] : []}
               onDragEnd={isEditMode ? handleDragEnd : undefined}
             >
-              <div className="relative w-full h-full" style={gridStyle}>
+              <div
+                className="relative w-full h-full"
+                style={gridStyle}
+                ref={canvasRef}
+              >
                 {widgets.map((w) => {
                   if (w.id === "driver-positions") {
                     return (
@@ -431,6 +562,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         key={w.id}
                         widget={w}
                         isEditMode={isEditMode}
+                        updateWidget={updateWidget}
                       >
                         <DriverPositions
                           positions={currentPositions}
@@ -456,6 +588,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         key={w.id}
                         widget={w}
                         isEditMode={isEditMode}
+                        updateWidget={updateWidget}
                       >
                         <MapAndMessages
                           telemetryData={telemetryData}
@@ -472,6 +605,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         key={w.id}
                         widget={w}
                         isEditMode={isEditMode}
+                        updateWidget={updateWidget}
                       >
                         <SessionAudios
                           teamRadio={teamRadioCaptures}
@@ -489,6 +623,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         key={w.id}
                         widget={w}
                         isEditMode={isEditMode}
+                        updateWidget={updateWidget}
                       >
                         <RaceControlList
                           raceControl={
@@ -508,6 +643,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         key={w.id}
                         widget={w}
                         isEditMode={isEditMode}
+                        updateWidget={updateWidget}
                       >
                         <CircleOfDoom
                           driverInfos={driverInfos}
@@ -529,6 +665,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         key={w.id}
                         widget={w}
                         isEditMode={isEditMode}
+                        updateWidget={updateWidget}
                       >
                         <CircleCarData
                           carData={

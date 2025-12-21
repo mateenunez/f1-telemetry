@@ -27,14 +27,22 @@ export type Widget = {
   y: number;
   width: number;
   height: number;
+  widthPct?: number;
+  heightPct?: number;
+  index?: number;
 };
 
 export interface WidgetConfig {
   enabled: boolean;
-  x: number;
-  y: number;
+  x?: number;
+  y?: number;
+  xPct?: number;
+  yPct?: number;
   width: number;
   height: number;
+  widthPct?: number;
+  heightPct?: number;
+  index?: number;
 }
 export interface Preferences {
   sectors: boolean;
@@ -54,17 +62,71 @@ export interface Preferences {
   weatherDetailed: boolean;
 }
 
-const DEFAULT_CONFIG: Preferences = {
+export const DEFAULT_CONFIG: Preferences = {
   sectors: false,
   corners: false,
   audio: true,
   headshot: false,
-  driverPositions: { enabled: true, x: 0, y: 0, width: 800, height: 400 },
-  mapAndMessages: { enabled: true, x: 800, y: 0, width: 700, height: 600 },
-  audioLog: { enabled: true, x: 0, y: 700, width: 400, height: 300 },
-  raceControlLog: { enabled: true, x: 350, y: 700, width: 450, height: 300 },
-  circleOfDoom: { enabled: true, x: 850, y: 700, width: 300, height: 300 },
-  circleCarData: { enabled: true, x: 1200, y: 700, width: 300, height: 300 },
+  driverPositions: {
+    enabled: true,
+    xPct: 0,
+    yPct: 0,
+    widthPct: 800 / 1526,
+    heightPct: 670 / 1094,
+    width: 800,
+    height: 670,
+    index: 0,
+  },
+  mapAndMessages: {
+    enabled: true,
+    xPct: 800 / 1526,
+    yPct: 0,
+    widthPct: 700 / 1526,
+    heightPct: 480 / 1094,
+    width: 700,
+    height: 480,
+    index: 1,
+  },
+  audioLog: {
+    enabled: true,
+    xPct: 0,
+    yPct: 1094 / 1094,
+    widthPct: 370 / 1526,
+    heightPct: 300 / 1094,
+    width: 370,
+    height: 300,
+    index: 2,
+  },
+  raceControlLog: {
+    enabled: true,
+    xPct: 400 / 1526,
+    yPct: 1094 / 1094,
+    widthPct: 400 / 1526,
+    heightPct: 300 / 1094,
+    width: 400,
+    height: 300,
+    index: 3,
+  },
+  circleOfDoom: {
+    enabled: true,
+    xPct: 850 / 1526,
+    yPct: 1094 / 1094,
+    widthPct: 300 / 1526,
+    heightPct: 300 / 1094,
+    width: 300,
+    height: 300,
+    index: 4,
+  },
+  circleCarData: {
+    enabled: true,
+    xPct: 1200 / 1526,
+    yPct: 1094 / 1094,
+    widthPct: 300 / 1526,
+    heightPct: 300 / 1094,
+    width: 300,
+    height: 300,
+    index: 5,
+  },
   favoriteDrivers: [],
   delay: 0,
   translate: false,
@@ -85,6 +147,7 @@ interface PreferencesContextValue {
   updateWidget: (id: WidgetId, updates: Partial<Widget>) => void;
   updateWidgets: (updates: Widget[]) => void;
   syncWidgetsFromPreferences: () => void;
+  setWidgetsPreferences: (widgets: Widget[]) => void;
 }
 
 const PreferencesContext = createContext<PreferencesContextValue | null>(null);
@@ -186,14 +249,50 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const buildWidgetsFromPreferences = useCallback(
     (prefs: Preferences): Widget[] => {
-      return [
-        { id: "driver-positions", ...prefs.driverPositions },
-        { id: "map-and-messages", ...prefs.mapAndMessages },
-        { id: "session-audios", ...prefs.audioLog },
-        { id: "race-control-list", ...prefs.raceControlLog },
-        { id: "circle-of-doom", ...prefs.circleOfDoom },
-        { id: "circle-car-data", ...prefs.circleCarData },
+      // convertir porcentajes guardados en preferences a valores absolutos
+      const BASE_W = typeof window !== "undefined" ? window.innerWidth : 1526;
+      const BASE_H = typeof window !== "undefined" ? window.innerHeight : 1094;
+
+      const toAbs = (cfg: WidgetConfig, id: WidgetId) => {
+        const x =
+          cfg.xPct !== undefined
+            ? Math.round(cfg.xPct * BASE_W)
+            : (cfg as any).x ?? 0;
+        const y =
+          cfg.yPct !== undefined
+            ? Math.round(cfg.yPct * BASE_H)
+            : (cfg as any).y ?? 0;
+        const width =
+          cfg.widthPct !== undefined
+            ? Math.round(cfg.widthPct * BASE_W)
+            : cfg.width ?? 0;
+        const height =
+          cfg.heightPct !== undefined
+            ? Math.round(cfg.heightPct * BASE_H)
+            : cfg.height ?? 0;
+        return {
+          id,
+          enabled: cfg.enabled,
+          x,
+          y,
+          width,
+          height,
+          index: cfg.index,
+          widthPct: cfg.widthPct,
+          heightPct: cfg.heightPct,
+        } as Widget;
+      };
+
+      const list: Widget[] = [
+        { ...toAbs(prefs.driverPositions, "driver-positions") },
+        { ...toAbs(prefs.mapAndMessages, "map-and-messages") },
+        { ...toAbs(prefs.audioLog, "session-audios") },
+        { ...toAbs(prefs.raceControlLog, "race-control-list") },
+        { ...toAbs(prefs.circleOfDoom, "circle-of-doom") },
+        { ...toAbs(prefs.circleCarData, "circle-car-data") },
       ];
+      console.log(list);
+      return list.sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
     },
     []
   );
@@ -208,14 +307,42 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const updateWidgets = useCallback((newWidgets: Widget[]) => {
     setWidgets(newWidgets);
+    setWidgetsPreferences(newWidgets);
   }, []);
 
-  // Función para actualizar un widget específico
   const updateWidget = useCallback((id: WidgetId, updates: Partial<Widget>) => {
     setWidgets((prev) =>
       prev.map((w) => (w.id === id ? { ...w, ...updates } : w))
     );
   }, []);
+
+  const setWidgetsPreferences = useCallback((widgetsArr: Widget[]) => {
+    widgetsArr.forEach((w, idx) => {
+      const prefKey = widgetIdToPrefKey(w.id);
+      if (prefKey) {
+        setPreference(prefKey, {
+          enabled: w.enabled,
+          x: Math.round(w.x ?? 0),
+          y: Math.round(w.y ?? 0),
+          width: w.width,
+          height: w.height,
+          index: idx,
+        });
+      }
+    });
+  }, []);
+
+  function widgetIdToPrefKey(id: WidgetId): keyof Preferences | null {
+    const map: Record<WidgetId, keyof Preferences> = {
+      "driver-positions": "driverPositions",
+      "map-and-messages": "mapAndMessages",
+      "session-audios": "audioLog",
+      "race-control-list": "raceControlLog",
+      "circle-of-doom": "circleOfDoom",
+      "circle-car-data": "circleCarData",
+    };
+    return map[id] ?? null;
+  }
 
   const syncWidgetsFromPreferences = useCallback(() => {
     setWidgets(buildWidgetsFromPreferences(preferences));
@@ -265,6 +392,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
       updateWidget,
       updateWidgets,
       syncWidgetsFromPreferences,
+      setWidgetsPreferences,
     }),
     [
       preferences,
@@ -275,6 +403,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
       updateWidget,
       updateWidgets,
       syncWidgetsFromPreferences,
+      setWidgetsPreferences,
     ]
   );
 
