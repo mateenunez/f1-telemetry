@@ -146,7 +146,6 @@ interface PreferencesContextValue {
   widgets: Widget[];
   updateWidget: (id: WidgetId, updates: Partial<Widget>) => void;
   updateWidgets: (updates: Widget[]) => void;
-  syncWidgetsFromPreferences: () => void;
   setWidgetsPreferences: (widgets: Widget[]) => void;
 }
 
@@ -344,10 +343,6 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
     return map[id] ?? null;
   }
 
-  const syncWidgetsFromPreferences = useCallback(() => {
-    setWidgets(buildWidgetsFromPreferences(preferences));
-  }, [preferences, buildWidgetsFromPreferences]);
-
   const getPreference = useCallback(
     <K extends keyof Preferences>(key: K): Preferences[K] => preferences[key],
     [preferences]
@@ -391,7 +386,6 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
       widgets,
       updateWidget,
       updateWidgets,
-      syncWidgetsFromPreferences,
       setWidgetsPreferences,
     }),
     [
@@ -402,7 +396,6 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
       widgets,
       updateWidget,
       updateWidgets,
-      syncWidgetsFromPreferences,
       setWidgetsPreferences,
     ]
   );

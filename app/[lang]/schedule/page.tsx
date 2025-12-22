@@ -1,6 +1,6 @@
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
-import { ScheduleContent } from "@/components/ScheduleContent";
+import { ScheduleContent } from "@/components/calendar/ScheduleContent";
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 

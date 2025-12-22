@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import F1Calendar from "@/components/Calendar";
+import F1Calendar from "@/components/calendar/Calendar";
 import type { TelemetryData } from "@/telemetry-manager";
 import { useEffect, useState } from "react";
 import {
@@ -15,7 +15,6 @@ import {
 import PreferencesPanel from "./PreferencesPanel";
 import { usePreferences } from "@/context/preferences";
 import Weather from "./Weather";
-import { Pencil } from "lucide-react";
 
 interface HeaderProps {
   telemetryData: TelemetryData | null;

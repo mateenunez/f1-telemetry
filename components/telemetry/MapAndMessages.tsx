@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Map from "@/components/Map";
-import RaceControl from "@/components/RaceControl";
+import Map from "./Map";
+import RaceControl from "@/components/telemetry/RaceControl";
 import { Orbitron } from "next/font/google";
 import { memo } from "react";
 import { usePreferences } from "@/context/preferences";

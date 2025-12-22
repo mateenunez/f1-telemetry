@@ -2,7 +2,7 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
-import LiveMapContent from "@/components/LiveMapContent";
+import LiveMapContent from "@/components/telemetry/LiveMapContent";
 
 export async function generateMetadata({
   params,

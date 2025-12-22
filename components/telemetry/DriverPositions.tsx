@@ -1,11 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import DriverPositionInfo from "@/components/DriverPositionInfo";
-import PitsDrsSpeed from "@/components/DrsSpeed";
-import Minisectors from "@/components/Minisectors";
-import LapTimes from "@/components/LapTimes";
-import DriverGaps from "@/components/DriverGap1";
-import Tyres from "@/components/Tyres";
+import DriverPositionInfo from "@/components/telemetry/DriverPositionInfo";
+import Minisectors from "@/components/telemetry/Minisectors";
+import LapTimes from "@/components/telemetry/LapTimes";
+import Tyres from "@/components/telemetry/Tyres";
 import {
   ProcessedPosition,
   ProcessedDriver,
@@ -20,10 +18,10 @@ import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Orbitron } from "next/font/google";
 import { audioUrl, useTelemetryAudio } from "@/hooks/use-raceControl";
 import { usePreferences } from "@/context/preferences";
-import DrsSpeed from "@/components/DrsSpeed";
+import DrsSpeed from "@/components/telemetry/DrsSpeed";
 import Pits from "./Pits";
 import DriverGap2 from "./DriverGap2";
-import DriverGap1 from "@/components/DriverGap1";
+import DriverGap1 from "@/components/telemetry/DriverGap1";
 
 interface DriverPositionsProps {
   positions: ProcessedPosition[];
@@ -37,8 +35,6 @@ interface DriverPositionsProps {
   session: ProcessedSession | null | undefined;
   aboutToBeEliminated: number[];
 }
-
-const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 const DriverPositions = memo(function DriverPositions({
   positions,
@@ -112,8 +108,7 @@ const DriverPositions = memo(function DriverPositions({
         >
           <table className="table-auto min-w-max w-full text-[0.6rem] text-gray-500">
             <thead
-              style={orbitron.style}
-              className="sticky top-0 z-30 bg-warmBlack h-[2rem]"
+              className="sticky top-0 z-30 bg-warmBlack h-[2rem] font-orbitron"
             >
               <tr className="text-center">
                 <th

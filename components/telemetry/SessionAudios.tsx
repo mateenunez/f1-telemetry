@@ -5,8 +5,8 @@ import {
   ProcessedTeamRadio,
 } from "@/processors";
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "./ui/card";
-import { ScrollArea } from "./ui/scroll-area";
+import { Card, CardContent } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Copy, DownloadIcon, PauseIcon, PlayIcon } from "lucide-react";
 import { toLocaleTime } from "@/utils/calendar";
 import { cn } from "@/lib/utils";

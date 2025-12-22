@@ -1,5 +1,5 @@
 "use client";
-import { ColorShift } from "@/components/ColorShift";
+import { ColorShift } from "@/components/home/ColorShift";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { config } from "@/lib/config";

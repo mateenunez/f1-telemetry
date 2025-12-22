@@ -17,7 +17,7 @@ import { Oxanium } from "next/font/google";
 import { getSectorColor } from "@/hooks/use-raceControl";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { usePreferences } from "@/context/preferences";
 
 // This is basically fearlessly copied from
