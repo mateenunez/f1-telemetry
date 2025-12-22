@@ -4,7 +4,7 @@ import {
   getCountryCode,
   GroupByLocation,
 } from "@/utils/calendar";
-import { Card, CardContent, CardHeader } from "./ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { config } from "@/lib/config";
 
 interface UpNextProps {

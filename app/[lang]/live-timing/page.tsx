@@ -1,6 +1,6 @@
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
-import { TelemetryContent } from "@/components/TelemetryContent";
+import { TelemetryContent } from "@/components/telemetry/TelemetryContent";
 import Footer from "@/components/Footer";
 import type { Metadata } from "next";
 

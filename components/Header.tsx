@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import F1Calendar from "@/components/Calendar";
+import F1Calendar from "@/components/calendar/Calendar";
 import type { TelemetryData } from "@/telemetry-manager";
 import { useEffect, useState } from "react";
 import {
@@ -87,9 +87,7 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
         <div className="flex flex-col md:flex-row lg:flex-row items-center justify-between gap-1">
           <div className="flex flex-row md:justify-start items-center mx-4">
             <div className="flex flex-row gap-4 w-full justify-center items-center">
-              <div className="ninth-step">
-                <PreferencesPanel driverInfo={telemetryData?.drivers} />
-              </div>
+              <PreferencesPanel driverInfo={telemetryData?.drivers} />
               <div className="flex flex-col md:flex-row items-center justify-center">
                 <div className="flex items-center flex-col">
                   <CardTitle className="flex flex-row items-center gap-4 text-md sm:text-xl font-orbitron font-normal">

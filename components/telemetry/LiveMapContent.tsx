@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import Map from "./Map";
+import Map from "../Map";
 import { useTelemetryManager } from "@/hooks/use-telemetry";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import Header from "./Header";
+import Header from "../Header";
 
 export function LiveMapContent({ dict }: { dict: any }) {
   const { telemetryData, yellowSectors, loading } = useTelemetryManager();

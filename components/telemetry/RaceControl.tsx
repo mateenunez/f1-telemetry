@@ -40,7 +40,7 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
     <Card className="bg-transparent border-none p-0">
       <CardContent className="align-center p-0">
         {lastMessage && (
-          <div className="rounded text-f1Blue py-0 font-geist font-medium">
+          <div className="text-f1Blue py-0 font-geist font-medium">
             <p className="text-xs text-gray-200 leading-tight">
               {lastMessage.message}
             </p>

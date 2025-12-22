@@ -13,7 +13,7 @@ interface LapTimesProps {
 
 export default function LapTimes({ timing, timingStats }: LapTimesProps) {
   return (
-    <div className="flex items-center flex-col text-white w-[5rem]">
+    <div className="flex items-center flex-col text-white">
       {/* Último tiempo de vuelta */}
       <div
         className="flex items-center flex-row gap-1 text-sm text-white"

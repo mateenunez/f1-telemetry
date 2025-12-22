@@ -17,7 +17,7 @@ import { Oxanium } from "next/font/google";
 import { getSectorColor } from "@/hooks/use-raceControl";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { usePreferences } from "@/context/preferences";
 
 // This is basically fearlessly copied from
@@ -189,7 +189,7 @@ export default function Map({
   if (!points || !minX || !minY || !widthX || !widthY) {
     return (
       <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
-        <Card className="lg:col-span-4 bg-warmBlack1 border-none border-2 flex flex-col mt-8">
+        <Card className="lg:col-span-4 bg-warmBlack1 border-none flex flex-col mt-8">
           <CardContent className="flex flex-col justify-center h-full">
             <div className="overflow-hidden h-fit">
               <Skeleton height={400} width="100%" />
@@ -201,177 +201,182 @@ export default function Map({
   }
 
   return (
-    <svg
-      viewBox={`${minX} ${minY} ${widthX} ${widthY}`}
-      className="h-full w-full xl:max-h-screen"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        className="stroke-gray-800"
-        strokeWidth={300}
-        strokeLinejoin="round"
-        fill="transparent"
-        d={`M${points[0].x},${points[0].y} ${points
-          .map((point) => `L${point.x},${point.y}`)
-          .join(" ")}`}
-      />
-
-      {renderedSectors.map((sector) => {
-        return (
-          <path
-            key={`map.sector.${sector.number}`}
-            className={sector.color}
-            strokeWidth={sector.strokeWidth}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            fill="transparent"
-            d={sector.d}
-          />
-        );
-      })}
-
-      {finishLine && (
-        <rect
-          x={finishLine.x - 150}
-          y={finishLine.y}
-          width={300}
-          height={50}
-          fill="white"
-          stroke="black"
-          strokeWidth={20}
-          transform={`rotate(${finishLine.startAngle + 90}, ${
-            finishLine.x + 25
-          }, ${finishLine.y})`}
+    <div className="w-full h-full">
+      <svg
+        viewBox={`${minX} ${minY} ${widthX} ${widthY}`}
+        width="100%"
+        height="100%"
+        preserveAspectRatio="none"
+        className="w-full h-full block"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          className="stroke-gray-800"
+          strokeWidth={300}
+          strokeLinejoin="round"
+          fill="transparent"
+          d={`M${points[0].x},${points[0].y} ${points
+            .map((point) => `L${point.x},${point.y}`)
+            .join(" ")}`}
         />
-      )}
 
-      {!sectorsCookie &&
-        sectors.map((sector, idx) => {
-          const startDx = sector.points[1]?.x - sector.points[0]?.x || 0;
-          const startDy = sector.points[1]?.y - sector.points[0]?.y || 0;
-          const startAngle = Math.atan2(startDy, startDx) * (180 / Math.PI);
-
-          const endDx =
-            sector.points[sector.points.length - 1]?.x -
-              sector.points[sector.points.length - 2]?.x || 0;
-          const endDy =
-            sector.points[sector.points.length - 1]?.y -
-              sector.points[sector.points.length - 2]?.y || 0;
-          const endAngle = Math.atan2(endDy, endDx) * (180 / Math.PI);
-
+        {renderedSectors.map((sector) => {
           return (
-            <g key={`sector-markers-${sector.number}`}>
-              {idx == sector1End && (
-                <g key={"sector-1"}>
-                  <rect
-                    x={sector.end.x - 150}
-                    y={sector.end.y}
-                    width={300}
-                    height={40}
-                    fill="red"
-                    stroke="red"
-                    opacity={0.8}
-                    strokeWidth={20}
-                    transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
-                      sector.end.y
-                    })`}
-                  />
-                </g>
-              )}
-
-              {idx == sector2End && (
-                <g key={"sector-1"}>
-                  <rect
-                    x={sector.end.x - 150}
-                    y={sector.end.y}
-                    width={300}
-                    height={40}
-                    fill="blue"
-                    stroke="blue"
-                    opacity={0.8}
-                    strokeWidth={20}
-                    transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
-                      sector.end.y
-                    })`}
-                  />
-                </g>
-              )}
-
-              {idx == sector3End && (
-                <g key={"sector-1"}>
-                  <rect
-                    x={sector.end.x - 150}
-                    y={sector.end.y}
-                    width={300}
-                    height={40}
-                    fill="orange"
-                    stroke="orange"
-                    opacity={0.8}
-                    strokeWidth={20}
-                    transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
-                      sector.end.y
-                    })`}
-                  />
-                </g>
-              )}
-            </g>
+            <path
+              key={`map.sector.${sector.number}`}
+              className={sector.color}
+              strokeWidth={sector.strokeWidth}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="transparent"
+              d={sector.d}
+            />
           );
         })}
 
-      {cornersCookie &&
-        corners.map((corner) => (
-          <CornerNumber
-            key={`corner.${corner.number}.${corner.letter && corner.letter}`}
-            number={corner.number}
-            x={corner.labelPos.x}
-            y={corner.labelPos.y}
+        {finishLine && (
+          <rect
+            x={finishLine.x - 150}
+            y={finishLine.y}
+            width={300}
+            height={50}
+            fill="white"
+            stroke="black"
+            strokeWidth={20}
+            transform={`rotate(${finishLine.startAngle + 90}, ${
+              finishLine.x + 25
+            }, ${finishLine.y})`}
           />
-        ))}
+        )}
 
-      {centerX && centerY && positions && drivers && (
-        <>
-          {Object.values(drivers) // Ordenar teniendo en cuenta los favoritos
-            .sort((a: ProcessedDriver, b: ProcessedDriver) => {
-              const aIsFavorite = favorites.has(a.driver_number);
-              const bIsFavorite = favorites.has(b.driver_number);
+        {!sectorsCookie &&
+          sectors.map((sector, idx) => {
+            const startDx = sector.points[1]?.x - sector.points[0]?.x || 0;
+            const startDy = sector.points[1]?.y - sector.points[0]?.y || 0;
+            const startAngle = Math.atan2(startDy, startDx) * (180 / Math.PI);
 
-              if (aIsFavorite === bIsFavorite) return 0;
-              if (aIsFavorite) return -1;
-              if (bIsFavorite) return 1;
-              return 0;
-            })
-            .reverse()
-            .map((driver) => {
-              const pos = positions.find(
-                (p) => p.driver_number === driver.driver_number
-              );
-              const tim = timing.find(
-                (t) => t.driver_number === driver.driver_number
-              );
-              let isFavorite: boolean;
-              if (favorites.size > 0) {
-                isFavorite = driver && favorites.has(driver.driver_number);
-              } else {
-                isFavorite = true;
-              }
-              if (!pos || !tim) return null;
-              return (
-                <CarDot
-                  key={`map.driver.${driver.driver_number}`}
-                  name={driver.name_acronym}
-                  color={driver.team_colour}
-                  pos={pos}
-                  timing={tim}
-                  rotation={rotation}
-                  centerX={centerX}
-                  centerY={centerY}
-                  favorite={isFavorite}
-                />
-              );
-            })}
-        </>
-      )}
-    </svg>
+            const endDx =
+              sector.points[sector.points.length - 1]?.x -
+                sector.points[sector.points.length - 2]?.x || 0;
+            const endDy =
+              sector.points[sector.points.length - 1]?.y -
+                sector.points[sector.points.length - 2]?.y || 0;
+            const endAngle = Math.atan2(endDy, endDx) * (180 / Math.PI);
+
+            return (
+              <g key={`sector-markers-${sector.number}`}>
+                {idx == sector1End && (
+                  <g key={"sector-1"}>
+                    <rect
+                      x={sector.end.x - 150}
+                      y={sector.end.y}
+                      width={300}
+                      height={40}
+                      fill="red"
+                      stroke="red"
+                      opacity={0.8}
+                      strokeWidth={20}
+                      transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
+                        sector.end.y
+                      })`}
+                    />
+                  </g>
+                )}
+
+                {idx == sector2End && (
+                  <g key={"sector-1"}>
+                    <rect
+                      x={sector.end.x - 150}
+                      y={sector.end.y}
+                      width={300}
+                      height={40}
+                      fill="blue"
+                      stroke="blue"
+                      opacity={0.8}
+                      strokeWidth={20}
+                      transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
+                        sector.end.y
+                      })`}
+                    />
+                  </g>
+                )}
+
+                {idx == sector3End && (
+                  <g key={"sector-1"}>
+                    <rect
+                      x={sector.end.x - 150}
+                      y={sector.end.y}
+                      width={300}
+                      height={40}
+                      fill="orange"
+                      stroke="orange"
+                      opacity={0.8}
+                      strokeWidth={20}
+                      transform={`rotate(${endAngle + 90}, ${sector.end.x}, ${
+                        sector.end.y
+                      })`}
+                    />
+                  </g>
+                )}
+              </g>
+            );
+          })}
+
+        {cornersCookie &&
+          corners.map((corner) => (
+            <CornerNumber
+              key={`corner.${corner.number}.${corner.letter && corner.letter}`}
+              number={corner.number}
+              x={corner.labelPos.x}
+              y={corner.labelPos.y}
+            />
+          ))}
+
+        {centerX && centerY && positions && drivers && (
+          <>
+            {Object.values(drivers) // Ordenar teniendo en cuenta los favoritos
+              .sort((a: ProcessedDriver, b: ProcessedDriver) => {
+                const aIsFavorite = favorites.has(a.driver_number);
+                const bIsFavorite = favorites.has(b.driver_number);
+
+                if (aIsFavorite === bIsFavorite) return 0;
+                if (aIsFavorite) return -1;
+                if (bIsFavorite) return 1;
+                return 0;
+              })
+              .reverse()
+              .map((driver) => {
+                const pos = positions.find(
+                  (p) => p.driver_number === driver.driver_number
+                );
+                const tim = timing.find(
+                  (t) => t.driver_number === driver.driver_number
+                );
+                let isFavorite: boolean;
+                if (favorites.size > 0) {
+                  isFavorite = driver && favorites.has(driver.driver_number);
+                } else {
+                  isFavorite = true;
+                }
+                if (!pos || !tim) return null;
+                return (
+                  <CarDot
+                    key={`map.driver.${driver.driver_number}`}
+                    name={driver.name_acronym}
+                    color={driver.team_colour}
+                    pos={pos}
+                    timing={tim}
+                    rotation={rotation}
+                    centerX={centerX}
+                    centerY={centerY}
+                    favorite={isFavorite}
+                  />
+                );
+              })}
+          </>
+        )}
+      </svg>
+    </div>
   );
 }
 

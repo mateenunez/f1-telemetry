@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Map from "@/components/Map";
-import RaceControl from "@/components/RaceControl";
+import Map from "./Map";
+import RaceControl from "@/components/telemetry/RaceControl";
 import { Orbitron } from "next/font/google";
 import { memo } from "react";
 import { usePreferences } from "@/context/preferences";
@@ -22,9 +22,9 @@ const MapAndMessages = memo(function MapAndMessages({
 }: MapAndMessagesProps) {
   const { preferences } = usePreferences();
   return (
-    <Card className="lg:col-span-5 bg-warmBlack1 flex flex-col border-none">
+    <Card className="lg:col-span-5 bg-warmBlack flex flex-col border-none">
       <CardHeader className="flex flex-col py-2">
-        <div className="flex flex-row gap-2 pt-4 items-center justify-between px-4 rounded-lg py-2 min-h-[5rem]">
+        <div className="flex flex-row gap-2 pt-4 items-center justify-between px-4 py-2 min-h-[5rem]">
           <CardTitle className="text-lg font-thin text-white">
             <div className="flex justify-center items-center third-step">
               <RaceControl
@@ -64,7 +64,6 @@ const MapAndMessages = memo(function MapAndMessages({
         </div>
       </CardHeader>
       <CardContent className="flex flex-col justify-center h-full p-0 second-step">
-        <Link href={`/live-map`} className="overflow-hidden h-fit">
           {telemetryData && telemetryData.session?.circuit_key && (
             <Map
               positions={telemetryData.positionData}
@@ -74,7 +73,6 @@ const MapAndMessages = memo(function MapAndMessages({
               yellowSectors={yellowSectors}
             />
           )}
-        </Link>
       </CardContent>
     </Card>
   );

@@ -16,7 +16,8 @@ export function CircleCarData({
   size = 100,
 }: CircleCarDataProps) {
   const { preferences } = usePreferences();
-
+  
+  const VW = size;
   const cx = 50;
   const cy = 50;
   const r = 50 - 5 / 2;
@@ -62,9 +63,9 @@ export function CircleCarData({
   const speedMarks = [0, 60, 120, 180, 240, 300, 360];
 
   return (
-    <div className="flex items-center flex justify-center w-full eighth-step">
-      <div>
-        <svg viewBox="0 0 100 100" className="w-full h-full">
+    <div className="flex items-center bg-warmBlack justify-center w-full h-full eighth-step">
+      <div className="w-full h-full">
+        <svg viewBox={`0 0 ${VW} ${VW}`} className="w-full h-full" preserveAspectRatio="none">
           {/* Outer speed circle background */}
           <circle
             cx={50}
