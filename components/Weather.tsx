@@ -29,8 +29,10 @@ const ClimateCondition = ({
 }: ClimateConditionProps) => {
   return (
     <div className="flex flex-col items-center">
-      <span className="text-gray-400 text-md font-geist">{label}</span>
-      <span className="text-md text-offWhite">
+      <span className="text-gray-400 text-md font-geist font-medium">
+        {label}
+      </span>
+      <span className="text-md text-offWhite font-geist font-medium">
         {value}
         {unit}
       </span>
@@ -258,6 +260,14 @@ export default function Weather({ weather, dict }: WeatherProps) {
   if (preferences.weatherDetailed) {
     return (
       <div className="flex flex-row gap-2 items-center text-offWhite">
+        <div className="flex flex-col items-center text-xs gap-1">
+          <span className="text-f1Blue font-geist font-medium">
+            {getWindDirection()}
+          </span>
+          <span className="text-xs font-geist font-medium">
+            {weather.wind_speed} m/s
+          </span>
+        </div>
         <ClimateCondition
           label={getWeatherLabel("rain")}
           value={weather.rainfall}
@@ -294,8 +304,12 @@ export default function Weather({ weather, dict }: WeatherProps) {
     <div className="flex flex-row gap-2 items-center text-offWhite">
       <div className="flex flex-col items-center">
         <div className="flex flex-row text-xs gap-1">
-          <span className="text-f1Blue">{getWindDirection()}</span>
-          <span className="text-xs">{weather.wind_speed} m/s</span>
+          <span className="text-f1Blue font-geist font-medium">
+            {getWindDirection()}
+          </span>
+          <span className="text-xs font-geist font-medium">
+            {weather.wind_speed} m/s
+          </span>
         </div>
         {getWeatherIcon()}
       </div>
