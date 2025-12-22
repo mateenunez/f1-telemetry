@@ -1,5 +1,5 @@
 interface QualifyingParts {
-  utc: string
+  Utc: string
   QualifyingPart: number
 }
 

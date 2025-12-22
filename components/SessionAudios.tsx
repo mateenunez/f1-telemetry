@@ -292,7 +292,7 @@ export default function SessionAudios({
             </div>
           ) : (
             <div className="min-h-[20rem] items-center justify-center flex">
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-gray-400 font-geist font-medium">
                 {preferences.translate
                   ? "Sin audios de carrera."
                   : "No team audios."}

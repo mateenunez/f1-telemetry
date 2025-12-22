@@ -242,7 +242,7 @@ export default function PreferencesPanel({
       >
         <div className="p-8 overflow-y-auto h-full">
           {/* Panel button */}
-          <span className="text-xl font-semibold mb-6 text-center flex gap-6 items-center font-orbitron">
+          <span className="text-xl mb-6 text-center flex gap-6 items-center font-orbitron">
             <PanelLeft
               className="text-gray-300 hover:text-gray-400 hover:cursor-pointer"
               width={15}
@@ -345,7 +345,7 @@ export default function PreferencesPanel({
 
           {/* Favorite Drivers */}
           <div className="flex flex-col gap-2 pb-4">
-            <p className="text-md text-gray-100 font-semibold font-orbitron">
+            <p className="text-md text-gray-100 font-orbitron">
               {preferences.translate
                 ? "Pilotos Favoritos"
                 : "Favorites Drivers"}
@@ -357,7 +357,7 @@ export default function PreferencesPanel({
                 favorites.map((driver, idx) => (
                   <span
                     key={idx}
-                    className="font-bold text-gray-200 border-2 border-gray-400 p-1 rounded flex flex-row gap-1 w-[4rem] items-center hover:cursor-pointer font-geist font-medium"
+                    className="text-gray-200 border-2 border-gray-400 p-1 rounded flex flex-row gap-1 w-[4rem] items-center hover:cursor-pointer font-geist font-medium"
                     style={{
                       color: "#" + driver.team_colour,
                     }}
