@@ -15,6 +15,7 @@ import {
 import PreferencesPanel from "./PreferencesPanel";
 import { usePreferences } from "@/context/preferences";
 import Weather from "./Weather";
+import { config } from "@/lib/config";
 
 interface HeaderProps {
   telemetryData: TelemetryData | null;
@@ -97,6 +98,11 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
                       )}/flat/64.png`}
                       alt={`Flag of ${session?.location}`}
                       className="w-[25%]"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = config.public.assets.chequered_flag;
+                        target.onerror = null;
+                      }}
                     />
                     <div className="flex flex-col">
                       <div className="flex flex-row items-center gap-2 w-full md:text-nowrap md:flex-nowrap">
@@ -107,7 +113,8 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
                         {preferences.translate
                           ? translateSessionName(session?.session_name)
                           : session?.session_name}
-                        {" " + (session?.series.slice(-1)[0]?.QualifyingPart || "")}
+                        {" " +
+                          (session?.series.slice(-1)[0]?.QualifyingPart || "")}
                       </div>
                       <div className="flex flex-row items-center gap-4 text-md tracking-wide">
                         <span className="font-orbitron">

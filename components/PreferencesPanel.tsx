@@ -270,7 +270,7 @@ export default function PreferencesPanel({
           width={15}
           className={`hover:cursor-pointer transition-colors ${
             isEditMode
-              ? "text-green-600 hover:text-green-700"
+              ? "text-f1Blue hover:text-f1Blue/80"
               : "text-gray-300 hover:text-gray-400"
           }`}
           onClick={handleEditMode}

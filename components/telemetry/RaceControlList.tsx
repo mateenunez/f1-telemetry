@@ -37,7 +37,7 @@ export default function RaceControlList({
   };
 
   return (
-    <Card className="flex w-full h-full bg-warmBlack border-b-2 border-t-2 border-l-0 border-r-0 rounded-none border-gray-800 pt-2 md:border-none">
+    <Card className="flex w-full h-full bg-warmBlack border-none">
       <CardContent className="overflow-x-auto flex-1 h-full w-full px-6 py-4">
         <ScrollArea className="overflow-x-auto h-full p-0" type="scroll">
           {raceControlLog && (

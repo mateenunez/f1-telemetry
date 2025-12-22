@@ -161,68 +161,32 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     );
 
     const HeaderSkeleton = () => (
-      <div className="flex flex-col md:flex-row gap-4 md:gap-0 justify-between items-center w-full px-6 py-4 mb-4">
-        <Skeleton height={60} width={450} />
+      <div className="flex flex-col lg:flex-row px-6 py-4 mb-4 gap-4 lg:gap-0 justify-between items-center border-b-2 border-t-0 border-l-0 border-r-0 rounded-none border-gray-800">
+        <Skeleton height={60} width={300} />
         <Skeleton height={60} width={300} />
       </div>
     );
 
-    const PositionsSkeletonList = () => (
-      <Card className="lg:col-span-5 bg-warmBlack1 border-none max-h-screen px-2">
-        <CardContent className="overflow-x-auto flex-1 max-h-[90vh] h-full p-0">
-          <div className="space-y-2">
-            {Array.from({ length: 20 }).map((_, idx) => (
-              <Skeleton key={idx} height={60} width="100%" />
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    );
-
-    const MapAndRaceSkeleton = () => (
-      <Card className="lg:col-span-5 bg-warmBlack1 border-none flex flex-col p-0 m-0">
-        <CardHeader className="pb-6 flex flex-row items-center justify-between">
-          <Skeleton height={50} width={200} />
-          <Skeleton height={50} width={120} />
-        </CardHeader>
-        <CardContent className="flex flex-col justify-center h-full">
-          <div className="overflow-hidden h-fit">
-            <Skeleton height={400} width="100%" />
-          </div>
-        </CardContent>
-      </Card>
-    );
-
-    const CardsRowSkeleton = () => (
-      <div className="flex flex-col md:flex-row gap-8 md:px-0 py-[2rem] md:mx-[1rem] md:justify-around items-center ">
-        <div className="flex flex-col md:flex-row gap-[3rem]">
-          {Array.from({ length: 2 }).map((_, idx) => (
-            <Skeleton key={idx} className="gap-2" width={320} height={250} />
-          ))}
-        </div>
-        <Skeleton circle height={280} width={280} />
-        <Skeleton circle height={280} width={280} />
+    const CanvasSkeleton = () => (
+      <div className="w-full h-full">
+        <Skeleton width="100%" height="95%" />
       </div>
     );
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 px-2">
+      <div className="lg:h-[170vh] h-[120vh] bg-warmBlack px-2">
         <LoaderOverlay />
-        <div className="max-w-8xl mx-auto space-y-4 h-full">
-          <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
+        <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
+          <div className="w-full h-[20vh]">
             <HeaderSkeleton />
-            <div className="grid grid-cols-1 lg:grid-cols-10 gap-4 pb-4">
-              <PositionsSkeletonList />
-              <MapAndRaceSkeleton />
+            <div className="h-[100vh] w-[100%] lg:h-[150vh]">
+              <CanvasSkeleton />
             </div>
-            <CardsRowSkeleton />
-          </SkeletonTheme>
-        </div>
+          </div>
+        </SkeletonTheme>
       </div>
     );
   }
-
-  console.log(widgets)
 
   return (
     <div className="min-h-screen bg-warmBlack">
@@ -287,7 +251,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                       <SortableWidget
                         key={w.id}
                         id={w.id}
-                        className="col-span-12 md:col-span-6 lg:col-span-4"
+                        className="col-span-12 lg:col-span-4"
                       >
                         <SessionAudios
                           teamRadio={teamRadioCaptures}
@@ -308,7 +272,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                       <SortableWidget
                         key={w.id}
                         id={w.id}
-                        className="col-span-12 md:col-span-6 lg:col-span-4"
+                        className="col-span-12 lg:col-span-4"
                       >
                         <RaceControlList
                           raceControl={
@@ -331,7 +295,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                       <SortableWidget
                         key={w.id}
                         id={w.id}
-                        className="col-span-12 md:col-span-6 lg:col-span-4"
+                        className="col-span-12 lg:col-span-4"
                       >
                         <CircleOfDoom
                           driverInfos={driverInfos}
@@ -356,7 +320,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                       <SortableWidget
                         key={w.id}
                         id={w.id}
-                        className="col-span-12 md:col-span-6 lg:col-span-4"
+                        className="col-span-12 lg:col-span-4"
                       >
                         <CircleCarData
                           carData={

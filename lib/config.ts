@@ -22,6 +22,7 @@ export const config = {
     apiUrl: process.env.NEXT_PUBLIC_API,
     blobBaseUrl: blobBaseUrl,
     assets: {
+      chequered_flag: `${blobBaseUrl}/chequered_flag.png`,
       f1t: `${blobBaseUrl}/f1t.png`,
       col: `${blobBaseUrl}/43.png`,
       discordIcon: `${blobBaseUrl}/discord.svg`,
