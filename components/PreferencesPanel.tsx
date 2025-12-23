@@ -260,7 +260,7 @@ export default function PreferencesPanel({
     <>
       {/* Toggle Button */}
       <PanelLeft
-        className="text-gray-300 hover:text-gray-400 hover:cursor-pointer ninth-step"
+        className="text-gray-300 hover:text-gray-400 hover:cursor-pointer eighth-step"
         width={15}
         onClick={() => setOpen((prev) => !prev)}
       />
@@ -268,7 +268,7 @@ export default function PreferencesPanel({
       {!isMobile && (
         <Pencil
           width={15}
-          className={`hover:cursor-pointer transition-colors ${
+          className={`hover:cursor-pointer transition-colors ninth-step ${
             isEditMode
               ? "text-f1Blue hover:text-f1Blue/80"
               : "text-gray-300 hover:text-gray-400"

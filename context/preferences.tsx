@@ -112,9 +112,9 @@ export const DEFAULT_CONFIG: Preferences = {
     xPct: 850 / 1526,
     yPct: 1094 / 1094,
     widthPct: 300 / 1526,
-    heightPct: 500 / 1094,
+    heightPct: 450 / 1094,
     width: 300,
-    height: 500,
+    height: 450,
     index: 4,
   },
   circleCarData: {
@@ -122,9 +122,9 @@ export const DEFAULT_CONFIG: Preferences = {
     xPct: 1200 / 1526,
     yPct: 1094 / 1094,
     widthPct: 300 / 1526,
-    heightPct: 500 / 1094,
+    heightPct: 450 / 1094,
     width: 300,
-    height: 500,
+    height: 450,
     index: 5,
   },
   favoriteDrivers: [],
@@ -290,7 +290,6 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
         { ...toAbs(prefs.circleOfDoom, "circle-of-doom") },
         { ...toAbs(prefs.circleCarData, "circle-car-data") },
       ];
-      console.log(list);
       return list.sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
     },
     []

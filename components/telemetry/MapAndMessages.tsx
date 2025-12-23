@@ -23,10 +23,10 @@ const MapAndMessages = memo(function MapAndMessages({
   const { preferences } = usePreferences();
   return (
     <Card className="lg:col-span-5 bg-warmBlack flex flex-col border-none">
-      <CardHeader className="flex flex-col py-2">
+      <CardHeader className="flex flex-col py-2 third-step">
         <div className="flex flex-row gap-2 pt-4 items-center justify-between px-4 py-2 min-h-[5rem]">
           <CardTitle className="text-lg font-thin text-white">
-            <div className="flex justify-center items-center third-step">
+            <div className="flex justify-center items-center">
               <RaceControl
                 raceControl={
                   preferences.translate
@@ -36,7 +36,7 @@ const MapAndMessages = memo(function MapAndMessages({
               />
             </div>
           </CardTitle>
-          <div className="flex flex-col h-full justify-start items-start fourth-step">
+          <div className="flex flex-col h-full justify-start items-start">
             {session?.session_type === "Race" && (
               <CardTitle
                 className="text-xxl font-bold text-gray-200 tracking-widest"

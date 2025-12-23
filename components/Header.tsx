@@ -83,7 +83,7 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
   }, [session?.session_status, telemetryData?.lastUpdateTime]);
 
   return (
-    <Card className="bg-warmBlack1 text-white border-b-2 border-t-0 border-l-0 border-r-0 rounded-none border-gray-800 relative fifth-step">
+    <Card className="bg-warmBlack1 text-white border-b-2 border-t-0 border-l-0 border-r-0 rounded-none border-gray-800 relative fourth-step">
       <CardHeader className="p-2">
         <div className="flex flex-col md:flex-row lg:flex-row items-center justify-between gap-1">
           <div className="flex flex-row md:justify-start items-center mx-4">

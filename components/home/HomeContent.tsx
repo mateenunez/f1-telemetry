@@ -1,16 +1,14 @@
 "use client";
 import { ColorShift } from "@/components/home/ColorShift";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { config } from "@/lib/config";
+import Navigation from "../Navigation";
 
 interface HomeContentProps {
   dict: any;
 }
 
 export default function HomeContent({ dict }: HomeContentProps) {
-  const [isVisible, setIsVisible] = useState(false);
-
   type InlineVideoCardProps = {
     title: string;
     description: string;
@@ -45,77 +43,16 @@ export default function HomeContent({ dict }: HomeContentProps) {
 
   const f1t = config.public.assets.f1t;
 
-  const handleScroll = () => {
-    const scrollPosition = window.scrollY;
-    if (scrollPosition > 100) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   return (
     <div className="min-h-screen w-full">
-      <header
-        className={`
-        fixed top-0 left-0 w-full gap-4 md:px-[15%] h-[5rem] z-50 
-        backdrop-blur-sm shadow-md 
-        transition-transform duration-300 ease-in-out bg-gradient-to-br from-warmBlack to-warmBlack2 
-        ${isVisible ? "translate-y-0" : "-translate-y-full"}
-      `}
-      >
-        <div className="flex justify-between items-center mx-auto px-4 h-full">
-          <Image
-            src={f1t}
-            width={80}
-            height={80}
-            alt="Telemetría telemetria telemetrics Formula 1 F1 Telemetry logo"
-          />
-          <nav className="flex flex-row gap-2 items-center justify-center">
-            <a
-              className="rounded px-3 py-3 text-sm bg-white text-black border-2 border-white text-center transition duration-300 ease-in-out 
-                font-geist font-medium
-                hover:bg-f1Blue
-                hover:shadow-2xl 
-                hover:text-gray-200
-                hover:cursor-pointer
-                hover:border-f1Blue
-                
-                focus:outline-none 
-                focus:ring-4 
-                focus:ring-gray-500 
-                focus:ring-opacity-50"
-              href="/live-timing"
-            >
-              {dict.home.dashboardButton}
-            </a>
-            <a
-              className="rounded w-full py-3 px-3 text-sm bg-transparent border-2 border-gray-200 text-gray-200 text-center transition duration-300 ease-in-out 
-                font-geist font-medium
-                hover:bg-f1Red
-                hover:text-gray-200
-                hover:border-f1Red
-                hover:cursor-pointer
-                
-                focus:outline-none 
-                focus:ring-4 
-                focus:ring-gray-500 
-                focus:ring-opacity-50"
-              href="/schedule"
-            >
-              {dict.home.scheduleButton}
-            </a>
-          </nav>
-        </div>
-      </header>
+      <Navigation
+        leftUrl="/live-timing"
+        rightUrl="/schedule"
+        leftTitle={dict.home.dashboardButton}
+        rightTitle={dict.home.scheduleButton}
+        f1t_url={f1t}
+        maxScrollPosition={100}
+      />
       <div className="h-screen py-5 w-full bg-f1telemetry bg-cover bg-center">
         <div className="flex flex-col justify-evenly h-full justify-center items-center max-w-4xl mx-auto">
           <div className="flex justify-center w-full items-center">

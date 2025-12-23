@@ -10,8 +10,8 @@
     "audioDesc": "Listen instantly to each driver’s team radio during the race—we also use AI for translation and transcription!",
     "circlesTitle": "Real-Time Analysis",
     "circlesDesc": "We keep adding features to boost race analysis, such as the Circle of Doom, perfect for undercut decisions.",
-    "version": "Version 1.4.3 includes a new header with two options: simple and detailed. We also fix some bugs.",
-    "announce": "We are working on migrating to a new server, this website may not work properly until then. See you in march!"
+    "version": "Version 1.4.4 introduces Drag and Drop personalization! you can now move and resize the widgets as you like on your computer, or change the position in your mobile.",
+    "announce": "We are still working on migrating to a new server, this website may not work properly until then. See you in march!"
   },
   "footer": {
     "legal": "This website is not associated, affiliated, authorized, endorsed, or officially connected in any way with Formula 1, the FIA, or any of its subsidiaries or affiliates."
@@ -48,17 +48,17 @@
     "sprintrace": "Sprint Race",
     "sprintqualification": "Sprint Qualification"
   },
-  "tourSteps": {
-    "welcome": "Welcome! With this tutorial we're going to show you the telemetry features.",
-    "positions": "Here you can see the current positions, compounds and pit history, differences in seconds, lap times and mini sectors.",
-    "map": "This map shows the real-time location of each driver on the circuit during the session.",
-    "raceControl": "Here you'll see race control messages, that is flags and penalties.",
-    "laps": "Next to the messages are the laps and the current state of the circuit.",
-    "header": "In the header you can see the session status, view weather conditions and the time to sync.",
-    "raceLogs": "You can also listen to audios, read their transcriptions or the session message history.",
-    "doomCircle": "The Circle of Doom helps you visualize pit stop strategies and undercut decisions in real-time. When a driver enters the pit they will be delayed until the PIT mark",
-    "carDataCircle": "This circle shows real-time data from the selected driver, such as speed, RPM and more.",
-    "preferences": "IMPORTANT: This is the preferences panel, you can customize the telemetry here. Enjoy!"
+"tourSteps": {
+    "welcome": "Welcome to F1 Telemetry! We’ll give you a quick tour to show you everything you can do with our telemetry tools.",
+    "positions": "Check out the live standings here—including tire compounds, pit history, gaps, lap times, and mini-sectors.",
+    "map": "This map tracks every driver’s position on the track in real time. You can customize how it looks in the settings panel!",
+    "raceControlAndlaps": "Keep an eye on race control messages like flags and penalties. You can also track current laps and track conditions.",
+    "header": "The header shows you the session status, live weather, and your sync timer.",
+    "raceLogs": "Catch up on team radio—listen to the audio, read the transcripts, or browse the session's message history.",
+    "doomCircle": "The 'Circle of Doom' helps you visualize pit strategies and undercut windows in real time. When a driver pits, they’ll drop back to the PIT marker.",
+    "carDataCircle": "This dial shows live data for your selected driver, like their current speed, RPM, and more.",
+    "preferences": "Click here to open the preferences panel and tweak the telemetry layout exactly how you like it.",
+    "edit": "Enter edit mode to move or resize any component. Give it a try on your desktop or laptop!"
   },
   "loading": "Getting things ready...",
   "delaying": "Applying delay...",

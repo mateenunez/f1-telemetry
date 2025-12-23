@@ -20,13 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
-    },
-    {
-      url: 'https://www.f1telemetry.com/es/live-map',
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.7,
-    },
+    }
 
     // --- URLs para la versión en inglés (/en/) ---
     {
@@ -46,12 +40,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
-    },
-    {
-      url: 'https://www.f1telemetry.com/en/live-map',
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.7,
     }
   ];
 }

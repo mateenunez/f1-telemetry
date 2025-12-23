@@ -10,8 +10,8 @@
     "audioDesc": "Podés escuchar al instante el mensaje de radio de equipo de cada piloto durante la carrera, y además ¡usamos IA para la traducción y transcripción!",
     "circlesTitle": "Análisis en tiempo real",
     "circlesDesc": "Estamos añadiendo constantemente funcionalidades para mejorar el análisis de carreras, como el Circle of Doom que sirve para tomar decisiones de undercut.",
-    "version": "La version 1.4.3 trae un nuevo encabezado con dos formas de mostrar el clima: simple y detallada. Además arreglamos bugs.",
-    "announce": "Estamos trabajando en migrar a un nuevo servidor, la telemetría puede no funcionar correctamente hasta que finalice el proceso. ¡Te esperamos en marzo!"
+    "version": "La version 1.4.4 introduce la personalización Drag and Drop! ahora podes mover y redimensionar los widgets a tu gusto en tu computadora o cambiar la posicion de los widgets en celular.",
+    "announce": "Seguimos trabajando en migrar a un nuevo servidor, la telemetría puede no funcionar correctamente hasta que finalice el proceso. ¡Te esperamos en marzo!"
   },
   "footer": {
     "legal": " Este sitio web no está asociado, afiliado, autorizado, respaldado ni conectado oficialmente de ninguna manera con la Fórmula 1, la FIA o cualquiera de sus subsidiarias o afiliadas."
@@ -52,16 +52,16 @@
     "error": "Las transcripciones para los audios de equipos estarán disponibles en breve."
   },
   "tourSteps": {
-    "welcome": "Bienvenido! con este tutorial vamos a mostrarte las funcionalidades de la telemetría.",
+    "welcome": "Bienvenido a F1 Telemetry! con este tutorial vamos a mostrarte las funcionalidades de la telemetría.",
     "positions": "Acá podés ver las posiciones actuales, compuestos e historial de pits, diferencias en segundos, tiempos de vuelta y minisectores.",
-    "map": "Este mapa muestra la ubicación en tiempo real de cada piloto en el circuito durante la sesión.",
-    "raceControl": "Acá se muestran los mensajes de control de carrera, por ejemplo, banderas y penalizaciones.",
-    "laps": "Al lado de los mensajes están las vueltas y el estado actual del circuito.",
+    "map": "Este mapa muestra la ubicación en tiempo real de cada piloto en el circuito durante la sesión. Podes personalizarlo en el panel de preferencias!",
+    "raceControlAndlaps": "Acá se muestran los mensajes de control de carrera, por ejemplo, banderas y penalizaciones. Además, podés ver las vueltas y el estado del circuito.",
     "header": "En el encabezado podés ver el estado de la sesión, ver condiciones climáticas y el tiempo para sincronizarte.",
     "raceLogs": "También podés escuchar audios, leer sus transcripciones o el historial de mensajes de la sesión.",
     "doomCircle": "El Circle of Doom te ayuda a visualizar estrategias de pit stops y decisiones de undercut en tiempo real. Cuando un piloto entre al pit se retrasará hasta la marca PIT.",
     "carDataCircle": "Este círculo muestra datos en tiempo real del piloto seleccionado, como velocidad, RPM y más.",
-    "preferences": "IMPORTANTE: Este es el panel de preferencias, podés personalizar la telemetría acá. ¡Que disfrutes!"
+    "preferences": "Haciendo click en este botón vas a acceder al panel de preferencias, en este podés personalizar la telemetría a tu gusto.",
+    "edit": "En el modo edición podés mover y redimensionar los distintos componentes de la telemetría. ¡Probalo en tu compu o laptop!"
   },
   "loading": "Preparando el sistema...",
   "delaying": "Aplicando delay...",

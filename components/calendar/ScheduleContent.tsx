@@ -7,6 +7,8 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Upnext from "@/components/calendar/Upnext";
+import { config } from "@/lib/config";
+import Navigation from "../Navigation";
 
 interface ScheduleContentProps {
   dict: any;
@@ -14,6 +16,7 @@ interface ScheduleContentProps {
 
 export function ScheduleContent({ dict }: ScheduleContentProps) {
   const [calendar, setCalendar] = useState<F1CalendarResponse | null>(null);
+  const f1t = config.public.assets.f1t;
 
   useEffect(() => {
     const loadCalendar = async () => {
@@ -87,23 +90,16 @@ export function ScheduleContent({ dict }: ScheduleContentProps) {
 
   if (calendar)
     return (
-      <div className="min-h-screen bg-gradient-to-br from-warmBlack to-warmBlack2 text-white overflow-hidden font-geist">
-        <div className="max-w-6xl mx-auto mt-12 px-4 md:px-8">
-          <div className="flex flex-row justify-between items-center w-full gap-4 mb-8">
-            <a
-              href="/"
-              className="text-2xl font-regular flex flex-row gap-2 hover:text-f1Yellow hover:cursor-pointer transition duration-300"
-            >
-              {dict.schedule.homeButton}
-            </a>
-
-            <a
-              className="text-xl font-regular hover:cursor-pointer hover:text-f1Blue transition duration-300"
-              href="/live-timing"
-            >
-              {dict.schedule.dashboardButton}
-            </a>
-          </div>
+      <div className="min-h-screen bg-warmBlack text-white overflow-hidden font-geist">
+        <div className="max-w-6xl mx-auto mt-20 px-4 md:px-8">
+      <Navigation
+        leftUrl="/live-timing"
+        rightUrl="/"
+        leftTitle={dict.schedule.dashboardButton}
+        rightTitle={dict.schedule.homeButton}
+        f1t_url={f1t}
+        rightColor="f1Purple"
+      />
           <div className="flex flex-row my-4">
             <div className="flex flex-col md:mx-8 w-full gap-6">
               {/* Proxima sesion */}

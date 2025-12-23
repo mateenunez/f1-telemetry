@@ -15,7 +15,6 @@ import {
   ProcessedSession,
 } from "@/processors";
 import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Orbitron } from "next/font/google";
 import { audioUrl, useTelemetryAudio } from "@/hooks/use-raceControl";
 import { usePreferences } from "@/context/preferences";
 import DrsSpeed from "@/components/telemetry/DrsSpeed";
@@ -34,6 +33,8 @@ interface DriverPositionsProps {
   handlePinnedDriver: (driverNumber: number) => void;
   session: ProcessedSession | null | undefined;
   aboutToBeEliminated: number[];
+  fullWidth?: boolean;
+  isMobile?: boolean;
 }
 
 const DriverPositions = memo(function DriverPositions({
@@ -47,6 +48,8 @@ const DriverPositions = memo(function DriverPositions({
   handlePinnedDriver,
   session,
   aboutToBeEliminated,
+  fullWidth,
+  isMobile,
 }: DriverPositionsProps) {
   const [isPlayingAudio, setIsPlayingAudio] = useState<number | undefined>();
   const lastPlayedUtcRef = useRef<string | undefined>(
@@ -100,9 +103,9 @@ const DriverPositions = memo(function DriverPositions({
 
   return (
     <Card className="w-full h-full bg-warmBlack border-none">
-      <CardContent className="flex-1 h-full p-0 first-step">
+      <CardContent className="flex-1 h-full p-0 first-step overflow-x-auto">
         <ScrollArea
-          className="w-full h-full"
+          className={`${fullWidth && !isMobile ? "w-full" : "w-max"} h-full overflow-x-auto`}
           type="scroll"
           ref={scrollRef}
         >
@@ -167,7 +170,7 @@ const DriverPositions = memo(function DriverPositions({
                   timing?.knockedOut || timing?.retired || timing?.stopped
                     ? {
                         opacity: 0.4,
-                        background: `linear-gradient(-90deg, #0d0d0d ${
+                        background: `linear-gradient(-90deg, #0a0a0a ${
                           headshot ? "90%" : "100%"
                         }, #${driver?.team_colour} 100%)`,
                       }
@@ -178,7 +181,7 @@ const DriverPositions = memo(function DriverPositions({
                             ? "#6b040447"
                             : isFavorite
                             ? "#" + driver?.team_colour + "30"
-                            : "#0d0d0d"
+                            : "#0a0a0a"
                         } ${
                           headshot && !isAboutToBeEliminated ? "90%" : "100%"
                         }, #${driver?.team_colour} 100%)`,
@@ -192,7 +195,7 @@ const DriverPositions = memo(function DriverPositions({
                     style={baseStyle}
                   >
                     <td
-                      className={`rounded-l-md ${
+                      className={`${
                         headshot ? "w-[11.5rem]" : "w-[9rem]"
                       }`}
                     >

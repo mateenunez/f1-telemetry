@@ -13,30 +13,30 @@ export const steps = (dict: any) => [
   },
   {
     selector: ".third-step",
-    content: dict.tourSteps.raceControl,
+    content: dict.tourSteps.raceControlAndlaps,
   },
   {
     selector: ".fourth-step",
-    content: dict.tourSteps.laps,
-  },
-  {
-    selector: ".fifth-step",
     content: dict.tourSteps.header,
   },
   {
-    selector: ".sixth-step",
+    selector: ".fifth-step",
     content: dict.tourSteps.raceLogs,
   },
   {
-    selector: ".seventh-step",
+    selector: ".sixth-step",
     content: dict.tourSteps.doomCircle,
   },
   {
-    selector: ".eighth-step",
+    selector: ".seventh-step",
     content: dict.tourSteps.carDataCircle,
   },
   {
-    selector: ".ninth-step",
+    selector: ".eighth-step",
     content: dict.tourSteps.preferences,
+  },
+  {
+    selector: ".ninth-step",
+    content: dict.tourSteps.edit,
   },
 ];

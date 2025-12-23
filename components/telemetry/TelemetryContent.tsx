@@ -1,6 +1,5 @@
 "use client";
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Header from "@/components/Header";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -220,6 +219,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           handlePinnedDriver={handlePinnedDriver}
                           session={session}
                           aboutToBeEliminated={aboutToBeEliminated}
+                          fullWidth={w.width >= canvasSize.width * 0.4}
+                          isMobile={isMobile}
                         />
                       </SortableWidget>
                     );
@@ -346,7 +347,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
             </SortableContext>
           </DndContext>
         ) : (
-          <div className="w-full lg:h-[150vh]">
+          <div className="w-full lg:h-[150vh] welcome-step">
             <DndContext
               modifiers={isEditMode ? [snapToGrid] : []}
               onDragEnd={isEditMode ? handleDragEnd : undefined}
@@ -378,6 +379,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           handlePinnedDriver={handlePinnedDriver}
                           session={session}
                           aboutToBeEliminated={aboutToBeEliminated}
+                          fullWidth={w.width >= canvasSize.width * 0.4}
+                          isMobile={isMobile}
                         />
                       </DraggableWidget>
                     );

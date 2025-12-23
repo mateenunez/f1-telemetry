@@ -121,7 +121,7 @@ export default function SessionAudios({
         100;
       setProgressMap((prev) => {
         const next = new Map(prev);
-        next.set(playingAudio, Math.min(pct, 80));
+        next.set(playingAudio, Math.min(pct, 100));
         return next;
       });
     };
@@ -138,14 +138,17 @@ export default function SessionAudios({
   }, [radioAudioRef.current, playingAudio]);
 
   return (
-    <Card className="flex w-full h-full bg-warmBlack border-none">
+    <Card className="flex w-full h-full bg-warmBlack border-none fifth-step">
       <CardContent className="overflow-x-hidden flex-1 px-6 py-4">
-        <ScrollArea className="overflow-x-auto h-full p-0" type="scroll">
+        <ScrollArea
+          className="overflow-x-auto h-[20rem] lg:h-full p-0"
+          type="scroll"
+        >
           {orderedCaptures.length > 0 && teamRadio ? (
             <div className="space-y-2">
               {orderedCaptures.map((capture, idx) => {
                 const driver = getdriver(capture.racingNumber);
-                const progress = progressMap?.get(idx) ?? 80;
+                const progress = progressMap?.get(idx) ?? 100;
                 const hasTranscription =
                   capture.transcription && capture.transcription !== "";
                 const hasEsTranscription =
@@ -157,35 +160,41 @@ export default function SessionAudios({
                     className="border-none flex flex-col max-w-full p-0 rounded"
                     style={{ ...messageStyle }}
                   >
-                    <div className="flex flex-row gap-2 rounded max-w-full px-1">
-                      {headshot ? (
-                        <div>
-                          {driver && (
-                            <img
-                              src={
-                                driver.driver_number === 43
-                                  ? config.public.assets.col
-                                  : driver?.headshot_url ||
-                                    config.public.assets.driver
-                              }
-                              className="object-cover h-[60px]"
-                              alt={`${driver.name_acronym} headshot f1 telemetry`}
-                            />
-                          )}
-                        </div>
-                      ) : (
-                        <p
-                          className="text-md text-gray-100 h-[3rem] flex items-center font-f1-regular"
-                          style={{
-                            color: "#" + driver.team_color,
-                          }}
-                        >
-                          {driver.name_acronym}
-                        </p>
-                      )}
+                    <div className="flex flex-row gap-2 rounded max-w-full px-1 ">
+                      <div className="w-[3rem]">
+                        {headshot ? (
+                          <div>
+                            {driver && (
+                              <img
+                                src={
+                                  driver.driver_number === 43
+                                    ? config.public.assets.col
+                                    : driver?.headshot_url ||
+                                      config.public.assets.driver
+                                }
+                                className="object-cover h-[60px]"
+                                alt={`${driver.name_acronym} headshot f1 telemetry`}
+                              />
+                            )}
+                          </div>
+                        ) : (
+                          <p
+                            className="text-md text-gray-100 h-[3rem] flex items-center font-f1-regular"
+                            style={{
+                              color: "#" + driver.team_color,
+                            }}
+                          >
+                            {driver.name_acronym}
+                          </p>
+                        )}
+                      </div>
                       <div
                         className="relative w-full max-w-full my-2 text-gray-400 border-none items-center border-[2px] rounded border-gray-400 flex justify-start overflow-hidden"
-                        onClick={() => handleAudioPlay(idx, capture.path)}
+                        onPointerUp={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          handleAudioPlay(idx, capture.path);
+                        }}
                       >
                         <div
                           className={cn(
@@ -262,7 +271,7 @@ export default function SessionAudios({
                     </span>
                     {(hasTranscription || hasEsTranscription) && (
                       <div
-                        className="flex flex-row gap-3 max-w-full w-[80%] mx-[4.5rem] overflow-hidden mt-2 items-stretch rounded-md"
+                        className="flex flex-row gap-3 max-w-full w-[100%] mx-[4.5rem] overflow-hidden mt-2 items-stretch rounded-md"
                         style={{
                           backgroundColor: "#" + driver.team_color + "20",
                         }}

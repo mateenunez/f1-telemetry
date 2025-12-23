@@ -39,7 +39,7 @@ export default function RaceControlList({
   return (
     <Card className="flex w-full h-full bg-warmBlack border-none">
       <CardContent className="overflow-x-auto flex-1 h-full w-full px-6 py-4">
-        <ScrollArea className="overflow-x-auto h-full p-0" type="scroll">
+        <ScrollArea className="overflow-x-auto h-[20rem] lg:h-full p-0" type="scroll">
           {raceControlLog && (
             <div className="space-y-2">
               {raceControl && raceControl?.length > 0 ? (
