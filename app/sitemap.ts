@@ -20,8 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
-    }
-
+    },
     // --- URLs para la versión en inglés (/en/) ---
     {
       url: 'https://www.f1telemetry.com/en',

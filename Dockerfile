@@ -1,5 +1,5 @@
 FROM node:20-alpine AS builder
-RUN npm install -g pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app/f1-telemetry
 COPY package.json pnpm-lock.yaml ./
 COPY .npmrc* ./
@@ -11,12 +11,12 @@ FROM node:20-alpine
 WORKDIR /app/f1-telemetry
 COPY package.json pnpm-lock.yaml ./
 COPY .npmrc* ./
-RUN npm install -g pnpm && pnpm install
+RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm install
 COPY --from=builder /app/f1-telemetry/.next ./.next
 COPY --from=builder /app/f1-telemetry/public ./public
 ENV PORT 3000
 # Expone el puerto que usa el front
-EXPOSE 3000
+#EXPOSE 3000
 
 # Producción
 CMD ["pnpm", "run", "start"] 
