@@ -29,5 +29,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /root/f1t-dock
-            docker compose pull web-service
-            docker compose up -d
+            docker-compose pull web-service
+            docker-compose up -d
