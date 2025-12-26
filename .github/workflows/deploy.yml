@@ -1,38 +1,33 @@
-name: Deploy to VPS - Ubuntu
+name: Deploy to VPS
 
 on:
   push:
-    branches:
-      - master 
-
+    branches: [ master ]
 jobs:
-  deploy:
-    runs-on: ubuntu-latest 
-
+  build-and-push:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Deploy
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}       
-          username: ${{ secrets.VPS_USER }}   
-          key: ${{ secrets.VPS_KEY }}         
-          script: |
-            # 1. Ruta de frontend
-            APP_DIR=/home/vboxuser/f1t-dock/f1-telemetry
-            DOCKER_IMAGE=web-service 
+      - uses: actions/checkout@v4
+      
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-            # 2. Navegar al directorio
-            cd $APP_DIR
-            
-            # 3. Obtener la versión más reciente del código
-            git pull origin master
-            
-            # 4. Construir la imagen y reiniciar el contenedor del frontend
-            # Vamos a /f1t-dock
-            cd ..
-            # Construimos el contenedor del frontend
-            docker compose up -d --build $DOCKER_IMAGE
-            
-            echo "Despliegue con Docker Compose completado."
+      - name: Build and Push
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/f1t-frontend:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/f1t-frontend:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute remote ssh commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /root/f1t-dock
+            docker compose pull web-service
+            docker compose up -d
