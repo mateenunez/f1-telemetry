@@ -14,7 +14,10 @@ jobs:
 
       - name: Build and Push
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/f1t-frontend:latest .
+          docker build \
+            --build-arg NEXT_PUBLIC_API="${{ secrets.NEXT_PUBLIC_API }}" \
+            --build-arg NEXT_PUBLIC_WS="${{ secrets.NEXT_PUBLIC_WS }}" \
+            -t ${{ secrets.DOCKER_USERNAME }}/f1t-frontend:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/f1t-frontend:latest
 
   deploy:
