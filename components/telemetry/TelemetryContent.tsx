@@ -51,8 +51,14 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     aboutToBeEliminated,
   } = useTelemetryManager();
   const { setIsOpen } = useTour();
-  const { preferences, isEditMode, widgets, updateWidget, updateWidgets } =
-    usePreferences();
+  const {
+    preferences,
+    isEditMode,
+    widgets,
+    updateWidget,
+    updateWidgets,
+    isResizing,
+  } = usePreferences();
   const isMobile = useIsMobile();
   const GRID_SIZE = 20;
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -74,7 +80,13 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     const { active, delta } = event;
     const widgetId = active.id as WidgetId;
     const widget = widgets.find((w) => w.id === widgetId);
-    if (!widget || canvasSize.width === 0 || canvasSize.height === 0) return;
+    if (
+      !widget ||
+      canvasSize.width === 0 ||
+      canvasSize.height === 0 ||
+      isResizing
+    )
+      return;
 
     let newX = widget.x + delta.x;
     let newY = widget.y + delta.y;
@@ -139,8 +151,17 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   const sensors = useSensors(
     useSensor(TouchSensor, {
       activationConstraint: { delay: 200, tolerance: 5 },
+      onActivation: (event) => {
+        const target = event.event.target as HTMLElement;
+        if (target.tagName === "INPUT" || target.closest("button")) {
+          return false;
+        }
+        return true;
+      },
     }),
-    useSensor(MouseSensor)
+    useSensor(MouseSensor, {
+      activationConstraint: { distance: 3 },
+    })
   );
 
   const secondsDelay = (deltaDelay * -1) / 1000;
@@ -351,6 +372,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
             <DndContext
               modifiers={isEditMode ? [snapToGrid] : []}
               onDragEnd={isEditMode ? handleDragEnd : undefined}
+              sensors={sensors}
             >
               <div
                 className="relative w-full h-full"

@@ -143,6 +143,8 @@ interface PreferencesContextValue {
   ) => void;
   isEditMode: boolean;
   setIsEditMode: (value: boolean) => void;
+  isResizing: boolean;
+  setIsResizing: (value: boolean) => void;
   widgets: Widget[];
   updateWidget: (id: WidgetId, updates: Partial<Widget>) => void;
   updateWidgets: (updates: Widget[]) => void;
@@ -245,6 +247,8 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
   });
 
   const [isEditMode, setIsEditMode] = useState(false);
+
+  const [isResizing, setIsResizing] = useState(false);
 
   const buildWidgetsFromPreferences = useCallback(
     (prefs: Preferences): Widget[] => {
@@ -386,6 +390,8 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
       updateWidget,
       updateWidgets,
       setWidgetsPreferences,
+      isResizing,
+      setIsResizing,
     }),
     [
       preferences,
@@ -396,6 +402,8 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
       updateWidget,
       updateWidgets,
       setWidgetsPreferences,
+      isResizing,
+      setIsResizing,
     ]
   );
 

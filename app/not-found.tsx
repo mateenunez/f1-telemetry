@@ -32,15 +32,10 @@ export default function NotFound() {
             <div className="w-full h-full bg-neutral-900 animate-pulse" />
           )}
         </div>
-
-        <h1 className="text-4xl md:text-5xl font-geist font-extrabold text-white text-center">
-          Te perdiste?
-        </h1>
-
         <Link href="/">
           <Button
-            size="sm"
-            className="bg-transparent font-geist  border border-f1Yellow rounded hover:bg-f1Yellow/90 text-gray-200 hover:text-warmBlack hover:border-warmBlack"
+            size="lg"
+            className="bg-transparent font-geist text-lg  border border-f1Yellow rounded hover:bg-f1Yellow/90 text-gray-200 hover:text-warmBlack hover:border-warmBlack"
           >
             Box Box!
           </Button>
