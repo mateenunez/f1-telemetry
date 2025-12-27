@@ -17,7 +17,11 @@ jobs:
           docker build \
             --build-arg NEXT_PUBLIC_API="${{ secrets.NEXT_PUBLIC_API }}" \
             --build-arg NEXT_PUBLIC_WS="${{ secrets.NEXT_PUBLIC_WS }}" \
+            --build-arg NEXT_PUBLIC_LINKEDIN_URL="${{ secrets.NEXT_PUBLIC_LINKEDIN_URL }}" \
+            --build-arg NEXT_PUBLIC_GITHUB_URL="${{ secrets.NEXT_PUBLIC_GITHUB_URL }}" \
+            --build-arg NEXT_PUBLIC_DISCORD_INVITE_URL="${{ secrets.NEXT_PUBLIC_DISCORD_INVITE_URL }}" \
             -t ${{ secrets.DOCKER_USERNAME }}/f1t-frontend:latest .
+          
           docker push ${{ secrets.DOCKER_USERNAME }}/f1t-frontend:latest
 
   deploy:
