@@ -61,8 +61,10 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   } = usePreferences();
   const isMobile = useIsMobile();
   const GRID_SIZE = 20;
+  const minPositionY = 400;
   const canvasRef = useRef<HTMLDivElement>(null);
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+  const [maxPositionY, setMaxPositionY] = useState("100vh");
 
   const snapToGrid = createSnapModifier(GRID_SIZE);
   const gridStyle = isEditMode
@@ -127,6 +129,13 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
       return () => clearTimeout(timer);
     }
   }, [preferences.hasSeenTour, loading, delayed, setIsOpen]);
+
+  useEffect(() => {
+    const maxY = Math.max(
+      ...widgets.filter((w) => w.enabled).map((w) => w.y + w.height + 10)
+    );
+    setMaxPositionY(maxY > minPositionY ? `${maxY}px` : minPositionY + "px");
+  }, [widgets]);
 
   useLayoutEffect(() => {
     if (!canvasRef.current) return;
@@ -368,7 +377,12 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
             </SortableContext>
           </DndContext>
         ) : (
-          <div className="w-full lg:h-[150vh] welcome-step">
+          <div
+            className={`w-full ${
+              isEditMode ? "lg:h-[150vh]" : ""
+            } welcome-step`}
+            style={{ height: !isEditMode ? maxPositionY : undefined }}
+          >
             <DndContext
               modifiers={isEditMode ? [snapToGrid] : []}
               onDragEnd={isEditMode ? handleDragEnd : undefined}
