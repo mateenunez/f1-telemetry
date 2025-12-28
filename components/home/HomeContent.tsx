@@ -53,7 +53,15 @@ export default function HomeContent({ dict }: HomeContentProps) {
         f1t_url={f1t}
         maxScrollPosition={100}
       />
-      <div className="h-screen py-5 w-full bg-f1telemetry bg-cover bg-center">
+      <div className="h-screen py-5 w-full bg-cover bg-center isolate">
+        <Image
+          src={config.public.assets.f1telemetrybg_v1}
+          alt="F1 Telemetry Background"
+          fill
+          priority
+          quality={85}
+          className="object-cover -z-10 w-full h-full"
+        />
         <div className="flex flex-col justify-evenly h-full justify-center items-center max-w-4xl mx-auto">
           <div className="flex justify-center w-full items-center">
             <p className="text-gray-300 text-sm text-center px-2 font-geist font-medium">
@@ -77,11 +85,11 @@ export default function HomeContent({ dict }: HomeContentProps) {
                     animateLetters={true}
                     letterDelay={150 * idx}
                     letterColor={
-                      idx < 3
+                      idx < dict.home.title.length * 0.3
                         ? "#3B82F6"
-                        : idx > 2 && idx < 6
+                        : idx >= dict.home.title.length * 0.3 && idx < dict.home.title.length * 0.6
                         ? "#ffe066"
-                        : idx > 9
+                        : idx > dict.home.title.length * 0.8
                         ? "#A855F7"
                         : "#51cf66"
                     }
@@ -116,7 +124,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 hover:bg-f1Red
                 hover:shadow-2xl 
                 hover:text-gray-200
-                hover:border-none
+                hover:border-transparent
                 hover:cursor-pointer
                 font-geist font-medium
                 
@@ -134,12 +142,9 @@ export default function HomeContent({ dict }: HomeContentProps) {
       <div className="py-5 w-full bg-warmBlack">
         <div className="flex flex-col justify-evenly min-h-screen h-full gap-[2rem] justify-center items-center max-w-4xl mx-auto">
           <div className="flex flex-col gap-[1rem]">
-            <h2 className="text-md text-gray-300 text-center font-geist font-medium">
+            <h2 className="text-xl text-gray-300 text-center font-geist font-medium m-6 lg:m-0">
               {dict.home.description}
             </h2>
-            <p className="text-md text-f1Red text-center font-geist font-medium">
-              {dict.home.announce}
-            </p>
           </div>
           <div className="flex flex-col gap-[5rem] md:flex-row justify-evenly">
             <InlineVideoCard

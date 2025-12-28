@@ -1,7 +1,7 @@
 {
   "home": {
     "title": "Telemetría en vivo",
-    "description": "F1 Telemetry es un dashboard de telemetría en tiempo real, para que puedas seguir la Fórmula 1 por completo y desde cualquier lado, sin necesidad de ver la transmisión.",
+    "description": "F1 Telemetry es un dashboard de telemetría en tiempo real, hecho para que puedas seguir la Fórmula 1 por completo y desde cualquier lado, sin necesidad de ver la transmisión.",
     "dashboardButton": "Telemetría",
     "scheduleButton": "Calendario",
     "mapTitle": "Mapa en vivo",
