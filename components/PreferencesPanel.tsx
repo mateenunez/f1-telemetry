@@ -523,10 +523,10 @@ export default function PreferencesPanel({
                   typeof currentValue === "object" &&
                   currentValue !== null &&
                   "enabled" in currentValue &&
-                  "x" in currentValue &&
-                  "y" in currentValue &&
-                  "width" in currentValue &&
-                  "height" in currentValue
+                  (("x" in currentValue) || ("xPct" in currentValue)) &&
+                  (("y" in currentValue) || ("yPct" in currentValue)) &&
+                  (("width" in currentValue) || ("widthPct" in currentValue)) &&
+                  (("height" in currentValue) || ("heightPct" in currentValue))
                 ) {
                   setPreference(key, {
                     ...currentValue,
@@ -541,7 +541,7 @@ export default function PreferencesPanel({
                 typeof value === "object" &&
                 value !== null &&
                 "enabled" in value &&
-                "x" in value;
+                (("x" in value) || ("xPct" in value));
 
               const checked = isWidgetConfig
                 ? (value as WidgetConfig).enabled

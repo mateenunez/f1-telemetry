@@ -174,7 +174,6 @@ function isPreferences(obj: any): obj is Preferences {
     return false;
   }
 
-  // validate against DEFAULT_CONFIG keys to avoid desincronías
   const requiredKeys = Object.keys(DEFAULT_CONFIG) as Array<keyof Preferences>;
 
   for (const key of requiredKeys) {
@@ -368,10 +367,6 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
       setPreferences((prev) => {
         const updated = { ...prev, [key]: value };
         Cookies.set("f1t_config", JSON.stringify(updated), { expires: 365 });
-        try {
-          localStorage.setItem("f1t_config", JSON.stringify(updated));
-          localStorage.setItem("f1t_config_ts", Date.now().toString());
-        } catch {}
         return updated;
       });
     },
