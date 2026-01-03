@@ -21,9 +21,9 @@ export default function Pits({ timing, driverStints }: PitsProps) {
   }, [driverStints]);
 
   return (
-    <div className="flex w-full justify-center">
+    <div className="flex w-full justify-center min-w-[2rem] w-full">
       {/* En PIT */}
-      <div className="text-xs text-white self-center m-0 p-0 min-w-[2rem] font-orbitron">
+      <div className="text-xs text-white self-center m-0 p-0 font-orbitron">
         {timing?.in_pit ? (
           <span className="flex flex-col font-geist">
             <p className="text-f1Blue text-nowrap flex flex-nowrap">IN PIT</p>

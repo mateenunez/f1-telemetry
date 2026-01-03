@@ -26,7 +26,6 @@ export const getCompoundSvg = (
   };
   const key = (compound || "").toUpperCase();
   const src = iconMap[key] || tyres.unknown;
-  if (src === tyres.unknown) console.log("Unknown compound type: ", compound);
 
   return (
     <img

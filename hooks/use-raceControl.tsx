@@ -48,8 +48,18 @@ export const getSectorColor = (
   sector1End: number,
   sector2End: number,
   idx: number,
-  sectorsCookie: boolean
+  sectorsCookie: boolean,
+  redFlag: boolean,
+  safetyCar: boolean
 ) => {
+  if (redFlag) {
+    return "stroke-red-500";
+  }
+
+  if (safetyCar) {
+    return "stroke-yellow-400";
+  }
+
   if (yellowSectors.has(sector.number)) {
     return "stroke-yellow-400";
   }

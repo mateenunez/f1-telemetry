@@ -169,21 +169,26 @@ export default function PreferencesPanel({
             "Mostrar la numeración de las curvas y detalles de los giros en el mapa.",
         },
         audio: {
-          title: "Notificaciones de Audio",
+          title: "Notificaciones de audio",
           description:
             "Activar efectos de sonido y audio de fondo durante la carrera.",
         },
         headshot: {
-          title: "Foto del Piloto",
+          title: "Foto del piloto",
           description: "Mostrar una foto de cada piloto.",
         },
+        weatherDetailed: {
+          title: "Clima detallado",
+          description:
+            "Mostrar información completa del clima (lluvia, humedad, viento, presión).",
+        },
         audioLog: {
-          title: "Audios de Pilotos",
+          title: "Audios de pilotos",
           description:
             "Mostrar el historial de mensajes de audio y llamadas de radio de equipo.",
         },
         raceControlLog: {
-          title: "Mensajes de Carrera",
+          title: "Mensajes de carrera",
           description:
             "Mostrar la lista oficial de mensajes de control de carrera.",
         },
@@ -197,10 +202,10 @@ export default function PreferencesPanel({
           description:
             "Mostrar la velocidad, marcha, acelerador y frenos de un piloto.",
         },
-        weatherDetailed: {
-          title: "Clima detallado",
+        tyresList: {
+          title: "Historial de compuestos",
           description:
-            "Mostrar información completa del clima (lluvia, humedad, viento, presión).",
+            "Mostrar el historial de compuestos de cada piloto, incluyendo promedios y mejores vueltas.",
         },
       }
     : {
@@ -221,6 +226,11 @@ export default function PreferencesPanel({
           title: "Driver Headshot",
           description: "Show a picture for each driver.",
         },
+        weatherDetailed: {
+          title: "Detailed Weather",
+          description:
+            "Show complete weather information (rain, humidity, wind, pressure).",
+        },
         audioLog: {
           title: "Driver Audios",
           description:
@@ -239,10 +249,10 @@ export default function PreferencesPanel({
           title: "Circle Car-Data",
           description: "Show speed, gear, throttle and brakes of one driver.",
         },
-        weatherDetailed: {
-          title: "Detailed Weather",
+        tyresList: {
+          title: "Compounds Record",
           description:
-            "Show complete weather information (rain, humidity, wind, pressure).",
+            "Display each driver's tire compound history, including averages and best laps.",
         },
       };
 

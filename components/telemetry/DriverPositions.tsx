@@ -105,14 +105,14 @@ const DriverPositions = memo(function DriverPositions({
     <Card className="w-full h-full bg-warmBlack border-none">
       <CardContent className="flex-1 h-full p-0 first-step overflow-x-auto">
         <ScrollArea
-          className={`${fullWidth && !isMobile ? "w-full" : "w-max"} h-full overflow-x-auto`}
+          className={`${
+            fullWidth && !isMobile ? "w-full" : "w-max"
+          } h-full overflow-x-auto`}
           type="scroll"
           ref={scrollRef}
         >
           <table className="table-auto min-w-max w-full text-[0.6rem] text-gray-500">
-            <thead
-              className="sticky top-0 z-30 bg-warmBlack h-[2rem] font-orbitron"
-            >
+            <thead className="sticky top-0 z-30 bg-warmBlack h-[2rem] font-orbitron">
               <tr className="text-center">
                 <th
                   className={`text-center ${
@@ -124,7 +124,7 @@ const DriverPositions = memo(function DriverPositions({
                 <th className="w-[3rem] font-normal">
                   {preferences.translate ? "NEUM." : "TYRES"}
                 </th>
-                <th className="w-[5rem] font-normal">
+                <th className="w-[3rem] font-normal">
                   {preferences.translate ? "DRS" : "SPEED"}
                 </th>
                 <th className="w-[3rem] font-normal">PITS</th>
@@ -194,11 +194,7 @@ const DriverPositions = memo(function DriverPositions({
                     onDoubleClick={() => handlePinnedDriver(pos.driver_number)}
                     style={baseStyle}
                   >
-                    <td
-                      className={`${
-                        headshot ? "w-[11.5rem]" : "w-[9rem]"
-                      }`}
-                    >
+                    <td className={`${headshot ? "w-[11.5rem]" : "w-[9rem]"}`}>
                       <DriverPositionInfo
                         position={pos}
                         driver={driver}
@@ -210,7 +206,7 @@ const DriverPositions = memo(function DriverPositions({
                       <Tyres driverStints={currentStints} />
                     </td>
 
-                    <td className="w-[5rem]">
+                    <td className="w-[3rem]">
                       <DrsSpeed carData={carData} />
                     </td>
 

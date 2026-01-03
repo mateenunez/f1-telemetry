@@ -40,6 +40,8 @@ type MapProps = {
   timing: ProcessedTiming[];
   circuitKey: number;
   yellowSectors: Set<number>;
+  redFlag?: boolean;
+  safetyCar?: boolean;
 };
 
 export default function Map({
@@ -48,6 +50,8 @@ export default function Map({
   timing,
   circuitKey,
   yellowSectors,
+  redFlag = false,
+  safetyCar = false,
 }: MapProps) {
   const [[minX, minY, widthX, widthY], setBounds] = useState<(null | number)[]>(
     [null, null, null, null]
@@ -166,7 +170,9 @@ export default function Map({
         sector1End,
         sector2End,
         idx,
-        sectorsCookie
+        sectorsCookie,
+        redFlag,
+        safetyCar
       );
       return {
         color,
@@ -184,7 +190,7 @@ export default function Map({
           .join(" ")}`,
       };
     });
-  }, [sectors, yellowSectors, sectorsCookie]);
+  }, [sectors, yellowSectors, sectorsCookie, redFlag, safetyCar]);
 
   if (!points || !minX || !minY || !widthX || !widthY) {
     return (

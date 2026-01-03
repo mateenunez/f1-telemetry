@@ -17,7 +17,7 @@ export default function DrsSpeed({ carData }: DrsSpeedProps) {
   return (
     <div className="flex flex-row gap-2 justify-around w-full">
       {/* DRS */}
-      <div className="flex flex-col min-w-[5rem] w-full items-center">
+      <div className="flex flex-col min-w-[3rem] w-full items-center">
         <span className="text-xs text-white self-center font-f1-regular">
           {carData?.drs ? (
             <p className="text-green-400">DRS</p>

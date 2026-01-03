@@ -140,6 +140,7 @@ export class TelemetryManager {
 
       case "TimingAppData":
         this.pitProcessor.processTimingAppData(messageData)
+        this.driverProcessor.processGridPositions(messageData)
         break
 
       case "TyreStintSeries":

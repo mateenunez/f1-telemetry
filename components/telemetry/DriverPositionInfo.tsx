@@ -16,8 +16,12 @@ export default function DriverPositionInfo({
   driver,
   isPlaying,
 }: DriverPositionInfoProps) {
-  const { getPreference } = usePreferences();
-  const headshot = getPreference("headshot");
+  const { preferences } = usePreferences();
+  const headshot = preferences.headshot;
+
+  let posDiff = 0;
+  if (driver?.grid_position)
+    posDiff = position.position - driver?.grid_position;
 
   return (
     <div
@@ -61,15 +65,23 @@ export default function DriverPositionInfo({
       <div className="flex justify-evenly flex-row font-f1-regular">
         <div className="flex flex-col self-start">
           <div className="flex items-center gap-1">
-            <span
-              className="text-xs text-gray-400 self-center font-geist"
-            >
-              #{position.driver_number}
-            </span>
-            <span className="text-xs text-white flex flex-row items-center font-f1-regular">
+            <span className="text-xs text-white flex flex-row items-center font-f1-regular gap-2">
               {driver?.name_acronym}{" "}
+              <span
+                className={`text-xs self-center font-geist ${
+                  posDiff > 0
+                    ? "text-f1Red"
+                    : posDiff < 0
+                    ? "text-f1Green"
+                    : "text-white/75"
+                }`}
+              >
+                {posDiff > 0 && `▼${posDiff}`}
+                {posDiff < 0 && `▲${Math.abs(posDiff)}`}
+                {posDiff === 0 && ""}
+              </span>
               {isPlaying === driver?.driver_number && (
-                <span className="ml-2">
+                <span>
                   <SoundWave
                     teamColor={driver?.team_colour}
                     width={undefined}

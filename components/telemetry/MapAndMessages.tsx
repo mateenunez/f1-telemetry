@@ -5,12 +5,13 @@ import { Orbitron } from "next/font/google";
 import { memo } from "react";
 import { usePreferences } from "@/context/preferences";
 import { getTrackStatusColor, getTrackStatusLabel } from "@/utils/telemetry";
-import Link from "next/link";
+import { TRACK_STATUS_KEYS } from "@/utils/telemetry";
+import { TelemetryData } from "@/telemetry-manager";
 
 const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
 interface MapAndMessagesProps {
-  telemetryData: any;
+  telemetryData: TelemetryData | null;
   session: any;
   yellowSectors: Set<number>;
 }
@@ -21,6 +22,8 @@ const MapAndMessages = memo(function MapAndMessages({
   yellowSectors,
 }: MapAndMessagesProps) {
   const { preferences } = usePreferences();
+  if (!telemetryData) return;
+
   return (
     <Card className="lg:col-span-5 bg-warmBlack flex flex-col border-none">
       <CardHeader className="flex flex-col py-2 third-step">
@@ -64,15 +67,20 @@ const MapAndMessages = memo(function MapAndMessages({
         </div>
       </CardHeader>
       <CardContent className="flex flex-col justify-center h-full p-0 second-step">
-          {telemetryData && telemetryData.session?.circuit_key && (
-            <Map
-              positions={telemetryData.positionData}
-              drivers={telemetryData.drivers}
-              timing={telemetryData.timing}
-              circuitKey={telemetryData.session.circuit_key}
-              yellowSectors={yellowSectors}
-            />
-          )}
+        {telemetryData && telemetryData.session?.circuit_key && (
+          <Map
+            positions={telemetryData.positionData}
+            drivers={telemetryData.drivers}
+            timing={telemetryData.timing}
+            circuitKey={telemetryData.session.circuit_key}
+            yellowSectors={yellowSectors}
+            redFlag={session.track_status === TRACK_STATUS_KEYS.RedFlag}
+            safetyCar={
+              session.track_status === TRACK_STATUS_KEYS.SafetyCar ||
+              session.track_status === TRACK_STATUS_KEYS.VirtualSafetyCar
+            }
+          />
+        )}
       </CardContent>
     </Card>
   );

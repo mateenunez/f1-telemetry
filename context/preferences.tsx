@@ -18,7 +18,8 @@ export type WidgetId =
   | "session-audios"
   | "race-control-list"
   | "circle-of-doom"
-  | "circle-car-data";
+  | "circle-car-data"
+  | "tyres-list";
 
 export type Widget = {
   id: WidgetId;
@@ -55,6 +56,7 @@ export interface Preferences {
   circleCarData: WidgetConfig;
   driverPositions: WidgetConfig;
   mapAndMessages: WidgetConfig;
+  tyresList: WidgetConfig;
   favoriteDrivers: ProcessedDriver[];
   delay: number;
   translate: boolean;
@@ -127,6 +129,16 @@ export const DEFAULT_CONFIG: Preferences = {
     height: 450,
     index: 5,
   },
+  tyresList: {
+    enabled: true,
+    xPct: 0,
+    yPct: 1620 / 1094,
+    widthPct: 1500 / 1526,
+    heightPct: 400 / 1094,
+    width: 1500,
+    height: 400,
+    index: 6,
+  },
   favoriteDrivers: [],
   delay: 0,
   translate: false,
@@ -162,20 +174,8 @@ function isPreferences(obj: any): obj is Preferences {
     return false;
   }
 
-  const requiredKeys: Array<keyof Preferences> = [
-    "sectors",
-    "corners",
-    "audio",
-    "headshot",
-    "audioLog",
-    "raceControlLog",
-    "circleOfDoom",
-    "circleCarData",
-    "favoriteDrivers",
-    "delay",
-    "hasSeenTour",
-    "weatherDetailed",
-  ];
+  // validate against DEFAULT_CONFIG keys to avoid desincronías
+  const requiredKeys = Object.keys(DEFAULT_CONFIG) as Array<keyof Preferences>;
 
   for (const key of requiredKeys) {
     if (!(key in obj) || obj[key] === undefined) {
@@ -188,8 +188,8 @@ function isPreferences(obj: any): obj is Preferences {
         "corners",
         "audio",
         "headshot",
-        "hasSeenTour",
         "weatherDetailed",
+        "hasSeenTour",
         "translate",
       ].includes(key)
     ) {
@@ -204,17 +204,27 @@ function isPreferences(obj: any): obj is Preferences {
         "circleCarData",
         "driverPositions",
         "mapAndMessages",
+        "tyresList",
       ].includes(key)
     ) {
       const widgetConfig = obj[key];
       if (
         typeof widgetConfig !== "object" ||
-        typeof widgetConfig.enabled !== "boolean" ||
-        typeof widgetConfig.x !== "number" ||
-        typeof widgetConfig.y !== "number" ||
-        typeof widgetConfig.width !== "number" ||
-        typeof widgetConfig.height !== "number"
+        typeof widgetConfig.enabled !== "boolean"
       ) {
+        return false;
+      }
+
+      const isNum = (v: any) => typeof v === "number" && !Number.isNaN(v);
+
+      const hasX = isNum(widgetConfig.x) || isNum(widgetConfig.xPct);
+      const hasY = isNum(widgetConfig.y) || isNum(widgetConfig.yPct);
+      const hasWidth =
+        isNum(widgetConfig.width) || isNum(widgetConfig.widthPct);
+      const hasHeight =
+        isNum(widgetConfig.height) || isNum(widgetConfig.heightPct);
+
+      if (!hasX || !hasY || !hasWidth || !hasHeight) {
         return false;
       }
     }
@@ -293,6 +303,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
         { ...toAbs(prefs.raceControlLog, "race-control-list") },
         { ...toAbs(prefs.circleOfDoom, "circle-of-doom") },
         { ...toAbs(prefs.circleCarData, "circle-car-data") },
+        { ...toAbs(prefs.tyresList, "tyres-list") },
       ];
       return list.sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
     },
@@ -342,6 +353,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
       "race-control-list": "raceControlLog",
       "circle-of-doom": "circleOfDoom",
       "circle-car-data": "circleCarData",
+      "tyres-list": "tyresList",
     };
     return map[id] ?? null;
   }
@@ -356,6 +368,10 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
       setPreferences((prev) => {
         const updated = { ...prev, [key]: value };
         Cookies.set("f1t_config", JSON.stringify(updated), { expires: 365 });
+        try {
+          localStorage.setItem("f1t_config", JSON.stringify(updated));
+          localStorage.setItem("f1t_config_ts", Date.now().toString());
+        } catch {}
         return updated;
       });
     },

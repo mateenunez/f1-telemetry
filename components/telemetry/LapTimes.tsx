@@ -19,7 +19,7 @@ export default function LapTimes({ timing, timingStats }: LapTimesProps) {
         className="flex items-center flex-row gap-1 text-sm text-white"
         style={aldrich.style}
       >
-        <p style={oxanium.style}>{timing?.last_lap_time || ""}</p>
+        <p style={oxanium.style}>{timing?.last_lap_time || "--.---"}</p>
       </div>
       {/* Mejor tiempo de vuelta */}
       <div className="flex flex-row gap-0">
@@ -27,19 +27,17 @@ export default function LapTimes({ timing, timingStats }: LapTimesProps) {
           className="flex items-center flex-row gap-1 text-white"
           style={aldrich.style}
         >
-          {" "}
-          <span className="text-xxs text-gray-500">
-            {timingStats?.personal_best_lap_time.Lap}
-          </span>
           <p
             className={
-              timingStats?.personal_best_lap_time.Position === 1
-                ? "text-purple-500 text-xs"
-                : "text-green-400 text-xs"
+              timingStats?.personal_best_lap_time.Value
+                ? timingStats?.personal_best_lap_time.Position === 1
+                  ? "text-purple-500 text-sm"
+                  : "text-green-400 text-sm"
+                : "text-white text-sm"
             }
             style={oxanium.style}
           >
-            {timingStats?.personal_best_lap_time.Value || ""}
+            {timingStats?.personal_best_lap_time.Value || "--.---"}
           </p>
         </div>
       </div>

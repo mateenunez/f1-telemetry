@@ -36,7 +36,6 @@ export default function SessionAudios({
     useTelemetryAudio();
 
   const { preferences } = usePreferences();
-  const headshot = preferences.headshot;
 
   const getMessageStyle = (msg: ProcessedCapture) => {
     const racingNumber = msg.racingNumber;
@@ -162,31 +161,14 @@ export default function SessionAudios({
                   >
                     <div className="flex flex-row gap-2 rounded max-w-full px-1 ">
                       <div className="w-[3rem]">
-                        {headshot ? (
-                          <div>
-                            {driver && (
-                              <img
-                                src={
-                                  driver.driver_number === 43
-                                    ? config.public.assets.col
-                                    : driver?.headshot_url ||
-                                      config.public.assets.driver
-                                }
-                                className="object-cover h-[60px]"
-                                alt={`${driver.name_acronym} headshot f1 telemetry`}
-                              />
-                            )}
-                          </div>
-                        ) : (
-                          <p
-                            className="text-md text-gray-100 h-[3rem] flex items-center font-f1-regular"
-                            style={{
-                              color: "#" + driver.team_color,
-                            }}
-                          >
-                            {driver.name_acronym}
-                          </p>
-                        )}
+                        <p
+                          className="text-md text-gray-100 h-[3rem] flex items-center font-f1-regular"
+                          style={{
+                            color: "#" + driver.team_color,
+                          }}
+                        >
+                          {driver.name_acronym}
+                        </p>
                       </div>
                       <div
                         className="relative w-full max-w-full my-2 text-gray-400 border-none items-center border-[2px] rounded border-gray-400 flex justify-start overflow-hidden"
@@ -271,7 +253,7 @@ export default function SessionAudios({
                     </span>
                     {(hasTranscription || hasEsTranscription) && (
                       <div
-                        className="flex flex-row gap-3 max-w-full w-[100%] mx-[4.5rem] overflow-hidden mt-2 items-stretch rounded-md"
+                        className="flex flex-row gap-3 w-[75%] mx-[4.5rem] text-wrap overflow-hidden mt-2 items-stretch rounded-md"
                         style={{
                           backgroundColor: "#" + driver.team_color + "20",
                         }}
@@ -281,7 +263,7 @@ export default function SessionAudios({
                           style={{ backgroundColor: "#" + driver.team_color }}
                         />
                         <span
-                          className="text-start py-1.5 whitespace-pre-wrap text-sm italic font-geist font-medium"
+                          className="text-start py-1.5 px-2 whitespace-pre-wrap text-sm italic font-geist font-medium"
                           style={{
                             color: "#" + driver.team_color,
                           }}

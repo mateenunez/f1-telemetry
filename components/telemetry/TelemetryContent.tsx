@@ -27,6 +27,7 @@ import { createSnapModifier } from "@dnd-kit/modifiers";
 import { useIsMobile } from "@/hooks/use-mobile";
 import DraggableWidget from "@/components/telemetry/DraggableWidget";
 import SortableWidget from "@/components/telemetry/SortableWidget";
+import TyresList from "./TyresList";
 
 interface TelemetryContentProps {
   dict: any;
@@ -64,7 +65,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   const minPositionY = 400;
   const canvasRef = useRef<HTMLDivElement>(null);
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
-  const [maxPositionY, setMaxPositionY] = useState("100vh");
+  const [maxPositionY, setMaxPositionY] = useState("220vh");
 
   const snapToGrid = createSnapModifier(GRID_SIZE);
   const gridStyle = isEditMode
@@ -217,6 +218,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     );
   }
 
+  const visibleWidgets = widgets.filter((w) => w.enabled);
+
   return (
     <div className="min-h-screen bg-warmBlack">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
@@ -225,9 +228,9 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
 
         {isMobile ? (
           <DndContext onDragEnd={handleMobileDragEnd} sensors={sensors}>
-            <SortableContext items={widgets}>
+            <SortableContext items={visibleWidgets.map((w) => w.id)}>
               <div className="grid h-full w-full grid-cols-12 gap-8">
-                {widgets.map((w) => {
+                {visibleWidgets.map((w) => {
                   // 1) Posiciones
                   if (w.id === "driver-positions") {
                     return (
@@ -274,10 +277,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                   }
 
                   // 3) Audios sesión
-                  if (
-                    w.id === "session-audios" &&
-                    preferences.audioLog.enabled
-                  ) {
+                  if (w.id === "session-audios" && w.enabled) {
                     return (
                       <SortableWidget
                         key={w.id}
@@ -295,10 +295,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                   }
 
                   // 4) Race control
-                  if (
-                    w.id === "race-control-list" &&
-                    preferences.raceControlLog.enabled
-                  ) {
+                  if (w.id === "race-control-list" && w.enabled) {
                     return (
                       <SortableWidget
                         key={w.id}
@@ -318,10 +315,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                   }
 
                   // 5) Circle of Doom
-                  if (
-                    w.id === "circle-of-doom" &&
-                    preferences.circleOfDoom.enabled
-                  ) {
+                  if (w.id === "circle-of-doom" && w.enabled) {
                     return (
                       <SortableWidget
                         key={w.id}
@@ -343,10 +337,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                   }
 
                   // 6) Circle Car Data
-                  if (
-                    w.id === "circle-car-data" &&
-                    preferences.circleCarData.enabled
-                  ) {
+                  if (w.id === "circle-car-data" && w.enabled) {
                     return (
                       <SortableWidget
                         key={w.id}
@@ -371,6 +362,24 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                     );
                   }
 
+                  // 7) Tyres List
+                  if (w.id === "tyres-list" && w.enabled) {
+                    return (
+                      <SortableWidget
+                        key={w.id}
+                        id={w.id}
+                        className="col-span-12 lg:col-span-4"
+                      >
+                        <TyresList
+                          positions={telemetryData?.positions}
+                          driverStints={driverStints}
+                          driverInfos={driverInfos}
+                          totalLaps={session?.current_lap}
+                        />
+                      </SortableWidget>
+                    );
+                  }
+
                   return null;
                 })}
               </div>
@@ -379,7 +388,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
         ) : (
           <div
             className={`w-full ${
-              isEditMode ? "lg:h-[150vh]" : ""
+              isEditMode ? "lg:h-[220vh]" : ""
             } welcome-step`}
             style={{ height: !isEditMode ? maxPositionY : undefined }}
           >
@@ -393,7 +402,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                 style={gridStyle}
                 ref={canvasRef}
               >
-                {widgets.map((w) => {
+                {visibleWidgets.map((w) => {
                   if (w.id === "driver-positions") {
                     return (
                       <DraggableWidget
@@ -524,6 +533,25 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                       </DraggableWidget>
                     );
                   }
+
+                  if (w.id === "tyres-list" && w.enabled) {
+                    return (
+                      <DraggableWidget
+                        key={w.id}
+                        widget={w}
+                        isEditMode={isEditMode}
+                        updateWidget={updateWidget}
+                      >
+                        <TyresList
+                          positions={telemetryData?.positions}
+                          driverStints={driverStints}
+                          driverInfos={driverInfos}
+                          totalLaps={session?.total_laps}
+                        />
+                      </DraggableWidget>
+                    );
+                  }
+
                   return null;
                 })}
               </div>

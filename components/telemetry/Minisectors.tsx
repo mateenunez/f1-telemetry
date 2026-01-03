@@ -13,13 +13,7 @@ interface MinisectorsProps {
 
 export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
   const getMinisectorColor = (segment: number) => {
-    if (
-      segment === 2048 ||
-      segment === 2050 ||
-      segment === 2052 ||
-      segment === 2068
-    )
-      return "#ffdd54ff"; // Amarillo
+    if (segment === 2048) return "#ffe066"; // Amarillo
     if (segment === 2049) return "#51cf66"; // Verde
     if (segment === 2051) return "#A855F7"; // Violeta
     if (segment === 2064) return "#2b7fff"; // Azul
@@ -27,22 +21,23 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
   };
 
   const getSectorTimeColor = (sector: any) => {
-    if (!sector || !sector.PreviousValue) return "text-f1Yellow";
+    if (!sector || !sector.PreviousValue || !sector.Value) return "text-white";
+    if (sector.Value >= sector.PreviousValue) return "text-f1Yellow";
     if (sector?.OverallFastest) return "text-f1Purple";
     if (sector?.PersonalFastest) return "text-green-400";
-    return "text-f1Yellow";
+    return "text-offWhite";
   };
 
   const getBestSectorColor = (sector: any) => {
-    if (!sector) return "text-white";
+    if (!sector || !sector.Value) return "text-white";
     if (sector?.Position === 1) return "text-purple-500";
     return "text-green-400";
   };
 
   return (
-    <div className="flex flex-row min-w-[13rem] justify-center gap-2">
+    <div className="flex flex-row min-w-[13rem] justify-evenly gap-2">
       {/* Minisectores */}
-      <div className="text-xs text-white" style={aldrich.style}>
+      <div className="text-xs text-white w-full" style={aldrich.style}>
         {(["sector1", "sector2", "sector3"] as const).map(
           (sectorKey, sectorIdx) => {
             const minisectors = timing?.sector_segments[sectorKey] || [];
@@ -77,39 +72,47 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
         )}
       </div>
 
-      {/* Tiempos de sector */}
-      <div
-        className="flex items-center flex-col text-xs text-white min-w-[2.5rem]"
-        style={oxanium.style}
-      >
-        {(["sector1", "sector2", "sector3"] as const).map((sectorKey, idx) => {
-          const sector = timing?.sector_times[sectorKey];
-          const color = getSectorTimeColor(sector);
-          const displayValue =
-            sector?.Value ?? sector?.PreviousValue ?? "--.---";
-          return (
-            <div className="flex flex-row gap-0" key={sectorKey}>
-              <span className={color}>{sector && displayValue || "--.---"}</span>
-            </div>
-          );
-        })}
-      </div>
+      <div className="flex flex-row w-full">
+        {/* Tiempos de sector */}
+        <div
+          className="flex items-center flex-col text-xs text-white min-w-[2rem] w-full"
+          style={oxanium.style}
+        >
+          {(["sector1", "sector2", "sector3"] as const).map(
+            (sectorKey, idx) => {
+              const sector = timing?.sector_times[sectorKey];
+              const color = getSectorTimeColor(sector);
+              const displayValue =
+                sector?.Value ?? sector?.PreviousValue ?? "--.---";
+              return (
+                <div className="flex flex-row gap-0 text-offWhite" key={sectorKey}>
+                  <span className={color}>
+                    {(sector && displayValue) || "--.---"}
+                  </span>
+                </div>
+              );
+            }
+          )}
+        </div>
 
-      {/* Mejores tiempos de sector */}
-      <div
-        className="flex items-center flex-col text-xs min-w-[2.5rem]"
-        style={oxanium.style}
-      >
-        {timingStats?.best_sectors.map((sectorKey, idx) => {
-          const sector = timingStats.best_sectors[idx];
-          const color = getBestSectorColor(sector);
-          const displayValue = sector?.Value ?? "--:--";
-          return (
-            <div className="flex flex-row gap-0" key={idx}>
-              <span className={color}>{sector && displayValue || "--.---"}</span>
-            </div>
-          );
-        })}
+        {/* Mejores tiempos de sector */}
+        <div
+          className="flex items-center flex-col text-xs min-w-[2rem] w-full"
+          style={oxanium.style}
+        >
+          {timingStats?.best_sectors.map((sectorKey, idx) => {
+            const sector = timingStats.best_sectors[idx];
+            const color = getBestSectorColor(sector);
+            const displayValue = sector?.Value ?? "--:--";
+            return (
+              <div className="flex flex-row gap-0 text-offWhite" key={idx}>
+                <span className={color}>
+                  {(sector && displayValue) || "--.---"}
+                </span>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
