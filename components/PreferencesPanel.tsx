@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   Preferences,
   WidgetConfig,
@@ -279,7 +279,7 @@ export default function PreferencesPanel({
         { value: "es", label: "Spanish" },
       ];
 
-  const handleTypeIconClick = () => {
+  const handleTypeIconClick = useCallback(() => {
     if (!jokeCtx) return;
     if (!isAuthenticated) {
       setAuthFormOpen(true);
@@ -287,7 +287,29 @@ export default function PreferencesPanel({
       jokeCtx.startPlacing();
       setOpen(false);
     }
-  };
+  }, [jokeCtx, isAuthenticated]);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() !== "t") return;
+      if (!e.shiftKey) return;
+      if (e.altKey || e.ctrlKey || e.metaKey) return;
+      const active = document.activeElement;
+      if (
+        active &&
+        (active.tagName === "INPUT" ||
+          active.tagName === "TEXTAREA" ||
+          (active as HTMLElement).isContentEditable)
+      )
+        return;
+      if (!preferences.jokesEnabled) return;
+      if (jokeCtx?.status === "writing") return;
+      handleTypeIconClick();
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [handleTypeIconClick, preferences.jokesEnabled, jokeCtx]);
 
   return (
     <>
@@ -312,7 +334,9 @@ export default function PreferencesPanel({
 
       <Type
         width={15}
-        style={{ display: isMobile || !preferences.jokesEnabled ? "none" : "block" }}
+        style={{
+          display: isMobile || !preferences.jokesEnabled ? "none" : "block",
+        }}
         className={`hover:cursor-pointer transition-colors tenth-step ${
           isAuthenticated
             ? "text-gray-300 hover:text-gray-400"

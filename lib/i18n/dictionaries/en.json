@@ -88,7 +88,7 @@
     "carDataCircle": "This dial shows live data for your selected driver, like their current speed, RPM, and more.",
     "preferences": "Click here to open the preferences panel and tweak the telemetry layout exactly how you like it.",
     "edit": "Enter edit mode to move or resize any component. Give it a try on your desktop or laptop!",
-    "jokeIcon": "The joke system icon lets you send messages that are broadcast to all users watching the session in real time, you only need to sign up."
+    "jokes": "The joke system icon lets you send messages that are broadcast to all users watching the session in real time, you only need to sign up. Activate this feature in the preferences panel and share your thoughts with the entire community!"
   },
   "joke": {
     "placeholder": "Share your thoughts..."

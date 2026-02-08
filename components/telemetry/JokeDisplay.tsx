@@ -52,7 +52,7 @@ export const JokeDisplay: React.FC<JokeDisplayProps> = ({
           {joke.user.username}
         </div>
 
-        <div className="text-xs text-gray-200 max-w-xs break-words">
+        <div className="text-xs text-gray-200 max-w-xs break-words break-all whitespace-pre-wrap overflow-auto">
           {joke.content}
         </div>
       </div>

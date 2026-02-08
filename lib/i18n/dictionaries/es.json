@@ -88,7 +88,7 @@
     "carDataCircle": "Este círculo muestra datos en tiempo real del piloto seleccionado, como velocidad, RPM y más.",
     "preferences": "Haciendo click en este botón vas a acceder al panel de preferencias, en este podés personalizar la telemetría a tu gusto.",
     "edit": "En el modo edición podés mover y redimensionar los distintos componentes de la telemetría. ¡Probalo en tu compu o laptop!",
-    "jokeIcon": "Podés enviar mensajes que se transmiten a todos los usuarios, solo tenés que registrarte."
+    "jokes": "Podés enviar mensajes que se transmiten a todos los usuarios, solo tenés que registrarte. Activa esta función en el panel de preferencias y compartí tus pensamientos con la comunidad!"
   },
   "joke": {
     "placeholder": "¿Qué estás pensando?"

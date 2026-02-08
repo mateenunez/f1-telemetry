@@ -39,4 +39,8 @@ export const steps = (dict: any) => [
     selector: ".ninth-step",
     content: dict.tourSteps.edit,
   },
+  {
+    selector: ".tenth-step",
+    content: dict.tourSteps.jokes,
+  },
 ];

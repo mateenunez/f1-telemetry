@@ -83,6 +83,14 @@ export function Joke({
               <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    if (content.trim() && canSend) {
+                      handleSubmit(e as any);
+                    }
+                  }
+                }}
                 placeholder={dict.joke.placeholder}
                 maxLength={maxLength}
                 className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none"

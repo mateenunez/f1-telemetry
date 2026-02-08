@@ -145,7 +145,7 @@ export const DEFAULT_CONFIG: Preferences = {
   translate: false,
   hasSeenTour: false,
   weatherDetailed: false,
-  jokesEnabled: true,
+  jokesEnabled: false,
 };
 
 interface PreferencesContextValue {
