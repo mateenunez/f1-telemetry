@@ -66,7 +66,7 @@ export default function TyresList({
 
   const averagePitStops = Math.max(totalPitStops / totalDrivers, 0);
   return (
-    <Card className="flex w-full h-full bg-warmBlack border-none fifth-step mb-4">
+    <Card className="flex w-full h-full bg-warmBlack border-none fifth-step">
       <CardContent className="overflow-x-hidden w-full px-6 my-4 h-full">
         <ScrollArea
           className="overflow-x-auto h-[18rem] lg:h-[80%] p-0"

@@ -10,7 +10,7 @@
     "audioDesc": "Podés escuchar al instante el mensaje de radio de equipo de cada piloto durante la carrera, y además ¡usamos IA para la traducción y transcripción!",
     "circlesTitle": "Análisis en tiempo real",
     "circlesDesc": "Estamos añadiendo constantemente funcionalidades para mejorar el análisis de carreras, como el Circle of Doom que sirve para tomar decisiones de undercut.",
-    "version": "La version 1.4.4 introduce la personalización Drag and Drop! ahora podes mover y redimensionar los widgets a tu gusto en tu computadora o cambiar la posicion de los widgets en celular.",
+    "version": "La version 1.6.0 trae la posibilidad de hacer chistes y mostrarlos en toda la pantalla, para todos los usuarios!",
     "announce": "Seguimos trabajando en migrar a un nuevo servidor, la telemetría puede no funcionar correctamente hasta que finalice el proceso. ¡Te esperamos en marzo!"
   },
   "footer": {
@@ -51,6 +51,32 @@
   "announce": {
     "error": "Las transcripciones para los audios de equipos estarán disponibles en breve."
   },
+  "auth": {
+    "loginTitle": "Iniciar Sesión",
+    "registerTitle": "Registrarse",
+    "email": "Correo Electrónico",
+    "emailPlaceholder": "ejemplo@correo.com",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Tu contraseña",
+    "username": "Nombre de usuario",
+    "usernamePlaceholder": "Tu usuario",
+    "confirmPassword": "Confirmar Contraseña",
+    "confirmPasswordPlaceholder": "Repite tu contraseña",
+    "passwordHint": "Mínimo 8 caracteres",
+    "loginButton": "Iniciar Sesión",
+    "registerButton": "Registrarse",
+    "loggingIn": "Iniciando...",
+    "registering": "Registrando...",
+    "noAccount": "¿No tienes cuenta?",
+    "signUp": "Registrate",
+    "hasAccount": "¿Ya tienes cuenta?",
+    "logIn": "Inicia sesión",
+    "fillAllFields": "Completa todos los campos",
+    "loginFailed": "Error al iniciar sesión",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden",
+    "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+    "registrationFailed": "Error al registrarse"
+  },
   "tourSteps": {
     "welcome": "Bienvenido a F1 Telemetry! con este tutorial vamos a mostrarte las funcionalidades de la telemetría.",
     "positions": "Acá podés ver las posiciones actuales, compuestos e historial de pits, diferencias en segundos, tiempos de vuelta y minisectores.",
@@ -61,7 +87,11 @@
     "doomCircle": "El Circle of Doom te ayuda a visualizar estrategias de pit stops y decisiones de undercut en tiempo real. Cuando un piloto entre al pit se retrasará hasta la marca PIT.",
     "carDataCircle": "Este círculo muestra datos en tiempo real del piloto seleccionado, como velocidad, RPM y más.",
     "preferences": "Haciendo click en este botón vas a acceder al panel de preferencias, en este podés personalizar la telemetría a tu gusto.",
-    "edit": "En el modo edición podés mover y redimensionar los distintos componentes de la telemetría. ¡Probalo en tu compu o laptop!"
+    "edit": "En el modo edición podés mover y redimensionar los distintos componentes de la telemetría. ¡Probalo en tu compu o laptop!",
+    "jokeIcon": "Podés enviar mensajes que se transmiten a todos los usuarios, solo tenés que registrarte."
+  },
+  "joke": {
+    "placeholder": "¿Qué estás pensando?"
   },
   "loading": "Preparando el sistema...",
   "delaying": "Aplicando delay...",

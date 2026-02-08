@@ -20,181 +20,219 @@ import {
   type ProcessedPositionData,
   TimingStatsProcessor,
   type ProcessedTimingStats,
-  ProcessedTeamRadio,
   TeamRadioProcessor,
-} from "@/processors"
-import { WebSocketManager, type WebSocketData, type SignalRMessage } from "@/websocket/websocket-manager"
+  ProcessedTeamRadio,
+  JokeProcessor,
+  ProcessedJoke,
+} from "@/processors";
+import {
+  WebSocketManager,
+  type WebSocketData,
+  type SignalRMessage,
+} from "@/websocket/websocket-manager";
 
 export interface TelemetryData {
-  positions: ProcessedPosition[]
-  timing: ProcessedTiming[]
-  weather: ProcessedWeather | null
-  drivers: ProcessedDriver[]
-  raceControl: ProcessedRaceControl[]
-  raceControlEs: ProcessedRaceControl[]
-  pitStops: ProcessedPitStop[]
-  stints: ProcessedStint[]
-  session: ProcessedSession | null
-  carData: ProcessedCarData[]
-  positionData: ProcessedPositionData[]
-  driversWithDRS: number[]
-  timingStats: ProcessedTimingStats[]
-  teamRadio: ProcessedTeamRadio
-  lastUpdateTime: Date
+  positions: ProcessedPosition[];
+  timing: ProcessedTiming[];
+  weather: ProcessedWeather | null;
+  drivers: ProcessedDriver[];
+  raceControl: ProcessedRaceControl[];
+  raceControlEs: ProcessedRaceControl[];
+  pitStops: ProcessedPitStop[];
+  stints: ProcessedStint[];
+  session: ProcessedSession | null;
+  carData: ProcessedCarData[];
+  positionData: ProcessedPositionData[];
+  driversWithDRS: number[];
+  timingStats: ProcessedTimingStats[];
+  teamRadio: ProcessedTeamRadio;
+  jokes: ProcessedJoke[];
+  lastUpdateTime: Date;
 }
 
 export class TelemetryManager {
-  private wsManager: WebSocketManager
-  private positionProcessor: PositionProcessor
-  private timingProcessor: TimingProcessor
-  private weatherProcessor: WeatherProcessor
-  private driverProcessor: DriverProcessor
-  private raceControlProcessor: RaceControlProcessor
-  private pitProcessor: PitProcessor
-  private sessionProcessor: SessionProcessor
-  private carDataProcessor: CarDataProcessor
-  private positionDataProcessor: PositionDataProcessor
-  private timingStatsProcessor: TimingStatsProcessor
-  private teamRadioProcessor: TeamRadioProcessor
+  private wsManager: WebSocketManager;
+  private positionProcessor: PositionProcessor;
+  private timingProcessor: TimingProcessor;
+  private weatherProcessor: WeatherProcessor;
+  private driverProcessor: DriverProcessor;
+  private raceControlProcessor: RaceControlProcessor;
+  private pitProcessor: PitProcessor;
+  private sessionProcessor: SessionProcessor;
+  private carDataProcessor: CarDataProcessor;
+  private positionDataProcessor: PositionDataProcessor;
+  private timingStatsProcessor: TimingStatsProcessor;
+  private teamRadioProcessor: TeamRadioProcessor;
+  private jokeProcessor: JokeProcessor;
 
-  private onDataUpdateCallback: ((data: TelemetryData) => void) | null = null
+  private onDataUpdateCallback: ((data: TelemetryData) => void) | null = null;
 
   constructor() {
-    this.wsManager = new WebSocketManager()
-    this.positionProcessor = new PositionProcessor()
-    this.timingProcessor = new TimingProcessor()
-    this.weatherProcessor = new WeatherProcessor()
-    this.driverProcessor = new DriverProcessor()
-    this.raceControlProcessor = new RaceControlProcessor()
-    this.pitProcessor = new PitProcessor()
-    this.sessionProcessor = new SessionProcessor()
-    this.carDataProcessor = new CarDataProcessor()
-    this.positionDataProcessor = new PositionDataProcessor()
-    this.timingStatsProcessor = new TimingStatsProcessor()
-    this.teamRadioProcessor = new TeamRadioProcessor()
+    this.wsManager = new WebSocketManager();
+    this.positionProcessor = new PositionProcessor();
+    this.timingProcessor = new TimingProcessor();
+    this.weatherProcessor = new WeatherProcessor();
+    this.driverProcessor = new DriverProcessor();
+    this.raceControlProcessor = new RaceControlProcessor();
+    this.pitProcessor = new PitProcessor();
+    this.sessionProcessor = new SessionProcessor();
+    this.carDataProcessor = new CarDataProcessor();
+    this.positionDataProcessor = new PositionDataProcessor();
+    this.timingStatsProcessor = new TimingStatsProcessor();
+    this.teamRadioProcessor = new TeamRadioProcessor();
+    this.jokeProcessor = new JokeProcessor();
   }
 
-  connect(url: string, onDataUpdate: (data: TelemetryData) => void) {
-    this.onDataUpdateCallback = onDataUpdate
+  connect(
+    url: string,
+    onDataUpdate: (data: TelemetryData) => void,
+    token?: string,
+  ) {
+    this.onDataUpdateCallback = onDataUpdate;
 
-    this.wsManager.connect(url, (data: WebSocketData) => {
-      this.processWebSocketData(data)
-    })
+    this.wsManager.connect(
+      url,
+      (data: WebSocketData) => {
+        this.processWebSocketData(data);
+      },
+      token,
+    );
+
+    // Manejar errores de autenticación
+    this.wsManager.onAuthError = () => {
+      console.error("WebSocket authentication failed");
+      // Emitir evento o callback para que el frontend reaccione
+    };
+
+    this.wsManager.onAuthSuccess = () => {
+      console.log("WebSocket authenticated successfully");
+    };
   }
 
   private processWebSocketData(data: WebSocketData) {
-
     if (Array.isArray(data.M)) {
-
       data.M.forEach((message: SignalRMessage) => {
         if (message.H && message.A) {
-          const dataType = message.A[0]
-          const messageData = message.A[1]
-          const timestamp = message.A[2]
-          this.processDataByType(dataType, messageData, timestamp)
+          const dataType = message.A[0];
+          const messageData = message.A[1];
+          const timestamp = message.A[2];
+          this.processDataByType(dataType, messageData, timestamp);
         }
-      })
+      });
     }
 
     if (data.R) {
-      const R = data.R
+      const R = data.R;
       Object.entries(R).forEach(([dataType, messageData]) => {
         if (messageData !== undefined) {
-          this.processDataByType(dataType, messageData)
+          this.processDataByType(dataType, messageData);
         }
-      })
+      });
     }
 
-    this.sendUpdate()
+    this.sendUpdate();
   }
 
-  private processDataByType(dataType: string, messageData: any, timestamp?: string) {
-
+  private processDataByType(
+    dataType: string,
+    messageData: any,
+    timestamp?: string,
+  ) {
     switch (dataType) {
       case "CarData":
-        this.carDataProcessor.processCarData(messageData)
-        break
+        this.carDataProcessor.processCarData(messageData);
+        break;
 
       case "CarData.z":
-        this.carDataProcessor.processCarData(null, messageData)
-        break
+        this.carDataProcessor.processCarData(null, messageData);
+        break;
 
       case "Position":
-        this.positionDataProcessor.processPositionData(messageData)
-        this.positionProcessor.processPositionData(messageData)
-        break
+        this.positionDataProcessor.processPositionData(messageData);
+        this.positionProcessor.processPositionData(messageData);
+        break;
 
       case "Position.z":
-        this.positionDataProcessor.processPositionData(null, messageData)
-        this.positionProcessor.processPositionData(null, messageData)
-        break
+        this.positionDataProcessor.processPositionData(null, messageData);
+        this.positionProcessor.processPositionData(null, messageData);
+        break;
 
       case "TopThree":
-        this.positionProcessor.processTopThreeData(messageData)
-        break
+        this.positionProcessor.processTopThreeData(messageData);
+        break;
 
       case "TimingData":
-        this.positionProcessor.processTimingDataPositions(messageData)
-        this.timingProcessor.processTimingData(messageData)
-        break
+        this.positionProcessor.processTimingDataPositions(messageData);
+        this.timingProcessor.processTimingData(messageData);
+        break;
 
       case "TimingAppData":
-        this.pitProcessor.processTimingAppData(messageData)
-        this.driverProcessor.processGridPositions(messageData)
-        break
+        this.pitProcessor.processTimingAppData(messageData);
+        this.driverProcessor.processGridPositions(messageData);
+        break;
 
       case "TyreStintSeries":
-        this.pitProcessor.processTyreStintSeries(messageData)
-        break
+        this.pitProcessor.processTyreStintSeries(messageData);
+        break;
 
       case "WeatherData":
-        this.weatherProcessor.processWeatherData(messageData)
-        break
+        this.weatherProcessor.processWeatherData(messageData);
+        break;
 
       case "DriverList":
-        this.driverProcessor.processDriverList(messageData)
-        break
+        this.driverProcessor.processDriverList(messageData);
+        break;
 
       case "RaceControlMessages":
-        this.raceControlProcessor.processRaceControlMessages(messageData, false)
-        break
+        this.raceControlProcessor.processRaceControlMessages(
+          messageData,
+          false,
+        );
+        break;
 
       case "RaceControlMessagesEs":
-        this.raceControlProcessor.processRaceControlMessages(messageData, true)
-        break
+        this.raceControlProcessor.processRaceControlMessages(messageData, true);
+        break;
 
       case "PitStopSeries":
-        this.pitProcessor.processPitStopSeries(messageData)
-        break
+        this.pitProcessor.processPitStopSeries(messageData);
+        break;
 
       case "SessionInfo":
-        this.sessionProcessor.processSessionInfo(messageData)
-        break
+        this.sessionProcessor.processSessionInfo(messageData);
+        break;
 
       case "SessionData":
-        this.sessionProcessor.processSessionInfo(messageData)
-        break
+        this.sessionProcessor.processSessionInfo(messageData);
+        break;
 
       case "LapCount":
-        this.sessionProcessor.processLapCount(messageData)
-        break
+        this.sessionProcessor.processLapCount(messageData);
+        break;
 
       case "TrackStatus":
-        this.sessionProcessor.processTrackStatus(messageData)
-        break
+        this.sessionProcessor.processTrackStatus(messageData);
+        break;
 
       case "TimingStats":
-        this.timingStatsProcessor.processTimingStats(messageData)
-        break
+        this.timingStatsProcessor.processTimingStats(messageData);
+        break;
 
       case "TeamRadio":
-        this.teamRadioProcessor.processTeamRadio(messageData)
-        break
+        this.teamRadioProcessor.processTeamRadio(messageData);
+        break;
+
+      case "Joke":
+        this.jokeProcessor.processJoke(messageData);
+        break;
+
+      default:
+        break;
     }
   }
 
   private sendUpdate() {
-    if (!this.onDataUpdateCallback) return
+    if (!this.onDataUpdateCallback) return;
 
     const telemetryData: TelemetryData = {
       positions: this.positionProcessor.getCurrentPositions(),
@@ -211,53 +249,63 @@ export class TelemetryManager {
       driversWithDRS: this.carDataProcessor.getDriversWithDRS(),
       timingStats: this.timingStatsProcessor.getAllStats(),
       teamRadio: this.teamRadioProcessor.getTeamRadio(),
-      lastUpdateTime: new Date()
-    }
+      jokes: this.jokeProcessor.getLatestJokes(),
+      lastUpdateTime: new Date(),
+    };
 
-    this.onDataUpdateCallback(telemetryData)
+    this.onDataUpdateCallback(telemetryData);
   }
 
   private getAllStints(): ProcessedStint[] {
-    const allStints: ProcessedStint[] = []
-    const drivers = this.driverProcessor.getAllDrivers()
+    const allStints: ProcessedStint[] = [];
+    const drivers = this.driverProcessor.getAllDrivers();
     for (const d of drivers) {
-      const driverStints = this.pitProcessor.getDriverStints(d.driver_number)
-      allStints.push(...driverStints)
+      const driverStints = this.pitProcessor.getDriverStints(d.driver_number);
+      allStints.push(...driverStints);
     }
-    return allStints
+    return allStints;
   }
 
   disconnect() {
-    this.wsManager.disconnect()
+    this.wsManager.disconnect();
   }
 
   // Métodos para obtener datos específicos
   getDriverPosition(driverNumber: number): ProcessedPosition | undefined {
-    return this.positionProcessor.getDriverPosition(driverNumber)
+    return this.positionProcessor.getDriverPosition(driverNumber);
   }
 
   getDriverTiming(driverNumber: number): ProcessedTiming | undefined {
-    return this.timingProcessor.getDriverTiming(driverNumber)
+    return this.timingProcessor.getDriverTiming(driverNumber);
   }
 
   getDriverStints(driverNumber: number): ProcessedStint[] {
-    return this.pitProcessor.getDriverStints(driverNumber)
+    return this.pitProcessor.getDriverStints(driverNumber);
   }
 
   getCurrentStint(driverNumber: number): ProcessedStint | undefined {
-    return this.pitProcessor.getCurrentStint(driverNumber)
+    return this.pitProcessor.getCurrentStint(driverNumber);
   }
 
   getDriverCarData(driverNumber: number): ProcessedCarData | undefined {
-    return this.carDataProcessor.getDriverCarData(driverNumber)
+    return this.carDataProcessor.getDriverCarData(driverNumber);
   }
 
-  getDriverPositionData(driverNumber: number): ProcessedPositionData | undefined {
-    return this.positionDataProcessor.getDriverPosition(driverNumber)
+  getDriverPositionData(
+    driverNumber: number,
+  ): ProcessedPositionData | undefined {
+    return this.positionDataProcessor.getDriverPosition(driverNumber);
+  }
+
+  sendMessage(messageType: string, payload: any): void {
+    this.wsManager.sendMessage(messageType, payload);
   }
 
   getTeamRadioCaptures(): ProcessedTeamRadio | undefined {
-    return this.teamRadioProcessor.getTeamRadio()
+    return this.teamRadioProcessor.getTeamRadio();
   }
 
+  updateToken(token: string) {
+    this.wsManager.setToken(token);
+  }
 }

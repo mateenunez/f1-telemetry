@@ -28,6 +28,9 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import DraggableWidget from "@/components/telemetry/DraggableWidget";
 import SortableWidget from "@/components/telemetry/SortableWidget";
 import TyresList from "./TyresList";
+import { useJoke } from "@/hooks/use-joke";
+import { JokeDisplay } from "./JokeDisplay";
+import { Joke } from "./Joke";
 
 interface TelemetryContentProps {
   dict: any;
@@ -133,10 +136,24 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
 
   useEffect(() => {
     const maxY = Math.max(
-      ...widgets.filter((w) => w.enabled).map((w) => w.y + w.height + 10)
+      ...widgets.filter((w) => w.enabled).map((w) => w.y + w.height + 10),
     );
     setMaxPositionY(maxY > minPositionY ? `${maxY}px` : minPositionY + "px");
   }, [widgets]);
+
+const { status, setLocation, activeJokes, remove, coords, cancel, finish, sendJoke, canSend, color, setColor } = useJoke(
+    telemetryData?.jokes,
+  );
+
+  const handleCanvasClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (status !== "selecting-location") return;
+
+    const rect = e.currentTarget.getBoundingClientRect(); // Ver por que usa esto y no canvasSize
+    const xPct = ((e.clientX - rect.left) / rect.width) * 100;
+    const yPct = ((e.clientY - rect.top) / rect.height) * 100;
+
+    setLocation(xPct, yPct);
+  };
 
   useLayoutEffect(() => {
     if (!canvasRef.current) return;
@@ -171,7 +188,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     }),
     useSensor(MouseSensor, {
       activationConstraint: { distance: 3 },
-    })
+    }),
   );
 
   const secondsDelay = (deltaDelay * -1) / 1000;
@@ -229,7 +246,10 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
         {isMobile ? (
           <DndContext onDragEnd={handleMobileDragEnd} sensors={sensors}>
             <SortableContext items={visibleWidgets.map((w) => w.id)}>
-              <div className="grid h-full w-full grid-cols-12 gap-8">
+              <div
+                className="grid h-full w-full grid-cols-12 gap-8"
+                onClick={handleCanvasClick}
+              >
                 {visibleWidgets.map((w) => {
                   // 1) Posiciones
                   if (w.id === "driver-positions") {
@@ -247,7 +267,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           driverCarData={driverCarData}
                           driverStints={driverStints}
                           lastCapture={teamRadioCaptures?.captures.findLast(
-                            (c) => c
+                            (c) => c,
                           )}
                           handlePinnedDriver={handlePinnedDriver}
                           session={session}
@@ -348,12 +368,12 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           carData={
                             pinnedDriver
                               ? telemetryData?.carData.find(
-                                  (c) => c.driver_number === pinnedDriver
+                                  (c) => c.driver_number === pinnedDriver,
                                 )
                               : telemetryData?.carData.find(
                                   (c) =>
                                     c.driver_number ===
-                                    currentPositions.at(0)?.driver_number
+                                    currentPositions.at(0)?.driver_number,
                                 )
                           }
                           driverInfo={driverInfos}
@@ -389,8 +409,9 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
           <div
             className={`w-full ${
               isEditMode ? "lg:h-[220vh]" : ""
-            } welcome-step`}
+            } welcome-step canvas-container ${status === "selecting-location" ? "cursor-crosshair z-50" : ""}`}
             style={{ height: !isEditMode ? maxPositionY : undefined }}
+            onClick={handleCanvasClick}
           >
             <DndContext
               modifiers={isEditMode ? [snapToGrid] : []}
@@ -402,6 +423,27 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                 style={gridStyle}
                 ref={canvasRef}
               >
+                <Joke
+                  dict={dict}
+                  status={status}
+                  coords={coords}
+                  cancel={cancel}
+                  finish={finish}
+                  sendJoke={sendJoke}
+                  canSend={canSend}
+                  color={color}
+                  setColor={setColor}
+                />
+                <div className="absolute inset-0 z-50 pointer-events-none">
+                  {activeJokes.map((joke) => (
+                    <JokeDisplay
+                      key={joke.id}
+                      joke={joke}
+                      canvasWidth={canvasSize.width}
+                      canvasHeight={canvasSize.height}
+                    />
+                  ))}
+                </div>
                 {visibleWidgets.map((w) => {
                   if (w.id === "driver-positions") {
                     return (
@@ -419,7 +461,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           driverCarData={driverCarData}
                           driverStints={driverStints}
                           lastCapture={teamRadioCaptures?.captures.findLast(
-                            (c) => c
+                            (c) => c,
                           )}
                           handlePinnedDriver={handlePinnedDriver}
                           session={session}
@@ -520,12 +562,12 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           carData={
                             pinnedDriver
                               ? telemetryData?.carData.find(
-                                  (c) => c.driver_number === pinnedDriver
+                                  (c) => c.driver_number === pinnedDriver,
                                 )
                               : telemetryData?.carData.find(
                                   (c) =>
                                     c.driver_number ===
-                                    currentPositions.at(0)?.driver_number
+                                    currentPositions.at(0)?.driver_number,
                                 )
                           }
                           driverInfo={driverInfos}

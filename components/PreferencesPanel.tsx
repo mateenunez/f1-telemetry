@@ -4,19 +4,22 @@ import { useState } from "react";
 import {
   Preferences,
   WidgetConfig,
-  WidgetId,
   usePreferences,
   DEFAULT_CONFIG,
-  Widget,
 } from "@/context/preferences";
-import { X, Check, PanelLeft, Pencil } from "lucide-react";
+import { X, Check, PanelLeft, Pencil, Type } from "lucide-react";
 import { ProcessedDriver } from "@/processors";
 import { useTour } from "@reactour/tour";
 import { usePathname } from "next/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/hooks/use-auth";
+import AuthForm from "./telemetry/AuthForm";
+import { useContext } from "react";
+import { JokeContext } from "@/context/jokes";
 
 interface PreferencesPanelProps {
   driverInfo: ProcessedDriver[] | undefined;
+  dict?: any;
 }
 
 type LanguageOptions = {
@@ -26,6 +29,7 @@ type LanguageOptions = {
 
 export default function PreferencesPanel({
   driverInfo,
+  dict,
 }: PreferencesPanelProps) {
   const {
     preferences,
@@ -35,20 +39,24 @@ export default function PreferencesPanel({
     widgets,
     setWidgetsPreferences,
   } = usePreferences();
+  const { isAuthenticated } = useAuth();
   const { setIsOpen } = useTour();
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
+  const [authFormOpen, setAuthFormOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [favorites, setFavorites] = useState<any[]>(
-    preferences.favoriteDrivers
+    preferences.favoriteDrivers,
   );
   const [delay, setDelay] = useState<number>(preferences.delay);
   const [selectedLanguage, setSelectedLanguage] = useState<string>(
-    preferences.translate ? "es" : "en"
+    preferences.translate ? "es" : "en",
   );
   const pathname = usePathname();
   const isLiveTimingPage = /^\/[^/]+\/live-timing\/?$/.test(pathname ?? "");
+  const { user, logout } = useAuth();
+  const jokeCtx = useContext(JokeContext);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -63,7 +71,7 @@ export default function PreferencesPanel({
       ? driverInfo.filter(
           (d) =>
             d.full_name.toLowerCase().includes(value.toLowerCase()) ||
-            d.team_name.toLowerCase().includes(value.toLowerCase())
+            d.team_name.toLowerCase().includes(value.toLowerCase()),
         )
       : [];
 
@@ -87,7 +95,7 @@ export default function PreferencesPanel({
 
   const handleDeleteDriver = (driver: any) => {
     const newFavorites = favorites.filter(
-      (d) => d.full_name !== driver.full_name
+      (d) => d.full_name !== driver.full_name,
     );
     setFavorites(newFavorites);
     setPreference("favoriteDrivers", newFavorites);
@@ -138,6 +146,7 @@ export default function PreferencesPanel({
       "raceControlLog",
       "circleOfDoom",
       "circleCarData",
+      "tyresList",
     ];
 
     widgetKeys.forEach((key) => {
@@ -151,6 +160,10 @@ export default function PreferencesPanel({
     }
     setIsEditMode(!isEditMode);
     setOpen(false);
+  };
+
+  const handleToggleJokes = (enabled: boolean) => {
+    setPreference("jokesEnabled", enabled);
   };
 
   const preferenceDetails: Record<
@@ -266,6 +279,16 @@ export default function PreferencesPanel({
         { value: "es", label: "Spanish" },
       ];
 
+  const handleTypeIconClick = () => {
+    if (!jokeCtx) return;
+    if (!isAuthenticated) {
+      setAuthFormOpen(true);
+    } else {
+      jokeCtx.startPlacing();
+      setOpen(false);
+    }
+  };
+
   return (
     <>
       {/* Toggle Button */}
@@ -286,6 +309,17 @@ export default function PreferencesPanel({
           onClick={handleEditMode}
         />
       )}
+
+      <Type
+        width={15}
+        style={{ display: isMobile || !preferences.jokesEnabled ? "none" : "block" }}
+        className={`hover:cursor-pointer transition-colors tenth-step ${
+          isAuthenticated
+            ? "text-gray-300 hover:text-gray-400"
+            : "text-blue-400 hover:text-f1Blue animate-pulse"
+        }`}
+        onClick={handleTypeIconClick}
+      />
 
       {/* Overlay */}
       <div
@@ -347,6 +381,41 @@ export default function PreferencesPanel({
                   ? "Ajustar delay en segundos (máx 600s)."
                   : "Set delay on seconds (máx 600s)."}
               </p>
+            </div>
+          </div>
+
+          {/* Jokes toggle as select (matches Language style) */}
+          <div className="flex flex-col gap-2 pb-4">
+            <p className="text-md text-gray-100 font-orbitron">
+              {preferences.translate ? "Chistes" : "User jokes"}
+            </p>
+            <div className="flex flex-col gap-2">
+              <p className="text-xs text-gray-500 font-geist font-medium">
+                {preferences.translate
+                  ? "Recibir y enviar mensajes que se transmiten a todos los usuarios que están viendo la sesión en tiempo real."
+                  : "Receive and send messages that are broadcasted to all users watching the session on real time."}
+              </p>
+              <select
+                id="jokes-select"
+                value={preferences.jokesEnabled ? "true" : "false"}
+                onChange={(e) => handleToggleJokes(e.target.value === "true")}
+                style={{
+                  boxShadow:
+                    "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
+                }}
+                className="text-sm py-2 px-2 rounded-md bg-warmBlack text-gray-200 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200 font-geist font-medium"
+              >
+                <option value={"true"}>
+                  {preferences.translate
+                    ? "Recibir y enviar chistes"
+                    : "Receive and send jokes"}
+                </option>
+                <option value={"false"}>
+                  {preferences.translate
+                    ? "Desactivar chistes"
+                    : "Disable jokes"}
+                </option>
+              </select>
             </div>
           </div>
 
@@ -516,17 +585,17 @@ export default function PreferencesPanel({
             {Object.entries(preferences).map(([key, value]) => {
               const handleWidgetToggle = (
                 key: keyof Preferences,
-                enabled: boolean
+                enabled: boolean,
               ) => {
                 const currentValue = preferences[key];
                 if (
                   typeof currentValue === "object" &&
                   currentValue !== null &&
                   "enabled" in currentValue &&
-                  (("x" in currentValue) || ("xPct" in currentValue)) &&
-                  (("y" in currentValue) || ("yPct" in currentValue)) &&
-                  (("width" in currentValue) || ("widthPct" in currentValue)) &&
-                  (("height" in currentValue) || ("heightPct" in currentValue))
+                  ("x" in currentValue || "xPct" in currentValue) &&
+                  ("y" in currentValue || "yPct" in currentValue) &&
+                  ("width" in currentValue || "widthPct" in currentValue) &&
+                  ("height" in currentValue || "heightPct" in currentValue)
                 ) {
                   setPreference(key, {
                     ...currentValue,
@@ -541,7 +610,7 @@ export default function PreferencesPanel({
                 typeof value === "object" &&
                 value !== null &&
                 "enabled" in value &&
-                (("x" in value) || ("xPct" in value));
+                ("x" in value || "xPct" in value);
 
               const checked = isWidgetConfig
                 ? (value as WidgetConfig).enabled
@@ -568,7 +637,7 @@ export default function PreferencesPanel({
                           onChange={(e) =>
                             handleWidgetToggle(
                               key as keyof Preferences,
-                              e.target.checked
+                              e.target.checked,
                             )
                           }
                         />
@@ -606,8 +675,34 @@ export default function PreferencesPanel({
               </span>
             </button>
           </div>
+
+          {user && (
+            <div className="flex flex-row gap-1">
+              <p className="text-xs text-gray-500 font-geist font-medium">
+                {preferences.translate
+                  ? "Sesión iniciada como "
+                  : "Signed in as "}
+              </p>
+              <p className="text-xs text-gray-500 font-geist font-medium">
+                {user.username}.
+              </p>
+              <p
+                className="text-xs text-gray-500 hover:text-f1Blue font-geist font-medium underline hover:cursor-pointer"
+                onClick={logout}
+              >
+                {preferences.translate ? " Cerrar sesión. " : " Sign out. "}
+              </p>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Auth Form Modal */}
+      <AuthForm
+        isOpen={authFormOpen}
+        onClose={() => setAuthFormOpen(false)}
+        dict={dict}
+      />
     </>
   );
 }

@@ -62,6 +62,7 @@ export interface Preferences {
   translate: boolean;
   hasSeenTour: boolean;
   weatherDetailed: boolean;
+  jokesEnabled: boolean;
 }
 
 export const DEFAULT_CONFIG: Preferences = {
@@ -144,6 +145,7 @@ export const DEFAULT_CONFIG: Preferences = {
   translate: false,
   hasSeenTour: false,
   weatherDetailed: false,
+  jokesEnabled: true,
 };
 
 interface PreferencesContextValue {
@@ -241,8 +243,9 @@ function isPreferences(obj: any): obj is Preferences {
 }
 
 export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
+  const cookieName = "f1t_pref";
   const [preferences, setPreferences] = useState<Preferences>(() => {
-    const cookie = Cookies.get("f1t_config");
+    const cookie = Cookies.get(cookieName);
     try {
       if (cookie) {
         const cookieJson = JSON.parse(cookie);
@@ -366,7 +369,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
     <K extends keyof Preferences>(key: K, value: Preferences[K]) => {
       setPreferences((prev) => {
         const updated = { ...prev, [key]: value };
-        Cookies.set("f1t_config", JSON.stringify(updated), { expires: 365 });
+        Cookies.set(cookieName, JSON.stringify(updated), { expires: 365 });
         return updated;
       });
     },
@@ -376,7 +379,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
   // Optional: sync cookie changes (multi-tab)
   useEffect(() => {
     const handleStorage = () => {
-      const cookie = Cookies.get("f1t_config");
+      const cookie = Cookies.get(cookieName);
       if (!cookie) return;
       try {
         const parsed = JSON.parse(cookie);

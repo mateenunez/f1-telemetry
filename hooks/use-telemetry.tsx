@@ -1,9 +1,11 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { TelemetryManager, type TelemetryData } from "../telemetry-manager";
+import { type TelemetryData } from "../telemetry-manager";
+import { getTelemetryManager } from "../telemetry-manager-singleton";
 import { findYellowSectors } from "@/hooks/use-raceControl";
 import { usePreferences } from "@/context/preferences";
 import { getAboutToBeEliminatedDrivers } from "@/utils/telemetry";
 import { config } from "@/lib/config";
+import { useAuth } from "./use-auth";
 
 const tyres = config.public.assets.tyres;
 
@@ -15,7 +17,7 @@ interface QueuedMessage {
 export const getCompoundSvg = (
   compound: string,
   idx: number,
-  iconSize: number
+  iconSize: number,
 ) => {
   const iconMap: Record<string, string> = {
     SOFT: tyres.soft,
@@ -41,11 +43,12 @@ export const getCompoundSvg = (
 
 export function useTelemetryManager() {
   const [telemetryData, setTelemetryData] = useState<TelemetryData | null>(
-    null
+    null,
   );
   const [loading, setLoading] = useState(true);
   const { preferences } = usePreferences();
-  const [telemetryManager] = useState(() => new TelemetryManager());
+  const {token} = useAuth();
+  const [telemetryManager] = useState(() => getTelemetryManager());
   const [pinnedDriver, setPinnedDriver] = useState<number | null>(null);
   const [delayed, setDelayed] = useState(false);
   const delayedRef = useRef(false);
@@ -91,7 +94,8 @@ export function useTelemetryManager() {
 
         const releaseTime = Date.now() + preferences.delay * 1000;
         messageQueue.current.push({ data: data, releaseTime: releaseTime });
-      }
+      },
+      token ? token : "",
     );
 
     if (
@@ -148,74 +152,74 @@ export function useTelemetryManager() {
 
   const currentPositions = useMemo(() => {
     if (!telemetryData?.positions) return [];
-    return telemetryData.positions
-      .filter((p) => p.position >= 1 && p.position <= 20)
-      .sort((a, b) => {
-        return a.position - b.position;
-      });
+    return telemetryData.positions.sort((a, b) => {
+      return a.position - b.position;
+    });
   }, [telemetryData?.positions, pinnedDriver]);
 
   const handlePinnedDriver = useMemo(
     () => (driverNumber: number | null) => {
       setPinnedDriver(pinnedDriver === driverNumber ? null : driverNumber);
     },
-    [pinnedDriver]
+    [pinnedDriver],
   );
 
   const driverInfos = useMemo(
     () =>
       currentPositions.map((pos) =>
         telemetryData?.drivers.find(
-          (d) => d.driver_number === pos.driver_number
-        )
+          (d) => d.driver_number === pos.driver_number,
+        ),
       ),
-    [currentPositions, telemetryData?.drivers]
+    [currentPositions, telemetryData?.drivers],
   );
 
   const driverTimings = useMemo(
     () =>
       currentPositions.map((pos) =>
-        telemetryData?.timing.find((t) => t.driver_number === pos.driver_number)
+        telemetryData?.timing.find(
+          (t) => t.driver_number === pos.driver_number,
+        ),
       ),
-    [currentPositions, telemetryData?.timing]
+    [currentPositions, telemetryData?.timing],
   );
 
   const driverCarData = useMemo(
     () =>
       currentPositions.map((pos) =>
         telemetryData?.carData.find(
-          (c) => c.driver_number === pos.driver_number
-        )
+          (c) => c.driver_number === pos.driver_number,
+        ),
       ),
-    [currentPositions, telemetryData?.carData]
+    [currentPositions, telemetryData?.carData],
   );
 
   const driverTimingStats = useMemo(
     () =>
       currentPositions.map((pos) =>
         telemetryData?.timingStats.find(
-          (c) => c.driver_number === pos.driver_number
-        )
+          (c) => c.driver_number === pos.driver_number,
+        ),
       ),
-    [currentPositions, telemetryData?.timingStats]
+    [currentPositions, telemetryData?.timingStats],
   );
 
   const driverStints = useMemo(
     () =>
       currentPositions.map((pos) =>
-        telemetryManager.getDriverStints(pos.driver_number)
+        telemetryManager.getDriverStints(pos.driver_number),
       ),
-    [currentPositions, telemetryManager]
+    [currentPositions, telemetryManager],
   );
 
   const teamRadioCaptures = useMemo(
     () => telemetryManager.getTeamRadioCaptures(),
-    [currentPositions, telemetryManager]
+    [currentPositions, telemetryManager],
   );
 
   const yellowSectors = useMemo(
     () => findYellowSectors(telemetryData?.raceControl),
-    [telemetryData?.raceControl]
+    [telemetryData?.raceControl],
   );
 
   const aboutToBeEliminated = useMemo(
@@ -223,13 +227,13 @@ export function useTelemetryManager() {
       getAboutToBeEliminatedDrivers(
         currentPositions,
         telemetryData?.session,
-        telemetryData?.timing
+        telemetryData?.timing,
       ),
     [
       telemetryData?.positions,
       telemetryData?.session,
       telemetryData?.session?.track_status,
-    ]
+    ],
   );
 
   const updateMessagesQueue = () => {
@@ -239,6 +243,7 @@ export function useTelemetryManager() {
   };
 
   return {
+    telemetryManager,
     telemetryData,
     loading,
     driverInfos,
