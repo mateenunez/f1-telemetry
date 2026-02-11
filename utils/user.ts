@@ -7,7 +7,6 @@ const API_BASE_URL = config.public.apiUrl;
 export interface Role {
   name: string;
   cooldown_ms: number;
-  can_be_anonymous: boolean;
 }
 
 export interface VerifiyTokenResponse {

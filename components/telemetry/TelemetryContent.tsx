@@ -194,6 +194,30 @@ const { status, setLocation, activeJokes, remove, coords, cancel, finish, sendJo
   const secondsDelay = (deltaDelay * -1) / 1000;
   const session = telemetryData?.session;
 
+  // Error screen when telemetry data is unavailable
+  if (session && session.circuit_key === 0) {
+    return (
+      <div className="fixed inset-0 w-screen h-screen bg-warmBlack flex items-center justify-center z-50">
+        <div className="flex flex-col items-center justify-center gap-8 px-8">
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl lg:text-5xl font-orbitron font-bold text-f1Red">
+              {dict.error.title}
+            </h1>
+            <p className="text-lg lg:text-xl text-gray-300 max-w-2xl font-geist leading-relaxed">
+              {dict.error.message}
+            </p>
+          </div>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 bg-f1Red hover:bg-red-600 text-white font-geist rounded-lg transition-colors duration-200"
+          >
+            {dict.error.reload}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (loading || delayed) {
     const LoaderOverlay = () => (
       <div className="fixed inset-0 z-20 flex items-center justify-center bg-warmBlack/40 backdrop-blur-sm">

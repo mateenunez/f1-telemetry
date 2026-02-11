@@ -96,5 +96,10 @@
   "loading": "Preparando el sistema...",
   "delaying": "Aplicando delay...",
   "404": "Te perdiste?.",
+  "error": {
+    "title": "Error de Conexión",
+    "message": "Estamos teniendo problemas para conectar con el servicio de telemetría. Por favor, verifica tu conexión e intenta actualizar la página. Si el problema persiste, vuelve más tarde.",
+    "reload": "Recargar"
+  },
   "locale": "es"
 }

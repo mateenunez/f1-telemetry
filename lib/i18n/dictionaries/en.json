@@ -96,5 +96,10 @@
   "loading": "Getting things ready...",
   "delaying": "Applying delay...",
   "404": "I think you're lost, bro.",
+  "error": {
+    "title": "Connection Error",
+    "message": "We're having trouble connecting to the telemetry service. Please check your connection and try refreshing the page. If the problem persists, come back later.",
+    "reload": "Reload"
+  },
   "locale": "en"
 }
