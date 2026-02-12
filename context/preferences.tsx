@@ -19,7 +19,8 @@ export type WidgetId =
   | "race-control-list"
   | "circle-of-doom"
   | "circle-car-data"
-  | "tyres-list";
+  | "tyres-list"
+  | "chat";
 
 export type Widget = {
   id: WidgetId;
@@ -57,12 +58,12 @@ export interface Preferences {
   driverPositions: WidgetConfig;
   mapAndMessages: WidgetConfig;
   tyresList: WidgetConfig;
+  chat: WidgetConfig;
   favoriteDrivers: ProcessedDriver[];
   delay: number;
   translate: boolean;
   hasSeenTour: boolean;
   weatherDetailed: boolean;
-  jokesEnabled: boolean;
 }
 
 export const DEFAULT_CONFIG: Preferences = {
@@ -100,6 +101,16 @@ export const DEFAULT_CONFIG: Preferences = {
     height: 500,
     index: 2,
   },
+  chat: {
+    enabled: true,
+    xPct: 850 / 1526,
+    yPct: 800 / 1094,
+    widthPct: 650 / 1526,
+    heightPct: 250 / 1094,
+    width: 650,
+    height: 250,
+    index: 3,
+  },
   raceControlLog: {
     enabled: true,
     xPct: 400 / 1526,
@@ -108,7 +119,7 @@ export const DEFAULT_CONFIG: Preferences = {
     heightPct: 500 / 1094,
     width: 400,
     height: 500,
-    index: 3,
+    index: 4,
   },
   circleOfDoom: {
     enabled: true,
@@ -118,7 +129,7 @@ export const DEFAULT_CONFIG: Preferences = {
     heightPct: 450 / 1094,
     width: 300,
     height: 450,
-    index: 4,
+    index: 5,
   },
   circleCarData: {
     enabled: true,
@@ -128,7 +139,7 @@ export const DEFAULT_CONFIG: Preferences = {
     heightPct: 450 / 1094,
     width: 300,
     height: 450,
-    index: 5,
+    index: 6,
   },
   tyresList: {
     enabled: true,
@@ -138,14 +149,13 @@ export const DEFAULT_CONFIG: Preferences = {
     heightPct: 400 / 1094,
     width: 1500,
     height: 400,
-    index: 6,
+    index: 7,
   },
   favoriteDrivers: [],
   delay: 0,
   translate: false,
   hasSeenTour: false,
   weatherDetailed: false,
-  jokesEnabled: false,
 };
 
 interface PreferencesContextValue {
@@ -153,7 +163,7 @@ interface PreferencesContextValue {
   getPreference: <K extends keyof Preferences>(key: K) => Preferences[K];
   setPreference: <K extends keyof Preferences>(
     key: K,
-    value: Preferences[K]
+    value: Preferences[K],
   ) => void;
   isEditMode: boolean;
   setIsEditMode: (value: boolean) => void;
@@ -206,6 +216,7 @@ function isPreferences(obj: any): obj is Preferences {
         "driverPositions",
         "mapAndMessages",
         "tyresList",
+        "chat",
       ].includes(key)
     ) {
       const widgetConfig = obj[key];
@@ -272,19 +283,19 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
         const x =
           cfg.xPct !== undefined
             ? Math.round(cfg.xPct * BASE_W)
-            : (cfg as any).x ?? 0;
+            : ((cfg as any).x ?? 0);
         const y =
           cfg.yPct !== undefined
             ? Math.round(cfg.yPct * BASE_H)
-            : (cfg as any).y ?? 0;
+            : ((cfg as any).y ?? 0);
         const width =
           cfg.widthPct !== undefined
             ? Math.round(cfg.widthPct * BASE_W)
-            : cfg.width ?? 0;
+            : (cfg.width ?? 0);
         const height =
           cfg.heightPct !== undefined
             ? Math.round(cfg.heightPct * BASE_H)
-            : cfg.height ?? 0;
+            : (cfg.height ?? 0);
         return {
           id,
           enabled: cfg.enabled,
@@ -306,10 +317,11 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
         { ...toAbs(prefs.circleOfDoom, "circle-of-doom") },
         { ...toAbs(prefs.circleCarData, "circle-car-data") },
         { ...toAbs(prefs.tyresList, "tyres-list") },
+        { ...toAbs(prefs.chat, "chat") },
       ];
       return list.sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
     },
-    []
+    [],
   );
 
   useEffect(() => {
@@ -317,7 +329,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
   }, [preferences, buildWidgetsFromPreferences]);
 
   const [widgets, setWidgets] = useState<Widget[]>(() =>
-    buildWidgetsFromPreferences(preferences)
+    buildWidgetsFromPreferences(preferences),
   );
 
   const updateWidgets = useCallback((newWidgets: Widget[]) => {
@@ -327,7 +339,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
 
   const updateWidget = useCallback((id: WidgetId, updates: Partial<Widget>) => {
     setWidgets((prev) =>
-      prev.map((w) => (w.id === id ? { ...w, ...updates } : w))
+      prev.map((w) => (w.id === id ? { ...w, ...updates } : w)),
     );
   }, []);
 
@@ -356,13 +368,14 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
       "circle-of-doom": "circleOfDoom",
       "circle-car-data": "circleCarData",
       "tyres-list": "tyresList",
+      chat: "chat",
     };
     return map[id] ?? null;
   }
 
   const getPreference = useCallback(
     <K extends keyof Preferences>(key: K): Preferences[K] => preferences[key],
-    [preferences]
+    [preferences],
   );
 
   const setPreference = useCallback(
@@ -373,7 +386,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
         return updated;
       });
     },
-    []
+    [],
   );
 
   // Optional: sync cookie changes (multi-tab)
@@ -418,7 +431,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
       setWidgetsPreferences,
       isResizing,
       setIsResizing,
-    ]
+    ],
   );
 
   return (
@@ -432,7 +445,7 @@ export function usePreferences(): PreferencesContextValue {
   const context = useContext(PreferencesContext);
   if (!context) {
     throw new Error(
-      "usePreferences must be used within a PreferencesProvider."
+      "usePreferences must be used within a PreferencesProvider.",
     );
   }
   return context;

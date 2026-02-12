@@ -2,14 +2,13 @@
 
 import Header from "@/components/Header";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import DriverPositions from "@/components/telemetry/DriverPositions";
 import MapAndMessages from "@/components/telemetry/MapAndMessages";
 import { useTelemetryManager } from "@/hooks/use-telemetry";
 import SessionAudios from "@/components/telemetry/SessionAudios";
 import RaceControlList from "@/components/telemetry/RaceControlList";
 import CircleOfDoom from "@/components/telemetry/CircleOfDoom";
-import { Widget, WidgetId, usePreferences } from "@/context/preferences";
+import { WidgetId, usePreferences } from "@/context/preferences";
 import { CircleCarData } from "@/components/telemetry/CircleCarData";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTour } from "@reactour/tour";
@@ -28,9 +27,9 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import DraggableWidget from "@/components/telemetry/DraggableWidget";
 import SortableWidget from "@/components/telemetry/SortableWidget";
 import TyresList from "./TyresList";
-import { useJoke } from "@/hooks/use-joke";
-import { JokeDisplay } from "./JokeDisplay";
-import { Joke } from "./Joke";
+import { useChat } from "@/hooks/use-chat";
+import { ChatWidget } from "./ChatWidget";
+import AuthForm from "@/components/telemetry/AuthForm";
 
 interface TelemetryContentProps {
   dict: any;
@@ -64,6 +63,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     isResizing,
   } = usePreferences();
   const isMobile = useIsMobile();
+  const [authFormOpen, setAuthFormOpen] = useState(false);
+  const { messages, sendMessage } = useChat(telemetryData?.chatMessages, dict);
   const GRID_SIZE = 20;
   const minPositionY = 400;
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -141,20 +142,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     setMaxPositionY(maxY > minPositionY ? `${maxY}px` : minPositionY + "px");
   }, [widgets]);
 
-const { status, setLocation, activeJokes, remove, coords, cancel, finish, sendJoke, canSend, color, setColor } = useJoke(
-    telemetryData?.jokes,
-  );
-
-  const handleCanvasClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (status !== "selecting-location") return;
-
-    const rect = e.currentTarget.getBoundingClientRect(); // Ver por que usa esto y no canvasSize
-    const xPct = ((e.clientX - rect.left) / rect.width) * 100;
-    const yPct = ((e.clientY - rect.top) / rect.height) * 100;
-
-    setLocation(xPct, yPct);
-  };
-
   useLayoutEffect(() => {
     if (!canvasRef.current) return;
 
@@ -218,6 +205,7 @@ const { status, setLocation, activeJokes, remove, coords, cancel, finish, sendJo
     );
   }
 
+  // Loading screen when processing data
   if (loading || delayed) {
     const LoaderOverlay = () => (
       <div className="fixed inset-0 z-20 flex items-center justify-center bg-warmBlack/40 backdrop-blur-sm">
@@ -264,16 +252,18 @@ const { status, setLocation, activeJokes, remove, coords, cancel, finish, sendJo
   return (
     <div className="min-h-screen bg-warmBlack">
       <div className="max-w-8xl mx-auto space-y-4 h-full">
-        {/* Header */}
         <Header telemetryData={telemetryData} dict={dict} />
+
+        <AuthForm
+          isOpen={authFormOpen}
+          onClose={() => setAuthFormOpen(false)}
+          dict={dict}
+        />
 
         {isMobile ? (
           <DndContext onDragEnd={handleMobileDragEnd} sensors={sensors}>
             <SortableContext items={visibleWidgets.map((w) => w.id)}>
-              <div
-                className="grid h-full w-full grid-cols-12 gap-8"
-                onClick={handleCanvasClick}
-              >
+              <div className="grid h-full w-full grid-cols-12 gap-8">
                 {visibleWidgets.map((w) => {
                   // 1) Posiciones
                   if (w.id === "driver-positions") {
@@ -424,6 +414,25 @@ const { status, setLocation, activeJokes, remove, coords, cancel, finish, sendJo
                     );
                   }
 
+                  // 8) Chat Widget
+                  if (w.id === "chat" && w.enabled) {
+                    return (
+                      <SortableWidget
+                        key={w.id}
+                        id={w.id}
+                        className="col-span-12 lg:col-span-4"
+                      >
+                        <ChatWidget
+                          language={preferences.translate ? "es" : "en"}
+                          messages={messages}
+                          dict={dict}
+                          sendMessage={sendMessage}
+                          onOpenAuth={() => setAuthFormOpen(true)}
+                        />
+                      </SortableWidget>
+                    );
+                  }
+
                   return null;
                 })}
               </div>
@@ -433,9 +442,8 @@ const { status, setLocation, activeJokes, remove, coords, cancel, finish, sendJo
           <div
             className={`w-full ${
               isEditMode ? "lg:h-[220vh]" : ""
-            } welcome-step canvas-container ${status === "selecting-location" ? "cursor-crosshair z-50" : ""}`}
+            } welcome-step canvas-container`}
             style={{ height: !isEditMode ? maxPositionY : undefined }}
-            onClick={handleCanvasClick}
           >
             <DndContext
               modifiers={isEditMode ? [snapToGrid] : []}
@@ -447,27 +455,6 @@ const { status, setLocation, activeJokes, remove, coords, cancel, finish, sendJo
                 style={gridStyle}
                 ref={canvasRef}
               >
-                <Joke
-                  dict={dict}
-                  status={status}
-                  coords={coords}
-                  cancel={cancel}
-                  finish={finish}
-                  sendJoke={sendJoke}
-                  canSend={canSend}
-                  color={color}
-                  setColor={setColor}
-                />
-                <div className="absolute inset-0 z-50 pointer-events-none">
-                  {activeJokes.map((joke) => (
-                    <JokeDisplay
-                      key={joke.id}
-                      joke={joke}
-                      canvasWidth={canvasSize.width}
-                      canvasHeight={canvasSize.height}
-                    />
-                  ))}
-                </div>
                 {visibleWidgets.map((w) => {
                   if (w.id === "driver-positions") {
                     return (
@@ -613,6 +600,25 @@ const { status, setLocation, activeJokes, remove, coords, cancel, finish, sendJo
                           driverStints={driverStints}
                           driverInfos={driverInfos}
                           totalLaps={session?.total_laps}
+                        />
+                      </DraggableWidget>
+                    );
+                  }
+
+                  if (w.id === "chat" && w.enabled) {
+                    return (
+                      <DraggableWidget
+                        key={w.id}
+                        widget={w}
+                        isEditMode={isEditMode}
+                        updateWidget={updateWidget}
+                      >
+                        <ChatWidget
+                          messages={messages}
+                          language={preferences.translate ? "es" : "en"}
+                          dict={dict}
+                          sendMessage={sendMessage}
+                          onOpenAuth={() => setAuthFormOpen(true)}
                         />
                       </DraggableWidget>
                     );

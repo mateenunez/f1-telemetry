@@ -22,8 +22,8 @@ import {
   type ProcessedTimingStats,
   TeamRadioProcessor,
   ProcessedTeamRadio,
-  JokeProcessor,
-  ProcessedJoke,
+  ChatProcessor,
+  ProcessedChatMessage,
 } from "@/processors";
 import {
   WebSocketManager,
@@ -46,7 +46,7 @@ export interface TelemetryData {
   driversWithDRS: number[];
   timingStats: ProcessedTimingStats[];
   teamRadio: ProcessedTeamRadio;
-  jokes: ProcessedJoke[];
+  chatMessages: ProcessedChatMessage[];
   lastUpdateTime: Date;
 }
 
@@ -63,7 +63,7 @@ export class TelemetryManager {
   private positionDataProcessor: PositionDataProcessor;
   private timingStatsProcessor: TimingStatsProcessor;
   private teamRadioProcessor: TeamRadioProcessor;
-  private jokeProcessor: JokeProcessor;
+  private chatProcessor: ChatProcessor;
 
   private onDataUpdateCallback: ((data: TelemetryData) => void) | null = null;
 
@@ -80,7 +80,7 @@ export class TelemetryManager {
     this.positionDataProcessor = new PositionDataProcessor();
     this.timingStatsProcessor = new TimingStatsProcessor();
     this.teamRadioProcessor = new TeamRadioProcessor();
-    this.jokeProcessor = new JokeProcessor();
+    this.chatProcessor = new ChatProcessor();
   }
 
   connect(
@@ -222,8 +222,12 @@ export class TelemetryManager {
         this.teamRadioProcessor.processTeamRadio(messageData);
         break;
 
-      case "Joke":
-        this.jokeProcessor.processJoke(messageData);
+      case "ChatMessageEn":
+        this.chatProcessor.processMessage(messageData, "en");
+        break;
+
+      case "ChatMessageEs":
+        this.chatProcessor.processMessage(messageData, "es");
         break;
 
       default:
@@ -249,7 +253,7 @@ export class TelemetryManager {
       driversWithDRS: this.carDataProcessor.getDriversWithDRS(),
       timingStats: this.timingStatsProcessor.getAllStats(),
       teamRadio: this.teamRadioProcessor.getTeamRadio(),
-      jokes: this.jokeProcessor.getLatestJokes(),
+      chatMessages: this.chatProcessor.getAllMessages(),
       lastUpdateTime: new Date(),
     };
 

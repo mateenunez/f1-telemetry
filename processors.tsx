@@ -10,4 +10,4 @@ export * from "./processors/team-radio-processor";
 export * from "./processors/timing-stats-processor";
 export * from "./processors/race-control-processor";
 export * from "./processors/pit-processor";
-export * from "./processors/joke-processor";
+export * from "./processors/chat-processor";

@@ -147,6 +147,7 @@ export default function PreferencesPanel({
       "circleOfDoom",
       "circleCarData",
       "tyresList",
+      "chat",
     ];
 
     widgetKeys.forEach((key) => {
@@ -160,10 +161,6 @@ export default function PreferencesPanel({
     }
     setIsEditMode(!isEditMode);
     setOpen(false);
-  };
-
-  const handleToggleJokes = (enabled: boolean) => {
-    setPreference("jokesEnabled", enabled);
   };
 
   const preferenceDetails: Record<
@@ -220,6 +217,11 @@ export default function PreferencesPanel({
           description:
             "Mostrar el historial de compuestos de cada piloto, incluyendo promedios y mejores vueltas.",
         },
+        chat: {
+          title: "Chat",
+          description:
+            "Mostrar el chat para enviar y ver mensajes en vivo.",
+        },
       }
     : {
         sectors: {
@@ -267,6 +269,11 @@ export default function PreferencesPanel({
           description:
             "Display each driver's tire compound history, including averages and best laps.",
         },
+        chat: {
+          title: "Chat",
+          description:
+            "Show the chat to send and view live messages.",
+        },
       };
 
   const options: LanguageOptions[] = preferences.translate
@@ -278,38 +285,6 @@ export default function PreferencesPanel({
         { value: "en", label: "English" },
         { value: "es", label: "Spanish" },
       ];
-
-  const handleTypeIconClick = useCallback(() => {
-    if (!jokeCtx) return;
-    if (!isAuthenticated) {
-      setAuthFormOpen(true);
-    } else {
-      jokeCtx.startPlacing();
-      setOpen(false);
-    }
-  }, [jokeCtx, isAuthenticated]);
-
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() !== "t") return;
-      if (!e.shiftKey) return;
-      if (e.altKey || e.ctrlKey || e.metaKey) return;
-      const active = document.activeElement;
-      if (
-        active &&
-        (active.tagName === "INPUT" ||
-          active.tagName === "TEXTAREA" ||
-          (active as HTMLElement).isContentEditable)
-      )
-        return;
-      if (!preferences.jokesEnabled) return;
-      if (jokeCtx?.status === "writing") return;
-      handleTypeIconClick();
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [handleTypeIconClick, preferences.jokesEnabled, jokeCtx]);
 
   return (
     <>
@@ -331,19 +306,6 @@ export default function PreferencesPanel({
           onClick={handleEditMode}
         />
       )}
-
-      <Type
-        width={15}
-        style={{
-          display: isMobile || !preferences.jokesEnabled ? "none" : "block",
-        }}
-        className={`hover:cursor-pointer transition-colors tenth-step ${
-          isAuthenticated
-            ? "text-gray-300 hover:text-gray-400"
-            : "text-blue-400 hover:text-f1Blue animate-pulse"
-        }`}
-        onClick={handleTypeIconClick}
-      />
 
       {/* Overlay */}
       <div
@@ -405,41 +367,6 @@ export default function PreferencesPanel({
                   ? "Ajustar delay en segundos (máx 600s)."
                   : "Set delay on seconds (máx 600s)."}
               </p>
-            </div>
-          </div>
-
-          {/* Jokes toggle as select (matches Language style) */}
-          <div className="flex flex-col gap-2 pb-4">
-            <p className="text-md text-gray-100 font-orbitron">
-              {preferences.translate ? "Chistes" : "User jokes"}
-            </p>
-            <div className="flex flex-col gap-2">
-              <p className="text-xs text-gray-500 font-geist font-medium">
-                {preferences.translate
-                  ? "Recibir y enviar mensajes que se transmiten a todos los usuarios que están viendo la sesión en tiempo real."
-                  : "Receive and send messages that are broadcasted to all users watching the session on real time."}
-              </p>
-              <select
-                id="jokes-select"
-                value={preferences.jokesEnabled ? "true" : "false"}
-                onChange={(e) => handleToggleJokes(e.target.value === "true")}
-                style={{
-                  boxShadow:
-                    "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
-                }}
-                className="text-sm py-2 px-2 rounded-md bg-warmBlack text-gray-200 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200 font-geist font-medium"
-              >
-                <option value={"true"}>
-                  {preferences.translate
-                    ? "Recibir y enviar chistes"
-                    : "Receive and send jokes"}
-                </option>
-                <option value={"false"}>
-                  {preferences.translate
-                    ? "Desactivar chistes"
-                    : "Disable jokes"}
-                </option>
-              </select>
             </div>
           </div>
 

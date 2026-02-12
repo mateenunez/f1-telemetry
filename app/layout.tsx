@@ -6,7 +6,7 @@ import { i18n, type Locale } from "@/lib/i18n/config";
 import Script from "next/script";
 import localFont from "next/font/local";
 import { Geist, Orbitron, Aldrich, Oxanium } from "next/font/google";
-
+import { ChatContext, ChatProvider } from "@/context/chat";
 
 const f1RegularfFont = localFont({
   src: "../public/fonts/Formula1-Regular.otf",
@@ -127,8 +127,12 @@ export default async function RootLayout({
         `}
         </Script>
       </head>
-      <body className={`${f1RegularfFont.variable} ${geist.variable} ${orbitron.variable} ${aldrich.variable} ${oxanium.variable}`}>
-        <PreferencesProvider>{children}</PreferencesProvider>
+      <body
+        className={`${f1RegularfFont.variable} ${geist.variable} ${orbitron.variable} ${aldrich.variable} ${oxanium.variable}`}
+      >
+        <PreferencesProvider>
+          <ChatProvider>{children}</ChatProvider>
+        </PreferencesProvider>
         <Analytics />
       </body>
     </html>
