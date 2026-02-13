@@ -142,7 +142,7 @@ export const DEFAULT_CONFIG: Preferences = {
     index: 6,
   },
   tyresList: {
-    enabled: true,
+    enabled: false,
     xPct: 0,
     yPct: 1620 / 1094,
     widthPct: 1500 / 1526,

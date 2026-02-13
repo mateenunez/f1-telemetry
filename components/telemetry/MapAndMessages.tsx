@@ -26,7 +26,7 @@ const MapAndMessages = memo(function MapAndMessages({
 
   return (
     <Card className="lg:col-span-5 bg-warmBlack flex flex-col border-none">
-      <CardHeader className="flex flex-col py-2 third-step">
+      <CardHeader className="flex flex-col py-2">
         <div className="flex flex-row gap-2 pt-4 items-center justify-between px-4 py-2 min-h-[5rem]">
           <CardTitle className="text-lg font-thin text-white">
             <div className="flex justify-center items-center">
@@ -66,7 +66,7 @@ const MapAndMessages = memo(function MapAndMessages({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col justify-center h-full p-0 second-step">
+      <CardContent className="flex flex-col justify-center h-full p-0">
         {telemetryData && telemetryData.session?.circuit_key && (
           <Map
             positions={telemetryData.positionData}

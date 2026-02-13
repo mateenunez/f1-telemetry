@@ -63,7 +63,7 @@ export function CircleCarData({
   const speedMarks = [0, 60, 120, 180, 240, 300, 360];
 
   return (
-    <div className="flex items-center bg-warmBlack justify-center w-full h-full p-6 lg:p-0 seventh-step">
+    <div className="flex items-center bg-warmBlack justify-center w-full h-full p-6 lg:p-0">
       <div className="w-full h-full">
         <svg viewBox={`0 0 ${VW} ${VW}`} className="w-full h-full" preserveAspectRatio="none">
           {/* Outer speed circle background */}

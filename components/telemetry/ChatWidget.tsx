@@ -110,20 +110,17 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
 
   if (!isAuthenticated) {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center bg-warmBlack border border-gray-700 rounded-lg p-4">
-        <div className="text-center space-y-4">
+      <div className="w-full h-full flex flex-col items-center justify-center bg-warmBlack rounded-lg chat-step">
+        <div className="text-center space-y-2">
           <LogIn className="mx-auto" size={32} />
-          <h3 className="text-lg font-semibold text-gray-200">
-            {language === "es" ? "Inicia sesión para chatear" : "Login to chat"}
-          </h3>
-          <p className="text-sm text-gray-400 max-w-xs">
+          <p className="text-xs text-gray-400 font-geist max-w-xs">
             {language === "es"
-              ? "Necesitas una cuenta para enviar mensajes"
-              : "You need an account to send messages"}
+              ? "Necesitas una cuenta para enviar mensajes!"
+              : "You need an account to send messages!"}
           </p>
           <button
             onClick={onOpenAuth}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm flex items-center justify-center gap-2 mx-auto"
+            className="px-2 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-geist text-xs flex items-center justify-center gap-2 mx-auto"
           >
             <LogIn size={16} />
             {language === "es" ? "Iniciar sesión" : "Login"}
@@ -134,7 +131,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   }
 
   return (
-    <div className="w-full md:h-full h-[20rem] flex flex-col bg-warmBlack rounded-lg overflow-hidden">
+    <div className="w-full md:h-full h-[20rem] flex flex-col bg-warmBlack rounded-lg overflow-hidden chat-step">
       {/* Messages Area */}
       <div
         ref={messagesContainerRef}
@@ -171,7 +168,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                     >
                       {msg.user.username}
                     </span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs font-geist text-gray-600">
                       {msg.timestamp.toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -218,7 +215,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
               <button
                 type="button"
                 onClick={() => setShowColorPicker((v) => !v)}
-                className="h-9 w-9 flex items-center justify-center rounded border border-gray-600 bg-transparent hover:border-gray-500 transition-colors"
+                className="h-9 w-9 flex items-center justify-center bg-transparent hover:border-gray-500 transition-colors"
                 title={
                   language === "es" ? "Color del nombre" : "Username color"
                 }
@@ -227,18 +224,18 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                 <Palette size={16} className="text-gray-400" />
               </button>
               {showColorPicker && (
-                <div className="absolute right-0 bottom-full mb-1 flex items-center gap-1 p-2 border border-gray-600 rounded shadow-lg z-10 bg-warmBlack">
+                <div className="absolute right-0 bottom-full mb-1 flex items-center gap-1 p-2 z-10 border border-gray-600 bg-warmBlack">
                   <input
                     type="color"
                     value={usernameColor}
                     onChange={(e) => setUsernameColor(e.target.value)}
-                    className="w-8 h-8 rounded cursor-pointer border border-gray-600 bg-transparent"
+                    className="w-8 h-8 cursor-pointer bg-transparent"
                   />
                   <input
                     type="text"
                     value={usernameColor}
                     onChange={(e) => setUsernameColor(e.target.value)}
-                    className="w-20 px-2 py-1 border border-gray-600 rounded text-white text-xs font-mono bg-transparent"
+                    className="w-20 px-2 py-1 text-white text-xs font-mono bg-transparent"
                   />
                 </div>
               )}
@@ -258,13 +255,6 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
           </div>
           <div className="flex justify-between text-xs text-gray-500 px-0.5">
             <span>{content.length}/{maxLength}</span>
-            {cooldown > 0 && (
-              <span className="text-yellow-500">
-                {language === "es"
-                  ? `Espera ${Math.ceil(cooldown / 1000)}s`
-                  : `Wait ${Math.ceil(cooldown / 1000)}s`}
-              </span>
-            )}
           </div>
         </form>
       </div>

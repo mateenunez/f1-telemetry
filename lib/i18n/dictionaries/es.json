@@ -10,7 +10,7 @@
     "audioDesc": "Podés escuchar al instante el mensaje de radio de equipo de cada piloto durante la carrera, y además ¡usamos IA para la traducción y transcripción!",
     "circlesTitle": "Análisis en tiempo real",
     "circlesDesc": "Estamos añadiendo constantemente funcionalidades para mejorar el análisis de carreras, como el Circle of Doom que sirve para tomar decisiones de undercut.",
-    "version": "La version 1.6.0 trae la posibilidad de hacer chistes y mostrarlos en toda la pantalla, para todos los usuarios!",
+    "version": "La version 1.6.0 trae un chat en vivo para todos los usuarios!",
     "announce": "Seguimos trabajando en migrar a un nuevo servidor, la telemetría puede no funcionar correctamente hasta que finalice el proceso. ¡Te esperamos en marzo!"
   },
   "footer": {
@@ -67,35 +67,33 @@
     "registerButton": "Registrarse",
     "loggingIn": "Iniciando...",
     "registering": "Registrando...",
-    "noAccount": "¿No tienes cuenta?",
+    "noAccount": "¿No tenés cuenta?",
     "signUp": "Registrate",
-    "hasAccount": "¿Ya tienes cuenta?",
+    "hasAccount": "¿Ya tenés cuenta?",
     "logIn": "Inicia sesión",
     "fillAllFields": "Completa todos los campos",
     "loginFailed": "Error al iniciar sesión",
     "passwordsDoNotMatch": "Las contraseñas no coinciden",
     "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
-    "registrationFailed": "Error al registrarse"
+    "registrationFailed": "Error al registrarse",
+    "errors": {
+      "USER_NOT_FOUND": "Usuario no encontrado. Verificá el correo.",
+      "WRONG_PASSWORD": "Contraseña incorrecta.",
+      "INVALID_TOKEN": "Sesión inválida o expirada. Volvé a iniciar sesión.",
+      "REGISTRATION_FAILED": "No se pudo crear la cuenta. Intentá de nuevo.",
+      "LOGIN_FAILED": "Error al iniciar sesión. Intentá de nuevo.",
+      "VALIDATION_REQUIRED": "Completá todos los campos requeridos.",
+      "default": "Algo salió mal. Acordate que el nombre e email deben ser únicos."
+    }
   },
   "tourSteps": {
-    "welcome": "Bienvenido a F1 Telemetry! con este tutorial vamos a mostrarte las funcionalidades de la telemetría.",
-    "positions": "Acá podés ver las posiciones actuales, compuestos e historial de pits, diferencias en segundos, tiempos de vuelta y minisectores.",
-    "map": "Este mapa muestra la ubicación en tiempo real de cada piloto en el circuito durante la sesión. Podes personalizarlo en el panel de preferencias!",
-    "raceControlAndlaps": "Acá se muestran los mensajes de control de carrera, por ejemplo, banderas y penalizaciones. Además, podés ver las vueltas y el estado del circuito.",
-    "header": "En el encabezado podés ver el estado de la sesión, ver condiciones climáticas y el tiempo para sincronizarte.",
-    "raceLogs": "También podés escuchar audios, leer sus transcripciones o el historial de mensajes de la sesión.",
-    "doomCircle": "El Circle of Doom te ayuda a visualizar estrategias de pit stops y decisiones de undercut en tiempo real. Cuando un piloto entre al pit se retrasará hasta la marca PIT.",
-    "carDataCircle": "Este círculo muestra datos en tiempo real del piloto seleccionado, como velocidad, RPM y más.",
-    "preferences": "Haciendo click en este botón vas a acceder al panel de preferencias, en este podés personalizar la telemetría a tu gusto.",
-    "edit": "En el modo edición podés mover y redimensionar los distintos componentes de la telemetría. ¡Probalo en tu compu o laptop!",
-    "jokes": "Podés enviar mensajes que se transmiten a todos los usuarios, solo tenés que registrarte. Activa esta función en el panel de preferencias y compartí tus pensamientos con la comunidad!"
-  },
-  "joke": {
-    "placeholder": "¿Qué estás pensando?"
+    "welcome": "Hola, esta es una guía de lo que hay en esta página :)",
+    "preferences": "Haciendo click en este botón vas a acceder al panel de preferencias, en este podés configurar la telemetría.",
+    "edit": "En el modo edición podés mover y redimensionar los distintos componentes de la telemetría. Solo disponible para PC.",
+    "chat": "Podés acceder al chat iniciando sesión."
   },
   "loading": "Preparando el sistema...",
   "delaying": "Aplicando delay...",
-  "404": "Te perdiste?.",
   "error": {
     "title": "Error de Conexión",
     "message": "Estamos teniendo problemas para conectar con el servicio de telemetría. Por favor, verifica tu conexión e intenta actualizar la página. Si el problema persiste, vuelve más tarde.",

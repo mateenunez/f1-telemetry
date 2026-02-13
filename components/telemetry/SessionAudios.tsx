@@ -137,7 +137,7 @@ export default function SessionAudios({
   }, [radioAudioRef.current, playingAudio]);
 
   return (
-    <Card className="flex w-full h-full bg-warmBlack border-none fifth-step">
+    <Card className="flex w-full h-full bg-warmBlack border-none">
       <CardContent className="overflow-x-hidden flex-1 px-6 py-4">
         <ScrollArea
           className="overflow-x-auto h-[20rem] lg:h-full p-0"

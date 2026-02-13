@@ -4,7 +4,6 @@ import { i18n, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { TourProvider } from "@/context/tour";
 import { AuthProvider } from "@/context/auth";
-import { JokeProvider } from "@/context/jokes";
 
 export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }));
@@ -61,9 +60,7 @@ export default async function LangLayout({
   return (
     <AuthProvider>
       <PreferencesProvider>
-        <JokeProvider>
-          <TourProvider dict={dict}>{children}</TourProvider>
-        </JokeProvider>
+        <TourProvider dict={dict}>{children}</TourProvider>
       </PreferencesProvider>
     </AuthProvider>
   );

@@ -15,7 +15,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/hooks/use-auth";
 import AuthForm from "./telemetry/AuthForm";
 import { useContext } from "react";
-import { JokeContext } from "@/context/jokes";
 
 interface PreferencesPanelProps {
   driverInfo: ProcessedDriver[] | undefined;
@@ -56,7 +55,6 @@ export default function PreferencesPanel({
   const pathname = usePathname();
   const isLiveTimingPage = /^\/[^/]+\/live-timing\/?$/.test(pathname ?? "");
   const { user, logout } = useAuth();
-  const jokeCtx = useContext(JokeContext);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -219,8 +217,7 @@ export default function PreferencesPanel({
         },
         chat: {
           title: "Chat",
-          description:
-            "Mostrar el chat para enviar y ver mensajes en vivo.",
+          description: "Mostrar el chat para enviar y ver mensajes en vivo.",
         },
       }
     : {
@@ -271,8 +268,7 @@ export default function PreferencesPanel({
         },
         chat: {
           title: "Chat",
-          description:
-            "Show the chat to send and view live messages.",
+          description: "Show the chat to send and view live messages.",
         },
       };
 
@@ -290,7 +286,7 @@ export default function PreferencesPanel({
     <>
       {/* Toggle Button */}
       <PanelLeft
-        className="text-gray-300 hover:text-gray-400 hover:cursor-pointer eighth-step"
+        className="text-gray-300 hover:text-gray-400 hover:cursor-pointer preferences-step"
         width={15}
         onClick={() => setOpen((prev) => !prev)}
       />
@@ -298,7 +294,7 @@ export default function PreferencesPanel({
       {!isMobile && (
         <Pencil
           width={15}
-          className={`hover:cursor-pointer transition-colors ninth-step ${
+          className={`hover:cursor-pointer transition-colors edit-step ${
             isEditMode
               ? "text-f1Blue hover:text-f1Blue/80"
               : "text-gray-300 hover:text-gray-400"

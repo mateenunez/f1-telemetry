@@ -35,11 +35,12 @@ export const userEndpoints = {
       body: JSON.stringify({ email, password }),
     });
 
+    const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-      throw new Error("Login failed");
+      throw new Error(data?.error ?? "LOGIN_FAILED");
     }
 
-    return response.json();
+    return data;
   },
 
   async register(
@@ -55,11 +56,12 @@ export const userEndpoints = {
       body: JSON.stringify({ username, email, password }),
     });
 
+    const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-      throw new Error("Registration failed");
+      throw new Error(data?.error ?? "REGISTRATION_FAILED");
     }
 
-    return response.json();
+    return data;
   },
 
   async verifyToken(token: string): Promise<VerifiyTokenResponse> {
@@ -72,11 +74,12 @@ export const userEndpoints = {
       body: JSON.stringify({ token }),
     });
 
+    const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-      throw new Error("Failed to fetch user");
+      throw new Error(data?.error ?? "INVALID_TOKEN");
     }
 
-    return response.json();
+    return data;
   },
 
   async getUser(token: string): Promise<User> {

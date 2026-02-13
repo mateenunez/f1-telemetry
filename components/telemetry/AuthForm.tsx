@@ -11,7 +11,7 @@ interface AuthFormProps {
 }
 
 export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
-  const { login, register, isLoading, error } = useAuth();
+  const { login, register, isLoading, error, clearError } = useAuth();
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -38,7 +38,11 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
       await login(loginEmail, loginPassword);
       onClose();
     } catch (err) {
-      setFormError(err instanceof Error && dict.auth.loginFailed);
+      const code = err instanceof Error ? err.message : "LOGIN_FAILED";
+      const errors = dict?.auth?.errors;
+      setFormError(
+        (errors && (errors[code] ?? errors.default)) || dict.auth.loginFailed
+      );
     }
   };
 
@@ -70,12 +74,18 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
       await register(registerUsername, registerEmail, registerPassword);
       onClose();
     } catch (err) {
-      setFormError(err instanceof Error && dict.auth.registrationFailed);
+      const code = err instanceof Error ? err.message : "REGISTRATION_FAILED";
+      const errors = dict?.auth?.errors;
+      setFormError(
+        (errors && (errors[code] ?? errors.default)) ||
+          dict.auth.registrationFailed
+      );
     }
   };
 
   const handleClose = () => {
     setFormError(null);
+    clearError();
     setLoginEmail("");
     setLoginPassword("");
     setRegisterUsername("");
@@ -136,7 +146,7 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
                 <div className="relative">
                   <Mail
                     width={16}
-                    className="absolute left-3 top-3 text-gray-500"
+                    className="absolute left-3 top-2 text-gray-500"
                   />
                   <input
                     type="email"
@@ -160,7 +170,7 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
                 <div className="relative">
                   <Lock
                     width={16}
-                    className="absolute left-3 top-3 text-gray-500"
+                    className="absolute left-3 top-2 text-gray-500"
                   />
                   <input
                     type="password"

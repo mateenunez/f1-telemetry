@@ -10,7 +10,7 @@
     "audioDesc": "Listen instantly to each driver’s team radio during the race—we also use AI for translation and transcription!",
     "circlesTitle": "Real-Time Analysis",
     "circlesDesc": "We keep adding features to boost race analysis, such as the Circle of Doom, perfect for undercut decisions.",
-    "version": "Version 1.6.0 allows you to tell jokes and display them on the entire screen, for all users!",
+    "version": "Version 1.6.0 has a new chat feature, you can now send and view live messages!",
     "announce": "We are still working on migrating to a new server, this website may not work properly until then. See you in march!"
   },
   "footer": {
@@ -75,27 +75,25 @@
     "loginFailed": "Login failed",
     "passwordsDoNotMatch": "Passwords don't match",
     "passwordTooShort": "Password must be at least 8 characters",
-    "registrationFailed": "Registration failed"
+    "registrationFailed": "Registration failed",
+    "errors": {
+      "USER_NOT_FOUND": "User not found. Check your email.",
+      "WRONG_PASSWORD": "Wrong password.",
+      "INVALID_TOKEN": "Invalid or expired session. Please sign in again.",
+      "REGISTRATION_FAILED": "Could not create account. Please try again.",
+      "LOGIN_FAILED": "Login failed. Please try again.",
+      "VALIDATION_REQUIRED": "Please fill in all required fields.",
+      "default": "Something went wrong. Remind that username and email must be unique."
+    }
   },
   "tourSteps": {
-    "welcome": "Welcome to F1 Telemetry! We’ll give you a quick tour to show you everything you can do with our telemetry tools.",
-    "positions": "Check out the live standings here—including tire compounds, pit history, gaps, lap times, and mini-sectors.",
-    "map": "This map tracks every driver’s position on the track in real time. You can customize how it looks in the settings panel!",
-    "raceControlAndlaps": "Keep an eye on race control messages like flags and penalties. You can also track current laps and track conditions.",
-    "header": "The header shows you the session status, live weather, and your sync timer.",
-    "raceLogs": "Catch up on team radio—listen to the audio, read the transcripts, or browse the session's message history.",
-    "doomCircle": "The 'Circle of Doom' helps you visualize pit strategies and undercut windows in real time. When a driver pits, they’ll drop back to the PIT marker.",
-    "carDataCircle": "This dial shows live data for your selected driver, like their current speed, RPM, and more.",
-    "preferences": "Click here to open the preferences panel and tweak the telemetry layout exactly how you like it.",
-    "edit": "Enter edit mode to move or resize any component. Give it a try on your desktop or laptop!",
-    "jokes": "The joke system icon lets you send messages that are broadcast to all users watching the session in real time, you only need to sign up. Activate this feature in the preferences panel and share your thoughts with the entire community!"
-  },
-  "joke": {
-    "placeholder": "Share your thoughts..."
+    "welcome": "Hi, this is a guide to what's on this page :)",
+    "preferences": "Click this button to open the preferences panel and configure the telemetry.",
+    "edit": "In edit mode you can move and resize the different telemetry components. Only available on PC.",
+    "chat": "You can access the chat by signing in."
   },
   "loading": "Getting things ready...",
   "delaying": "Applying delay...",
-  "404": "I think you're lost, bro.",
   "error": {
     "title": "Connection Error",
     "message": "We're having trouble connecting to the telemetry service. Please check your connection and try refreshing the page. If the problem persists, come back later.",

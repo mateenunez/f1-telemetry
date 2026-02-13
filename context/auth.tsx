@@ -9,6 +9,7 @@ export interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   error: string | null;
+  clearError: () => void;
   login: (email: string, password: string) => Promise<void>;
   register: (
     username: string,
@@ -85,6 +86,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         const errorMessage =
           err instanceof Error ? err.message : "User login failed";
         setError(errorMessage);
+        throw err;
       } finally {
         setIsLoading(false);
       }
@@ -104,6 +106,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         const errorMessage =
           err instanceof Error ? err.message : "User registration failed";
         setError(errorMessage);
+        throw err;
       } finally {
         setIsLoading(false);
       }
@@ -115,11 +118,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     handleAuthError();
   }, [tokenName]);
 
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
+
   const value: AuthContextType = {
     user,
     token,
     isLoading,
     error,
+    clearError,
     login,
     register,
     logout,

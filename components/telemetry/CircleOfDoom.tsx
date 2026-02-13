@@ -181,7 +181,7 @@ export default function CircleOfDoom({
   const pitLabelPos = polar(adjusted(pitStopDeg || 60), r - 7);
 
   return (
-    <div className="flex items-center bg-warmBlack justify-center w-full h-full p-6 lg:p-0 sixth-step">
+    <div className="flex items-center bg-warmBlack justify-center w-full h-full p-6 lg:p-0">
       <div className="w-full h-full">
         <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
           <circle
