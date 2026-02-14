@@ -83,13 +83,23 @@ export const DEFAULT_CONFIG: Preferences = {
   },
   mapAndMessages: {
     enabled: true,
-    xPct: 800 / 1526,
+    xPct: 890 / 1526,
     yPct: 0,
-    widthPct: 700 / 1526,
-    heightPct: 1000 / 1094,
-    width: 700,
-    height: 480,
+    widthPct: 500 / 1526,
+    heightPct: 450 / 1094,
+    width: 500,
+    height: 450,
     index: 1,
+  },
+  chat: {
+    enabled: true,
+    xPct: 880 / 1526,
+    yPct: 720 / 1094,
+    widthPct: 500 / 1526,
+    heightPct: 300 / 1094,
+    width: 600,
+    height: 300,
+    index: 2,
   },
   audioLog: {
     enabled: true,
@@ -99,16 +109,6 @@ export const DEFAULT_CONFIG: Preferences = {
     heightPct: 500 / 1094,
     width: 370,
     height: 500,
-    index: 2,
-  },
-  chat: {
-    enabled: true,
-    xPct: 850 / 1526,
-    yPct: 800 / 1094,
-    widthPct: 650 / 1526,
-    heightPct: 250 / 1094,
-    width: 650,
-    height: 250,
     index: 3,
   },
   raceControlLog: {
@@ -356,6 +356,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
           index: idx,
         });
       }
+      console.log(widgetsArr);
     });
   }, []);
 

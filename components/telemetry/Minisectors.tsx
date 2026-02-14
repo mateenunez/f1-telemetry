@@ -42,7 +42,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
           (sectorKey, sectorIdx) => {
             const minisectors = timing?.sector_segments[sectorKey] || [];
             return (
-              <div
+              <div  
                 key={sectorKey}
                 className="flex gap-1 items-center text-xs text-gray-500 h-[1rem]"
               >
@@ -72,7 +72,7 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
         )}
       </div>
 
-      <div className="flex flex-row w-full">
+      <div className="flex flex-row w-full gap-1">
         {/* Tiempos de sector */}
         <div
           className="flex items-center flex-col text-xs text-white min-w-[2rem] w-full"
