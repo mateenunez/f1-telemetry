@@ -48,11 +48,7 @@ export default function DriverPositionInfo({
           <div>
             {driver && (
               <img
-                src={
-                  driver.driver_number === 43
-                    ? config.public.assets.col
-                    : driver?.headshot_url || config.public.assets.driver
-                }
+                src={driver?.headshot_url || config.public.assets.driver}
                 className="object-cover h-[60px]"
                 alt={`${driver.name_acronym} headshot f1 telemetry`}
               />
@@ -72,8 +68,8 @@ export default function DriverPositionInfo({
                   posDiff > 0
                     ? "text-f1Red"
                     : posDiff < 0
-                    ? "text-f1Green"
-                    : "text-white/75"
+                      ? "text-f1Green"
+                      : "text-white/75"
                 }`}
               >
                 {posDiff > 0 && `▼${posDiff}`}

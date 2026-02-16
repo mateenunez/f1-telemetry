@@ -24,7 +24,6 @@ export const config = {
     assets: {
       chequered_flag: `${blobBaseUrl}/chequered_flag.png`,
       f1t: `${blobBaseUrl}/f1t.png`,
-      col: `${blobBaseUrl}/43.png`,
       discordIcon: `${blobBaseUrl}/discord.svg`,
       driver: `${blobBaseUrl}/driver.png`,
       f1t_black: `${blobBaseUrl}/f1t_black.png`,

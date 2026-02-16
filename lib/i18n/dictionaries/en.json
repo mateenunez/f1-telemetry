@@ -35,6 +35,10 @@
     "title": "Live timing",
     "description": "Real-time F1 telemetry dashboard with live timing, driver positions, lap times, and race analytics. Follow Formula 1 races with detailed data."
   },
+  "help":{
+    "title": "Widgets and features",
+    "description": "Help and documentation for F1 Telemetry, the fan-made live timing dashboard for Formula 1 fans."
+  },
   "map": {
     "title": "Live map",
     "description": "F1 Telemetry live map of the Formula 1 race circuit."
