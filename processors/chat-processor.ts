@@ -8,6 +8,7 @@ export interface ProcessedChatMessage {
     username: string;
     color?: string;
     roleId?: number;
+    badge?: string;
   };
   language: 'en' | 'es';
   timestamp: Date;
@@ -37,6 +38,7 @@ export class ChatProcessor {
         username: messageData.user.username,
         color: typeof userColor === "string" ? userColor : DEFAULT_USERNAME_COLOR,
         roleId: roleId != null ? Number(roleId) : undefined,
+        badge: messageData.user?.badge ?? undefined,
       },
       language,
       cooldown: messageData.cooldown || 0,

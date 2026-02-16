@@ -2,9 +2,8 @@ import { config } from "@/lib/config";
 
 const API_BASE_URL = config.public.apiUrl;
 
-// Interfaz Role no se usa x ahora
-
 export interface Role {
+  id: number;
   name: string;
   cooldown_ms: number;
 }
@@ -18,6 +17,10 @@ export interface User {
   id: number;
   username: string;
   role: Role;
+  chat_color: string;
+  chat_badge?: string;
+  email: string;
+  created_at: string;
 }
 
 export interface AuthResponse {

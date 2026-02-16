@@ -58,7 +58,7 @@ export const useChat = (processedMessages: ProcessedChatMessage[] | undefined, d
     return () => clearInterval(timer);
   }, [cooldown]);
 
-  const sendMessage = async (content: string, color: string) => {
+  const sendMessage = async (content: string, color: string, badge: string) => {
     if (!content.trim()) return setError("Message is empty.");
 
     setError(null);
@@ -69,8 +69,8 @@ export const useChat = (processedMessages: ProcessedChatMessage[] | undefined, d
         content: content.trim(),
         language: currentLanguage,
         color: color || undefined, // Undefined o default?
+        badge: badge || undefined,
       };
-      console.log("Sending message:", messageData);
       telemetryManager.sendMessage("chat:post", messageData);
 
       setCooldown(user?.role?.cooldown_ms ?? 5000);

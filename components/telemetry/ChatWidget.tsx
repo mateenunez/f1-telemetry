@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Send, LogIn, Palette, Crown, Heart, Star, Stars } from "lucide-react";
+import { Send, LogIn, Palette, Stars } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { ProcessedChatMessage } from "@/processors/chat-processor";
 
@@ -9,7 +9,7 @@ interface ChatWidgetProps {
   messages: ProcessedChatMessage[];
   language: string;
   dict: any;
-  sendMessage: (content: string, color: string) => Promise<void>;
+  sendMessage: (content: string, color: string, badge: string) => Promise<void>;
   onOpenAuth: () => void;
 }
 
@@ -29,30 +29,40 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
     "#fb923c",
     "#c084fc",
   ];
-
+  const { user, isAuthenticated } = useAuth();
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [cooldown, setCooldown] = useState(0);
-  const [usernameColor, setUsernameColor] = useState<string>(
-    () =>
-      DEFAULT_USERNAME_COLORS[
-        Math.floor(Math.random() * DEFAULT_USERNAME_COLORS.length)
-      ],
-  );
+  const [usernameColor, setUsernameColor] = useState<string>(() => {
+    if (user?.chat_color && user.chat_color.trim() !== "") {
+      return user.chat_color;
+    }
+    return DEFAULT_USERNAME_COLORS[
+      Math.floor(Math.random() * DEFAULT_USERNAME_COLORS.length)
+    ];
+  });
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [selectedEmoji, setSelectedEmoji] = useState(user?.chat_badge || "");
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const { user, isAuthenticated } = useAuth();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
   const maxLength = 200;
-
-  const isPremiumOrAdmin = (roleId?: number) => roleId === 2 || roleId === 3;
-  const messageBgStyle = (hexColor: string | undefined) => {
-    if (!hexColor) return undefined;
-    const hex = hexColor.replace(/^#/, "");
-    if (hex.length === 6) return { backgroundColor: `${hexColor}18` };
-    return undefined;
-  };
+  const COMMON_EMOJIS = [
+    "🏎️",
+    "🏁",
+    "🏆",
+    "🔥",
+    "🛠️",
+    "🚦",
+    "⭐",
+    "😎",
+    "💪",
+    "🚀",
+    "🔋",
+    "❤️",
+    "🥥",
+  ];
 
   // Cooldown timer
   useEffect(() => {
@@ -98,7 +108,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
     if (!content.trim() || !isAuthenticated || !user) return;
 
     try {
-      sendMessage(content.trim(), usernameColor);
+      sendMessage(content.trim(), usernameColor, selectedEmoji);
       setContent("");
       setIsSubmitting(false);
       setCooldown(user?.role.cooldown_ms || 5000);
@@ -132,7 +142,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
           <form onSubmit={handleSubmit} className="flex flex-col gap-1">
             <div className="flex items-stretch gap-1.5">
               <div className="flex flex-row w-full items-center border border-gray-600 rounded focus:ring-blue-500">
-                {/* <Stars size={16} className="ml-2 text-gray-400" /> */}
+                <Stars size={16} className="ml-2 text-gray-400" />
                 <textarea
                   placeholder={
                     language === "es"
@@ -182,8 +192,8 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full text-gray-400 text-sm">
             {language === "es"
-              ? "Este es la primera versión del chat, probalo 🌱"
-              : "This is the first version of the chat, try it out 🌱"}
+              ? "No anda nadie por ahora... 👀"
+              : "No one's here yet... 👀"}
           </div>
         ) : (
           <>
@@ -193,28 +203,14 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                   key={msg.id}
                   className="text-sm flex flex-row gap-1 break-words rounded-md"
                 >
-                  <div className="flex items-center gap-1">
+                  <div className="flex gap-1">
                     <span className="text-[0.6rem] font-geist text-gray-500">
                       {msg.timestamp.toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
                     </span>
-                    {msg.user.roleId === 3 && (
-                      <Crown
-                        size={14}
-                        className="shrink-0"
-                        color={msg.user.color}
-                      />
-                    )}
-                    {msg.user.roleId === 2 && (
-                      <Heart
-                        size={14}
-                        className="shrink-0"
-                        color={msg.user.color}
-                        
-                      />
-                    )}
+                    {msg.user.roleId !== 1 && <span>{msg.user.badge}</span>}
                     <span
                       className="font-semibold truncate"
                       style={{ color: msg.user.color ?? "#94a3b8" }}
@@ -236,9 +232,46 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
       {/* Input Area */}
       <div className="px-2 pb-2 pt-1 bg-warmBlack">
         <form onSubmit={handleSubmit} className="flex flex-col gap-1">
-          <div className="flex items-stretch gap-1.5">
+          <div className="flex items-stretch gap-1">
             <div className="flex flex-row w-full items-center border border-gray-600 rounded focus:ring-blue-500">
-              {/* <Stars size={16} className="ml-2 text-gray-400" /> */}
+              <div className="relative flex items-center shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setShowEmojiPicker((v) => !v)}
+                  className="h-9 w-9 flex items-center justify-center bg-transparent hover:border-gray-500 transition-colors"
+                  title={language === "es" ? "Elegir emoji" : "Pick badge"}
+                  disabled={user?.role.name === "base"}
+                  style={{ opacity: user?.role.name === "base" ? 0.5 : 1 , cursor: user?.role.name === "base" ? "not-allowed" : "pointer" }}
+                  aria-label="Pick emoji badge"
+                >
+                  {selectedEmoji || (
+                    <Stars size={16} className="text-gray-400" />
+                  )}
+                </button>
+
+                {showEmojiPicker && (
+                  <div className="absolute left-0 bottom-full mb-1 p-2 z-10 border border-gray-600 bg-warmBlack w-48">
+                    {/* Grid de Emojis */}
+                    <div className="grid grid-cols-4 gap-1 max-h-40 overflow-y-auto custom-scrollbar">
+                      {COMMON_EMOJIS.map((emoji, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => {
+                            setSelectedEmoji(emoji);
+                            setShowEmojiPicker(false);
+                          }}
+                          className={`hover:bg-gray-700 rounded transition-colors ${
+                            selectedEmoji === emoji ? "bg-gray-600" : ""
+                          }`}
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
               <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
@@ -257,7 +290,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                 }
                 maxLength={maxLength}
                 disabled={cooldown > 0 || isSubmitting}
-                className="flex-1 min-h-[36px] h-9 px-2.5 py-1.5 text-white placeholder-gray-500 focus:outline-none resize-none text-sm max-h-20 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent"
+                className="flex-1 min-h-[36px] h-9 py-1.5 text-white placeholder-gray-500 focus:outline-none resize-none text-sm max-h-20 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent"
                 rows={1}
               />
 
