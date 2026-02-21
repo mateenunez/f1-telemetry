@@ -36,7 +36,7 @@ export const mockData = {
       sector_times: {
         sector1: {
           Stopped: false,
-          Value: "39.317",
+          Value: 39.217,
           Status: 0,
           OverallFastest: false,
           PersonalFastest: false,
@@ -72,11 +72,11 @@ export const mockData = {
               Status: 0,
             },
           ],
-          PreviousValue: "39.317",
+          PreviousValue: 39.217,
         },
         sector2: {
           Stopped: false,
-          Value: "58.453",
+          Value: 58.453,
           Status: 0,
           OverallFastest: false,
           PersonalFastest: true,
@@ -115,11 +115,11 @@ export const mockData = {
               Status: 0,
             },
           ],
-          PreviousValue: "61.690",
+          PreviousValue: 61.690,
         },
         sector3: {
           Stopped: false,
-          Value: "30.875",
+          Value: 30.875,
           Status: 0,
           OverallFastest: true,
           PersonalFastest: true,
@@ -297,17 +297,15 @@ export const mockData = {
     },
   ],
   driver_car_data: [
-    [
-      {
-        driver_number: 43,
-        drs: true,
-        speed: 274,
-        brake: 0,
-        throttle: 100,
-        gear: 5,
-        rpm: 12000,
-        date: Date.now(),
-      },
-    ],
+    {
+      driver_number: 43,
+      drs: true,
+      speed: 274,
+      brake: 0,
+      throttle: 100,
+      gear: 5,
+      rpm: 12000,
+      date: Date.now(),
+    },
   ],
 };

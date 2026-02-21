@@ -9,15 +9,21 @@ interface DriverPositionInfoProps {
   position: ProcessedPosition;
   driver: ProcessedDriver | undefined;
   isPlaying: number | undefined;
+  driverHeadshot?: boolean;
 }
 
 export default function DriverPositionInfo({
   position,
   driver,
   isPlaying,
+  driverHeadshot,
 }: DriverPositionInfoProps) {
   const { preferences } = usePreferences();
-  const headshot = preferences.headshot;
+  let headshot = driverHeadshot;
+
+  if (headshot === null) {
+    headshot = preferences.headshot;
+  }
 
   let posDiff = 0;
   if (driver?.grid_position)

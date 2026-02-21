@@ -14,7 +14,8 @@
     "announce": "Seguimos trabajando en migrar a un nuevo servidor, la telemetría puede no funcionar correctamente hasta que finalice el proceso. ¡Te esperamos en marzo!"
   },
   "footer": {
-    "legal": " Este sitio web no está asociado, afiliado, autorizado, respaldado ni conectado oficialmente de ninguna manera con la Fórmula 1, la FIA o cualquiera de sus subsidiarias o afiliadas."
+    "legal": "Este sitio web no está asociado, afiliado, autorizado, respaldado ni conectado oficialmente de ninguna manera con la Fórmula 1, la FIA o cualquiera de sus subsidiarias o afiliadas.",
+    "help": "Más información sobre widgets."
   },
   "schedule": {
     "homeButton": "Inicio",
@@ -35,9 +36,60 @@
     "title": "Telemetría en vivo",
     "description": "Dashboard de F1 Telemetry en tiempo real con tiempos en vivo, posiciones de pilotos, tiempos por vuelta y análisis de carrera. Sigue las carreras de Fórmula 1 con datos detallados."
   },
-  "help":{
+  "help": {
     "title": "Widgets y funcionalidades",
-    "description": "Ayuda y documentación para F1 Telemetry, el dashboard de telemetría en vivo hecho por fans de Formula 1."
+    "description": "Ayuda y documentación para F1 Telemetry, el dashboard de telemetría en vivo hecho por fans de Formula 1.",
+    "drivers": {
+      "title": "Posiciones de Pilotos",
+      "description": "La tabla de posiciones muestra la telemetría actual de cada piloto.",
+      "knocked_out": "Cuando un piloto es eliminado (knocked out), se mostrará con menor opacidad.",
+      "elimination": "Cuando un piloto está en riesgo de eliminación, se mostrará con un fondo rojo."
+    },
+    "compounds": {
+      "title": "Compuestos",
+      "description": "Los compuestos de neumáticos se muestran con su edad (vueltas) debajo. En este ejemplo, el neumático ha sido usado por 12 vueltas.",
+      "icons_label": "Iconos de todos los compuestos:",
+      "types": {
+        "hard": "Duro",
+        "medium": "Medio",
+        "soft": "Blando",
+        "intermediate": "Intermedio",
+        "wet": "Lluvia",
+        "unknown": "Desconocido"
+      }
+    },
+    "pits": {
+      "title": "Pit Stops",
+      "description": "Mostramos los compuestos usados en cada parada y la cantidad total de pits. En este caso, el piloto hizo 2 paradas, usando medios y blandos.",
+      "pitlane_label": "Si el piloto está en el carril de pits (pitlane), se verá así:"
+    },
+    "colors": {
+      "title": "Colores",
+      "color": {
+        "yellow": "Amarillo",
+        "green": "Verde",
+        "purple": "Violeta",
+        "blue": "Azul"
+      },
+      "description": "Seguimos el estándar oficial de colores de la Fórmula 1 para telemetría.",
+      "yellow": "para un tiempo más lento que su mejor marca personal",
+      "green": "para su mejor marca personal (personal best)",
+      "purple": "para la mejor marca de la sesión (overall best)",
+      "blue": "para pilotos en el carril de pits"
+    },
+    "map": {
+      "title": "Mapa",
+      "description": "El mapa se actualiza en tiempo real mostrando posiciones relativas. Incluye sectores amarillos por incidentes/Safety Car y sectores rojos por Red Flag.",
+      "footer": "También puedes activar la visualización de los tres sectores en el panel de preferencias."
+    },
+    "doom": {
+      "title": "Círculo del Destino (Circle of Doom)",
+      "description": "Muestra la diferencia en segundos entre pilotos. Es útil para ver dónde caerá un piloto tras una parada en boxes. En este caso, si COLAPINTO entra a pits, saldrá cerca de STROLL. La marca de PIT es rosada y más gruesa."
+    },
+    "car_data": {
+      "title": "Círculo de Datos del Coche",
+      "description": "Muestra los datos del coche en formato circular: velocidad actual, acelerador, freno, marcha y RPM."
+    }
   },
   "map": {
     "title": "Mapa en vivo",
