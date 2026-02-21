@@ -184,13 +184,13 @@ const DriverPositions = memo(function DriverPositions({
                   timing?.knockedOut || timing?.retired || timing?.stopped
                     ? {
                         opacity: 0.4,
-                        background: `linear-gradient(-90deg, #0a0a0a ${
+                        background: `linear-gradient(-50deg, #0a0a0a ${
                           headshot ? "90%" : "100%"
                         }, #${driver?.team_colour} 100%)`,
                       }
                     : {
                         opacity: 1,
-                        background: `linear-gradient(-90deg, ${
+                        background: `linear-gradient(-50deg, ${
                           isAboutToBeEliminated
                             ? "#6b040447"
                             : isFavorite
@@ -199,6 +199,8 @@ const DriverPositions = memo(function DriverPositions({
                         } ${
                           headshot && !isAboutToBeEliminated ? "90%" : "100%"
                         }, #${driver?.team_colour} 100%)`,
+                       
+                        
                       };
 
                 return (

@@ -301,6 +301,10 @@ export class TelemetryManager {
     return this.positionDataProcessor.getDriverPosition(driverNumber);
   }
 
+  getMessages(): ProcessedChatMessage[] {
+    return this.chatProcessor.getAllMessages();
+  }
+
   sendMessage(messageType: string, payload: any): void {
     this.wsManager.sendMessage(messageType, payload);
   }

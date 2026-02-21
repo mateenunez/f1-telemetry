@@ -4,7 +4,10 @@ import { useAuth } from "./use-auth";
 import { getTelemetryManager } from "../telemetry-manager-singleton";
 import { ProcessedChatMessage } from "@/processors/chat-processor";
 
-export const useChat = (processedMessages: ProcessedChatMessage[] | undefined, dict: any) => {
+export const useChat = (
+  processedMessages: ProcessedChatMessage[] | undefined,
+  dict: any,
+) => {
   const context = useContext(ChatContext);
 
   if (!context) throw new Error("Error at useChat hook.");
@@ -14,11 +17,13 @@ export const useChat = (processedMessages: ProcessedChatMessage[] | undefined, d
   const [cooldown, setCooldown] = useState(0);
   const { messages, isOpen, setIsOpen, addMessage, removeMessage } = context;
   const timersRef = useRef<Set<string>>(new Set());
-  const visibleTime = 3600000; // 1 hour
+  const visibleTime = 2000; // 1 hour
 
   const currentLanguage = dict?.locale ? dict.locale : "es";
 
-  const currentLanguageMessages = messages.filter((m) => m.language === currentLanguage);
+  const currentLanguageMessages = messages.filter(
+    (m) => m.language === currentLanguage,
+  );
 
   useEffect(() => {
     if (!processedMessages) return;
@@ -26,20 +31,10 @@ export const useChat = (processedMessages: ProcessedChatMessage[] | undefined, d
     const now = new Date().getTime();
 
     processedMessages.forEach((msg) => {
-      const expirationTime = msg.timestamp.getTime() + msg.cooldown;
-
-      if (expirationTime <= now) return;
-
-      if (!timersRef.current.has(msg.id)) {
+      if (!timersRef.current.has(msg.id) || msg.fromRetransmition) {
+        msg.fromRetransmition = false;
         addMessage(msg);
         timersRef.current.add(msg.id);
-
-        const remainingTime = visibleTime - msg.cooldown;
-
-        setTimeout(() => {
-          removeMessage(msg.id);
-          timersRef.current.delete(msg.id);
-        }, remainingTime);
       }
     });
 

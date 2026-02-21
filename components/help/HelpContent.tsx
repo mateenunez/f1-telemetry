@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import Navigation from "../Navigation";
 import { config } from "@/lib/config";

@@ -1,6 +1,6 @@
 "use client";
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { ProcessedChatMessage } from '@/processors';
+import React, { createContext, useState, useContext, useEffect } from "react";
+import { ProcessedChatMessage } from "@/processors";
 
 interface ChatContextType {
   messages: ProcessedChatMessage[];
@@ -9,10 +9,12 @@ interface ChatContextType {
   removeMessage: (id: string) => void;
   clearMessages: () => void;
   setIsOpen: (open: boolean) => void;
-//   removeOldMessages: () => void;
+  //   removeOldMessages: () => void;
 }
 
-export const ChatContext = createContext<ChatContextType | undefined>(undefined);
+export const ChatContext = createContext<ChatContextType | undefined>(
+  undefined,
+);
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState<ProcessedChatMessage[]>([]);
@@ -21,7 +23,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const addMessage = (message: ProcessedChatMessage) => {
     setMessages((prev) => {
       const updated = [...prev, message];
-      return updated
+      return updated;
     });
   };
 
@@ -33,18 +35,18 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     setMessages([]);
   };
 
-//   const removeOldMessages = () => {
-//     const now = Date.now();
-//     setMessages((prev) =>
-//       prev.filter((msg) => now - msg.timestamp.getTime() < messageLifetime)
-//     );
-//   };
+  //   const removeOldMessages = () => {
+  //     const now = Date.now();
+  //     setMessages((prev) =>
+  //       prev.filter((msg) => now - msg.timestamp.getTime() < messageLifetime)
+  //     );
+  //   };
 
-//   // Clean up old messages periodically
-//   useEffect(() => {
-//     const interval = setInterval(removeOldMessages, 60000); // Every minute
-//     return () => clearInterval(interval);
-//   }, []);
+  //   // Clean up old messages periodically
+  //   useEffect(() => {
+  //     const interval = setInterval(removeOldMessages, 60000); // Every minute
+  //     return () => clearInterval(interval);
+  //   }, []);
 
   return (
     <ChatContext.Provider
@@ -66,7 +68,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 export function useChat(): ChatContextType {
   const context = useContext(ChatContext);
   if (!context) {
-    throw new Error('useChat must be used within a ChatProvider');
+    throw new Error("useChat must be used within a ChatProvider");
   }
   return context;
 }

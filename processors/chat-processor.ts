@@ -10,16 +10,27 @@ export interface ProcessedChatMessage {
     roleId?: number;
     badge?: string;
   };
-  language: 'en' | 'es';
+  language: "en" | "es";
   timestamp: Date;
   cooldown: number;
+  fromRetransmition?: boolean;
 }
 
 export class ChatProcessor {
   private messages: Map<string, ProcessedChatMessage> = new Map();
-  private maxMessages = 100;
+  private maxMessages = 50;
 
-  processMessage(messageData: any, language: 'en' | 'es'): ProcessedChatMessage | null {
+  processMessage(
+    messageData: any | any[],
+    language: "en" | "es",
+  ): ProcessedChatMessage | null {
+    if (Array.isArray(messageData.Messages)) {
+      messageData.Messages.forEach((msg: any) =>
+        this.processMessage(msg, msg.language),
+      );
+      return null;
+    }
+
     if (!messageData || !messageData.id) {
       console.error("Invalid message data", messageData);
       return null;
@@ -36,13 +47,15 @@ export class ChatProcessor {
       user: {
         id: messageData.user.id,
         username: messageData.user.username,
-        color: typeof userColor === "string" ? userColor : DEFAULT_USERNAME_COLOR,
+        color:
+          typeof userColor === "string" ? userColor : DEFAULT_USERNAME_COLOR,
         roleId: roleId != null ? Number(roleId) : undefined,
         badge: messageData.user?.badge ?? undefined,
       },
       language,
       cooldown: messageData.cooldown || 0,
-      timestamp: new Date(),
+      timestamp: new Date(messageData.timestamp || ""),
+      fromRetransmition: messageData.fromRetransmition || false,
     };
 
     this.messages.set(messageData.id, processedMessage);
@@ -72,7 +85,7 @@ export class ChatProcessor {
     this.messages.clear();
   }
 
-  clearLanguage(language: 'en' | 'es'): void {
+  clearLanguage(language: "en" | "es"): void {
     const keysToDelete = Array.from(this.messages.entries())
       .filter(([, msg]) => msg.language === language)
       .map(([key]) => key);

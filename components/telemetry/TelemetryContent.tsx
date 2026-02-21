@@ -288,6 +288,9 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           aboutToBeEliminated={aboutToBeEliminated}
                           fullWidth={w.width >= canvasSize.width * 0.4}
                           isMobile={isMobile}
+                          driverHeadshot={preferences.headshot}
+                          audioEnabled={preferences.audio}
+                          translate={preferences.translate}
                         />
                       </SortableWidget>
                     );
@@ -479,6 +482,9 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           aboutToBeEliminated={aboutToBeEliminated}
                           fullWidth={w.width >= canvasSize.width * 0.4}
                           isMobile={isMobile}
+                          driverHeadshot={preferences.headshot}
+                          audioEnabled={preferences.audio}
+                          translate={preferences.translate}
                         />
                       </DraggableWidget>
                     );

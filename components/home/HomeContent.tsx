@@ -65,7 +65,27 @@ export default function HomeContent({ dict }: HomeContentProps) {
         <div className="flex flex-col justify-evenly h-full justify-center items-center max-w-4xl mx-auto">
           <div className="flex justify-center w-full items-center">
             <p className="text-gray-300 text-sm text-center px-2 font-geist font-medium">
-              {dict.home.version}
+              {Array.from(dict.home.version).map((char, idx) => {
+                if (typeof char !== "string") return;
+                return (
+                  <ColorShift
+                    key={idx}
+                    text={char}
+                    animateLetters={true}
+                    letterDelay={150 * idx}
+                    letterColor={
+                      idx < dict.home.version.length * 0.3
+                        ? "#3B82F6"
+                        : idx >= dict.home.version.length * 0.3 &&
+                            idx < dict.home.version.length * 0.6
+                          ? "#ffe066"
+                          : idx > dict.home.version.length * 0.8
+                            ? "#A855F7"
+                            : "#51cf66"
+                    }
+                  />
+                );
+              })}
             </p>
           </div>
           <div className="flex flex-col items-center">
@@ -75,28 +95,6 @@ export default function HomeContent({ dict }: HomeContentProps) {
               width={250}
               alt="F1 Telemetry black logo"
             />
-            <h1 className="text-[2rem] text-gray-200 font-geist font-extrabold">
-              {Array.from(dict.home.title).map((char, idx) => {
-                if (typeof char !== "string") return;
-                return (
-                  <ColorShift
-                    key={idx}
-                    text={char}
-                    animateLetters={true}
-                    letterDelay={150 * idx}
-                    letterColor={
-                      idx < dict.home.title.length * 0.3
-                        ? "#3B82F6"
-                        : idx >= dict.home.title.length * 0.3 && idx < dict.home.title.length * 0.6
-                        ? "#ffe066"
-                        : idx > dict.home.title.length * 0.8
-                        ? "#A855F7"
-                        : "#51cf66"
-                    }
-                  />
-                );
-              })}
-            </h1>
           </div>
           <div className="flex md:flex-row flex-col justify-center items-center md:gap-[4rem] gap-[2rem] w-full">
             <a

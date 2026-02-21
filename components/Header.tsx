@@ -9,6 +9,7 @@ import {
   formatTime,
   getCountryCode,
   parseTimeOffset,
+  sessionType,
   translateSessionName,
   translateSessionStatus,
 } from "@/utils/calendar";
@@ -88,13 +89,16 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
         <div className="flex flex-col md:flex-row lg:flex-row items-center justify-between gap-1">
           <div className="flex flex-row md:justify-start items-center mx-4">
             <div className="flex flex-row gap-4 w-full justify-center items-center">
-              <PreferencesPanel driverInfo={telemetryData?.drivers} dict={dict} />
+              <PreferencesPanel
+                driverInfo={telemetryData?.drivers}
+                dict={dict}
+              />
               <div className="flex flex-col md:flex-row items-center justify-center">
                 <div className="flex items-center flex-col">
                   <CardTitle className="flex flex-row items-center gap-4 text-md sm:text-xl font-orbitron font-normal">
                     <img
                       src={`https://flagsapi.com/${getCountryCode(
-                        session?.location || ""
+                        session?.location || "",
                       )}/flat/64.png`}
                       alt={`Flag of ${session?.location}`}
                       className="w-[25%]"
@@ -107,8 +111,18 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
                     <div className="flex flex-col">
                       <div className="flex flex-row items-center gap-2 w-full md:text-nowrap md:flex-nowrap">
                         {preferences.translate
-                          ? "Gran Premio de " + session?.circuit_short_name
-                          : session?.circuit_short_name + " Grand Prix"}
+                          ? sessionType(
+                              session?.session_name,
+                              preferences.translate,
+                            ) +
+                            " " +
+                            session?.circuit_short_name
+                          : session?.circuit_short_name +
+                            " " +
+                            sessionType(
+                              session?.session_name,
+                              preferences.translate,
+                            )}
                         {": "}
                         {preferences.translate
                           ? translateSessionName(session?.session_name)

@@ -102,7 +102,9 @@
     "qualifying": "Qualifying",
     "race": "Race",
     "sprintrace": "Sprint Race",
-    "sprintqualification": "Sprint Qualification"
+    "sprintqualification": "Sprint Qualification",
+    "grandprix": "Grand Prix",
+    "preseason": "Pre-season"
   },
   "announce": {
     "error": "Las transcripciones para los audios de equipos estarán disponibles en breve."
