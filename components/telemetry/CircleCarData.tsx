@@ -1,22 +1,25 @@
 import { usePreferences } from "@/context/preferences";
-import {
-  ProcessedCarData,
-  ProcessedDriver,
-} from "@/processors";
+import { ProcessedCarData, ProcessedDriver } from "@/processors";
 
 interface CircleCarDataProps {
   driverInfo: (ProcessedDriver | undefined)[];
   carData: ProcessedCarData | undefined;
   size?: number;
+  translate?: boolean;
 }
 
 export function CircleCarData({
   driverInfo,
   carData,
   size = 100,
+  translate,
 }: CircleCarDataProps) {
   const { preferences } = usePreferences();
-  
+
+  if (translate === null) {
+    translate = preferences.translate;
+  }
+
   const VW = size;
   const cx = 50;
   const cy = 50;
@@ -56,7 +59,7 @@ export function CircleCarData({
   const drs = carData?.drs || false;
   const rpm = carData?.rpm || 0;
   const driver = driverInfo.find(
-    (d) => d?.driver_number === carData?.driver_number
+    (d) => d?.driver_number === carData?.driver_number,
   );
   const gear = carData?.gear || 0;
 
@@ -65,7 +68,11 @@ export function CircleCarData({
   return (
     <div className="flex items-center bg-warmBlack justify-center w-full h-full p-6 lg:p-0">
       <div className="w-full h-full">
-        <svg viewBox={`0 0 ${VW} ${VW}`} className="w-full h-full" preserveAspectRatio="none">
+        <svg
+          viewBox={`0 0 ${VW} ${VW}`}
+          className="w-full h-full"
+          preserveAspectRatio="none"
+        >
           {/* Outer speed circle background */}
           <circle
             cx={50}
@@ -178,7 +185,7 @@ export function CircleCarData({
               dominantBaseline="middle"
               className="font-geist font-medium"
             >
-              {preferences.translate ? "MARCHA" : "GEAR"} {gear}
+              {translate ? "MARCHA" : "GEAR"} {gear}
             </text>
             <text
               x={50}

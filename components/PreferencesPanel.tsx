@@ -529,6 +529,15 @@ export default function PreferencesPanel({
             <p className="text-md text-gray-100 font-orbitron">
               {preferences.translate ? "Vista" : "Visuals"}
             </p>
+            <a
+              href="/help"
+              target="_blank"
+              className="text-xs text-gray-500 font-geist font-medium hover:text-f1Blue"
+            >
+              {preferences.translate
+                ? "Más información sobre los widgets acá."
+                : "Learn more about widgets here."}
+            </a>
             {Object.entries(preferences).map(([key, value]) => {
               const handleWidgetToggle = (
                 key: keyof Preferences,

@@ -14,7 +14,8 @@
     "announce": "We are still working on migrating to a new server, this website may not work properly until then. See you in march!"
   },
   "footer": {
-    "legal": "This website is not associated, affiliated, authorized, endorsed, or officially connected in any way with Formula 1, the FIA, or any of its subsidiaries or affiliates."
+    "legal": "This website is not associated, affiliated, authorized, endorsed, or officially connected in any way with Formula 1, the FIA, or any of its subsidiaries or affiliates.",
+    "help": "About widgets."
   },
   "schedule": {
     "homeButton": "Home",
@@ -34,6 +35,61 @@
   "liveTiming": {
     "title": "Live timing",
     "description": "Real-time F1 telemetry dashboard with live timing, driver positions, lap times, and race analytics. Follow Formula 1 races with detailed data."
+  },
+  "help": {
+    "title": "Widgets and features",
+    "description": "Help and documentation for F1 Telemetry, the fan-made live timing dashboard for Formula 1 fans.",
+    "drivers": {
+      "title": "Drivers Positions",
+      "description": "The driver positions leaderboard shows the current telemetrics of each driver.",
+      "knocked_out": "When a driver is knocked out, it will be displayed with less opacity.",
+      "elimination": "When a driver is about to be eliminated, it will be displayed with a red background."
+    },
+    "compounds": {
+      "title": "Compounds",
+      "description": "The tyre compounds are displayed with the age (laps) below. In this example, the compound has been used for 12 laps.",
+      "icons_label": "Here are all compound icons:",
+      "types": {
+        "hard": "Hard",
+        "medium": "Medium",
+        "soft": "Soft",
+        "intermediate": "Intermediate",
+        "wet": "Wet",
+        "unknown": "Unknown"
+      }
+    },
+    "pits": {
+      "title": "Pit Stops",
+      "description": "We display the driver's pit stop compounds and the total count of stops. In this case, the driver has done 2 stops, using medium and soft compounds.",
+      "pitlane_label": "If the driver is in the pitlane, it will be displayed like this:"
+    },
+    "colors": {
+      "color": {
+        "yellow": "Yellow",
+        "green": "Green",
+        "purple": "Purple",
+        "blue": "Blue"
+      },
+      "title": "Colors",
+      "description": "We follow the official Formula 1 color standard for telemetrics.",
+      "yellow": "for slower than personal best time",
+      "green": "for personal best time",
+      "purple": "for overall best time",
+      "blue": "for drivers in pit lane"
+    },
+    "map": {
+      "title": "Map",
+      "description": "The map updates in real-time showing relative positions. It features yellow sectors for incidents/Safety Car and red sectors for Red Flags.",
+      "footer": "Also, you can enable the three-sector display in the preferences panel."
+    },
+    "doom": {
+      "title": "Circle of Doom",
+      "description": "Shows the gap in seconds between drivers. It is useful to predict where a driver will rejoin after a pit stop. For example, if COLAPINTO pits now, he will rejoin near STROLL. The PIT mark is pink and thicker."
+    },
+    "car_data": {
+      "title": "Circle of Car Data",
+      "description": "Displays real-time car data in a circular format: current speed, throttle, brake, gear, and RPM."
+    }
   },
   "map": {
     "title": "Live map",

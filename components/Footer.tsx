@@ -32,15 +32,20 @@ export default function Footer({ dict }: FooterProps) {
           >
             <img
               src={config.public.assets.discordIcon}
-              width={20}
+              width={30}
               height={"auto"}
               alt="Discord"
             />
           </a>
         </div>
-        <p className="text-xs text-center font-geist">
-          {dict.footer.legal}
-        </p>
+        <p className="text-xs text-center font-geist">{dict.footer.legal}</p>
+        <a
+          href="/help"
+          target="_blank"
+          className="text-xs text-gray-500 font-geist hover:text-f1Blue text-center"
+        >
+          {dict.footer.help}
+        </a>
       </div>
     </div>
   );

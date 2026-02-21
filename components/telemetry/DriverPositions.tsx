@@ -35,6 +35,9 @@ interface DriverPositionsProps {
   aboutToBeEliminated: number[];
   fullWidth?: boolean;
   isMobile?: boolean;
+  translate?: boolean;
+  driverHeadshot?: boolean;
+  audioEnabled?: boolean;
 }
 
 const DriverPositions = memo(function DriverPositions({
@@ -50,18 +53,31 @@ const DriverPositions = memo(function DriverPositions({
   aboutToBeEliminated,
   fullWidth,
   isMobile,
+  translate,
+  driverHeadshot,
+  audioEnabled,
 }: DriverPositionsProps) {
   const [isPlayingAudio, setIsPlayingAudio] = useState<number | undefined>();
   const lastPlayedUtcRef = useRef<string | undefined>(
-    lastCapture ? lastCapture.utc : undefined
+    lastCapture ? lastCapture.utc : undefined,
   );
   const scrollRef = useRef<HTMLDivElement>(null);
   const scrollPosition = useRef(0);
   const { playNotificationSound } = useTelemetryAudio();
   const { playTeamRadioSound, radioAudioRef } = useTelemetryAudio();
   const { preferences } = usePreferences();
-  const headshot = preferences.headshot;
-  const popup = preferences.audio;
+  let headshot = driverHeadshot;
+  let popup = audioEnabled;
+
+  if (translate === null) {
+    translate = preferences.translate;
+  }
+  if (headshot === null) {
+    headshot = preferences.headshot;
+  }
+  if (popup === null) {
+    popup = preferences.audio;
+  }
 
   useEffect(() => {
     if (!lastCapture || !popup) return;
@@ -119,34 +135,32 @@ const DriverPositions = memo(function DriverPositions({
                     headshot ? "w-[11.5rem]" : "w-[9rem]"
                   }`}
                 >
-                  {preferences.translate ? "PILOTO" : "DRIVER"}
+                  {translate ? "PILOTO" : "DRIVER"}
                 </th>
                 <th className="w-[3rem] font-normal">
-                  {preferences.translate ? "NEUM." : "TYRES"}
+                  {translate ? "NEUM." : "TYRES"}
                 </th>
                 <th className="w-[3rem] font-normal">
-                  {preferences.translate ? "DRS" : "SPEED"}
+                  {translate ? "DRS" : "SPEED"}
                 </th>
                 <th className="w-[3rem] font-normal">PITS</th>
                 <th className="w-[3rem] font-normal">
                   {session?.session_type === "Race"
-                    ? preferences.translate
+                    ? translate
                       ? "LÍDER"
                       : "LEADER"
-                    : preferences.translate
-                    ? "MEJOR VUELTA"
-                    : "FASTEST"}
+                    : translate
+                      ? "MEJOR VUELTA"
+                      : "FASTEST"}
                 </th>
                 <th className="w-[3rem] font-normal">
                   {session?.session_type === "Race" ? "POS" : "INT"}
                 </th>
                 <th className="w-[5rem] text-center font-normal">
-                  {preferences.translate ? "VUELTAS" : "LAP TIMES"}
+                  {translate ? "VUELTAS" : "LAP TIMES"}
                 </th>
                 <th className="w-[13rem] text-center font-normal">
-                  {preferences.translate
-                    ? "MINISECTORES Y TIEMPOS"
-                    : "MINISECTORS & TIMES"}
+                  {translate ? "MINISECTORES Y TIEMPOS" : "MINISECTORS & TIMES"}
                 </th>
               </tr>
             </thead>
@@ -160,7 +174,7 @@ const DriverPositions = memo(function DriverPositions({
                 const isFavorite =
                   driver?.driver_number &&
                   preferences.favoriteDrivers.some(
-                    (d) => d.driver_number === driver.driver_number
+                    (d) => d.driver_number === driver.driver_number,
                   );
                 const isAboutToBeEliminated =
                   driver?.driver_number &&
@@ -180,8 +194,8 @@ const DriverPositions = memo(function DriverPositions({
                           isAboutToBeEliminated
                             ? "#6b040447"
                             : isFavorite
-                            ? "#" + driver?.team_colour + "30"
-                            : "#0a0a0a"
+                              ? "#" + driver?.team_colour + "30"
+                              : "#0a0a0a"
                         } ${
                           headshot && !isAboutToBeEliminated ? "90%" : "100%"
                         }, #${driver?.team_colour} 100%)`,
@@ -199,6 +213,7 @@ const DriverPositions = memo(function DriverPositions({
                         position={pos}
                         driver={driver}
                         isPlaying={isPlayingAudio}
+                        driverHeadshot={headshot}
                       />
                     </td>
 
