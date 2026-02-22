@@ -6,7 +6,7 @@ import { i18n, type Locale } from "@/lib/i18n/config";
 import Script from "next/script";
 import localFont from "next/font/local";
 import { Geist, Orbitron, Aldrich, Oxanium } from "next/font/google";
-import { ChatContext, ChatProvider } from "@/context/chat";
+import { ChatProvider } from "@/context/chat";
 
 const f1RegularfFont = localFont({
   src: "../public/fonts/Formula1-Regular.otf",

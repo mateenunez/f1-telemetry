@@ -21,6 +21,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'daily',
       priority: 0.9,
     },
+    {
+      url: 'https://www.f1telemetry.com/es/help',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.7,
+    },
     // --- URLs para la versión en inglés (/en/) ---
     {
       url: 'https://www.f1telemetry.com/en',
@@ -39,6 +45,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
+    },
+    {
+      url: 'https://www.f1telemetry.com/en/help',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.7,
     }
   ];
 }
