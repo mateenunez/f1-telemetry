@@ -83,7 +83,7 @@
       "footer": "También puedes activar la visualización de los tres sectores en el panel de preferencias."
     },
     "doom": {
-      "title": "Círculo del Destino (Circle of Doom)",
+      "title": "Circle of Doom",
       "description": "Muestra la diferencia en segundos entre pilotos. Es útil para ver dónde caerá un piloto tras una parada en boxes. En este caso, si COLAPINTO entra a pits, saldrá cerca de STROLL. La marca de PIT es rosada y más gruesa."
     },
     "car_data": {

@@ -95,7 +95,7 @@ export default function NextSession({
               translateSessionType(session.type, dict).toUpperCase()}
           </span>
 
-          <div className="flex md:flex-row justify-center gap-4">
+          <div className="flex md:flex-row justify-center gap-4 items-center">
             {/* Location and Status */}
             <div>
               <InfoRowWithFlag
@@ -135,9 +135,9 @@ function InfoRowWithFlag({ label, value }: { label: string; value: string }) {
   return (
     <span className="text-gray-200 flex flex-col gap-0 items-center">
       <img
-        src={`https://flagsapi.com/${getCountryCode(value)}/flat/32.png`}
+        src={`https://flagsapi.com/${getCountryCode(value)}/flat/64.png`}
         alt={`Flag of ${value}`}
-        className="w-12 h-12"
+        className="w-15 h-15"
       />
     </span>
   );

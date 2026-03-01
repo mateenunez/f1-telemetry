@@ -1,5 +1,4 @@
 import { Github } from "lucide-react";
-import { Geist } from "next/font/google";
 import { config } from "@/lib/config";
 import Image from "next/image";
 
@@ -28,12 +27,12 @@ export default function Footer({ dict }: FooterProps) {
           <a
             href={config.public.discord}
             target="_blank"
-            className="text-gray-400"
+            className="text-gray-400 w-[1rem]"
           >
-            <img
+            <Image
               src={config.public.assets.discordIcon}
-              width={30}
-              height={"auto"}
+              width={18}
+              height={18}
               alt="Discord"
             />
           </a>

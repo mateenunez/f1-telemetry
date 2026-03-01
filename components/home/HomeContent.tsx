@@ -74,14 +74,14 @@ export default function HomeContent({ dict }: HomeContentProps) {
                     animateLetters={true}
                     letterDelay={150 * idx}
                     letterColor={
-                      idx < dict.home.version.length * 0.3
-                        ? "#3B82F6"
-                        : idx >= dict.home.version.length * 0.3 &&
+                      idx < dict.home.version.length * 0.25
+                        ? "#3b83f6ab"
+                        : idx >= dict.home.version.length * 0.25 &&
                             idx < dict.home.version.length * 0.6
-                          ? "#ffe066"
+                          ? "#ffe066ab"
                           : idx > dict.home.version.length * 0.8
-                            ? "#A855F7"
-                            : "#51cf66"
+                            ? "#A855F7ab"
+                            : "#338540"
                     }
                   />
                 );

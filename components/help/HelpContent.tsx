@@ -124,7 +124,7 @@ export function HelpContent({ dict }: HelpContentProps) {
               <Tyres driverStints={mockData.driver_stints[0]} />
             </div>
 
-            <div className="flex flex-row w-full gap-6 justify-start items-center">
+            <div className="flex flex-row w-full gap-6 justify-start items-center flex-wrap">
               <p className="text-gray-300 font-geist">
                 {dict.help.compounds.icons_label}
               </p>

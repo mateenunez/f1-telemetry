@@ -29,9 +29,6 @@ export function ColorShift({
       setTimeout(() => {
         element.style.color = letterColor
       }, letterDelay)
-      setTimeout(() => {
-        element.style.color = "";
-      }, 3000 + letterDelay)
     })
   }, [animateLetters, letterDelay, letterColor])
 
@@ -52,11 +49,4 @@ export function ColorShift({
       ))}
     </span>
   )
-}
-
-export function animateColor(element: HTMLElement, delay: number, color: string) {
-  setTimeout(() => {
-    element.style.transition = "color 500ms ease-in-out"
-    element.style.color = color
-  }, delay)
 }
