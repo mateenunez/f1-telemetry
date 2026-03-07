@@ -112,11 +112,11 @@ export function getAboutToBeEliminatedDrivers(
     return !timing?.knockedOut && !timing?.retired && !timing?.stopped;
   });
 
-  if (activePositions.length > 5) {
+  if (activePositions.length > 6) {
     const sortedByPosition = [...activePositions].sort(
       (a, b) => b.position - a.position
     );
-    return sortedByPosition.slice(0, 5).map((pos) => pos.driver_number);
+    return sortedByPosition.slice(0, 6).map((pos) => pos.driver_number);
   }
 
   return [];

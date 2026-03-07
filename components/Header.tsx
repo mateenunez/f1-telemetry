@@ -39,13 +39,12 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
     if (session.session_status === "Finalised") return;
 
     const update = () => {
-      const now = telemetryData?.lastUpdateTime.getTime();
-      if (!now) return;
+      const now = new Date().getTime();
 
       // Qualy
-      if (session.series && session.series.length > 0) {
+      if (session.series && session.series.length > 0 && session.session_type === "Qualifying") {
         const activePart = session.series.slice(-1)[0];
-        if (activePart) {
+        if (activePart && activePart.QualifyingPart) {
           const partNumber = activePart.QualifyingPart;
           let durationMinutes: number;
           switch (partNumber) {

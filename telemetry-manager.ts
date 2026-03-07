@@ -214,6 +214,10 @@ export class TelemetryManager {
         this.sessionProcessor.processTrackStatus(messageData);
         break;
 
+      case "ExtrapolatedClock":
+        this.sessionProcessor.processExtrapolatedClock(messageData);
+        break;
+
       case "TimingStats":
         this.timingStatsProcessor.processTimingStats(messageData);
         break;

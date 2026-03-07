@@ -20,6 +20,8 @@ export interface ProcessedSession {
   session_status: string
   path: string
   series: QualifyingParts[]
+  remaining: string
+  extrapolating: boolean
 }
 
 export class SessionProcessor {
@@ -43,7 +45,9 @@ export class SessionProcessor {
       circuit_key: 0,
       session_status: "",
       path: "",
-      series: [] as QualifyingParts[]
+      series: [] as QualifyingParts[],
+      remaining: "",
+      extrapolating: false
     }
   }
 
@@ -80,7 +84,9 @@ export class SessionProcessor {
       circuit_key: meeting.Circuit?.Key ?? existing.circuit_key,
       session_status: sessionData.SessionStatus ?? existing.session_status,
       path: sessionData.Path ?? existing.path,
-      series
+      series,
+      remaining: existing.remaining,
+      extrapolating: existing.extrapolating,
     }
 
     this.sessionInfo = processed
@@ -110,6 +116,18 @@ export class SessionProcessor {
     }
 
     this.sessionInfo = processed;
+  }
+
+  processExtrapolatedClock(clockData: any): void {
+    if (!clockData) return
+
+    const existing = this.sessionInfo;
+
+    this.sessionInfo = {
+      ...existing,
+      remaining: clockData.Remaining ?? existing.remaining,
+      extrapolating: clockData.Extrapolating ?? existing.extrapolating,
+    }
   }
 
   getSessionInfo(): ProcessedSession {

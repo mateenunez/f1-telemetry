@@ -58,7 +58,10 @@ export class ChatProcessor {
       fromRetransmition: messageData.fromRetransmition || false,
     };
 
-    this.messages.set(messageData.id, processedMessage);
+    // Set the retransmition message only if the message list is empty.
+    if (!processedMessage.fromRetransmition || this.messages.size === 0) {
+      this.messages.set(messageData.id, processedMessage);
+    }
 
     // Clean up old messages if exceeding limit
     if (this.messages.size > this.maxMessages) {
