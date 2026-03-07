@@ -356,7 +356,6 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
           index: idx,
         });
       }
-      console.log(widgetsArr);
     });
   }, []);
 

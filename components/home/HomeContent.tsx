@@ -64,7 +64,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
         />
         <div className="flex flex-col justify-evenly h-full justify-center items-center max-w-4xl mx-auto">
           <div className="flex justify-center w-full items-center">
-            <p className="text-gray-300 text-sm text-center px-2 font-geist font-medium">
+            <p className="text-gray-300 text-sm text-center px-2 font-geist text-wrap break-words font-medium">
               {Array.from(dict.home.version).map((char, idx) => {
                 if (typeof char !== "string") return;
                 return (
@@ -78,10 +78,10 @@ export default function HomeContent({ dict }: HomeContentProps) {
                         ? "#3b83f6ab"
                         : idx >= dict.home.version.length * 0.25 &&
                             idx < dict.home.version.length * 0.6
-                          ? "#ffe066ab"
+                          ? "#fbbf24"
                           : idx > dict.home.version.length * 0.8
                             ? "#A855F7ab"
-                            : "#338540"
+                            : "#33b949"
                     }
                   />
                 );

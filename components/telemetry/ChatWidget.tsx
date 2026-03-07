@@ -111,7 +111,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
       sendMessage(content.trim(), usernameColor, selectedEmoji);
       setContent("");
       setIsSubmitting(false);
-      setCooldown(user?.role.cooldown_ms || 5000);
+      setCooldown(user?.role.cooldown_ms || 0);
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -150,7 +150,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                       : "Type a message..."
                   }
                   disabled={true}
-                  className="flex-1 min-h-[36px] h-9 px-2.5 py-1.5 text-white placeholder-gray-500 focus:outline-none resize-none text-sm max-h-20 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent"
+                  className="flex-1 min-h-[36px] h-9 px-2.5 py-1.5 text-white placeholder-gray-500 focus:outline-none resize-none text-sm max-h-20 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent break-words"
                   rows={1}
                 />
 
@@ -201,10 +201,10 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
               return (
                 <div
                   key={msg.id}
-                  className="text-sm flex flex-row gap-1 break-words rounded-md"
+                  className="text-sm overflow-x-hidden flex flex-row gap-1 rounded-md"
                 >
                   <div className="flex gap-1">
-                    <span className="text-[0.6rem] font-geist text-gray-500">
+                    <span className="text-[0.6rem] md:text-nowrap font-geist text-gray-500 text-center">
                       {msg.timestamp.toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -212,13 +212,13 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                     </span>
                     {msg.user.roleId !== 1 && <span>{msg.user.badge}</span>}
                     <span
-                      className="font-semibold truncate"
+                      className="font-semibold"
                       style={{ color: msg.user.color ?? "#94a3b8" }}
                     >
                       {msg.user.username}:
                     </span>
                   </div>
-                  <p className="text-gray-200 break-words whitespace-pre-wrap">
+                  <p className="text-gray-200 break-words text-wrap whitespace-pre-wrap text-wrap flex-wrap">
                     {msg.content}
                   </p>
                 </div>
@@ -290,7 +290,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                 }
                 maxLength={maxLength}
                 disabled={cooldown > 0 || isSubmitting}
-                className="flex-1 min-h-[36px] h-9 py-1.5 text-white placeholder-gray-500 focus:outline-none resize-none text-sm max-h-20 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent"
+                className="flex-1 min-h-[36px] h-9 py-1.5 text-white placeholder-gray-500 focus:outline-none resize-none text-sm max-h-20 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent break-words"
                 rows={1}
               />
 

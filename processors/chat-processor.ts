@@ -58,8 +58,8 @@ export class ChatProcessor {
       fromRetransmition: messageData.fromRetransmition || false,
     };
 
-    // Set the retransmition message only if the message list is empty.
-    if (!processedMessage.fromRetransmition || this.messages.size === 0) {
+    // Set the message only if the ID doesn't already exist
+    if (!this.messages.has(messageData.id)) {
       this.messages.set(messageData.id, processedMessage);
     }
 
