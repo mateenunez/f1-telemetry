@@ -212,7 +212,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
         {delayed ? (
           <Countdown totalSeconds={Math.max(secondsDelay, 0)} dict={dict} />
         ) : (
-          <span className="text-white text-xl text-center font-geist">
+          <span className="text-white text-2xl text-center font-geist font-medium">
             {dict.loading}
           </span>
         )}
@@ -368,6 +368,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                               ? pinnedDriver
                               : currentPositions.at(0)?.driver_number
                           }
+                          sessionType={session?.session_type}
                         />
                       </SortableWidget>
                     );
@@ -412,6 +413,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           driverStints={driverStints}
                           driverInfos={driverInfos}
                           totalLaps={session?.current_lap}
+                          sessionType={session?.session_type}
                         />
                       </SortableWidget>
                     );
@@ -562,6 +564,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                               ? pinnedDriver
                               : currentPositions.at(0)?.driver_number
                           }
+                          sessionType={session?.session_type}
                         />
                       </DraggableWidget>
                     );
@@ -606,6 +609,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           driverStints={driverStints}
                           driverInfos={driverInfos}
                           totalLaps={session?.total_laps}
+                          sessionType={session?.session_type}
                         />
                       </DraggableWidget>
                     );

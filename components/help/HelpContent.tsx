@@ -247,6 +247,8 @@ export function HelpContent({ dict }: HelpContentProps) {
                   timings={mockCircleOfDoom.timings}
                   driverInfos={mockCircleOfDoom.driverInfos}
                   refDriver={43}
+                  sessionType="race"
+                  dict={dict}
                 />
               </div>
             </div>

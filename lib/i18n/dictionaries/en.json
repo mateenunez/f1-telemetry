@@ -145,10 +145,10 @@
     }
   },
   "tourSteps": {
-    "welcome": "Hi, this is a guide to what's on this page :)",
-    "preferences": "Click this button to open the preferences panel and configure the telemetry.",
-    "edit": "In edit mode you can move and resize the different telemetry components. Only available on PC.",
-    "chat": "You can access the chat by signing in."
+    "welcome": "Welcome, this is a real quick tutorial, navigate with the arrows below 😑",
+    "preferences": "Click this button to open the preferences panel and configure the telemetry. ",
+    "edit": "In edit mode you can move and resize the different telemetry components. Only available on PC 🤖",
+    "chat": "You can access the chat by signing in. Fake emails allowed 🫂"
   },
   "loading": "Getting things ready...",
   "delaying": "Applying delay...",

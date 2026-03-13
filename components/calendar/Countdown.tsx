@@ -58,75 +58,19 @@ export function Countdown({
 
   if (!mounted || !remainingSeconds || !totalSeconds)
     return (
-      <span className="text-white text-xl text-center font-geist font-medium">
+      <span className="text-white text-2xl text-center font-geist font-medium">
         {dict.loading}
       </span>
     );
 
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const progress = (totalSeconds - remainingSeconds) / totalSeconds;
-  const offset = circumference * (1 - progress);
-
-  const centerX = size / 2;
-  const centerY = size / 2;
-
   return (
     <div className="flex flex-col items-center justify-center gap-2 bg-none">
-      <span className="text-white text-xl text-center font-geist font-medium">
+      <span className="text-white text-2xl text-center font-geist font-medium">
         {dict.delaying}
       </span>
-      <style>{`
-        @keyframes pulse-stroke {
-          0%, 100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0.6;
-          }
-        }
-        .pulse-circle {
-          animation: pulse-stroke 1.5s ease-in-out infinite;
-        }
-      `}</style>
-      <div className="relative bg-none" style={{ width: size, height: size }}>
-        <svg
-          width={size}
-          height={size}
-          className="transform -rotate-90"
-          viewBox={`0 0 ${size} ${size}`}
-        >
-          <circle
-            cx={centerX}
-            cy={centerY}
-            r={radius}
-            strokeWidth={strokeWidth}
-            fill="none"
-          />
-
-          <circle
-            cx={centerX}
-            cy={centerY}
-            r={radius}
-            stroke="#e5e7eb"
-            strokeWidth={strokeWidth}
-            fill="none"
-            strokeDasharray={circumference}
-            strokeDashoffset={offset}
-            strokeLinecap="round"
-            className="pulse-circle"
-            style={{
-              transition: "stroke-dashoffset 1s linear",
-            }}
-          />
-        </svg>
-
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-md font-bold font-mono text-offWhite font-geist font-medium">
-            {remainingSeconds}
-          </span>
-        </div>
-      </div>
+      <span className="text-6xl font-bold text-offWhite font-geist">
+        {remainingSeconds}
+      </span>
     </div>
   );
 }

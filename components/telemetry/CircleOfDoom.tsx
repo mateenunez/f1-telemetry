@@ -4,12 +4,15 @@ import {
   ProcessedTiming,
 } from "@/processors";
 import { useMemo } from "react";
+import { usePreferences } from "@/context/preferences";
 
 interface CircleOfDoomProps {
   currentPositions: (ProcessedPosition | undefined)[];
   timings: (ProcessedTiming | undefined)[];
   driverInfos: (ProcessedDriver | undefined)[];
   refDriver: number | undefined;
+  sessionType?: string | null;
+  dict?: any;
 }
 
 export default function CircleOfDoom({
@@ -17,7 +20,14 @@ export default function CircleOfDoom({
   timings,
   driverInfos,
   refDriver = 1,
+  sessionType
 }: CircleOfDoomProps) {
+  const { preferences } = usePreferences();
+  const isRace = String(sessionType ?? "").toLowerCase().includes("race");
+  const noRaceMessage = preferences.translate
+    ? "Circle of Doom disponible solo en carreras."
+    : "Circle of Doom is available on a Race.";
+
   const ANGLE_OFFSET = 90;
   const CLOCKWISE = true;
   const tickLength = 2;
@@ -25,6 +35,41 @@ export default function CircleOfDoom({
   const cx = 50;
   const cy = 50;
   const r = 50 - strokeWidth / 2;
+
+  if (!isRace) {
+    return (
+      <div className="flex items-center bg-warmBlack justify-center w-full h-full p-6 lg:p-0">
+        <div className="w-full h-full">
+          <svg
+            viewBox="0 0 100 100"
+            className="w-full h-full"
+            preserveAspectRatio="none"
+          >
+            <circle
+              cx={50}
+              cy={50}
+              r={r}
+              fill="transparent"
+              stroke="rgb(40, 40, 40)  "
+              strokeWidth={strokeWidth}
+            />
+            <text
+              x={50}
+              y={50}
+              fill="rgb(156 163 175)"
+              fontSize="4"
+              fontFamily="monospace"
+              textAnchor="middle"
+              dominantBaseline="middle"
+              className="font-geist font-medium"
+            >
+              {noRaceMessage}
+            </text>
+          </svg>
+        </div>
+      </div>
+    );
+  }
 
   const deg2rad = (deg: number) => (deg * Math.PI) / 180;
 
@@ -57,14 +102,14 @@ export default function CircleOfDoom({
 
   const cleanTimings = useMemo(
     () => (timings ?? []).filter((t): t is ProcessedTiming => !!t),
-    [timings]
+    [timings],
   );
 
   const pilotRef = useMemo(() => {
     const info = driverInfos.find((d) => d?.driver_number === refDriver);
     const timing = cleanTimings.find((d) => d.driver_number === refDriver);
     const refIndex = currentPositions.findIndex(
-      (pos) => pos?.driver_number === refDriver
+      (pos) => pos?.driver_number === refDriver,
     );
     const gapToAhead = timing?.time_diff_to_ahead || timing?.interval_to_ahead;
     return {
@@ -112,7 +157,7 @@ export default function CircleOfDoom({
               position: refIndex,
               driver: aheadPosition,
               driverInfo: driverInfos.find(
-                (d) => d?.driver_number === aheadPosition.driver_number
+                (d) => d?.driver_number === aheadPosition.driver_number,
               ),
               gap: aheadGapToRef,
             }
@@ -123,7 +168,7 @@ export default function CircleOfDoom({
               position: refIndex + 2,
               driver: behindPosition,
               driverInfo: driverInfos.find(
-                (d) => d?.driver_number === behindPosition.driver_number
+                (d) => d?.driver_number === behindPosition.driver_number,
               ),
               gap: behindGapToRef,
             }
@@ -147,7 +192,7 @@ export default function CircleOfDoom({
 
     currentPositions.forEach((d, idx) => {
       const driverTimings = timings.find(
-        (dt) => dt?.driver_number === d?.driver_number
+        (dt) => dt?.driver_number === d?.driver_number,
       );
       const diffAhead =
         driverTimings?.time_diff_to_ahead || driverTimings?.interval_to_ahead;
@@ -183,7 +228,11 @@ export default function CircleOfDoom({
   return (
     <div className="flex items-center bg-warmBlack justify-center w-full h-full p-6 lg:p-0">
       <div className="w-full h-full">
-        <svg viewBox="0 0 100 100" className="w-full h-full" preserveAspectRatio="none">
+        <svg
+          viewBox="0 0 100 100"
+          className="w-full h-full"
+          preserveAspectRatio="none"
+        >
           <circle
             cx={50}
             cy={50}
@@ -323,7 +372,7 @@ export default function CircleOfDoom({
             if (!dri) return;
             const deg = markersDeg?.get(dri?.driver_number);
             const driverInfo = driverInfos.find(
-              (driver) => driver?.driver_number === dri.driver_number
+              (driver) => driver?.driver_number === dri.driver_number,
             );
             if (deg === undefined || Number.isNaN(deg)) return;
             const outer = polarToCartesian(adjusted(deg), r + tickLength);

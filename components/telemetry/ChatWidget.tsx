@@ -121,7 +121,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
     return (
       <div className="w-full md:h-full h-[20rem] flex flex-col bg-warmBlack rounded-lg overflow-hidden chat-step">
         <div className="w-full h-full flex flex-col items-center justify-center bg-warmBlack rounded-lg">
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-4">
             <LogIn className="mx-auto" size={32} />
             <p className="text-xs text-gray-400 font-geist max-w-xs">
               {language === "es"

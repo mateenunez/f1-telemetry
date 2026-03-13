@@ -145,10 +145,10 @@
     }
   },
   "tourSteps": {
-    "welcome": "Hola, esta es una guía de lo que hay en esta página :)",
+    "welcome": "Hola, esto es un tutorial cortito, navega con las flechas de abajo 😑",
     "preferences": "Haciendo click en este botón vas a acceder al panel de preferencias, en este podés configurar la telemetría.",
-    "edit": "En el modo edición podés mover y redimensionar los distintos componentes de la telemetría. Solo disponible para PC.",
-    "chat": "Podés acceder al chat iniciando sesión."
+    "edit": "En el modo edición podés mover y redimensionar los distintos componentes de la telemetría. Solo disponible para PC. 🤖",
+    "chat": "Podés acceder al chat iniciando sesión. Emails falsos permitidos 🫂"
   },
   "loading": "Preparando el sistema...",
   "delaying": "Aplicando delay...",

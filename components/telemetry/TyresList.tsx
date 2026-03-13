@@ -18,6 +18,8 @@ interface TyresListProps {
   driverStints: (ProcessedStint[] | undefined)[];
   driverInfos: (ProcessedDriver | undefined)[];
   totalLaps: number | undefined;
+  sessionType?: string | null;
+  dict?: any;
 }
 
 export default function TyresList({
@@ -25,10 +27,33 @@ export default function TyresList({
   driverStints,
   driverInfos,
   totalLaps = 52,
+  sessionType,
 }: TyresListProps) {
-  if (!positions || !totalLaps) return;
-
   const { preferences } = usePreferences();
+
+  const isRace = String(sessionType ?? "").toLowerCase().includes("race");
+  const noRaceMessage =
+    (preferences.translate
+      ? "Historial de compuestos solo disponible en carreras."
+      : "Tyres compound history is available on a Race.");
+  const noDataMessage = preferences.translate
+    ? "No hay datos de neumáticos disponibles."
+    : "No tyre data available.";
+
+  if (!positions || !totalLaps || !isRace) {
+    const message = !isRace ? noRaceMessage : noDataMessage;
+    return (
+      <Card className="flex w-full h-full bg-warmBlack border-none">
+        <CardContent className="overflow-x-hidden w-full px-6 my-4 h-full">
+          <div className="min-h-[15rem] items-center justify-center flex">
+            <p className="text-xs text-gray-400 font-geist font-medium">
+              {message}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   let bestLapTimeValue = Number.POSITIVE_INFINITY;
   let bestLapTimeString = "99:99.999";
