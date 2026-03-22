@@ -4,8 +4,6 @@ import { usePreferences, Widget, WidgetId } from "@/context/preferences";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { Resizable } from "react-resizable";
-import "react-resizable/css/styles.css";
 import { X } from "lucide-react";
 
 const ManualInput = ({
@@ -63,19 +61,6 @@ export default function DraggableWidget({
     id: widget.id,
     disabled: !isEditMode,
   });
-  const { setIsResizing } = usePreferences();
-  const handleResize = useCallback(
-    (
-      e: React.SyntheticEvent,
-      data: { size: { width: number; height: number } }
-    ) => {
-      updateWidget(widget.id, {
-        width: data.size.width,
-        height: data.size.height,
-      });
-    },
-    [widget.id, updateWidget]
-  );
   const style = {
     position: "absolute" as const,
     left: widget.x,
@@ -147,36 +132,17 @@ export default function DraggableWidget({
           >
             <X size={18} />
           </button>
-        )}
+      )}
 
-      <Resizable
-        width={widget.width}
-        height={widget.height}
-        onResize={handleResize}
-        onResizeStart={() => setIsResizing(true)}
-        onResizeStop={() => setIsResizing(false)}
-        minConstraints={[100, 100]}
-        maxConstraints={[Infinity, Infinity]}
-        handle={
-          <div
-            className="absolute bottom-0 right-0 m-2 w-4 h-4 bg-offWhite/60 hover:bg-offWhite/80 border border-offWhite/50 cursor-se-resize rounded-md"
-            style={{
-              zIndex: 1000,
-            }}
-          />
-        }
-        resizeHandles={["se"]}
+      <div
+        style={{
+          width: widget.width,
+          height: widget.height,
+          overflow: "hidden",
+        }}
       >
-        <div
-          style={{
-            width: widget.width,
-            height: widget.height,
-            overflow: "hidden",
-          }}
-        >
-          {children}
-        </div>
-      </Resizable>
+        {children}
+      </div>
     </div>
   );
 }

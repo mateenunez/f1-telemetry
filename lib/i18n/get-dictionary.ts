@@ -1,10 +1,12 @@
 import type { Locale } from "./config"
+import en from "./dictionaries/en.json"
+import es from "./dictionaries/es.json"
 
 const dictionaries = {
-  en: () => import("./dictionaries/en.json").then((module) => module.default),
-  es: () => import("./dictionaries/es.json").then((module) => module.default),
+  en,
+  es,
 }
 
 export const getDictionary = async (locale: Locale) => {
-  return dictionaries[locale]()
+  return dictionaries[locale]
 }

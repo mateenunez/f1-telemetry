@@ -22,6 +22,7 @@ const MapAndMessages = memo(function MapAndMessages({
   yellowSectors,
 }: MapAndMessagesProps) {
   const { preferences } = usePreferences();
+  const isRace = String(session?.session_type ?? "").toLowerCase().includes("race");
   if (!telemetryData) return;
 
   return (
@@ -40,7 +41,7 @@ const MapAndMessages = memo(function MapAndMessages({
             </div>
           </CardTitle>
           <div className="flex flex-col h-full justify-start items-start">
-            {session?.session_type === "Race" && (
+            {isRace && (
               <CardTitle
                 className="text-xxl font-bold text-gray-200 tracking-widest"
                 style={orbitron.style}

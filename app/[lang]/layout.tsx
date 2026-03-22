@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { PreferencesProvider } from "@/context/preferences";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { TourProvider } from "@/context/tour";
 import { AuthProvider } from "@/context/auth";
 
 export async function generateStaticParams() {
@@ -59,9 +58,7 @@ export default async function LangLayout({
 
   return (
     <AuthProvider>
-      <PreferencesProvider>
-        <TourProvider dict={dict}>{children}</TourProvider>
-      </PreferencesProvider>
+      <PreferencesProvider dict={dict}>{children}</PreferencesProvider>
     </AuthProvider>
   );
 }

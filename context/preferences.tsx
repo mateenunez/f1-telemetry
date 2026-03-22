@@ -62,7 +62,8 @@ export interface Preferences {
   favoriteDrivers: ProcessedDriver[];
   delay: number;
   translate: boolean;
-  hasSeenTour: boolean;
+  hasSeenPanel: boolean;
+  hasSeenEditMode: boolean;
   weatherDetailed: boolean;
 }
 
@@ -154,7 +155,8 @@ export const DEFAULT_CONFIG: Preferences = {
   favoriteDrivers: [],
   delay: 0,
   translate: false,
-  hasSeenTour: false,
+  hasSeenPanel: false,
+  hasSeenEditMode: false,
   weatherDetailed: false,
 };
 
@@ -173,12 +175,14 @@ interface PreferencesContextValue {
   updateWidget: (id: WidgetId, updates: Partial<Widget>) => void;
   updateWidgets: (updates: Widget[]) => void;
   setWidgetsPreferences: (widgets: Widget[]) => void;
+  dict?: any;
 }
 
 const PreferencesContext = createContext<PreferencesContextValue | null>(null);
 
 interface ProviderProps {
   children: ReactNode;
+  dict?: any;
 }
 
 function isPreferences(obj: any): obj is Preferences {
@@ -200,7 +204,8 @@ function isPreferences(obj: any): obj is Preferences {
         "audio",
         "headshot",
         "weatherDetailed",
-        "hasSeenTour",
+        "hasSeenPanel",
+        "hasSeenEditMode",
         "translate",
       ].includes(key)
     ) {
@@ -253,7 +258,7 @@ function isPreferences(obj: any): obj is Preferences {
   return true;
 }
 
-export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
+export const PreferencesProvider: React.FC<ProviderProps> = ({ children, dict }) => {
   const cookieName = "f1t_pref";
   const [preferences, setPreferences] = useState<Preferences>(() => {
     const cookie = Cookies.get(cookieName);
@@ -419,6 +424,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
       setWidgetsPreferences,
       isResizing,
       setIsResizing,
+      dict,
     }),
     [
       preferences,
@@ -431,6 +437,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children }) => {
       setWidgetsPreferences,
       isResizing,
       setIsResizing,
+      dict,
     ],
   );
 

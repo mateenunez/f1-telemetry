@@ -89,7 +89,10 @@ export default function TyresList({
 
   const averageCompoundAge = Math.floor(totalLapsAllStints / totalStintsCount);
 
-  const averagePitStops = Math.max(totalPitStops / totalDrivers, 0);
+  const averagePitStops = Math.max(
+    Math.round((totalPitStops / totalDrivers) * 100) / 100,
+    0
+  );
   return (
     <Card className="flex w-full h-full bg-warmBlack border-none">
       <CardContent className="overflow-x-hidden w-full px-6 my-4 h-full">

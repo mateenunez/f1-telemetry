@@ -110,10 +110,10 @@
     "error": "Las transcripciones para los audios de equipos estarán disponibles en breve."
   },
   "auth": {
-    "loginTitle": "Iniciar Sesión",
+    "loginTitle": "Iniciar sesión",
     "registerTitle": "Registrarse",
-    "email": "Correo Electrónico",
-    "emailPlaceholder": "ejemplo@correo.com",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "Ejemplo@correo.com",
     "password": "Contraseña",
     "passwordPlaceholder": "Tu contraseña",
     "username": "Nombre de usuario",
@@ -121,7 +121,7 @@
     "confirmPassword": "Confirmar Contraseña",
     "confirmPasswordPlaceholder": "Repite tu contraseña",
     "passwordHint": "Mínimo 8 caracteres",
-    "loginButton": "Iniciar Sesión",
+    "loginButton": "Iniciar sesión",
     "registerButton": "Registrarse",
     "loggingIn": "Iniciando...",
     "registering": "Registrando...",
@@ -144,17 +144,10 @@
       "default": "Algo salió mal. Acordate que el nombre e email deben ser únicos."
     }
   },
-  "tourSteps": {
-    "welcome": "Hola, esto es un tutorial cortito, navega con las flechas de abajo 😑",
-    "preferences": "Haciendo click en este botón vas a acceder al panel de preferencias, en este podés configurar la telemetría.",
-    "edit": "En el modo edición podés mover y redimensionar los distintos componentes de la telemetría. Solo disponible para PC. 🤖",
-    "chat": "Podés acceder al chat iniciando sesión. Emails falsos permitidos 🫂"
-  },
   "loading": "Preparando el sistema...",
   "delaying": "Aplicando delay...",
   "error": {
-    "title": "Error de Conexión",
-    "message": "Estamos teniendo problemas para conectar con el servicio de telemetría. Por favor, verifica tu conexión e intenta actualizar la página. Si el problema persiste, vuelve más tarde.",
+    "message": "Servicio temporalmente no disponible.",
     "reload": "Recargar"
   },
   "locale": "es"

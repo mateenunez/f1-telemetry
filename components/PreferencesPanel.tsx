@@ -1,20 +1,17 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState } from "react";
 import {
   Preferences,
   WidgetConfig,
   usePreferences,
   DEFAULT_CONFIG,
 } from "@/context/preferences";
-import { X, Check, PanelLeft, Pencil, Type } from "lucide-react";
+import { X, Check, PanelLeft, Pencil } from "lucide-react";
 import { ProcessedDriver } from "@/processors";
-import { useTour } from "@reactour/tour";
-import { usePathname } from "next/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/hooks/use-auth";
 import AuthForm from "./telemetry/AuthForm";
-import { useContext } from "react";
 
 interface PreferencesPanelProps {
   driverInfo: ProcessedDriver[] | undefined;
@@ -38,8 +35,6 @@ export default function PreferencesPanel({
     widgets,
     setWidgetsPreferences,
   } = usePreferences();
-  const { isAuthenticated } = useAuth();
-  const { setIsOpen } = useTour();
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const [authFormOpen, setAuthFormOpen] = useState(false);
@@ -52,8 +47,6 @@ export default function PreferencesPanel({
   const [selectedLanguage, setSelectedLanguage] = useState<string>(
     preferences.translate ? "es" : "en",
   );
-  const pathname = usePathname();
-  const isLiveTimingPage = /^\/[^/]+\/live-timing\/?$/.test(pathname ?? "");
   const { user, logout } = useAuth();
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,12 +123,6 @@ export default function PreferencesPanel({
     setPreference("translate", newLang === "es");
   };
 
-  const handleRestartTour = () => {
-    if (!isLiveTimingPage) return;
-    setOpen(false);
-    setTimeout(() => setIsOpen(true), 300);
-  };
-
   const handleResetWidgets = () => {
     const widgetKeys: Array<keyof Preferences> = [
       "driverPositions",
@@ -156,6 +143,8 @@ export default function PreferencesPanel({
   const handleEditMode = () => {
     if (isEditMode) {
       setWidgetsPreferences(widgets);
+    } else {
+      setPreference("hasSeenEditMode", true);
     }
     setIsEditMode(!isEditMode);
     setOpen(false);
@@ -285,22 +274,35 @@ export default function PreferencesPanel({
   return (
     <>
       {/* Toggle Button */}
-      <PanelLeft
-        className="text-gray-300 hover:text-gray-400 hover:cursor-pointer preferences-step"
-        width={15}
-        onClick={() => setOpen((prev) => !prev)}
-      />
+      <div className="relative">
+        <PanelLeft
+          className="text-gray-300 hover:text-gray-400 hover:cursor-pointer preferences-step"
+          width={15}
+          onClick={() => {
+            setOpen((prev) => !prev);
+            if (!open) setPreference("hasSeenPanel", true);
+          }}
+        />
+        {!preferences.hasSeenPanel && (
+          <div className="absolute -bottom-0.5 -right-1 w-1.5 h-1.5 bg-f1Blue rounded-full animate-pulse"></div>
+        )}
+      </div>
 
       {!isMobile && (
-        <Pencil
-          width={15}
-          className={`hover:cursor-pointer transition-colors edit-step ${
-            isEditMode
-              ? "text-f1Blue hover:text-f1Blue/80"
-              : "text-gray-300 hover:text-gray-400"
-          }`}
-          onClick={handleEditMode}
-        />
+        <div className="relative">
+          <Pencil
+            width={15}
+            className={`hover:cursor-pointer transition-colors edit-step ${
+              isEditMode
+                ? "text-f1Blue hover:text-f1Blue/80"
+                : "text-gray-300 hover:text-gray-400"
+            }`}
+            onClick={handleEditMode}
+          />
+          {!preferences.hasSeenEditMode && (
+            <div className="absolute -bottom-0.5 -right-1 w-1.5 h-1.5 bg-f1Blue rounded-full animate-pulse"></div>
+          )}
+        </div>
       )}
 
       {/* Overlay */}
@@ -398,26 +400,6 @@ export default function PreferencesPanel({
                 ))}
               </select>
             </div>
-          </div>
-
-          {/* Tutorial Button */}
-          <div className="flex flex-col gap-2 pb-4">
-            <p className="text-md text-gray-100 font-orbitron">Tutorial</p>
-            <p className="text-xs text-gray-500 font-geist font-medium">
-              {preferences.translate
-                ? "Volver a ver el tutorial de introducción."
-                : "Show the introduction tutorial again."}
-            </p>
-            <button
-              onClick={handleRestartTour}
-              className="flex items-start justify-start gap-2 px-4 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist font-medium"
-              style={{
-                boxShadow:
-                  "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
-              }}
-            >
-              <span>{preferences.translate ? "Reiniciar" : "Restart"}</span>
-            </button>
           </div>
 
           {/* Edit Canvas Button */}

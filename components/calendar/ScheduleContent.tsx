@@ -34,9 +34,9 @@ export function ScheduleContent({ dict }: ScheduleContentProps) {
   if (!calendar) {
     const LoaderOverlay = () => (
       <div className="fixed inset-0 z-20 flex items-center justify-center bg-warmBlack/40 backdrop-blur-sm">
-        <div className="rounded-xl text-white text-xl text-center font-geist">
+        <span className="text-white text-2xl text-center font-geist font-medium">
           {dict.schedule.loading}
-        </div>
+        </span>
       </div>
     );
 

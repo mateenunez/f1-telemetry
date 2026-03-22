@@ -113,7 +113,7 @@
     "loginTitle": "Login",
     "registerTitle": "Register",
     "email": "Email",
-    "emailPlaceholder": "example@email.com",
+    "emailPlaceholder": "Example@email.com",
     "password": "Password",
     "passwordPlaceholder": "Your password",
     "username": "Username",
@@ -144,17 +144,10 @@
       "default": "Something went wrong. Remind that username and email must be unique."
     }
   },
-  "tourSteps": {
-    "welcome": "Welcome, this is a real quick tutorial, navigate with the arrows below 😑",
-    "preferences": "Click this button to open the preferences panel and configure the telemetry. ",
-    "edit": "In edit mode you can move and resize the different telemetry components. Only available on PC 🤖",
-    "chat": "You can access the chat by signing in. Fake emails allowed 🫂"
-  },
   "loading": "Getting things ready...",
   "delaying": "Applying delay...",
   "error": {
-    "title": "Connection Error",
-    "message": "We're having trouble connecting to the telemetry service. Please check your connection and try refreshing the page. If the problem persists, come back later.",
+    "message": "Service temporarily unavailable.",
     "reload": "Reload"
   },
   "locale": "en"

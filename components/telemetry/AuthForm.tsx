@@ -225,7 +225,7 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
                 <div className="relative">
                   <User
                     width={16}
-                    className="absolute left-3 top-3 text-gray-500"
+                    className="absolute left-3 top-2 text-gray-500"
                   />
                   <input
                     type="text"
@@ -249,7 +249,7 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
                 <div className="relative">
                   <Mail
                     width={16}
-                    className="absolute left-3 top-3 text-gray-500"
+                    className="absolute left-3 top-2 text-gray-500"
                   />
                   <input
                     type="email"
@@ -273,7 +273,7 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
                 <div className="relative">
                   <Lock
                     width={16}
-                    className="absolute left-3 top-3 text-gray-500"
+                    className="absolute left-3 top-2 text-gray-500"
                   />
                   <input
                     type="password"
@@ -297,7 +297,7 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
                 <div className="relative">
                   <Lock
                     width={16}
-                    className="absolute left-3 top-3 text-gray-500"
+                    className="absolute left-3 top-2 text-gray-500"
                   />
                   <input
                     type="password"

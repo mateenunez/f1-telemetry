@@ -11,7 +11,6 @@ import CircleOfDoom from "@/components/telemetry/CircleOfDoom";
 import { WidgetId, usePreferences } from "@/context/preferences";
 import { CircleCarData } from "@/components/telemetry/CircleCarData";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { useTour } from "@reactour/tour";
 import { Countdown } from "../calendar/Countdown";
 import {
   DndContext,
@@ -30,6 +29,7 @@ import TyresList from "./TyresList";
 import { useChat } from "@/hooks/use-chat";
 import { ChatWidget } from "./ChatWidget";
 import AuthForm from "@/components/telemetry/AuthForm";
+import { Button } from "../ui/button";
 
 interface TelemetryContentProps {
   dict: any;
@@ -53,14 +53,12 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     deltaDelay,
     aboutToBeEliminated,
   } = useTelemetryManager();
-  const { setIsOpen } = useTour();
   const {
     preferences,
     isEditMode,
     widgets,
     updateWidget,
     updateWidgets,
-    isResizing,
   } = usePreferences();
   const isMobile = useIsMobile();
   const [authFormOpen, setAuthFormOpen] = useState(false);
@@ -90,8 +88,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     if (
       !widget ||
       canvasSize.width === 0 ||
-      canvasSize.height === 0 ||
-      isResizing
+      canvasSize.height === 0
     )
       return;
 
@@ -125,15 +122,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     const newWidgets = reordered.map((id) => widgets.find((w) => w.id === id)!);
     updateWidgets(newWidgets);
   };
-
-  useEffect(() => {
-    if (!preferences.hasSeenTour && !loading && !delayed) {
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [preferences.hasSeenTour, loading, delayed, setIsOpen]);
 
   useEffect(() => {
     const maxY = Math.max(
@@ -185,21 +173,24 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   if (session && session.circuit_key === 0) {
     return (
       <div className="fixed inset-0 w-screen h-screen bg-warmBlack flex items-center justify-center z-50">
-        <div className="flex flex-col items-center justify-center gap-8 px-8">
-          <div className="text-center space-y-4">
-            <h1 className="text-4xl lg:text-5xl font-orbitron font-bold text-f1Red">
-              {dict.error.title}
+        <div className="flex flex-col items-center gap-8 max-w-2xl w-full px-4">
+          <div className="relative w-full flex flex-row items-center gap-4 justify-center">
+            <h1 className="text-8xl font-bold text-f1Red tracking-wide font-geist text-start items-center">
+              ERROR 503
+              <div className="flex flex-col">
+                <p className="text-2xl font-bold text-f1Red opacity-70 tracking-wide text-start font-geist">
+                  {dict.error.message}
+                </p>
+              </div>
             </h1>
-            <p className="text-lg lg:text-xl text-gray-300 max-w-2xl font-geist leading-relaxed">
-              {dict.error.message}
-            </p>
           </div>
-          <button
+          <Button
             onClick={() => window.location.reload()}
-            className="px-6 py-3 bg-f1Red hover:bg-red-600 text-white font-geist rounded-lg transition-colors duration-200"
+            size="lg"
+            className="bg-transparent font-geist text-lg border-2 border-f1Red rounded-lg hover:bg-f1Red/90 text-gray-200 hover:text-warmBlack hover:border-warmBlack"
           >
             {dict.error.reload}
-          </button>
+          </Button>
         </div>
       </div>
     );
