@@ -11,7 +11,6 @@ import { Copy, DownloadIcon, PauseIcon, PlayIcon } from "lucide-react";
 import { toLocaleTime } from "@/utils/calendar";
 import { cn } from "@/lib/utils";
 import { useTelemetryAudio, audioUrl } from "@/hooks/use-raceControl";
-import { usePreferences } from "@/context/preferences";
 import { config } from "@/lib/config";
 
 interface SessionAudiosProps {
@@ -19,6 +18,7 @@ interface SessionAudiosProps {
   drivers: (ProcessedDriver | undefined)[];
   session: ProcessedSession | null | undefined;
   driverInfos?: (ProcessedDriver | undefined)[];
+  translate?: boolean;
 }
 
 const AUDIO_DOWNLOAD_URL = config.public + "download-mp3";
@@ -28,14 +28,13 @@ export default function SessionAudios({
   drivers,
   session,
   driverInfos,
+  translate,
 }: SessionAudiosProps) {
   const [playingAudio, setPlayingAudio] = useState<number | undefined>();
   const [progressMap, setProgressMap] = useState<Map<number, number>>();
 
   const { playTeamRadioSound, radioAudioRef, stopTeamRadioSound } =
     useTelemetryAudio();
-
-  const { preferences } = usePreferences();
 
   const getMessageStyle = (msg: ProcessedCapture) => {
     const racingNumber = msg.racingNumber;
@@ -85,7 +84,7 @@ export default function SessionAudios({
   };
 
   const handleCopyTranscription = async (cap: ProcessedCapture) => {
-    const text = preferences.translate
+    const text = translate
       ? cap?.transcriptionEs
       : cap?.transcription;
     if (!text) return;
@@ -268,7 +267,7 @@ export default function SessionAudios({
                             color: "#" + driver.team_color,
                           }}
                         >
-                          {preferences.translate
+                          {translate
                             ? hasEsTranscription
                               ? `" ${capture.transcriptionEs} "`
                               : capture.transcription
@@ -284,7 +283,7 @@ export default function SessionAudios({
           ) : (
             <div className="min-h-[20rem] items-center justify-center flex">
               <p className="text-xs text-gray-400 font-geist font-medium">
-                {preferences.translate
+                {translate
                   ? "Sin audios de carrera."
                   : "No team audios."}
               </p>

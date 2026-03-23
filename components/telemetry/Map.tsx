@@ -16,9 +16,9 @@ import {
 import { Oxanium } from "next/font/google";
 import { getSectorColor } from "@/hooks/use-raceControl";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+// @ts-ignore
 import "react-loading-skeleton/dist/skeleton.css";
 import { Card, CardContent } from "@/components/ui/card";
-import { usePreferences } from "@/context/preferences";
 
 // This is basically fearlessly copied from
 // https://github.com/tdjsnelling/monaco
@@ -42,6 +42,10 @@ type MapProps = {
   yellowSectors: Set<number>;
   redFlag?: boolean;
   safetyCar?: boolean;
+  translate?: boolean;
+  cornersPreferences?: boolean;
+  sectorsPreferences?: boolean;
+  favoriteDrivers?: ProcessedDriver[];
 };
 
 export default function Map({
@@ -52,6 +56,9 @@ export default function Map({
   yellowSectors,
   redFlag = false,
   safetyCar = false,
+  cornersPreferences,
+  sectorsPreferences,
+  favoriteDrivers,
 }: MapProps) {
   const [[minX, minY, widthX, widthY], setBounds] = useState<(null | number)[]>(
     [null, null, null, null]
@@ -71,11 +78,10 @@ export default function Map({
     startAngle: number;
   }>(null);
 
-  const { preferences } = usePreferences();
-  const cornersCookie = preferences.corners;
-  const sectorsCookie = preferences.sectors;
+  const cornersCookie = cornersPreferences ?? false;
+  const sectorsCookie = sectorsPreferences ?? false;
   const favorites = new Set(
-    preferences.favoriteDrivers.map((d) => d.driver_number)
+    favoriteDrivers?.map((d) => d.driver_number) || []
   );
 
   useEffect(() => {

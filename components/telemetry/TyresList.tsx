@@ -9,8 +9,6 @@ import { getCompoundSvg } from "@/hooks/use-telemetry";
 import { Card, CardContent } from "../ui/card";
 import { ScrollArea } from "../ui/scroll-area";
 import { Badge } from "../ui/badge";
-import { usePreferences } from "@/context/preferences";
-import Tyres from "./Tyres";
 import { getCompoundColor, parseLapTime } from "@/utils/telemetry";
 
 interface TyresListProps {
@@ -20,6 +18,8 @@ interface TyresListProps {
   totalLaps: number | undefined;
   sessionType?: string | null;
   dict?: any;
+  translate?: boolean;
+  favoriteDrivers?: ProcessedDriver[];
 }
 
 export default function TyresList({
@@ -28,15 +28,16 @@ export default function TyresList({
   driverInfos,
   totalLaps = 52,
   sessionType,
+  translate,
+  favoriteDrivers,
 }: TyresListProps) {
-  const { preferences } = usePreferences();
 
   const isRace = String(sessionType ?? "").toLowerCase().includes("race");
   const noRaceMessage =
-    (preferences.translate
+    (translate
       ? "Historial de compuestos solo disponible en carreras."
       : "Tyres compound history is available on a Race.");
-  const noDataMessage = preferences.translate
+  const noDataMessage = translate
     ? "No hay datos de neumáticos disponibles."
     : "No tyre data available.";
 
@@ -105,7 +106,7 @@ export default function TyresList({
             const stints = driverStints[idx];
             const isFavorite =
               driver?.driver_number &&
-              preferences.favoriteDrivers.some(
+              favoriteDrivers?.some(
                 (d) => d.driver_number === driver.driver_number
               );
             const personalBestStint = stints?.reduce((best, stint) => {
@@ -123,10 +124,10 @@ export default function TyresList({
               >
                 <div className={`flex flex-row gap-2 items-center`}>
                   <div
-                    className={`flex flex-row gap-2 items-center min-w-[3rem]`}
+                    className={`flex flex-row gap-1 items-center min-w-[3rem]`}
                   >
                     <Badge
-                      className="w-[2.5rem] text-sm items-center font-bold pr-[0px] pl-4 font-aldrich"
+                      className="w-[2rem] text-sm items-center font-bold pr-[0px] font-aldrich"
                       style={{
                         backgroundColor: `transparent`,
                       }}
@@ -146,8 +147,7 @@ export default function TyresList({
                     </div>
                   </div>
                 </div>
-                  <Tyres driverStints={stints} width={2} iconSize={15} />
-                <div className="w-full items-center pr-2">
+                <div className="w-full items-center mr-6">
                   <div className="flex w-full h-[5px] bg-carbonBlack rounded-sm">
                     {stints &&
                       stints.map((stint, index) => {
@@ -208,7 +208,7 @@ export default function TyresList({
                               }}
                             >
                               <span
-                                className="text-xs text-white mt-1 font-geist text-center px-4"
+                                className="text-xs text-white mt-1 font-geist text-center px-4 whitespace-nowrap"
                                 style={{
                                   display:
                                     stint.lap_number === totalLaps ||
@@ -217,7 +217,7 @@ export default function TyresList({
                                       : "block",
                                 }}
                               >
-                                {accumulatedLaps}
+                                {accumulatedLaps} L
                               </span>
                             </div>
                             {index === 0 && (
@@ -229,8 +229,8 @@ export default function TyresList({
                                   transform: "translateX(-50%)",
                                 }}
                               >
-                                <span className="text-xs mt-1 text-white font-geist block text-center">
-                                  0
+                                <span className="text-xs mt-1 ml-5 text-white font-geist block text-center whitespace-nowrap">
+                                  0 L
                                 </span>
                               </div>
                             )}
@@ -246,13 +246,13 @@ export default function TyresList({
         <div className="flex flex-row gap-2 items-center w-full justify-evenly pt-4">
           <div className="flex flex-col gap-1 h-[2rem] items-center">
             <span className="text-xs lg:text-md font-geist font-medium text-offWhite">
-              {preferences.translate ? "MÁS USADO" : "MOST USED"}
+              {translate ? "MÁS USADO" : "MOST USED"}
             </span>
             {getCompoundSvg(mostUsedCompound.compound, 9, 30)}
           </div>
           <div className="flex flex-col gap-1 h-[2rem] items-center">
             <span className="text-xs font-geist font-medium text-offWhite">
-              {preferences.translate ? "PROM. VUELTAS" : "AVG. LAP AGE"}
+              {translate ? "PROM. VUELTAS" : "AVG. LAP AGE"}
             </span>
             <span className="text-xl font-geist font-medium text-offWhite">
               {averageCompoundAge || 0}
@@ -260,7 +260,7 @@ export default function TyresList({
           </div>
           <div className="flex flex-col gap-1 h-[2rem] items-center">
             <span className="text-xs font-geist font-medium text-offWhite">
-              {preferences.translate ? "PROM. PITS" : "AVG. PIT STOPS"}
+              {translate ? "PROM. PITS" : "AVG. PIT STOPS"}
             </span>
             <span className="text-xl font-geist font-medium text-offWhite">
               {averagePitStops || 0}

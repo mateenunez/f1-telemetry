@@ -4,7 +4,6 @@ import {
   ProcessedTiming,
 } from "@/processors";
 import { useMemo } from "react";
-import { usePreferences } from "@/context/preferences";
 
 interface CircleOfDoomProps {
   currentPositions: (ProcessedPosition | undefined)[];
@@ -13,6 +12,7 @@ interface CircleOfDoomProps {
   refDriver: number | undefined;
   sessionType?: string | null;
   dict?: any;
+  translate?: boolean;
 }
 
 export default function CircleOfDoom({
@@ -20,11 +20,12 @@ export default function CircleOfDoom({
   timings,
   driverInfos,
   refDriver = 1,
-  sessionType
+  sessionType,
+  dict,
+  translate,
 }: CircleOfDoomProps) {
-  const { preferences } = usePreferences();
   const isRace = String(sessionType ?? "").toLowerCase().includes("race");
-  const noRaceMessage = preferences.translate
+  const noRaceMessage = translate
     ? "Circle of Doom disponible solo en carreras."
     : "Circle of Doom is available on a Race.";
 

@@ -53,13 +53,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     deltaDelay,
     aboutToBeEliminated,
   } = useTelemetryManager();
-  const {
-    preferences,
-    isEditMode,
-    widgets,
-    updateWidget,
-    updateWidgets,
-  } = usePreferences();
+  const { preferences, isEditMode, widgets, updateWidget, updateWidgets } =
+    usePreferences();
   const isMobile = useIsMobile();
   const [authFormOpen, setAuthFormOpen] = useState(false);
   const { messages, sendMessage } = useChat(telemetryData?.chatMessages, dict);
@@ -85,12 +80,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     const { active, delta } = event;
     const widgetId = active.id as WidgetId;
     const widget = widgets.find((w) => w.id === widgetId);
-    if (
-      !widget ||
-      canvasSize.width === 0 ||
-      canvasSize.height === 0
-    )
-      return;
+    if (!widget || canvasSize.width === 0 || canvasSize.height === 0) return;
 
     let newX = widget.x + delta.x;
     let newY = widget.y + delta.y;
@@ -204,8 +194,16 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
           <Countdown totalSeconds={Math.max(secondsDelay, 0)} dict={dict} />
         ) : (
           <div className="relative flex items-center justify-center w-24 h-24">
-            <img src="/assets/F1White.svg" className="absolute w-full h-full" alt="F1 Telemetry Logo White" />
-            <img src="/assets/F1Blue.svg" className="absolute w-full h-full animate-fill-color" alt="F1 Telemetry Logo Blue" />
+            <img
+              src="/assets/F1White.svg"
+              className="absolute w-full h-full"
+              alt="F1 Telemetry Logo White"
+            />
+            <img
+              src="/assets/F1Blue.svg"
+              className="absolute w-full h-full animate-fill-color"
+              alt="F1 Telemetry Logo Blue"
+            />
           </div>
         )}
       </div>
@@ -283,6 +281,10 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           driverHeadshot={preferences.headshot}
                           audioEnabled={preferences.audio}
                           translate={preferences.translate}
+                          favoriteDrivers={preferences.favoriteDrivers}
+                          minisectorHorizontal={
+                            preferences.minisectorHorizontal
+                          }
                         />
                       </SortableWidget>
                     );
@@ -300,6 +302,10 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           telemetryData={telemetryData}
                           session={session}
                           yellowSectors={yellowSectors}
+                          translate={preferences.translate}
+                          cornersPreferences={preferences.corners}
+                          sectorsPreferences={preferences.sectors}
+                          favoriteDrivers={preferences.favoriteDrivers}
                         />
                       </SortableWidget>
                     );
@@ -318,6 +324,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           drivers={driverInfos}
                           session={session}
                           driverInfos={telemetryData?.drivers}
+                          translate={preferences.translate}
                         />
                       </SortableWidget>
                     );
@@ -338,6 +345,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                               : telemetryData?.raceControl
                           }
                           driverInfos={telemetryData?.drivers}
+                          raceControlLog={preferences.raceControlLog}
+                          translate={preferences.translate}
                         />
                       </SortableWidget>
                     );
@@ -406,6 +415,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           driverInfos={driverInfos}
                           totalLaps={session?.current_lap}
                           sessionType={session?.session_type}
+                          translate={preferences.translate}
+                          favoriteDrivers={preferences.favoriteDrivers}
                         />
                       </SortableWidget>
                     );
@@ -460,6 +471,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         widget={w}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
+                        translate={preferences.translate}
                       >
                         <DriverPositions
                           positions={currentPositions}
@@ -479,6 +491,10 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           driverHeadshot={preferences.headshot}
                           audioEnabled={preferences.audio}
                           translate={preferences.translate}
+                          favoriteDrivers={preferences.favoriteDrivers}
+                          minisectorHorizontal={
+                            preferences.minisectorHorizontal
+                          }
                         />
                       </DraggableWidget>
                     );
@@ -491,11 +507,16 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         widget={w}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
+                        translate={preferences.translate}
                       >
                         <MapAndMessages
                           telemetryData={telemetryData}
                           session={session}
                           yellowSectors={yellowSectors}
+                          translate={preferences.translate}
+                          cornersPreferences={preferences.corners}
+                          sectorsPreferences={preferences.sectors}
+                          favoriteDrivers={preferences.favoriteDrivers}
                         />
                       </DraggableWidget>
                     );
@@ -508,12 +529,14 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         widget={w}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
+                        translate={preferences.translate}
                       >
                         <SessionAudios
                           teamRadio={teamRadioCaptures}
                           drivers={driverInfos}
                           session={session}
                           driverInfos={telemetryData?.drivers}
+                          translate={preferences.translate}
                         />
                       </DraggableWidget>
                     );
@@ -526,6 +549,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         widget={w}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
+                        translate={preferences.translate}
                       >
                         <RaceControlList
                           raceControl={
@@ -534,6 +558,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                               : telemetryData?.raceControl
                           }
                           driverInfos={telemetryData?.drivers}
+                          raceControlLog={preferences.raceControlLog}
+                          translate={preferences.translate}
                         />
                       </DraggableWidget>
                     );
@@ -546,6 +572,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         widget={w}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
+                        translate={preferences.translate}
                       >
                         <CircleOfDoom
                           driverInfos={driverInfos}
@@ -569,6 +596,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         widget={w}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
+                        translate={preferences.translate}
                       >
                         <CircleCarData
                           carData={
@@ -595,6 +623,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         widget={w}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
+                        translate={preferences.translate}
                       >
                         <TyresList
                           positions={telemetryData?.positions}
@@ -602,6 +631,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           driverInfos={driverInfos}
                           totalLaps={session?.total_laps}
                           sessionType={session?.session_type}
+                          translate={preferences.translate}
+                          favoriteDrivers={preferences.favoriteDrivers}
                         />
                       </DraggableWidget>
                     );
@@ -614,6 +645,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         widget={w}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
+                        translate={preferences.translate}
                       >
                         <ChatWidget
                           messages={messages}

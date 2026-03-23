@@ -3,13 +3,13 @@
 import { Badge } from "@/components/ui/badge";
 import type { ProcessedPosition, ProcessedDriver } from "@/processors";
 import SoundWave from "./SoundWave";
-import { usePreferences } from "@/context/preferences";
 import { config } from "@/lib/config";
 interface DriverPositionInfoProps {
   position: ProcessedPosition;
   driver: ProcessedDriver | undefined;
   isPlaying: number | undefined;
   driverHeadshot?: boolean;
+  translate?: boolean;
 }
 
 export default function DriverPositionInfo({
@@ -17,13 +17,9 @@ export default function DriverPositionInfo({
   driver,
   isPlaying,
   driverHeadshot,
+  translate,
 }: DriverPositionInfoProps) {
-  const { preferences } = usePreferences();
-  let headshot = driverHeadshot;
-
-  if (headshot === null) {
-    headshot = preferences.headshot;
-  }
+  let headshot = driverHeadshot || false;
 
   let posDiff = 0;
   if (driver?.grid_position)

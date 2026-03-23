@@ -9,9 +9,10 @@ const oxanium = Oxanium({ subsets: ["latin"], weight: "500" });
 interface MinisectorsProps {
   timing: ProcessedTiming | undefined;
   timingStats: ProcessedTimingStats | undefined;
+  MinisectorHorizontal?: boolean;
 }
 
-export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
+export default function Minisectors({ timing, timingStats, MinisectorHorizontal = false }: MinisectorsProps) {
   const getMinisectorColor = (segment: number) => {
     if (segment === 2048) return "#ffe066"; // Amarillo
     if (segment === 2049) return "#51cf66"; // Verde
@@ -34,23 +35,20 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
     return "text-green-400";
   };
 
-  return (
-    <div className="flex flex-row min-w-[13rem] justify-evenly gap-2 pr-1">
-      {/* Minisectores */}
-      <div className="text-xs text-white w-full" style={aldrich.style}>
-        {(["sector1", "sector2", "sector3"] as const).map(
-          (sectorKey, sectorIdx) => {
+  if (MinisectorHorizontal) {
+    return (
+      <div className="flex flex-col gap-2">
+        {/* All minisectors in one row with spacing between sectors */}
+        <div className="flex gap-4 items-center text-xs text-gray-500">
+          {(["sector1", "sector2", "sector3"] as const).map(sectorKey => {
             const minisectors = timing?.sector_segments[sectorKey] || [];
             return (
-              <div  
-                key={sectorKey}
-                className="flex gap-1 items-center text-xs text-gray-500 h-[1rem]"
-              >
-                {minisectors.map((s: number, sIdx: number) => {
+              <div key={sectorKey} className="flex gap-1">
+                {minisectors.map((s, idx) => {
                   const bg = getMinisectorColor(s);
                   return (
                     <span
-                      key={`${sectorKey}-${sIdx}`}
+                      key={idx}
                       style={{
                         backgroundColor: bg,
                         width: 8,
@@ -68,52 +66,113 @@ export default function Minisectors({ timing, timingStats }: MinisectorsProps) {
                 })}
               </div>
             );
-          }
-        )}
-      </div>
-
-      <div className="flex flex-row w-full gap-1">
-        {/* Tiempos de sector */}
-        <div
-          className="flex items-center flex-col text-xs text-white min-w-[2rem] w-full"
-          style={oxanium.style}
-        >
-          {(["sector1", "sector2", "sector3"] as const).map(
-            (sectorKey, idx) => {
-              const sector = timing?.sector_times[sectorKey];
-              const color = getSectorTimeColor(sector);
-              const displayValue =
-                sector?.Value ?? sector?.PreviousValue ?? "--.---";
-              return (
-                <div className="flex flex-row gap-0 text-offWhite" key={sectorKey}>
-                  <span className={color}>
-                    {(sector && displayValue) || "--.---"}
-                  </span>
-                </div>
-              );
-            }
-          )}
+          })}
         </div>
-
-        {/* Mejores tiempos de sector */}
-        <div
-          className="flex items-center flex-col text-xs min-w-[2rem] w-full"
-          style={oxanium.style}
-        >
-          {timingStats?.best_sectors.map((sectorKey, idx) => {
-            const sector = timingStats.best_sectors[idx];
-            const color = getBestSectorColor(sector);
-            const displayValue = sector?.Value ?? "--:--";
+        {/* Times and best times paired per sector */}
+        <div className="flex flex-row text-xs text-white gap-6" style={oxanium.style}>
+          {(["sector1", "sector2", "sector3"] as const).map((sectorKey, idx) => {
+            const sector = timing?.sector_times[sectorKey];
+            const color = getSectorTimeColor(sector);
+            const displayValue = sector?.Value ?? sector?.PreviousValue ?? "--.---";
+            const bestSector = timingStats?.best_sectors[idx];
+            const bestColor = getBestSectorColor(bestSector);
+            const bestDisplayValue = bestSector?.Value ?? "--:--";
             return (
-              <div className="flex flex-row gap-0 text-offWhite" key={idx}>
-                <span className={color}>
+              <div key={sectorKey} className="flex gap-2">
+                <span className={`${color} min-w-[2rem]`}>
                   {(sector && displayValue) || "--.---"}
+                </span>
+                <span className={`${bestColor} min-w-[2rem]`}>
+                  {(bestSector && bestDisplayValue) || "--.---"}
                 </span>
               </div>
             );
           })}
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="flex flex-row min-w-[13rem] justify-evenly gap-2 pr-1">
+        {/* Minisectores */}
+        <div className="text-xs text-white w-full" style={aldrich.style}>
+          {(["sector1", "sector2", "sector3"] as const).map(
+            (sectorKey, sectorIdx) => {
+              const minisectors = timing?.sector_segments[sectorKey] || [];
+              return (
+                <div  
+                  key={sectorKey}
+                  className="flex gap-1 items-center text-xs text-gray-500 h-[1rem]"
+                >
+                  {minisectors.map((s: number, sIdx: number) => {
+                    const bg = getMinisectorColor(s);
+                    return (
+                      <span
+                        key={`${sectorKey}-${sIdx}`}
+                        style={{
+                          backgroundColor: bg,
+                          width: 8,
+                          height: 5,
+                          borderRadius: 4,
+                          stroke: bg,
+                          strokeWidth: 4,
+                          padding: 2,
+                          display: "inline-block",
+                          marginLeft: 2,
+                          opacity: 1,
+                        }}
+                      ></span>
+                    );
+                  })}
+                </div>
+              );
+            }
+          )}
+        </div>
+
+        <div className="flex flex-row w-full gap-1">
+          {/* Tiempos de sector */}
+          <div
+            className="flex items-center flex-col text-xs text-white min-w-[2rem] w-full"
+            style={oxanium.style}
+          >
+            {(["sector1", "sector2", "sector3"] as const).map(
+              (sectorKey, idx) => {
+                const sector = timing?.sector_times[sectorKey];
+                const color = getSectorTimeColor(sector);
+                const displayValue =
+                  sector?.Value ?? sector?.PreviousValue ?? "--.---";
+                return (
+                  <div className="flex flex-row gap-0 text-offWhite" key={sectorKey}>
+                    <span className={color}>
+                      {(sector && displayValue) || "--.---"}
+                    </span>
+                  </div>
+                );
+              }
+            )}
+          </div>
+
+          {/* Mejores tiempos de sector */}
+          <div
+            className="flex items-center flex-col text-xs min-w-[2rem] w-full"
+            style={oxanium.style}
+          >
+            {timingStats?.best_sectors.map((sectorKey, idx) => {
+              const sector = timingStats.best_sectors[idx];
+              const color = getBestSectorColor(sector);
+              const displayValue = sector?.Value ?? "--:--";
+              return (
+                <div className="flex flex-row gap-0 text-offWhite" key={idx}>
+                  <span className={color}>
+                    {(sector && displayValue) || "--.---"}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  }
 }

@@ -5,6 +5,7 @@ import { F1CalendarResponse, fetchCalendar } from "@/utils/calendar";
 import NextSession from "@/components/calendar/NextSession";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+// @ts-ignore
 import "react-loading-skeleton/dist/skeleton.css";
 import Upnext from "@/components/calendar/Upnext";
 import { config } from "@/lib/config";

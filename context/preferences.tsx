@@ -51,6 +51,7 @@ export interface Preferences {
   corners: boolean;
   audio: boolean;
   headshot: boolean;
+  minisectorHorizontal: boolean;
   audioLog: WidgetConfig;
   raceControlLog: WidgetConfig;
   circleOfDoom: WidgetConfig;
@@ -72,19 +73,20 @@ export const DEFAULT_CONFIG: Preferences = {
   corners: false,
   audio: true,
   headshot: false,
+  minisectorHorizontal: false,
   driverPositions: {
     enabled: true,
     xPct: 0,
     yPct: 0,
-    widthPct: 800 / 1526,
+    widthPct: 900 / 1526,
     heightPct: 1000 / 1094,
-    width: 800,
+    width: 900,
     height: 1000,
     index: 0,
   },
   mapAndMessages: {
     enabled: true,
-    xPct: 890 / 1526,
+    xPct: 920 / 1526,
     yPct: 0,
     widthPct: 500 / 1526,
     heightPct: 450 / 1094,
@@ -94,7 +96,7 @@ export const DEFAULT_CONFIG: Preferences = {
   },
   chat: {
     enabled: true,
-    xPct: 880 / 1526,
+    xPct: 950 / 1526,
     yPct: 720 / 1094,
     widthPct: 500 / 1526,
     heightPct: 300 / 1094,
@@ -203,6 +205,7 @@ function isPreferences(obj: any): obj is Preferences {
         "corners",
         "audio",
         "headshot",
+        "minisectorHorizontal",
         "weatherDetailed",
         "hasSeenPanel",
         "hasSeenEditMode",

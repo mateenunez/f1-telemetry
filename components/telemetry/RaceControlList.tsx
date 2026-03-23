@@ -1,19 +1,23 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { WidgetConfig } from "@/context/preferences";
 import { ProcessedDriver, ProcessedRaceControl } from "@/processors";
 import { toLocaleTime } from "@/utils/calendar";
-import { usePreferences } from "@/context/preferences";
 interface RaceControlListProps {
   raceControl: ProcessedRaceControl[] | undefined;
   driverInfos?: (ProcessedDriver | undefined)[];
+  translate?: boolean;
+  raceControlLog?: WidgetConfig;
+  favoriteDrivers?: ProcessedDriver[];
 }
 
 export default function RaceControlList({
   raceControl,
   driverInfos,
+  translate,
+  favoriteDrivers,
+  raceControlLog
 }: RaceControlListProps) {
-  const { preferences } = usePreferences();
-  const raceControlLog = preferences.raceControlLog;
 
   const getMessageStyle = (msg: ProcessedRaceControl) => {
     if (!msg.racing_number || !driverInfos) return {};
@@ -24,7 +28,7 @@ export default function RaceControlList({
     const driver = driverInfos.find((d) => d?.driver_number === racingNumber);
     if (!driver) return {};
 
-    const isFavorite = preferences.favoriteDrivers.some(
+    const isFavorite = favoriteDrivers?.some(
       (fav) => fav.driver_number === driver.driver_number
     );
 
@@ -78,7 +82,7 @@ export default function RaceControlList({
               ) : (
                 <div className="min-h-[20rem] justify-center items-center flex font-geist font-medium">
                   <p className="text-xs text-gray-400">
-                    {preferences.translate
+                    {translate
                       ? "Sin mensajes de carrera."
                       : "No race messages."}
                   </p>

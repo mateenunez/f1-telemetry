@@ -16,7 +16,6 @@ import {
 } from "@/processors";
 import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { audioUrl, useTelemetryAudio } from "@/hooks/use-raceControl";
-import { usePreferences } from "@/context/preferences";
 import DrsSpeed from "@/components/telemetry/DrsSpeed";
 import Pits from "./Pits";
 import DriverGap2 from "./DriverGap2";
@@ -38,6 +37,8 @@ interface DriverPositionsProps {
   translate?: boolean;
   driverHeadshot?: boolean;
   audioEnabled?: boolean;
+  favoriteDrivers?: ProcessedDriver[];
+  minisectorHorizontal?: boolean;
 }
 
 const DriverPositions = memo(function DriverPositions({
@@ -56,6 +57,8 @@ const DriverPositions = memo(function DriverPositions({
   translate,
   driverHeadshot,
   audioEnabled,
+  favoriteDrivers,
+  minisectorHorizontal,
 }: DriverPositionsProps) {
   const [isPlayingAudio, setIsPlayingAudio] = useState<number | undefined>();
   const lastPlayedUtcRef = useRef<string | undefined>(
@@ -65,22 +68,9 @@ const DriverPositions = memo(function DriverPositions({
   const scrollPosition = useRef(0);
   const { playNotificationSound } = useTelemetryAudio();
   const { playTeamRadioSound, radioAudioRef } = useTelemetryAudio();
-  const { preferences } = usePreferences();
-  let headshot = driverHeadshot;
-  let popup = audioEnabled;
-
-  if (translate === null) {
-    translate = preferences.translate;
-  }
-  if (headshot === null) {
-    headshot = preferences.headshot;
-  }
-  if (popup === null) {
-    popup = preferences.audio;
-  }
 
   useEffect(() => {
-    if (!lastCapture || !popup) return;
+    if (!lastCapture || !audioEnabled) return;
     if (session?.session_status === "Finalised") return;
     if (lastPlayedUtcRef.current !== lastCapture.utc) {
       const url = audioUrl + session?.path + lastCapture.path;
@@ -132,7 +122,7 @@ const DriverPositions = memo(function DriverPositions({
               <tr className="text-center">
                 <th
                   className={`text-center ${
-                    headshot ? "w-[11.5rem]" : "w-[9rem]"
+                    driverHeadshot ? "w-[11.5rem]" : "w-[9rem]"
                   }`}
                 >
                   {translate ? "PILOTO" : "DRIVER"}
@@ -173,7 +163,7 @@ const DriverPositions = memo(function DriverPositions({
                 const currentStints = driverStints[idx];
                 const isFavorite =
                   driver?.driver_number &&
-                  preferences.favoriteDrivers.some(
+                  favoriteDrivers?.some(
                     (d) => d.driver_number === driver.driver_number,
                   );
                 const isAboutToBeEliminated =
@@ -185,7 +175,7 @@ const DriverPositions = memo(function DriverPositions({
                     ? {
                         opacity: 0.4,
                         background: `linear-gradient(-50deg, #0a0a0a ${
-                          headshot ? "90%" : "100%"
+                          driverHeadshot ? "90%" : "100%"
                         }, #${driver?.team_colour} 100%)`,
                       }
                     : {
@@ -197,7 +187,7 @@ const DriverPositions = memo(function DriverPositions({
                               ? "#" + driver?.team_colour + "30"
                               : "#0a0a0a"
                         } ${
-                          headshot && !isAboutToBeEliminated ? "90%" : "100%"
+                          driverHeadshot && !isAboutToBeEliminated ? "90%" : "100%"
                         }, #${driver?.team_colour} 100%)`,
                        
                         
@@ -210,12 +200,13 @@ const DriverPositions = memo(function DriverPositions({
                     onDoubleClick={() => handlePinnedDriver(pos.driver_number)}
                     style={baseStyle}
                   >
-                    <td className={`${headshot ? "w-[11.5rem]" : "w-[9rem]"}`}>
+                    <td className={`${driverHeadshot ? "w-[11.5rem]" : "w-[9rem]"}`}>
                       <DriverPositionInfo
                         position={pos}
                         driver={driver}
                         isPlaying={isPlayingAudio}
-                        driverHeadshot={headshot}
+                        driverHeadshot={driverHeadshot}
+                        translate={translate}
                       />
                     </td>
 
@@ -244,7 +235,7 @@ const DriverPositions = memo(function DriverPositions({
                     </td>
 
                     <td className="w-[13rem]">
-                      <Minisectors timing={timing} timingStats={timingStats} />
+                      <Minisectors timing={timing} timingStats={timingStats} MinisectorHorizontal={minisectorHorizontal} />
                     </td>
                   </tr>
                 );

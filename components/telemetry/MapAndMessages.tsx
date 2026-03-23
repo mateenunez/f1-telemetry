@@ -3,10 +3,10 @@ import Map from "./Map";
 import RaceControl from "@/components/telemetry/RaceControl";
 import { Orbitron } from "next/font/google";
 import { memo } from "react";
-import { usePreferences } from "@/context/preferences";
 import { getTrackStatusColor, getTrackStatusLabel } from "@/utils/telemetry";
 import { TRACK_STATUS_KEYS } from "@/utils/telemetry";
 import { TelemetryData } from "@/telemetry-manager";
+import { ProcessedDriver } from "@/processors";
 
 const orbitron = Orbitron({ subsets: ["latin"], weight: "400" });
 
@@ -14,14 +14,21 @@ interface MapAndMessagesProps {
   telemetryData: TelemetryData | null;
   session: any;
   yellowSectors: Set<number>;
+  translate?: boolean;
+  cornersPreferences?: boolean;
+  sectorsPreferences?: boolean;
+  favoriteDrivers?: ProcessedDriver[];
 }
 
 const MapAndMessages = memo(function MapAndMessages({
   telemetryData,
   session,
   yellowSectors,
+  translate,
+  cornersPreferences,
+  sectorsPreferences,
+  favoriteDrivers,
 }: MapAndMessagesProps) {
-  const { preferences } = usePreferences();
   const isRace = String(session?.session_type ?? "").toLowerCase().includes("race");
   if (!telemetryData) return;
 
@@ -33,7 +40,7 @@ const MapAndMessages = memo(function MapAndMessages({
             <div className="flex justify-center items-center">
               <RaceControl
                 raceControl={
-                  preferences.translate
+                  translate
                     ? telemetryData.raceControlEs
                     : telemetryData.raceControl
                 }
@@ -59,7 +66,7 @@ const MapAndMessages = memo(function MapAndMessages({
                   color: getTrackStatusColor(session.track_status),
                 }}
               >
-                {preferences.translate
+                {translate
                   ? getTrackStatusLabel(session.track_status, true)
                   : getTrackStatusLabel(session.track_status, false)}
               </CardTitle>
@@ -80,6 +87,9 @@ const MapAndMessages = memo(function MapAndMessages({
               session.track_status === TRACK_STATUS_KEYS.SafetyCar ||
               session.track_status === TRACK_STATUS_KEYS.VirtualSafetyCar
             }
+            cornersPreferences={cornersPreferences}
+            sectorsPreferences={sectorsPreferences}
+            favoriteDrivers={favoriteDrivers}
           />
         )}
       </CardContent>

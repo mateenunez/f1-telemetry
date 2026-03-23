@@ -174,6 +174,10 @@ export default function PreferencesPanel({
           title: "Foto del piloto",
           description: "Mostrar una foto de cada piloto.",
         },
+        minisectorHorizontal: {
+          title: "Mostrar minisectores horizontalmente",
+          description: "Muestra los minisectores en una fila horizontal en lugar de columnas verticales.",
+        },
         weatherDetailed: {
           title: "Clima detallado",
           description:
@@ -226,6 +230,10 @@ export default function PreferencesPanel({
         headshot: {
           title: "Driver Headshot",
           description: "Show a picture for each driver.",
+        },
+        minisectorHorizontal: {
+          title: "Show minisector horizontally",
+          description: "Display minisectors in a horizontal row instead of vertical columns.",
         },
         weatherDetailed: {
           title: "Detailed Weather",
