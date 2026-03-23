@@ -23,10 +23,13 @@ export const config = {
     blobBaseUrl: blobBaseUrl,
     assets: {
       chequered_flag: `${blobBaseUrl}/chequered_flag.png`,
-      f1t: `${blobBaseUrl}/f1t.png`,
+      f1_white: `${blobBaseUrl}/F1White.svg`,
+      f1_black: `${blobBaseUrl}/F1Black.svg`,
+      f1_blue: `${blobBaseUrl}/F1Blue.svg`,
       discordIcon: `${blobBaseUrl}/discord.svg`,
       driver: `${blobBaseUrl}/driver.png`,
-      f1t_black: `${blobBaseUrl}/f1t_black.png`,
+      f1telemetry_black: `${blobBaseUrl}/F1TelemetryBlack.svg`,
+      f1telemetry_white: `${blobBaseUrl}/F1TelemetryWhite.svg`,
       f1telemetrybg_v1: `${blobBaseUrl}/f1telemetrybg_v1.png`,
       mp3: {
         raceControl: `${blobBaseUrl}/mp3/race-control-notification.mp3`,

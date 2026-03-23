@@ -144,7 +144,6 @@
       "default": "Algo salió mal. Acordate que el nombre e email deben ser únicos."
     }
   },
-  "loading": "Preparando el sistema...",
   "delaying": "Aplicando delay...",
   "error": {
     "message": "Servicio temporalmente no disponible.",

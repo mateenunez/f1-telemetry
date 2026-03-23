@@ -144,7 +144,6 @@
       "default": "Something went wrong. Remind that username and email must be unique."
     }
   },
-  "loading": "Getting things ready...",
   "delaying": "Applying delay...",
   "error": {
     "message": "Service temporarily unavailable.",

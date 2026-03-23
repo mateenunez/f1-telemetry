@@ -11,7 +11,7 @@ export default function Footer({ dict }: FooterProps) {
     <div className="flex flex-row items-center justify-between gap-[2rem] py-8 px-4 max-w-5xl mx-auto text-gray-500">
       <div className="flex flex-col lg:flex-row items-center gap-4">
         <Image
-          src={config.public.assets.f1t}
+          src={config.public.assets.f1_white}
           width={60}
           height={60}
           alt="F1 Telemetry logo"

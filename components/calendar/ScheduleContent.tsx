@@ -16,7 +16,7 @@ interface ScheduleContentProps {
 
 export function ScheduleContent({ dict }: ScheduleContentProps) {
   const [calendar, setCalendar] = useState<F1CalendarResponse | null>(null);
-  const f1t = config.public.assets.f1t;
+  const f1t = config.public.assets.f1_white;
 
   useEffect(() => {
     const loadCalendar = async () => {
@@ -34,9 +34,18 @@ export function ScheduleContent({ dict }: ScheduleContentProps) {
   if (!calendar) {
     const LoaderOverlay = () => (
       <div className="fixed inset-0 z-20 flex items-center justify-center bg-warmBlack/40 backdrop-blur-sm">
-        <span className="text-white text-2xl text-center font-geist font-medium">
-          {dict.schedule.loading}
-        </span>
+        <div className="relative flex items-center justify-center w-24 h-24">
+          <img
+            src="/assets/F1White.svg"
+            className="absolute w-full h-full"
+            alt="F1 Telemetry Logo White"
+          />
+          <img
+            src="/assets/F1Red.svg"
+            className="absolute w-full h-full animate-fill-color"
+            alt="F1 Telemetry Logo Red"
+          />
+        </div>
       </div>
     );
 
@@ -92,14 +101,14 @@ export function ScheduleContent({ dict }: ScheduleContentProps) {
     return (
       <div className="min-h-screen bg-warmBlack text-white overflow-hidden font-geist">
         <div className="max-w-6xl mx-auto mt-20 px-4 md:px-8">
-      <Navigation
-        leftUrl="/live-timing"
-        rightUrl="/"
-        leftTitle={dict.schedule.dashboardButton}
-        rightTitle={dict.schedule.homeButton}
-        f1t_url={f1t}
-        rightColor="f1Purple"
-      />
+          <Navigation
+            leftUrl="/live-timing"
+            rightUrl="/"
+            leftTitle={dict.schedule.dashboardButton}
+            rightTitle={dict.schedule.homeButton}
+            f1t_url={f1t}
+            rightColor="f1Purple"
+          />
           <div className="flex flex-row my-4">
             <div className="flex flex-col md:mx-8 w-full gap-6">
               {/* Proxima sesion */}

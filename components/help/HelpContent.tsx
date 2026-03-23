@@ -20,7 +20,7 @@ interface HelpContentProps {
 }
 
 export function HelpContent({ dict }: HelpContentProps) {
-  const f1t = config.public.assets.f1t;
+  const f1t = config.public.assets.f1_white;
   const isMobile = useIsMobile();
 
   return (

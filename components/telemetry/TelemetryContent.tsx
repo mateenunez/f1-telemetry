@@ -203,9 +203,10 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
         {delayed ? (
           <Countdown totalSeconds={Math.max(secondsDelay, 0)} dict={dict} />
         ) : (
-          <span className="text-white text-2xl text-center font-geist font-medium">
-            {dict.loading}
-          </span>
+          <div className="relative flex items-center justify-center w-24 h-24">
+            <img src="/assets/F1White.svg" className="absolute w-full h-full" alt="F1 Telemetry Logo White" />
+            <img src="/assets/F1Blue.svg" className="absolute w-full h-full animate-fill-color" alt="F1 Telemetry Logo Blue" />
+          </div>
         )}
       </div>
     );

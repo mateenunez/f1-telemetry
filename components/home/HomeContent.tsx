@@ -8,7 +8,6 @@ interface HomeContentProps {
 }
 
 export default function HomeContent({ dict }: HomeContentProps) {
-  const f1t = config.public.assets.f1t;
 
   return (
     <div className="min-h-screen w-full">
@@ -17,7 +16,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
         rightUrl="/schedule"
         leftTitle={dict.home.dashboardButton}
         rightTitle={dict.home.scheduleButton}
-        f1t_url={f1t}
+        f1t_url={config.public.assets.f1_white}
         maxScrollPosition={100}
       />
       <div className="h-screen py-5 w-full bg-cover bg-center isolate">
@@ -32,9 +31,9 @@ export default function HomeContent({ dict }: HomeContentProps) {
         <div className="flex flex-col justify-evenly h-full justify-center items-center max-w-4xl mx-auto">
           <div className="flex flex-col items-center">
             <Image
-              src={config.public.assets.f1t_black}
-              height={150}
-              width={250}
+              src={config.public.assets.f1telemetry_black}
+              height={500}
+              width={500}
               alt="F1 Telemetry black logo"
             />
           </div>
