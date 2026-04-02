@@ -1,4 +1,5 @@
 import { useAuth } from "@/hooks/use-auth";
+import { decode as cborDecode, encode as cborEncode } from "cbor2";
 
 export interface SignalRMessage {
   H: string;
@@ -44,6 +45,31 @@ export class WebSocketManager {
   private reconnectDelay = 3000;
   private token: string | null = null;
 
+  private encodeWebSocketMessage(value: any): Uint8Array {
+    const encoded = cborEncode(value) as any;
+    return new Uint8Array(
+      encoded.buffer as ArrayBuffer,
+      encoded.byteOffset,
+      encoded.byteLength,
+    );
+  }
+
+  private decodeWebSocketMessage(rawData: unknown): any {
+    let bytes: Uint8Array | null = null;
+
+    if (rawData instanceof ArrayBuffer) {
+      bytes = new Uint8Array(rawData);
+    } else if (ArrayBuffer.isView(rawData)) {
+      const view = rawData as ArrayBufferView;
+      bytes = new Uint8Array(view.buffer, view.byteOffset, view.byteLength);
+    }
+
+    if (!bytes) {
+      return rawData;
+    }
+    return cborDecode(bytes);
+  }
+
   connect(
     url: string,
     onMessage: (data: WebSocketData) => void,
@@ -58,6 +84,7 @@ export class WebSocketManager {
   private attemptConnection() {
     try {
       this.ws = new WebSocket(this.url);
+      this.ws.binaryType = "arraybuffer";
 
       this.ws.onopen = () => {
         console.log("WebSocket connected");
@@ -69,7 +96,7 @@ export class WebSocketManager {
       };
 
       this.ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
+        const data = this.decodeWebSocketMessage(event.data);
         this.handleMessage(data);
       };
 
@@ -113,7 +140,7 @@ export class WebSocketManager {
         type: "auth:token",
         payload: { token },
       };
-      this.ws.send(JSON.stringify(authMessage));
+      this.ws.send(this.encodeWebSocketMessage(authMessage) as any);
     }
   }
 
@@ -142,7 +169,9 @@ export class WebSocketManager {
 
   sendMessage(messageType: string, payload: any): void {
     if (this.ws?.readyState === WebSocket.OPEN) {
-      this.ws.send(JSON.stringify({ type: messageType, payload }));
+      this.ws.send(
+        this.encodeWebSocketMessage({ type: messageType, payload }) as any,
+      );
     }
   }
 }
