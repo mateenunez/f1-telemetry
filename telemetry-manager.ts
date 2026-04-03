@@ -47,6 +47,7 @@ export interface TelemetryData {
   timingStats: ProcessedTimingStats[];
   teamRadio: ProcessedTeamRadio;
   chatMessages: ProcessedChatMessage[];
+  userCount: number;
   lastUpdateTime: Date;
 }
 
@@ -110,6 +111,11 @@ export class TelemetryManager {
   }
 
   private processWebSocketData(data: WebSocketData) {
+    // Handle wsu (WebSocket Users) if present
+    if (typeof data.wsu === "number") {
+      this.chatProcessor.setUserCount(data.wsu);
+    }
+
     if (Array.isArray(data.M)) {
       data.M.forEach((message: SignalRMessage) => {
         if (message.H && message.A) {
@@ -258,6 +264,7 @@ export class TelemetryManager {
       timingStats: this.timingStatsProcessor.getAllStats(),
       teamRadio: this.teamRadioProcessor.getTeamRadio(),
       chatMessages: this.chatProcessor.getAllMessages(),
+      userCount: this.chatProcessor.getUserCount(),
       lastUpdateTime: new Date(),
     };
 

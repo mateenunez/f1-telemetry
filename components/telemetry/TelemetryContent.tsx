@@ -436,6 +436,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           dict={dict}
                           sendMessage={sendMessage}
                           onOpenAuth={() => setAuthFormOpen(true)}
+                          userCount={telemetryData?.userCount || 0}
                         />
                       </SortableWidget>
                     );
@@ -653,6 +654,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           dict={dict}
                           sendMessage={sendMessage}
                           onOpenAuth={() => setAuthFormOpen(true)}
+                          userCount={telemetryData?.userCount || 0}
                         />
                       </DraggableWidget>
                     );

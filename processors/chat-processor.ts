@@ -19,6 +19,7 @@ export interface ProcessedChatMessage {
 export class ChatProcessor {
   private messages: Map<string, ProcessedChatMessage> = new Map();
   private maxMessages = 50;
+  private currentUserCount: number = 0;
 
   processMessage(
     messageData: any | any[],
@@ -94,5 +95,13 @@ export class ChatProcessor {
       .map(([key]) => key);
 
     keysToDelete.forEach((key) => this.messages.delete(key));
+  }
+
+  setUserCount(count: number): void {
+    this.currentUserCount = count;
+  }
+
+  getUserCount(): number {
+    return this.currentUserCount;
   }
 }

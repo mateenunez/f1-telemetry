@@ -33,6 +33,7 @@ export interface WebSocketData {
   C?: string;
   H?: string;
   A?: [string, any, string];
+  wsu?: number;
 }
 
 export class WebSocketManager {

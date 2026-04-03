@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Send, LogIn, Palette, Stars } from "lucide-react";
+import { Send, LogIn, Palette, Stars, User } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { ProcessedChatMessage } from "@/processors/chat-processor";
 
@@ -11,6 +11,7 @@ interface ChatWidgetProps {
   dict: any;
   sendMessage: (content: string, color: string, badge: string) => Promise<void>;
   onOpenAuth: () => void;
+  userCount: number;
 }
 
 export const ChatWidget: React.FC<ChatWidgetProps> = ({
@@ -18,6 +19,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   language,
   sendMessage,
   onOpenAuth,
+  userCount,
 }) => {
   const DEFAULT_USERNAME_COLORS = [
     "#60a5fa",
@@ -185,16 +187,21 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   return (
     <div className="w-full md:h-full h-[20rem] flex flex-col bg-warmBlack rounded-lg overflow-hidden chat-step">
       {/* Messages Area */}
+      <div className="absolute top-0 left-0 w-full z-20 bg-warmBlack pointer-events-none">
+        {/* User Count */}
+        {userCount > 20 && (
+          <div className="text-center text-f1Green font-geist gap-1 text-xs mb-1 flex items-center justify-center">
+            <User size={15} className="text-f1Green pulse" />
+            {userCount}
+          </div>
+        )}
+      </div>
       <div
         ref={messagesContainerRef}
         className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#0a0a0a]"
       >
         {messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-gray-400 text-sm">
-            {language === "es"
-              ? "No anda nadie por ahora... 👀"
-              : "No one's here yet... 👀"}
-          </div>
+          <div className="flex items-center justify-center h-full text-gray-400 text-sm"></div>
         ) : (
           <>
             {messages.map((msg) => {
@@ -241,7 +248,11 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                   className="h-9 w-9 flex items-center justify-center bg-transparent hover:border-gray-500 transition-colors"
                   title={language === "es" ? "Elegir emoji" : "Pick badge"}
                   disabled={user?.role.name === "base"}
-                  style={{ opacity: user?.role.name === "base" ? 0.5 : 1 , cursor: user?.role.name === "base" ? "not-allowed" : "pointer" }}
+                  style={{
+                    opacity: user?.role.name === "base" ? 0.5 : 1,
+                    cursor:
+                      user?.role.name === "base" ? "not-allowed" : "pointer",
+                  }}
                   aria-label="Pick emoji badge"
                 >
                   {selectedEmoji || (
