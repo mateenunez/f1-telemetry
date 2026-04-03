@@ -53,17 +53,20 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   const COMMON_EMOJIS = [
     "🏎️",
     "🏁",
-    "🏆",
-    "🔥",
-    "🛠️",
-    "🚦",
-    "⭐",
-    "😎",
-    "💪",
-    "🚀",
-    "🔋",
-    "❤️",
+    "🍾",
+    "🤡",
+    "💨",
+    "🚜",
+    "👀",
+    "🚧",
+    "📉",
+    "🧱",
+    "📻",
+    "☔",
     "🥥",
+    "👨‍🦽‍➡️",
+    "👹",
+    "🎃",
   ];
 
   // Cooldown timer
@@ -269,7 +272,11 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                           key={idx}
                           type="button"
                           onClick={() => {
-                            setSelectedEmoji(emoji);
+                            if (selectedEmoji === emoji) {
+                              setSelectedEmoji("");
+                            } else {
+                              setSelectedEmoji(emoji);
+                            }
                             setShowEmojiPicker(false);
                           }}
                           className={`hover:bg-gray-700 rounded transition-colors ${
