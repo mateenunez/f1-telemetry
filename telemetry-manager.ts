@@ -24,6 +24,7 @@ import {
   ProcessedTeamRadio,
   ChatProcessor,
   ProcessedChatMessage,
+  PinnedChatMessage,
 } from "@/processors";
 import {
   WebSocketManager,
@@ -47,6 +48,7 @@ export interface TelemetryData {
   timingStats: ProcessedTimingStats[];
   teamRadio: ProcessedTeamRadio;
   chatMessages: ProcessedChatMessage[];
+  pinnedMessages: PinnedChatMessage[];
   userCount: number;
   lastUpdateTime: Date;
 }
@@ -114,6 +116,10 @@ export class TelemetryManager {
     // Handle wsu (WebSocket Users) if present
     if (typeof data.wsu === "number") {
       this.chatProcessor.setUserCount(data.wsu);
+    }
+
+    if (typeof data.PinnedMessages === "object"){
+      this.chatProcessor.processPinnedMessages(data.PinnedMessages);
     }
 
     if (Array.isArray(data.M)) {
@@ -264,6 +270,7 @@ export class TelemetryManager {
       timingStats: this.timingStatsProcessor.getAllStats(),
       teamRadio: this.teamRadioProcessor.getTeamRadio(),
       chatMessages: this.chatProcessor.getAllMessages(),
+      pinnedMessages: this.chatProcessor.getPinnedMessages(),
       userCount: this.chatProcessor.getUserCount(),
       lastUpdateTime: new Date(),
     };

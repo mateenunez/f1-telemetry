@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/use-auth";
+import { PinnedChatMessage } from "@/processors";
 
 export interface SignalRMessage {
   H: string;
@@ -34,6 +34,7 @@ export interface WebSocketData {
   H?: string;
   A?: [string, any, string];
   wsu?: number;
+  PinnedMessages?: PinnedChatMessage[];
 }
 
 export class WebSocketManager {

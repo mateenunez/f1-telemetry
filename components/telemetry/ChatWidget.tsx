@@ -1,24 +1,29 @@
-"use client";
-
-import React, { useState, useEffect, useRef } from "react";
-import { Send, LogIn, Palette, Stars, User } from "lucide-react";
+import React, { useState, useEffect, useRef, JSX } from "react";
+import { Send, LogIn, Palette, Stars, User, Pin, Eye } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { ProcessedChatMessage } from "@/processors/chat-processor";
+import {
+  ProcessedChatMessage,
+  PinnedChatMessage,
+} from "@/processors/chat-processor";
 
 interface ChatWidgetProps {
   messages: ProcessedChatMessage[];
+  pinnedMessages: PinnedChatMessage[];
   language: string;
   dict: any;
   sendMessage: (content: string, color: string, badge: string) => Promise<void>;
+  deletePinMessage: (id: number) => void;
   onOpenAuth: () => void;
   userCount: number;
 }
 
 export const ChatWidget: React.FC<ChatWidgetProps> = ({
   messages,
+  pinnedMessages,
   language,
   sendMessage,
   onOpenAuth,
+  deletePinMessage,
   userCount,
 }) => {
   const DEFAULT_USERNAME_COLORS = [
@@ -30,6 +35,24 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
     "#22d3ee",
     "#fb923c",
     "#c084fc",
+  ];
+  const COMMON_EMOJIS = [
+    "🏎️",
+    "🏁",
+    "🍾",
+    "🤡",
+    "💨",
+    "🚜",
+    "👀",
+    "🚧",
+    "📉",
+    "🧱",
+    "📻",
+    "☔",
+    "🥥",
+    "👨‍🦽‍➡️",
+    "👹",
+    "🎃",
   ];
   const { user, isAuthenticated } = useAuth();
   const [content, setContent] = useState("");
@@ -50,24 +73,37 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
   const maxLength = 200;
-  const COMMON_EMOJIS = [
-    "🏎️",
-    "🏁",
-    "🍾",
-    "🤡",
-    "💨",
-    "🚜",
-    "👀",
-    "🚧",
-    "📉",
-    "🧱",
-    "📻",
-    "☔",
-    "🥥",
-    "👨‍🦽‍➡️",
-    "👹",
-    "🎃",
-  ];
+  const renderContentWithLinks = (content: string) => {
+    const urlRegex = /https:\/\/[^\s]+/g;
+    const parts = content.split(urlRegex);
+    const urls = content.match(urlRegex) || [];
+
+    if (urls.length === 0) return content;
+
+    const result: (string | JSX.Element)[] = [];
+    let urlIndex = 0;
+
+    parts.forEach((part, index) => {
+      result.push(part);
+      if (urlIndex < urls.length && index < parts.length - 1) {
+        const url = urls[urlIndex];
+        result.push(
+          <a
+            key={`link-${index}`}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-400 hover:text-blue-300 underline"
+          >
+            {url}
+          </a>,
+        );
+        urlIndex++;
+      }
+    });
+
+    return result;
+  };
 
   // Cooldown timer
   useEffect(() => {
@@ -190,34 +226,57 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   return (
     <div className="w-full md:h-full h-[20rem] flex flex-col bg-warmBlack rounded-lg overflow-hidden chat-step">
       {/* Messages Area */}
-      <div className="absolute top-0 left-0 w-full z-20 bg-warmBlack pointer-events-none">
+      <div className="flex justify-center w-full z-20 bg-warmBlack pointer-events-none">
         {/* User Count */}
-        {userCount > 20 && (
-          <div className="text-center text-f1Green font-geist gap-1 text-xs mb-1 flex items-center justify-center">
-            <User size={15} className="text-f1Green pulse" />
+        {userCount >= 20 && (
+          <div className="text-center text-f1Blue font-geist gap-1 text-xs mb-1 flex items-center justify-center">
+            <User size={15} className="text-f1Blue" />
             {userCount}
           </div>
         )}
       </div>
+      {/* Pinned messages */}
+      {pinnedMessages.length > 0 && (
+        <div className="space-y-2 md:mb-2 w-full bg-warmBlack px-4">
+          {pinnedMessages.map((msg) => (
+            <div
+              key={`pinned-${msg.id}`}
+              className="text-sm overflow-x-hiddenflex flex justify-between px-4 items-center flex-row gap-1 rounded-md bg-f1Blue/20 py-2"
+            >
+              <p className="text-white font-medium break-words text-wrap whitespace-pre-wrap text-wrap flex-wrap font-geist">
+                {renderContentWithLinks(msg.content)}
+              </p>
+              <Eye
+                size="1.25rem"
+                color="white"
+                onClick={() => deletePinMessage(msg.id)}
+                cursor="pointer"
+              />
+            </div>
+          ))}
+        </div>
+      )}
       <div
         ref={messagesContainerRef}
-        className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#0a0a0a]"
+        className="flex-1 overflow-y-auto space-y-3 bg-[#0a0a0a]"
       >
-        {messages.length === 0 ? (
+        {messages.length === 0 && pinnedMessages.length === 0 ? (
           <div className="flex items-center justify-center h-full text-gray-400 text-sm"></div>
         ) : (
           <>
+            {/* Regular messages */}
             {messages.map((msg) => {
               return (
                 <div
                   key={msg.id}
-                  className="text-sm overflow-x-hidden flex flex-row gap-1 rounded-md"
+                  className="text-sm overflow-x-hidden flex flex-row gap-1 rounded-md px-4"
                 >
                   <div className="flex gap-1">
                     <span className="text-[0.6rem] md:text-nowrap font-geist text-gray-500 text-center">
                       {msg.timestamp.toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
+                        hour12: false,
                       })}
                     </span>
                     {msg.user.roleId !== 1 && <span>{msg.user.badge}</span>}
@@ -229,7 +288,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                     </span>
                   </div>
                   <p className="text-gray-200 break-words text-wrap whitespace-pre-wrap text-wrap flex-wrap">
-                    {msg.content}
+                    {renderContentWithLinks(msg.content)}
                   </p>
                 </div>
               );
@@ -243,7 +302,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
       <div className="px-2 pb-2 pt-1 bg-warmBlack">
         <form onSubmit={handleSubmit} className="flex flex-col gap-1">
           <div className="flex items-stretch gap-1">
-            <div className="flex flex-row w-full items-center border border-gray-600 rounded focus:ring-blue-500">
+            <div className="flex flex-row w-full items-center focus:outline-2 focus:ring-blue-500">
               <div className="relative flex items-center shrink-0">
                 <button
                   type="button"

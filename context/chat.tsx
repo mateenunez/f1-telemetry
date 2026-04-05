@@ -1,15 +1,17 @@
 "use client";
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { ProcessedChatMessage } from "@/processors";
+import { PinnedChatMessage } from "@/processors/chat-processor";
 
 interface ChatContextType {
   messages: ProcessedChatMessage[];
+  pinnedMessages: PinnedChatMessage[];
   isOpen: boolean;
   addMessage: (message: ProcessedChatMessage) => void;
   removeMessage: (id: string) => void;
-  clearMessages: () => void;
+  setPinnedMessages: (messages: PinnedChatMessage[]) => void;
+  removePinnedMessage: (id: number) => void;
   setIsOpen: (open: boolean) => void;
-  //   removeOldMessages: () => void;
 }
 
 export const ChatContext = createContext<ChatContextType | undefined>(
@@ -18,6 +20,7 @@ export const ChatContext = createContext<ChatContextType | undefined>(
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState<ProcessedChatMessage[]>([]);
+  const [pinnedMessages, setPinnedMessages] = useState<PinnedChatMessage[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
   const addMessage = (message: ProcessedChatMessage) => {
@@ -31,33 +34,21 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     setMessages((prev) => prev.filter((m) => m.id !== id));
   };
 
-  const clearMessages = () => {
-    setMessages([]);
+  const removePinnedMessage = (id: number) => {
+    setPinnedMessages((prev) => prev.filter((m) => m.id !== id));
   };
-
-  //   const removeOldMessages = () => {
-  //     const now = Date.now();
-  //     setMessages((prev) =>
-  //       prev.filter((msg) => now - msg.timestamp.getTime() < messageLifetime)
-  //     );
-  //   };
-
-  //   // Clean up old messages periodically
-  //   useEffect(() => {
-  //     const interval = setInterval(removeOldMessages, 60000); // Every minute
-  //     return () => clearInterval(interval);
-  //   }, []);
 
   return (
     <ChatContext.Provider
       value={{
         messages,
+        pinnedMessages,
         isOpen,
         addMessage,
         removeMessage,
-        clearMessages,
+        setPinnedMessages,
+        removePinnedMessage,
         setIsOpen,
-        // removeOldMessages,
       }}
     >
       {children}

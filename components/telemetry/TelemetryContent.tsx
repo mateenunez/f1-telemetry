@@ -57,7 +57,11 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     usePreferences();
   const isMobile = useIsMobile();
   const [authFormOpen, setAuthFormOpen] = useState(false);
-  const { messages, sendMessage } = useChat(telemetryData?.chatMessages, dict);
+  const { messages, pinnedMessages, sendMessage, deletePinMessage } = useChat(
+    telemetryData?.chatMessages,
+    telemetryData?.pinnedMessages,
+    dict,
+  );
   const GRID_SIZE = 20;
   const minPositionY = 400;
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -433,8 +437,10 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                         <ChatWidget
                           language={preferences.translate ? "es" : "en"}
                           messages={messages}
+                          pinnedMessages={pinnedMessages}
                           dict={dict}
                           sendMessage={sendMessage}
+                          deletePinMessage={deletePinMessage}
                           onOpenAuth={() => setAuthFormOpen(true)}
                           userCount={telemetryData?.userCount || 0}
                         />
@@ -650,9 +656,11 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                       >
                         <ChatWidget
                           messages={messages}
+                          pinnedMessages={pinnedMessages}
                           language={preferences.translate ? "es" : "en"}
                           dict={dict}
                           sendMessage={sendMessage}
+                          deletePinMessage={deletePinMessage}
                           onOpenAuth={() => setAuthFormOpen(true)}
                           userCount={telemetryData?.userCount || 0}
                         />
