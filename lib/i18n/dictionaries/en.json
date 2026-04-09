@@ -13,6 +13,12 @@
     "version": "Version 1.6.0 has a new chat feature, you can now send and view live messages!",
     "announce": "We are still working on migrating to a new server, this website may not work properly until then. See you in march!"
   },
+  "feedback": {
+    "description": "We want to know your opinion",
+    "button": "Fill survey",
+    "hideButton": "Hide survey",
+    "url": "https://docs.google.com/forms/d/e/1FAIpQLScs9cIGiZamLcDUkDPEqoMeufFAX9ITOvrncGG0WltD8XMs4g/viewform"
+  },
   "footer": {
     "legal": "This website is not associated, affiliated, authorized, endorsed, or officially connected in any way with Formula 1, the FIA, or any of its subsidiaries or affiliates.",
     "help": "About widgets."
