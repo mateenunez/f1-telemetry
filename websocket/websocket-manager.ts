@@ -1,5 +1,6 @@
 import { useAuth } from "@/hooks/use-auth";
 import { decode as cborDecode, encode as cborEncode } from "cbor2";
+import { PinnedChatMessage } from "@/processors";
 
 export interface SignalRMessage {
   H: string;
@@ -34,6 +35,8 @@ export interface WebSocketData {
   C?: string;
   H?: string;
   A?: [string, any, string];
+  wsu?: number;
+  PinnedMessages?: PinnedChatMessage[];
 }
 
 export class WebSocketManager {

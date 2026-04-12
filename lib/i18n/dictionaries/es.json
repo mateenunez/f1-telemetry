@@ -13,6 +13,12 @@
     "version": "La version 1.6.0 trae un chat en vivo para todos los usuarios!",
     "announce": "Seguimos trabajando en migrar a un nuevo servidor, la telemetría puede no funcionar correctamente hasta que finalice el proceso. ¡Te esperamos en marzo!"
   },
+  "feedback": {
+    "description": "Queremos saber tu opinión",
+    "button": "Rellenar encuesta",
+    "hideButton": "Ocultar encuesta",
+    "url": "https://docs.google.com/forms/d/e/1FAIpQLSfN_x5J8-zpuoKh8pU8fe35n-eWbgkwNiYvkNOR9_e64Ejf3Q/viewform"
+  },
   "footer": {
     "legal": "Este sitio web no está asociado, afiliado, autorizado, respaldado ni conectado oficialmente de ninguna manera con la Fórmula 1, la FIA o cualquiera de sus subsidiarias o afiliadas.",
     "help": "Más información sobre widgets."
