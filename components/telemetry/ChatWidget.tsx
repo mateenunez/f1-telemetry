@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, JSX } from "react";
-import { Send, LogIn, Palette, Stars, User, Pin, Eye } from "lucide-react";
+import { Send, LogIn, Palette, Stars, User, CheckCheck } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import {
   ProcessedChatMessage,
@@ -182,8 +182,11 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
         <div className="px-2 pb-2 pt-1 bg-warmBlack">
           <form onSubmit={handleSubmit} className="flex flex-col gap-1">
             <div className="flex items-stretch gap-1.5">
-              <div className="flex flex-row w-full items-center border border-gray-600 rounded focus:ring-blue-500">
-                <Stars size={16} className="ml-2 text-gray-400" />
+              <div className="flex flex-row w-full items-center">
+                <Stars
+                  size={16}
+                  className="ml-2 text-gray-400 cursor-not-allowed"
+                />
                 <textarea
                   placeholder={
                     language === "es"
@@ -198,21 +201,26 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                 <div className="relative flex items-center shrink-0">
                   <button
                     type="button"
-                    onClick={() => setShowColorPicker((v) => !v)}
-                    className="h-9 w-9 flex items-center justify-center bg-transparent hover:border-gray-500 transition-colors"
-                    title={
-                      language === "es" ? "Color del nombre" : "Username color"
-                    }
-                    aria-label="Pick username color"
+                    className="h-9 w-9 flex items-center justify-center bg-transparent transition-colors cursor-not-allowed"
+                    disabled={true}
                   >
-                    <Palette size={16} className="text-gray-400" />
+                    <span
+                      className="transition-colors text-gray-400"
+                      style={{
+                        color: showColorPicker
+                          ? usernameColor
+                          : "rgb(156, 163, 175)",
+                      }}
+                    >
+                      <Palette size={16} />
+                    </span>
                   </button>
                 </div>
               </div>
               <button
                 type="submit"
                 disabled={true}
-                className="h-9 px-3 flex items-center justify-center bg-blue-600 text-white rounded border border-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:border-gray-600 disabled:cursor-not-allowed transition-colors font-medium text-sm shrink-0"
+                className="h-9 px-3 flex items-center justify-center text-gray-400 disabled:cursor-not-allowed transition-colors font-medium text-sm shrink-0"
               >
                 <Send size={14} />
               </button>
@@ -241,13 +249,13 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
           {pinnedMessages.map((msg) => (
             <div
               key={`pinned-${msg.id}`}
-              className="text-sm overflow-x-hiddenflex flex justify-between px-4 items-center flex-row gap-1 rounded-md bg-f1Blue/20 py-2"
+              className="text-sm overflow-x-hiddenflex flex justify-between px-4 items-center flex-row gap-2 rounded-md bg-f1Blue/20 py-2"
             >
               <p className="text-white font-medium break-words text-wrap whitespace-pre-wrap text-wrap flex-wrap font-geist">
                 {renderContentWithLinks(msg.content)}
               </p>
-              <Eye
-                size="1.25rem"
+              <CheckCheck
+                size="16"
                 color="white"
                 onClick={() => deletePinMessage(msg.id)}
                 cursor="pointer"
@@ -307,7 +315,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowEmojiPicker((v) => !v)}
-                  className="h-9 w-9 flex items-center justify-center bg-transparent hover:border-gray-500 transition-colors"
+                  className="h-9 w-9 flex items-center justify-center bg-transparent transition-colors"
                   title={language === "es" ? "Elegir emoji" : "Pick badge"}
                   disabled={user?.role.name === "base"}
                   style={{
@@ -317,9 +325,9 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                   }}
                   aria-label="Pick emoji badge"
                 >
-                  {selectedEmoji || (
-                    <Stars size={16} className="text-gray-400" />
-                  )}
+                  <span className="text-gray-400">
+                    {selectedEmoji || <Stars size={16} />}
+                  </span>
                 </button>
 
                 {showEmojiPicker && (
@@ -375,13 +383,22 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowColorPicker((v) => !v)}
-                  className="h-9 w-9 flex items-center justify-center bg-transparent hover:border-gray-500 transition-colors"
+                  className="h-9 w-9 flex items-center justify-center bg-transparent transition-colors"
                   title={
                     language === "es" ? "Color del nombre" : "Username color"
                   }
                   aria-label="Pick username color"
                 >
-                  <Palette size={16} className="text-gray-400" />
+                  <span
+                    className="transition-colors"
+                    style={{
+                      color: showColorPicker
+                        ? usernameColor
+                        : "rgb(156 163 175)",
+                    }}
+                  >
+                    <Palette size={16} />
+                  </span>
                 </button>
                 {showColorPicker && (
                   <div className="absolute right-0 bottom-full mb-1 flex items-center gap-1 p-2 z-10 border border-gray-600 bg-warmBlack">
@@ -403,13 +420,14 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
             </div>
             <button
               type="submit"
+              title={language === "es" ? "Enviar" : "Send"}
               disabled={
                 !content.trim() ||
                 isSubmitting ||
                 cooldown > 0 ||
                 !isAuthenticated
               }
-              className="h-9 px-3 flex items-center justify-center bg-blue-600 text-white rounded border border-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:border-gray-600 disabled:cursor-not-allowed transition-colors font-medium text-sm shrink-0"
+              className="h-9 px-3 flex items-center justify-center bg-transparent text-gray-400 hover:text-f1Blue active:text-f1Blue hover:cursor-pointer transition-colors font-medium text-sm shrink-0"
             >
               <Send size={14} />
             </button>
