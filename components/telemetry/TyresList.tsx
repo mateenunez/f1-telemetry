@@ -31,12 +31,12 @@ export default function TyresList({
   translate,
   favoriteDrivers,
 }: TyresListProps) {
-
-  const isRace = String(sessionType ?? "").toLowerCase().includes("race");
-  const noRaceMessage =
-    (translate
-      ? "Historial de compuestos solo disponible en carreras."
-      : "Tyres compound history is available on a Race.");
+  const isRace = String(sessionType ?? "")
+    .toLowerCase()
+    .includes("race");
+  const noRaceMessage = translate
+    ? "Historial de compuestos solo disponible en carreras."
+    : "Tyres compound history is available on a Race.";
   const noDataMessage = translate
     ? "No hay datos de neumáticos disponibles."
     : "No tyre data available.";
@@ -85,14 +85,14 @@ export default function TyresList({
     (most, [compound, laps]) => {
       return laps > most.laps ? { compound, laps } : most;
     },
-    { compound: "", laps: 0 }
+    { compound: "", laps: 0 },
   );
 
   const averageCompoundAge = Math.floor(totalLapsAllStints / totalStintsCount);
 
   const averagePitStops = Math.max(
     Math.round((totalPitStops / totalDrivers) * 100) / 100,
-    0
+    0,
   );
   return (
     <Card className="flex w-full h-full bg-warmBlack border-none">
@@ -107,11 +107,14 @@ export default function TyresList({
             const isFavorite =
               driver?.driver_number &&
               favoriteDrivers?.some(
-                (d) => d.driver_number === driver.driver_number
+                (d) => d.driver_number === driver.driver_number,
               );
-            const personalBestStint = stints?.reduce((best, stint) => {
-              return !best || stint.lap_time < best.lap_time ? stint : best;
-            }, undefined as ProcessedStint | undefined);
+            const personalBestStint = stints?.reduce(
+              (best, stint) => {
+                return !best || stint.lap_time < best.lap_time ? stint : best;
+              },
+              undefined as ProcessedStint | undefined,
+            );
             return (
               <div
                 className="flex flex-row gap-2 py-1 w-full items-center justify-center mb-4"
@@ -148,13 +151,15 @@ export default function TyresList({
                   </div>
                 </div>
                 <div className="w-full items-center mr-6">
-                  <div className="flex w-full h-[5px] bg-carbonBlack rounded-sm">
+                  <div
+                    className={`flex w-full h-[5px] bg-warmBlack rounded-sm`}
+                  >
                     {stints &&
                       stints.map((stint, index) => {
                         const widthPercentage =
                           (stint.total_laps / totalLaps) * 100;
                         const backgroundColor = getCompoundColor(
-                          stint.compound
+                          stint.compound,
                         );
                         const accumulatedLaps = stints
                           .slice(0, index + 1)
@@ -172,10 +177,12 @@ export default function TyresList({
                               backgroundColor,
                               borderRight:
                                 index < stints.length - 1
-                                  ? "4px solid #000"
+                                  ? `4px solid ${isFavorite ? "#" + driver?.team_colour : "#000"}`
                                   : "none",
                               borderLeft:
-                                index !== 0 ? "4px solid #000" : "none",
+                                index !== 0
+                                  ? `4px solid ${isFavorite ? "#" + driver?.team_colour : "#000"}`
+                                  : "none",
                               borderRadius: "0px",
                             }}
                           >

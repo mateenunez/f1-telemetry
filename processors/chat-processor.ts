@@ -16,9 +16,19 @@ export interface ProcessedChatMessage {
   fromRetransmition?: boolean;
 }
 
+export interface PinnedChatMessage {
+  id: number;
+  content: string;
+  language: string;
+  timestamp: Date;
+  pinned: boolean;
+}
+
 export class ChatProcessor {
   private messages: Map<string, ProcessedChatMessage> = new Map();
+  private pinnedMessages: PinnedChatMessage[] = [];
   private maxMessages = 50;
+  private currentUserCount: number = 0;
 
   processMessage(
     messageData: any | any[],
@@ -72,8 +82,28 @@ export class ChatProcessor {
     return processedMessage;
   }
 
+  processPinnedMessages(pinnedData: any): void {
+    if (!Array.isArray(pinnedData)) {
+      console.warn("PinnedMessages payload is not an array", pinnedData);
+      this.pinnedMessages = [];
+      return;
+    }
+
+    this.pinnedMessages = pinnedData.map((msg: any) => ({
+      id: Number(msg.id),
+      content: String(msg.content ?? ""),
+      language: msg.language === "es" ? "es" : "en",
+      timestamp: new Date(msg.timestamp || Date.now()),
+      pinned: Boolean(msg.pinned ?? true),
+    }));
+  }
+
   getAllMessages(): ProcessedChatMessage[] {
     return Array.from(this.messages.values());
+  }
+
+  getPinnedMessages(): PinnedChatMessage[] {
+    return this.pinnedMessages;
   }
 
   getMessageById(id: string): ProcessedChatMessage | undefined {
@@ -84,15 +114,11 @@ export class ChatProcessor {
     this.messages.delete(id);
   }
 
-  clear(): void {
-    this.messages.clear();
+  setUserCount(count: number): void {
+    this.currentUserCount = count;
   }
 
-  clearLanguage(language: "en" | "es"): void {
-    const keysToDelete = Array.from(this.messages.entries())
-      .filter(([, msg]) => msg.language === language)
-      .map(([key]) => key);
-
-    keysToDelete.forEach((key) => this.messages.delete(key));
+  getUserCount(): number {
+    return this.currentUserCount;
   }
 }
