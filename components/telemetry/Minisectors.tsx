@@ -35,6 +35,14 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
     return "text-green-400";
   };
 
+  const getDifference = (current: any, best: any) => {
+    if (!current?.Value || !best?.Value) return { value: "--.---", color: "text-offWhite" };
+    const diff = best.Value - current.Value;
+    const formatted = diff >= 0 ? `+${diff.toFixed(3)}` : diff.toFixed(3);
+    const color = diff > 0 ? "text-green-400" : "text-offWhite";
+    return { value: formatted, color };
+  };
+
   if (MinisectorHorizontal) {
     return (
       <div className="flex flex-row gap-4">
@@ -73,6 +81,7 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
               <div className="flex flex-row items-start gap-2 text-white" style={oxanium.style}>
                 <span className={color}>{(sector && displayValue) || "--.---"}</span>
                 <span className={bestColor}>{(bestSector && bestDisplayValue) || "--.---"}</span>
+                <span className={getDifference(sector, bestSector).color}>{getDifference(sector, bestSector).value}</span>
               </div>
             </div>
           );
@@ -155,6 +164,23 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
                   <span className={color}>
                     {(sector && displayValue) || "--.---"}
                   </span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Diferencia */}
+          <div
+            className="flex items-center flex-col text-xs min-w-[2rem] w-full"
+            style={oxanium.style}
+          >
+            {(["sector1", "sector2", "sector3"] as const).map((sectorKey, idx) => {
+              const sector = timing?.sector_times[sectorKey];
+              const bestSector = timingStats?.best_sectors?.[idx];
+              const diff = getDifference(sector, bestSector);
+              return (
+                <div className="flex flex-row gap-0 text-offWhite" key={sectorKey}>
+                  <span className={diff.color}>{diff.value}</span>
                 </div>
               );
             })}
