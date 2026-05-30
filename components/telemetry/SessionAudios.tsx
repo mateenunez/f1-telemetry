@@ -12,6 +12,7 @@ import { toLocaleTime } from "@/utils/calendar";
 import { cn } from "@/lib/utils";
 import { useTelemetryAudio, audioUrl } from "@/hooks/use-raceControl";
 import { config } from "@/lib/config";
+import { usePreferences } from "@/context/preferences";
 
 interface SessionAudiosProps {
   teamRadio: ProcessedTeamRadio | undefined;
@@ -32,6 +33,7 @@ export default function SessionAudios({
 }: SessionAudiosProps) {
   const [playingAudio, setPlayingAudio] = useState<number | undefined>();
   const [progressMap, setProgressMap] = useState<Map<number, number>>();
+  const { preferences } = usePreferences();
 
   const { playTeamRadioSound, radioAudioRef, stopTeamRadioSound } =
     useTelemetryAudio();
@@ -46,7 +48,7 @@ export default function SessionAudios({
     if (!driver) return {};
 
     const isFavorite = preferences.favoriteDrivers.some(
-      (fav) => fav.driver_number === driver.driver_number
+      (fav) => fav.driver_number === driver.driver_number,
     );
 
     if (!isFavorite) return {};
@@ -84,9 +86,7 @@ export default function SessionAudios({
   };
 
   const handleCopyTranscription = async (cap: ProcessedCapture) => {
-    const text = translate
-      ? cap?.transcriptionEs
-      : cap?.transcription;
+    const text = translate ? cap?.transcriptionEs : cap?.transcription;
     if (!text) return;
     try {
       await navigator.clipboard.writeText(text);
@@ -104,7 +104,7 @@ export default function SessionAudios({
 
   const orderedCaptures = teamRadio
     ? [...teamRadio.captures].sort(
-        (a, b) => Date.parse(String(b.utc)) - Date.parse(String(a.utc))
+        (a, b) => Date.parse(String(b.utc)) - Date.parse(String(a.utc)),
       )
     : [];
 
@@ -129,7 +129,7 @@ export default function SessionAudios({
     return () => {
       radioAudioRef.current?.removeEventListener(
         "timeupdate",
-        handleTimeUpdate
+        handleTimeUpdate,
       );
       radioAudioRef.current?.removeEventListener("ended", handleEnded);
     };
@@ -182,7 +182,7 @@ export default function SessionAudios({
                             "absolute inset-0 flex flex-row w-full items-center px-0",
                             playingAudio === idx
                               ? "opacity-100 translate-y-0"
-                              : "opacity-0 -translate-y-2"
+                              : "opacity-0 -translate-y-2",
                           )}
                         >
                           <PauseIcon
@@ -205,7 +205,7 @@ export default function SessionAudios({
                         <div
                           className={cn(
                             "absolute inset-0 flex flex-row w-full items-center px-0 transition-all duration-300 ease-out",
-                            playingAudio === idx ? "opacity-0" : "opacity-100"
+                            playingAudio === idx ? "opacity-0" : "opacity-100",
                           )}
                         >
                           <PlayIcon
@@ -283,9 +283,7 @@ export default function SessionAudios({
           ) : (
             <div className="min-h-[20rem] items-center justify-center flex">
               <p className="text-xs text-gray-400 font-geist font-medium">
-                {translate
-                  ? "Sin audios de carrera."
-                  : "No team audios."}
+                {translate ? "Sin audios de carrera." : "No team audios."}
               </p>
             </div>
           )}
