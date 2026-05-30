@@ -2,7 +2,7 @@
 FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app/f1-telemetry
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9 --activate
 COPY package.json pnpm-lock.yaml ./
 COPY .npmrc* ./
 RUN pnpm install --frozen-lockfile
@@ -10,7 +10,7 @@ RUN pnpm install --frozen-lockfile
 # Build
 FROM node:20-alpine AS builder
 WORKDIR /app/f1-telemetry
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9 --activate
 COPY --from=deps /app/f1-telemetry/node_modules ./node_modules
 COPY . .
 ARG NEXT_PUBLIC_API
