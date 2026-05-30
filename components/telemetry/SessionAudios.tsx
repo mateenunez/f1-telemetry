@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ProcessedCapture,
   ProcessedDriver,
@@ -47,7 +49,7 @@ export default function SessionAudios({
     const driver = driverInfos.find((d) => d?.driver_number === racingNumber);
     if (!driver) return {};
 
-    const isFavorite = preferences.favoriteDrivers.some(
+    const isFavorite = preferences?.favoriteDrivers?.some(
       (fav) => fav.driver_number === driver.driver_number,
     );
 
