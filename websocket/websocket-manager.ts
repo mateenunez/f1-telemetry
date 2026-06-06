@@ -100,7 +100,6 @@ export class WebSocketManager {
 
       this.ws.onmessage = (event) => {
         const data = this.decodeWebSocketMessage(event.data);
-        console.log(data)
         this.handleMessage(data);
       };
 
