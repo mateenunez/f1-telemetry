@@ -50,7 +50,7 @@ const MapAndMessages = memo(function MapAndMessages({
           <div className="flex flex-col h-full justify-start items-start">
             {isRace && (
               <CardTitle
-                className="text-xxl font-bold text-gray-200 tracking-widest"
+                className="text-xxl font-bold text-gray-400 tracking-widest"
                 style={orbitron.style}
               >
                 {session?.current_lap}/{session?.total_laps}
@@ -60,9 +60,8 @@ const MapAndMessages = memo(function MapAndMessages({
               <CardTitle
                 className={`${
                   session.session_type === "Race" ? "text-xs" : "text-md"
-                } text-gray-200 tracking-widest w-full text-top flex-wrap text-center mt-1`}
+                } font-inter font-light text-gray-400 tracking-wide w-full text-top flex-wrap text-center mt-1`}
                 style={{
-                  fontFamily: orbitron.style.fontFamily,
                   color: getTrackStatusColor(session.track_status),
                 }}
               >

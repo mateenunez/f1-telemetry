@@ -117,11 +117,11 @@ const DriverPositions = memo(function DriverPositions({
           type="scroll"
           ref={scrollRef}
         >
-          <table className="table-auto min-w-max w-full text-[0.6rem] text-gray-500">
-            <thead className="sticky top-0 z-30 bg-warmBlack h-[2rem] font-orbitron">
+          <table className="table-auto min-w-max w-full text-[0.6rem] text-gray-400">
+            <thead className="sticky top-0 z-30 bg-warmBlack h-[2rem] font-geist">
               <tr className="text-center">
                 <th
-                  className={`text-center ${
+                  className={`text-center font-normal ${
                     driverHeadshot ? "w-[11.5rem]" : "w-[9rem]"
                   }`}
                 >
@@ -196,7 +196,7 @@ const DriverPositions = memo(function DriverPositions({
                 return (
                   <tr
                     key={pos.driver_number}
-                    className="transition-all cursor-pointer py-1.5"
+                    className="transition-all cursor-pointer py-4"
                     onDoubleClick={() => handlePinnedDriver(pos.driver_number)}
                     style={baseStyle}
                   >

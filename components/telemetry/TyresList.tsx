@@ -130,7 +130,7 @@ export default function TyresList({
                     className={`flex flex-row gap-1 items-center min-w-[3rem]`}
                   >
                     <Badge
-                      className="w-[2rem] text-sm items-center font-bold pr-[0px] font-aldrich"
+                      className="w-[2rem] text-sm items-center font-bold pr-[0px] font-inter"
                       style={{
                         backgroundColor: `transparent`,
                       }}
@@ -140,7 +140,7 @@ export default function TyresList({
 
                     <div className="w-[2rem]">
                       <p
-                        className="text-xs text-gray-100 flex items-center font-f1-regular"
+                        className="text-xs text-gray-400 flex items-center font-f1-regular"
                         style={{
                           color: "#" + driver?.team_colour,
                         }}
@@ -195,7 +195,7 @@ export default function TyresList({
                               }}
                             >
                               <span
-                                className={`text-xs font-oxanium whitespace-nowrap ${
+                                className={`text-xs font-inter whitespace-nowrap ${
                                   isPersonalBestStint
                                     ? isBestStint
                                       ? "text-f1Purple"
@@ -215,7 +215,7 @@ export default function TyresList({
                               }}
                             >
                               <span
-                                className="text-xs text-white mt-1 font-geist text-center px-4 whitespace-nowrap"
+                                className="text-xs text-white mt-1 font-inter text-center px-4 whitespace-nowrap"
                                 style={{
                                   display:
                                     stint.lap_number === totalLaps ||
@@ -236,7 +236,7 @@ export default function TyresList({
                                   transform: "translateX(-50%)",
                                 }}
                               >
-                                <span className="text-xs mt-1 ml-5 text-white font-geist block text-center whitespace-nowrap">
+                                <span className="text-xs mt-1 ml-5 text-white font-inter block text-center whitespace-nowrap">
                                   0 L
                                 </span>
                               </div>
@@ -261,7 +261,7 @@ export default function TyresList({
             <span className="text-xs font-geist font-medium text-offWhite">
               {translate ? "PROM. VUELTAS" : "AVG. LAP AGE"}
             </span>
-            <span className="text-xl font-geist font-medium text-offWhite">
+            <span className="text-xl font-inter font-medium text-offWhite">
               {averageCompoundAge || 0}
             </span>
           </div>
@@ -269,7 +269,7 @@ export default function TyresList({
             <span className="text-xs font-geist font-medium text-offWhite">
               {translate ? "PROM. PITS" : "AVG. PIT STOPS"}
             </span>
-            <span className="text-xl font-geist font-medium text-offWhite">
+            <span className="text-xl font-inter font-medium text-offWhite">
               {averagePitStops || 0}
             </span>
           </div>

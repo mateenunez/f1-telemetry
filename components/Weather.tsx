@@ -32,7 +32,7 @@ const ClimateCondition = ({
       <span className="text-gray-400 text-md font-geist font-medium">
         {label}
       </span>
-      <span className="text-md text-offWhite font-geist font-medium">
+      <span className="text-md text-offWhite font-inter font-medium">
         {value}
         {unit}
       </span>
@@ -156,7 +156,7 @@ const ClimateCircle = ({
             fontFamily="monospace"
             textAnchor="middle"
             dominantBaseline="middle"
-            className="font-geist"
+            className="font-inter"
           >
             {Math.round(value)}
             {unit}
@@ -198,12 +198,12 @@ export default function Weather({ weather, dict }: WeatherProps) {
   };
 
   const getWeatherIcon = () => {
-    if (!weather) return <Sun className="h-8 w-8 text-gray-300" />;
+    if (!weather) return <Sun className="h-8 w-8 text-gray-400" />;
     if (weather.rainfall > 0)
-      return <CloudRain className="h-8 w-8 text-gray-300" />;
+      return <CloudRain className="h-8 w-8 text-gray-400" />;
     if (weather.humidity >= 60)
-      return <CloudSun className="h-8 w-8 text-gray-300" />;
-    return <Sun className="h-8 w-8 text-gray-300" />;
+      return <CloudSun className="h-8 w-8 text-gray-400" />;
+    return <Sun className="h-8 w-8 text-gray-400" />;
   };
 
   const getWindDirection = () => {
@@ -264,7 +264,7 @@ export default function Weather({ weather, dict }: WeatherProps) {
           <span className="text-f1Blue font-geist font-medium">
             {getWindDirection()}
           </span>
-          <span className="text-xs font-geist font-medium">
+          <span className="text-xs font-inter font-medium">
             {weather.wind_speed} m/s
           </span>
         </div>
@@ -307,7 +307,7 @@ export default function Weather({ weather, dict }: WeatherProps) {
           <span className="text-f1Blue font-geist font-medium">
             {getWindDirection()}
           </span>
-          <span className="text-xs font-geist font-medium">
+          <span className="text-xs font-inter font-medium">
             {weather.wind_speed} m/s
           </span>
         </div>

@@ -38,7 +38,7 @@ export function HelpContent({ dict }: HelpContentProps) {
           {/* Introduction */}
           <div className="flex flex-col gap-2 py-4">
             <h1 className="text-2xl font-orbitron">{dict.help.title}</h1>
-            <p className="text-gray-300 font-geist">{dict.help.description}</p>
+            <p className="text-gray-400 font-geist">{dict.help.description}</p>
           </div>
 
           {/* Positions */}
@@ -46,7 +46,7 @@ export function HelpContent({ dict }: HelpContentProps) {
             <h1 className="text-2xl font-orbitron">
               {dict.help.drivers.title}
             </h1>
-            <p className="text-gray-300 font-geist">
+            <p className="text-gray-400 font-geist">
               {dict.help.drivers.description}
             </p>
             <div className="w-full">
@@ -68,7 +68,7 @@ export function HelpContent({ dict }: HelpContentProps) {
                 handlePinnedDriver={() => {}}
               />
             </div>
-            <p className="text-gray-300 font-geist">
+            <p className="text-gray-400 font-geist">
               {dict.help.drivers.knocked_out}
             </p>
             <div className="w-full">
@@ -90,7 +90,7 @@ export function HelpContent({ dict }: HelpContentProps) {
                 handlePinnedDriver={() => {}}
               />
             </div>
-            <p className="text-gray-300 font-geist">
+            <p className="text-gray-400 font-geist">
               {dict.help.drivers.elimination}
             </p>
             <div className="w-full">
@@ -119,13 +119,13 @@ export function HelpContent({ dict }: HelpContentProps) {
             <h1 className="text-2xl font-orbitron">
               {dict.help.compounds.title}
             </h1>
-            <div className="text-gray-300 font-geist flex flex-row">
+            <div className="text-gray-400 font-geist flex flex-row">
               {dict.help.compounds.description}
               <Tyres driverStints={mockData.driver_stints[0]} />
             </div>
 
             <div className="flex flex-row w-full gap-6 justify-start items-center flex-wrap">
-              <p className="text-gray-300 font-geist">
+              <p className="text-gray-400 font-geist">
                 {dict.help.compounds.icons_label}
               </p>
               <div>
@@ -155,7 +155,7 @@ export function HelpContent({ dict }: HelpContentProps) {
           {/* Pits */}
           <div className="flex flex-col gap-2 py-4">
             <h1 className="text-2xl font-orbitron">{dict.help.pits.title}</h1>
-            <div className="text-gray-300 font-geist flex flex-row gap-1">
+            <div className="text-gray-400 font-geist flex flex-row gap-1">
               {dict.help.pits.description}
             </div>
             <Pits
@@ -163,7 +163,7 @@ export function HelpContent({ dict }: HelpContentProps) {
               timing={mockData.driver_timings[0]}
             />
 
-            <p className="text-gray-300 font-geist">
+            <p className="text-gray-400 font-geist">
               {dict.help.pits.pitlane_label}
             </p>
             <Pits
@@ -175,7 +175,7 @@ export function HelpContent({ dict }: HelpContentProps) {
           {/* Colors */}
           <div className="flex flex-col gap-2 py-4">
             <h1 className="text-2xl font-orbitron">{dict.help.colors.title}</h1>
-            <p className="text-gray-300 font-geist">
+            <p className="text-gray-400 font-geist">
               {dict.help.colors.description}{" "}
             </p>
             <div className="flex flex-row gap-1">
@@ -199,7 +199,7 @@ export function HelpContent({ dict }: HelpContentProps) {
           {/* Map */}
           <div className="flex flex-col gap-2 py-4">
             <h1 className="text-2xl font-orbitron">{dict.help.map.title}</h1>
-            <p className="text-gray-300 font-geist">
+            <p className="text-gray-400 font-geist">
               {dict.help.map.description}
             </p>
             <div className="flex justify-start items-center justify-between">
@@ -231,13 +231,13 @@ export function HelpContent({ dict }: HelpContentProps) {
                 safetyCar={false}
               />
             </div>
-            <p className="text-gray-300 font-geist">{dict.help.map.footer}</p>
+            <p className="text-gray-400 font-geist">{dict.help.map.footer}</p>
           </div>
 
           {/* Circle of Doom */}
           <div className="flex flex-col gap-2 py-4">
             <h1 className="text-2xl font-orbitron">{dict.help.doom.title}</h1>
-            <p className="text-gray-300 font-geist">
+            <p className="text-gray-400 font-geist">
               {dict.help.doom.description}
             </p>
             <div className="w-full flex justify-center items-center">
@@ -259,7 +259,7 @@ export function HelpContent({ dict }: HelpContentProps) {
             <h1 className="text-2xl font-orbitron">
               {dict.help.car_data.title}
             </h1>
-            <p className="text-gray-300 font-geist">
+            <p className="text-gray-400 font-geist">
               {dict.help.car_data.description}
             </p>
 

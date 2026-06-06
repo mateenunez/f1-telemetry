@@ -163,7 +163,7 @@ export default function SessionAudios({
                     <div className="flex flex-row gap-2 rounded max-w-full px-1 ">
                       <div className="w-[3rem]">
                         <p
-                          className="text-md text-gray-100 h-[3rem] flex items-center font-f1-regular"
+                          className="text-md text-gray-400 h-[3rem] flex items-center font-f1-regular"
                           style={{
                             color: "#" + driver.team_color,
                           }}
@@ -224,7 +224,7 @@ export default function SessionAudios({
                         </div>
                       </div>
                     </div>
-                    <span className="text-xs flex flex-row gap-2 items-center text-gray-500 mx-[4.5rem] max-w-full font-geist font-medium">
+                    <span className="text-xs flex flex-row gap-2 items-center text-gray-400 mx-[4.5rem] max-w-full font-geist font-medium">
                       {toLocaleTime(capture.utc)}
 
                       {AUDIO_DOWNLOAD_URL ? (

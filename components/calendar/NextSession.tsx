@@ -109,7 +109,7 @@ export default function NextSession({
                 {getDayOfWeek(session.start, dict.locale).toUpperCase()}{" "}
                 {getRelativeDate(session.start, dict)}
               </p>
-              <div className="items-center text-gray-300">
+              <div className="items-center text-gray-400">
                 {getTimeOnly(session.start)} - {getTimeOnly(session.end || "")}
               </div>
             </div>
@@ -124,8 +124,8 @@ export default function NextSession({
 function TimeUnit({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col">
-      <span className="text-[3rem] md:text-[4rem]">{value}</span>
-      <p className="text-[1rem] text-gray-600">{label}</p>
+      <span className="text-[3rem] md:text-[4rem] font-inter">{value}</span>
+      <p className="text-[1rem] text-gray-400">{label}</p>
     </div>
   );
 }
@@ -133,7 +133,7 @@ function TimeUnit({ value, label }: { value: number; label: string }) {
 // Componente para filas de información con bandera
 function InfoRowWithFlag({ label, value }: { label: string; value: string }) {
   return (
-    <span className="text-gray-200 flex flex-col gap-0 items-center">
+    <span className="text-gray-400 flex flex-col gap-0 items-center">
       <img
         src={`https://flagsapi.com/${getCountryCode(value)}/flat/64.png`}
         alt={`Flag of ${value}`}

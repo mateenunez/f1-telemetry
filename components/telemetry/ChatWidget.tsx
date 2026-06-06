@@ -237,9 +237,9 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
       <div className="flex justify-center w-full z-20 bg-warmBlack pointer-events-none">
         {/* User Count */}
         {userCount >= 20 && (
-          <div className="text-center text-f1Blue font-geist gap-1 text-xs mb-1 flex items-center justify-center">
+          <div className="text-center text-f1Blue gap-1 text-xs mb-1 flex items-center justify-center">
             <User size={15} className="text-f1Blue" />
-            {userCount}
+            <span className="font-inter">{userCount}</span>
           </div>
         )}
       </div>
@@ -280,7 +280,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                   className="text-sm overflow-x-hidden flex flex-row gap-1 rounded-md px-4"
                 >
                   <div className="flex gap-1">
-                    <span className="text-[0.6rem] md:text-nowrap font-geist text-gray-500 text-center">
+                    <span className="text-[0.6rem] md:text-nowrap font-inter text-gray-400 text-center">
                       {msg.timestamp.toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -295,7 +295,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                       {msg.user.username}:
                     </span>
                   </div>
-                  <p className="text-gray-200 break-words text-wrap whitespace-pre-wrap text-wrap flex-wrap">
+                  <p className="text-offWhite break-words text-wrap whitespace-pre-wrap text-wrap flex-wrap">
                     {renderContentWithLinks(msg.content)}
                   </p>
                 </div>

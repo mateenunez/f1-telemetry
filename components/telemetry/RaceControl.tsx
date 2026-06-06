@@ -41,15 +41,15 @@ export default function RaceControl({ raceControl }: RaceControlProps) {
       <CardContent className="align-center p-0">
         {lastMessage && (
           <div className="text-f1Blue py-0 font-geist font-medium">
-            <p className="text-xs text-gray-200 leading-tight">
+            <p className="text-xs text-offWhite leading-tight">
               {lastMessage.message}
             </p>
             <div className="flex items-center justify-between mt-1">
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-400 font-inter">
                 {toLocaleTime(lastMessage.date)}
               </span>
               {lastMessage.racing_number && (
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-gray-400 font-inter">
                   #{lastMessage.racing_number}
                 </span>
               )}

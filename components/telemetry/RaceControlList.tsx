@@ -60,16 +60,16 @@ export default function RaceControlList({
                           style={{ ...messageStyle }}
                         >
                           <div className="pr-2 w-full max-w-full">
-                            <p className="text-xs text-gray-200 leading-tight w-full max-w-full whitespace-normal break-words">
+                            <p className="text-xs text-offWhite leading-tight w-full max-w-full whitespace-normal break-words">
                               {msg.message}
                             </p>
                           </div>
                           <div className="flex items-center gap-3 ">
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-gray-400 font-inter">
                               {toLocaleTime(msg.date)}
                             </span>
                             {msg.racing_number && (
-                              <span className="text-xs text-gray-400">
+                              <span className="text-xs text-gray-400 font-inter">
                                 #{msg.racing_number}
                               </span>
                             )}

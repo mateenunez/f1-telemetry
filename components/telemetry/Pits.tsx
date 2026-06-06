@@ -27,12 +27,12 @@ export default function Pits({ timing, driverStints }: PitsProps) {
         {timing?.in_pit ? (
           <span className="flex flex-col font-geist">
             <p className="text-f1Blue text-nowrap flex flex-nowrap">IN PIT</p>
-            <span className="text-[0.6rem] text-white text-center font-geist">
+            <span className="text-[0.6rem] text-white text-center font-inter">
               {timing?.number_of_pit_stops} PIT
             </span>
           </span>
         ) : (
-          <span className="font-geist">
+          <span className="font-inter">
             {driverStints && (
               <div className="flex flex-row gap-0 justify-start flex-wrap">
                 {previousStintCompounds}

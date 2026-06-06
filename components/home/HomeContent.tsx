@@ -46,7 +46,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 hover:scale-105 
                 hover:bg-f1Blue 
                 hover:shadow-2xl 
-                hover:text-gray-200
+                hover:text-offWhite
                 hover:cursor-pointer
                 font-geist font-medium
                 
@@ -59,12 +59,12 @@ export default function HomeContent({ dict }: HomeContentProps) {
               {dict.home.dashboardButton}
             </a>
             <a
-              className="rounded px-6 w-[15rem] py-3 text-[1.5rem] bg-transparent border-2 border-gray-200 text-gray-200 text-center transition duration-300 ease-in-out 
+              className="rounded px-6 w-[15rem] py-3 text-[1.5rem] bg-transparent border-2 border-gray text-offWhite text-center transition duration-300 ease-in-out 
                 hover:-translate-y-1 
                 hover:scale-105 
                 hover:bg-f1Red
                 hover:shadow-2xl 
-                hover:text-gray-200
+                hover:text-offWhite
                 hover:border-transparent
                 hover:cursor-pointer
                 font-geist font-medium
@@ -83,24 +83,24 @@ export default function HomeContent({ dict }: HomeContentProps) {
       <div className="py-5 w-full bg-warmBlack">
         <div className="flex flex-col min-h-[20rem] h-full gap-[2rem] justify-center items-center max-w-4xl mx-auto">
           <div className="flex flex-col gap-[1rem]">
-            <h2 className="text-xl text-gray-300 text-center font-geist font-medium m-6 lg:m-0">
+            <h2 className="text-xl text-gray-400 text-center font-geist font-medium m-6 lg:m-0">
               {dict.home.description}
             </h2>
           </div>
           <div className="flex flex-col justify-center items-center">
             <div className="flex flex-col gap-6 justify-center items-center">
-              <h3 className="font-geist text-xl text-gray-300 text-center font-medium">
+              <h3 className="font-geist text-xl text-gray-400 text-center font-medium">
                 {dict.feedback.description}
               </h3>
               <button
                 type="button"
                 onClick={() => setIsSurveyVisible((visible) => !visible)}
-                className="rounded px-6 w-[15rem] py-3 text-[1rem] border-2 border-gray-200 text-gray-200 text-center transition duration-300 ease-in-out 
+                className="rounded px-6 w-[15rem] py-3 text-[1rem] border-2 border-gray-200 text-offWhite text-center transition duration-300 ease-in-out 
                 hover:-translate-y-1 
                 hover:scale-105 
                 hover:bg-f1Green
                 hover:shadow-2xl 
-                hover:text-gray-200
+                hover:text-offWhite
                 hover:border-transparent
                 hover:cursor-pointer
                 font-geist font-medium

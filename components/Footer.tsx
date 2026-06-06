@@ -8,7 +8,7 @@ interface FooterProps {
 
 export default function Footer({ dict }: FooterProps) {
   return (
-    <div className="flex flex-row items-center justify-between gap-[2rem] py-8 px-4 max-w-5xl mx-auto text-gray-500">
+    <div className="flex flex-row items-center justify-between gap-[2rem] py-8 px-4 max-w-5xl mx-auto text-gray-400">
       <div className="flex flex-col lg:flex-row items-center gap-4">
         <Image
           src={config.public.assets.f1_white}
@@ -20,7 +20,7 @@ export default function Footer({ dict }: FooterProps) {
           <a
             href={config.public.github}
             target="_blank"
-            className="text-gray-500"
+            className="text-gray-400"
           >
             <Github size={18} />
           </a>
@@ -37,11 +37,11 @@ export default function Footer({ dict }: FooterProps) {
             />
           </a>
         </div>
-        <p className="text-xs text-center font-geist">{dict.footer.legal}</p>
+        <p className="text-xs text-center text-gray-400 font-geist">{dict.footer.legal}</p>
         <a
           href="/help"
           target="_blank"
-          className="text-xs text-gray-500 font-geist hover:text-f1Blue text-center"
+          className="text-xs text-gray-400 font-geist hover:text-f1Blue text-center"
         >
           {dict.footer.help}
         </a>

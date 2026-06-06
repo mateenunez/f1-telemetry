@@ -1,11 +1,7 @@
 "use client";
 
-import { Aldrich, Oxanium } from "next/font/google";
 import type { ProcessedSession, ProcessedTiming } from "@/processors";
 import { useRef } from "react";
-
-const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
-const oxanium = Oxanium({ subsets: ["latin"], weight: "500" });
 
 interface DriverGap1Props {
   timing: ProcessedTiming | undefined;
@@ -44,11 +40,8 @@ export default function DriverGap1({ timing, session }: DriverGap1Props) {
     : timing?.time_diff_to_fastest || lastGap?.TimeDiffToFastest || "";
 
   return (
-    <div
-      className="flex flex-row text-sm text-white w-[3rem] justify-center w-full"
-      style={aldrich.style}
-    >
-      <p style={oxanium.style} className="text-center w-full">
+    <div className="flex flex-row text-sm text-white w-[3rem] justify-center w-full">
+      <p className="font-inter text-center w-full">
         {gap1Value || "-.---"}
       </p>
     </div>

@@ -5,7 +5,7 @@ import { PreferencesProvider } from "@/context/preferences";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import Script from "next/script";
 import localFont from "next/font/local";
-import { Geist, Orbitron, Aldrich, Oxanium } from "next/font/google";
+import { Geist, Orbitron, Inter } from "next/font/google";
 import { ChatProvider } from "@/context/chat";
 
 const f1RegularfFont = localFont({
@@ -27,16 +27,10 @@ const orbitron = Orbitron({
   variable: "--font-orbitron",
 });
 
-const aldrich = Aldrich({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-aldrich",
-});
-
-const oxanium = Oxanium({
+const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500"],
-  variable: "--font-oxanium",
+  variable: "--font-inter",
 });
 
 export async function generateStaticParams() {
@@ -128,7 +122,7 @@ export default async function RootLayout({
         </Script>
       </head>
       <body
-        className={`${f1RegularfFont.variable} ${geist.variable} ${orbitron.variable} ${aldrich.variable} ${oxanium.variable}`}
+        className={`${f1RegularfFont.variable} ${geist.variable} ${orbitron.variable} ${inter.variable}`}
       >
         <PreferencesProvider>
           <ChatProvider>{children}</ChatProvider>

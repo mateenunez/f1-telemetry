@@ -25,7 +25,7 @@ export default function Tyres({
       {currentStint && (
         <div className="flex flex-col items-center justify-center text-white">
           {getCompoundSvg(currentStint.compound, 0, iconSize)}
-          <p>{currentStint.total_laps} L</p>
+          <p className="font-inter">{currentStint.total_laps} L</p>
         </div>
       )}
     </div>

@@ -28,7 +28,9 @@ export class RaceControlProcessor {
       return []
     }
 
-    const incoming = toArray(raceControlData.Messages).filter(i => i !== null);
+    const incoming = toArray(raceControlData.Messages).filter(
+      (item) => item != null && typeof item === "object",
+    );
     const processedBatch: ProcessedRaceControl[] = []
 
     if (isTranslation) {

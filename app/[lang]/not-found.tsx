@@ -18,7 +18,7 @@ export default async function NotFound() {
     <div className="min-h-screen bg-warmBlack flex flex-col items-center justify-center p-4">
       <div className="flex flex-col items-center gap-8 max-w-2xl w-full">
         <div className="relative w-full flex flex-row items-center gap-4 justify-center">
-          <h1 className="text-9xl font-bold text-f1Yellow tracking-wide font-geist">
+          <h1 className="text-9xl font-bold text-f1Yellow tracking-wide font-inter">
             404
           </h1>
           <div className="flex flex-col">
@@ -35,7 +35,7 @@ export default async function NotFound() {
         <Link href={`/`}>
           <Button
             size="lg"
-            className="bg-transparent font-geist text-lg border-2 border-f1Yellow rounded-lg hover:bg-f1Yellow/90 text-gray-200 hover:text-warmBlack hover:border-warmBlack"
+            className="bg-transparent font-geist text-lg border-2 border-f1Yellow rounded-lg hover:bg-f1Yellow/90 text-gray-400 hover:text-warmBlack hover:border-warmBlack"
           >
             Box!
           </Button>

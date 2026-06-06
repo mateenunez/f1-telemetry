@@ -34,7 +34,7 @@ export default function F1Calendar({ dict }: { dict: any }) {
 
       >
         <div
-          className="flex flex-row font-geist lg:flex-row text-xs md:text-sm lg:text-sm text-gray-500 gap-1"
+          className="flex flex-row font-geist lg:flex-row text-xs md:text-sm lg:text-sm text-gray-400 gap-1"
        
         >
           <p>{dict.schedule.next}:</p>

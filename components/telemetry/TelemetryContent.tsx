@@ -169,7 +169,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
       <div className="fixed inset-0 w-screen h-screen bg-warmBlack flex items-center justify-center z-50">
         <div className="flex flex-col items-center gap-8 max-w-2xl w-full px-4">
           <div className="relative w-full flex flex-row items-center gap-4 justify-center">
-            <h1 className="text-8xl font-bold text-f1Red tracking-wide font-geist text-start items-center">
+            <h1 className="text-8xl font-bold text-f1Red tracking-wide font-inter text-start items-center">
               ERROR 503
               <div className="flex flex-col">
                 <p className="text-2xl font-bold text-f1Red opacity-70 tracking-wide text-start font-geist">
@@ -181,7 +181,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
           <Button
             onClick={() => window.location.reload()}
             size="lg"
-            className="bg-transparent font-geist text-lg border-2 border-f1Red rounded-lg hover:bg-f1Red/90 text-gray-200 hover:text-warmBlack hover:border-warmBlack"
+            className="bg-transparent font-geist text-lg border-2 border-f1Red rounded-lg hover:bg-f1Red/90 text-gray-400 hover:text-warmBlack hover:border-warmBlack"
           >
             {dict.error.reload}
           </Button>

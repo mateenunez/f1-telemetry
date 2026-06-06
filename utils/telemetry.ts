@@ -71,6 +71,7 @@ export function getTrackStatusLabel(
   translate: boolean
 ): string {
   const key = normalizeStatus(status);
+  if (key === "AllClear") return "";
   if (!key) return status || "";
   return translate ? TRACK_STATUS_LABELS_ES[key] : TRACK_STATUS_LABELS_EN[key];
 }

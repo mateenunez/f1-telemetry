@@ -68,7 +68,7 @@ export function Countdown({
       <span className="text-white text-2xl text-center font-geist font-medium">
         {dict.delaying}
       </span>
-      <span className="text-6xl font-bold text-offWhite font-geist">
+      <span className="text-6xl font-bold text-offWhite font-inter">
         {remainingSeconds}
       </span>
     </div>

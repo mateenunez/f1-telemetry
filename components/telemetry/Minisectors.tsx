@@ -1,10 +1,6 @@
 "use client";
 
-import { Geist, Aldrich, Oxanium } from "next/font/google";
 import type { ProcessedTiming, ProcessedTimingStats } from "@/processors";
-
-const aldrich = Aldrich({ subsets: ["latin"], weight: "400" });
-const oxanium = Oxanium({ subsets: ["latin"], weight: "500" });
 
 interface MinisectorsProps {
   timing: ProcessedTiming | undefined;
@@ -56,7 +52,7 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
           const bestDisplayValue = bestSector?.Value ?? "--:--";
           return (
             <div key={sectorKey} className="flex flex-col items-start gap-1 text-xs">
-              <div className="flex gap-1 items-center text-gray-500">
+              <div className="flex gap-1 items-center text-gray-400">
                 {minisectors.map((s, sIdx) => {
                   const bg = getMinisectorColor(s);
                   return (
@@ -78,7 +74,7 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
                   );
                 })}
               </div>
-              <div className="flex flex-row items-start gap-2 text-white" style={oxanium.style}>
+              <div className="flex flex-row items-start gap-2 text-white font-inter">
                 <span className={color}>{(sector && displayValue) || "--.---"}</span>
                 <span className={bestColor}>{(bestSector && bestDisplayValue) || "--.---"}</span>
                 <span className={getDifference(sector, bestSector).color}>{getDifference(sector, bestSector).value}</span>
@@ -92,14 +88,14 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
     return (
       <div className="flex flex-row min-w-[13rem] justify-evenly gap-2 pr-1">
         {/* Minisectores */}
-        <div className="text-xs text-white w-full" style={aldrich.style}>
+        <div className="text-xs text-white w-full">
           {(["sector1", "sector2", "sector3"] as const).map(
             (sectorKey, sectorIdx) => {
               const minisectors = timing?.sector_segments[sectorKey] || [];
               return (
                 <div  
                   key={sectorKey}
-                  className="flex gap-1 items-center text-xs text-gray-500 h-[1rem]"
+                  className="flex gap-1 items-center text-xs text-gray-400 h-[1rem]"
                 >
                   {minisectors.map((s: number, sIdx: number) => {
                     const bg = getMinisectorColor(s);
@@ -130,8 +126,7 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
         <div className="flex flex-row w-full gap-1">
           {/* Tiempos de sector */}
           <div
-            className="flex items-center flex-col text-xs text-white min-w-[2rem] w-full"
-            style={oxanium.style}
+            className="flex items-center flex-col text-xs text-white min-w-[2rem] w-full font-inter"
           >
             {(["sector1", "sector2", "sector3"] as const).map(
               (sectorKey, idx) => {
@@ -152,8 +147,7 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
 
           {/* Mejores tiempos de sector */}
           <div
-            className="flex items-center flex-col text-xs min-w-[2rem] w-full"
-            style={oxanium.style}
+            className="flex items-center flex-col text-xs min-w-[2rem] w-full font-inter"
           >
             {timingStats?.best_sectors.map((sectorKey, idx) => {
               const sector = timingStats.best_sectors[idx];
@@ -171,8 +165,7 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
 
           {/* Diferencia */}
           <div
-            className="flex items-center flex-col text-xs min-w-[2rem] w-full"
-            style={oxanium.style}
+            className="flex items-center flex-col text-xs min-w-[2rem] w-full font-inter"
           >
             {(["sector1", "sector2", "sector3"] as const).map((sectorKey, idx) => {
               const sector = timing?.sector_times[sectorKey];

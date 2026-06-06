@@ -159,7 +159,7 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
-              className="font-geist font-medium"
+              className="font-inter font-medium"
             >
               {speed}
             </text>
@@ -183,7 +183,7 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
-              className="font-geist font-medium"
+              className="font-inter font-medium"
             >
               {translate ? "MARCHA" : "GEAR"} {gear}
             </text>
@@ -213,7 +213,7 @@ export function CircleCarData({
               fontFamily="monospace"
               textAnchor="middle"
               dominantBaseline="middle"
-              className="font-geist font-medium"
+              className="font-inter font-medium"
             >
               {rpm}
             </text>
@@ -262,7 +262,7 @@ export function CircleCarData({
                   fill={"rgb(201, 199, 199)"}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className="font-geist font-medium"
+                  className="font-inter font-medium"
                 >
                   {mark}
                 </text>

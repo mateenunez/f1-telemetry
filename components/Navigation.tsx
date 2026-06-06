@@ -56,16 +56,16 @@ export default function Navigation({
   const leftBtnClass = `rounded px-3 py-3 text-sm bg-white text-black border-2 border-white text-center transition duration-300 ease-in-out 
                 font-geist font-medium
                 hover:shadow-2xl 
-                hover:text-gray-200
+                hover:text-offWhite
                 hover:cursor-pointer
                 focus:outline-none 
                 focus:ring-4 
                 focus:ring-gray-500 
                 focus:ring-opacity-50 ${leftColorClasses}`;
 
-  const rightBtnClass = `rounded w-full py-3 px-3 text-sm bg-transparent border-2 border-gray-200 text-gray-200 text-center transition duration-300 ease-in-out 
+  const rightBtnClass = `rounded w-full py-3 px-3 text-sm bg-transparent border-2 border-gray text-offWhite text-center transition duration-300 ease-in-out 
                 font-geist font-medium
-                hover:text-gray-200
+                hover:text-offWhite
                 hover:cursor-pointer
                 focus:outline-none 
                 focus:ring-4 

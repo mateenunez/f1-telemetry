@@ -38,7 +38,7 @@ export default function DriverPositionInfo({
         }`}
       >
         <Badge
-          className="w-[2rem] text-[1rem] items-center font-bold pr-[0px] pl-4 font-aldrich"
+          className="w-[2rem] text-[1rem] items-center font-bold pr-[0px] pl-4 font-inter"
           style={{
             backgroundColor: `transparent`,
           }}
@@ -66,7 +66,7 @@ export default function DriverPositionInfo({
             <span className="text-xs text-white flex flex-row items-center font-f1-regular gap-2">
               {driver?.name_acronym}{" "}
               <span
-                className={`text-xs self-center font-geist ${
+                className={`text-xs self-center font-inter ${
                   posDiff > 0
                     ? "text-f1Red"
                     : posDiff < 0
@@ -89,7 +89,7 @@ export default function DriverPositionInfo({
             </span>
           </div>
           <p
-            className="text-xs text-gray-100 truncate"
+            className="text-xs text-gray-400 truncate"
             style={
               headshot
                 ? { color: "white" }

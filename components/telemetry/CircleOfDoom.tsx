@@ -300,7 +300,7 @@ export default function CircleOfDoom({
                   fill={"#e5e7eb"}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className="font-geist font-medium"
+                  className="font-inter font-medium"
                 >
                   {adjacentDrivers.ahead.gap}
                 </text>
@@ -328,7 +328,7 @@ export default function CircleOfDoom({
                   fill="#e5e7eb"
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className="font-geist font-medium"
+                  className="font-inter font-medium"
                 >
                   {pilotRef?.last_lap_time}
                 </text>
@@ -361,7 +361,7 @@ export default function CircleOfDoom({
                   fill={"#e5e7eb"}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className="font-geist font-medium"
+                  className="font-inter font-medium"
                 >
                   {adjacentDrivers.behind.gap}
                 </text>

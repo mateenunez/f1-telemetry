@@ -13,7 +13,6 @@ import {
   rotate,
   rad,
 } from "@/processors/map-processor";
-import { Oxanium } from "next/font/google";
 import { getSectorColor } from "@/hooks/use-raceControl";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 // @ts-ignore
@@ -25,7 +24,6 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const SPACE = 1000;
 const ROTATION_FIX = 90;
-const oxanium = Oxanium({ subsets: ["latin"], weight: "400" });
 
 type Corner = {
   number: number;
@@ -410,10 +408,9 @@ const CornerNumber: React.FC<CornerNumberProps> = ({ number, x, y }) => {
     <text
       x={x}
       y={y}
-      className="fill-gray-600"
+      className="fill-gray-600 font-inter"
       fontSize={200}
       fontWeight="semibold"
-      style={oxanium.style}
     >
       {number}
     </text>

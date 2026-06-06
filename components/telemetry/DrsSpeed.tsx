@@ -22,13 +22,13 @@ export default function DrsSpeed({ carData }: DrsSpeedProps) {
           {carData?.drs ? (
             <p className="text-green-400">DRS</p>
           ) : (
-            <p className="text-gray-500">DRS</p>
+            <p className="text-gray-400">DRS</p>
           )}
         </span>
 
         {/* Speed */}
         <p
-          className={`text-[0.6rem] text-white font-geist ${getSpeedColor(
+          className={`text-[0.6rem] text-white font-inter ${getSpeedColor(
             carData?.speed
           )}`}
         >

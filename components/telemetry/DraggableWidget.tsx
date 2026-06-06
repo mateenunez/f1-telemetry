@@ -47,7 +47,7 @@ const ManualInput = ({
             commitChange();
           }
         }}
-        className="w-[4rem] bg-black/40 text-white text-geist bg-warmBlack text-sm p-1 border border-white/10 rounded outline-none focus:border-f1Blue"
+        className="w-[4rem] bg-black/40 text-white font-inter bg-warmBlack text-sm p-1 border border-white/10 rounded outline-none focus:border-f1Blue"
       />
       {focused && (
         <p className="font-geist text-xs text-white absolute top-full left-0 mt-1">{label}</p>

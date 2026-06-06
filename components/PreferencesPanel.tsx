@@ -284,7 +284,7 @@ export default function PreferencesPanel({
       {/* Toggle Button */}
       <div className="relative">
         <PanelLeft
-          className="text-gray-300 hover:text-gray-400 hover:cursor-pointer preferences-step"
+          className="text-gray-400 hover:text-gray-400 hover:cursor-pointer preferences-step"
           width={15}
           onClick={() => {
             setOpen((prev) => !prev);
@@ -303,7 +303,7 @@ export default function PreferencesPanel({
             className={`hover:cursor-pointer transition-colors edit-step ${
               isEditMode
                 ? "text-f1Blue hover:text-f1Blue/80"
-                : "text-gray-300 hover:text-gray-400"
+                : "text-gray-400 hover:text-gray-400"
             }`}
             onClick={handleEditMode}
           />
@@ -331,7 +331,7 @@ export default function PreferencesPanel({
           {/* Panel button */}
           <span className="text-xl mb-6 text-center flex gap-6 items-center font-orbitron">
             <PanelLeft
-              className="text-gray-300 hover:text-gray-400 hover:cursor-pointer"
+              className="text-gray-400 hover:text-gray-400 hover:cursor-pointer"
               width={15}
               onClick={() => setOpen((prev) => !prev)}
             />
@@ -340,7 +340,7 @@ export default function PreferencesPanel({
 
           {/* Delay */}
           <div className="flex flex-col gap-4 pb-4">
-            <p className="text-md text-gray-100 font-orbitron">Delay</p>
+            <p className="text-md text-offWhite font-orbitron">Delay</p>
             <div className="flex flex-row w-full justify-around gap-2 h-[2.5rem] items-center">
               <input
                 type="number"
@@ -355,11 +355,11 @@ export default function PreferencesPanel({
                 }}
                 onChange={handleDelayChange}
                 value={delay}
-                className="w-[8rem] px-3 h-full text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200 font-geist font-medium"
+                className="w-[8rem] px-3 h-full text-sm rounded-md bg-warmBlack text-offWhite border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200 font-inter font-medium"
               />
               <button
                 type="button"
-                className="flex justify-center items-center px-3 h-full text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 transition-all hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
+                className="flex justify-center items-center px-3 h-full text-sm rounded-md bg-warmBlack text-offWhite border-2 border-gray-700 transition-all hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200"
                 onClick={handleDelay}
                 style={{
                   boxShadow:
@@ -368,7 +368,7 @@ export default function PreferencesPanel({
               >
                 <Check width={15} />
               </button>
-              <p className="text-xs text-gray-500 font-geist font-medium">
+              <p className="text-xs text-gray-400 font-geist font-medium">
                 {preferences.translate
                   ? "Ajustar delay en segundos (máx 600s)."
                   : "Set delay on seconds (máx 600s)."}
@@ -378,11 +378,11 @@ export default function PreferencesPanel({
 
           {/* Language */}
           <div className="flex flex-col gap-2 pb-4">
-            <p className="text-md text-gray-100 font-orbitron">
+            <p className="text-md text-offWhite font-orbitron">
               {preferences.translate ? "Idioma" : "Language"}
             </p>
             <div className="flex flex-col gap-2">
-              <p className="text-xs text-gray-500 font-geist font-medium">
+              <p className="text-xs text-gray-400 font-geist font-medium">
                 {preferences.translate
                   ? "Las traducciones al español pueden tardar unos segundos más en llegar."
                   : "The spanish translation may have additional delay."}
@@ -395,13 +395,13 @@ export default function PreferencesPanel({
                   boxShadow:
                     "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
                 }}
-                className="text-sm py-2 px-2 rounded-md bg-warmBlack text-gray-200 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200 font-geist font-medium"
+                className="text-sm py-2 px-2 rounded-md bg-warmBlack text-offWhite border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200 font-geist font-medium"
               >
                 {options.map((option) => (
                   <option
                     key={option.value}
                     value={option.value}
-                    className="bg-warmBlack px-2 text-gray-200 border-none"
+                    className="bg-warmBlack px-2 text-offWhite border-none"
                   >
                     {option.label}
                   </option>
@@ -413,17 +413,17 @@ export default function PreferencesPanel({
           {/* Edit Canvas Button */}
           {!isMobile && (
             <div className="flex flex-col gap-2 pb-4">
-              <p className="text-md text-gray-100 font-orbitron">
+              <p className="text-md text-offWhite font-orbitron">
                 {preferences.translate ? "Editar widgets" : "Edit canvas"}
               </p>
-              <p className="text-xs text-gray-500 font-geist font-medium">
+              <p className="text-xs text-gray-400 font-geist font-medium">
                 {preferences.translate
                   ? "Habilitar el modo de edición para mover o redimensionar los widgets."
                   : "Enable edit mode to move or redimension widgets."}
               </p>
               <button
                 onClick={handleEditMode}
-                className="flex items-start justify-start gap-2 px-4 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist font-medium"
+                className="flex items-start justify-start gap-2 px-4 py-2 text-sm rounded-md bg-warmBlack text-offWhite border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist font-medium"
                 style={{
                   boxShadow:
                     "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
@@ -450,7 +450,7 @@ export default function PreferencesPanel({
 
           {/* Favorite Drivers */}
           <div className="flex flex-col gap-2 pb-4">
-            <p className="text-md text-gray-100 font-orbitron">
+            <p className="text-md text-offWhite font-orbitron">
               {preferences.translate
                 ? "Pilotos Favoritos"
                 : "Favorites Drivers"}
@@ -462,7 +462,7 @@ export default function PreferencesPanel({
                 favorites.map((driver, idx) => (
                   <span
                     key={idx}
-                    className="text-gray-200 border-2 border-gray-400 p-1 rounded flex flex-row gap-1 w-[4rem] items-center hover:cursor-pointer font-geist font-medium"
+                    className="text-gray-400 border-2 border-gray-400 p-1 rounded flex flex-row gap-1 w-[4rem] items-center hover:cursor-pointer font-geist font-medium"
                     style={{
                       color: "#" + driver.team_colour,
                     }}
@@ -489,7 +489,7 @@ export default function PreferencesPanel({
                     ? "Buscar por piloto o equipo..."
                     : "Search by name or team..."
                 }
-                className="w-full px-3 py-2 text-sm rounded-md bg-warmBlack text-gray-100 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200 font-geist font-medium"
+                className="w-full px-3 py-2 text-sm rounded-md bg-warmBlack text-offWhite border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-200 font-geist font-medium"
               />
 
               {/* Suggestions dropdown */}
@@ -499,9 +499,9 @@ export default function PreferencesPanel({
                     <li
                       key={idx}
                       onClick={() => handleSelectDriver(driver)}
-                      className="px-3 py-2 text-sm text-gray-200 hover:cursor-pointer"
+                      className="px-3 py-2 text-sm text-offWhite hover:cursor-pointer"
                     >
-                      <div className="font-medium font-geist font-medium">
+                      <div className="font-medium font-geist font-medium text-offWhite">
                         {driver.full_name}
                       </div>
                       <div className="text-xs text-gray-400 font-geist font-medium">
@@ -516,13 +516,13 @@ export default function PreferencesPanel({
 
           {/* Visuals */}
           <div className="flex flex-col justify-evenly pb-4">
-            <p className="text-md text-gray-100 font-orbitron">
+            <p className="text-md text-offWhite font-orbitron">
               {preferences.translate ? "Vista" : "Visuals"}
             </p>
             <a
               href="/help"
               target="_blank"
-              className="text-xs text-gray-500 font-geist font-medium hover:text-f1Blue"
+              className="text-xs text-gray-400 font-geist font-medium hover:text-f1Blue"
             >
               {preferences.translate
                 ? "Más información sobre los widgets acá."
@@ -568,10 +568,10 @@ export default function PreferencesPanel({
                     <>
                       {" "}
                       <div className="flex flex-col px-2 py-2">
-                        <span className="text-xs font-geist font-medium">
+                        <span className="text-xs font-geist font-medium text-offWhite">
                           {preferenceDetails[key as string].title}
                         </span>
-                        <span className="text-xs text-gray-500 font-geist font-medium">
+                        <span className="text-xs text-gray-400 font-geist font-medium">
                           {preferenceDetails[key as string].description}
                         </span>
                       </div>
@@ -601,7 +601,7 @@ export default function PreferencesPanel({
 
           {/* Reset config */}
           <div className="flex flex-col gap-2 pb-4 border-t border-gray-700 pt-4">
-            <p className="text-xs text-gray-500 font-geist font-medium">
+            <p className="text-xs text-gray-400 font-geist font-medium">
               {preferences.translate
                 ? "Restablecer todos los widgets a sus posiciones y tamaños por defecto. Esta acción no se puede deshacer."
                 : "Reset all widgets to their default positions and sizes. This action cannot be undone."}
@@ -624,16 +624,16 @@ export default function PreferencesPanel({
 
           {user && (
             <div className="flex flex-row gap-1">
-              <p className="text-xs text-gray-500 font-geist font-medium">
+              <p className="text-xs text-gray-400 font-geist font-medium">
                 {preferences.translate
                   ? "Sesión iniciada como "
                   : "Signed in as "}
               </p>
-              <p className="text-xs text-gray-500 font-geist font-medium">
+              <p className="text-xs text-gray-400 font-geist font-medium">
                 {user.username}.
               </p>
               <p
-                className="text-xs text-gray-500 hover:text-f1Blue font-geist font-medium underline hover:cursor-pointer"
+                className="text-xs text-gray-400 hover:text-f1Blue font-geist font-medium underline hover:cursor-pointer"
                 onClick={logout}
               >
                 {preferences.translate ? " Cerrar sesión. " : " Sign out. "}

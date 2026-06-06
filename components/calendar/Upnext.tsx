@@ -27,7 +27,7 @@ function Session({
 
   return (
     <div className="flex flex-col gap-0 text-wrap text-gray-400 text-xs">
-      <span className="text-md text-gray-100">{displayLabel}</span>
+      <span className="text-md text-offWhite">{displayLabel}</span>
       <span>{formatEventDateShort(eventData.start || "", dict.locale)}</span>
     </div>
   );
