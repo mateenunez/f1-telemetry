@@ -93,6 +93,18 @@ export class WebSocketManager {
         console.log("WebSocket connected");
         this.reconnectAttempts = 0;
 
+        // Request initial state from server
+        const stateRequest = { type: "get:state" };
+        this.ws!.send(
+          this.encodeWebSocketMessage(stateRequest) as any,
+        );
+
+        // Request pinned messages
+        const pinnedRequest = { type: "get:pinned" };
+        this.ws!.send(
+          this.encodeWebSocketMessage(pinnedRequest) as any,
+        );
+
         if (this.token) {
           this.sendAuthToken(this.token);
         }

@@ -128,9 +128,7 @@ export default function DraggableWidget({
         </div>
       )}
 
-      {isEditMode &&
-        widget.id !== "driver-positions" &&
-        widget.id !== "map-and-messages" && (
+      {isEditMode && (
           <button
             onClick={(e) => {
               e.preventDefault();

@@ -42,13 +42,19 @@ export default function F1Calendar({ dict }: { dict: any }) {
           <p>{translateSessionType(upcoming?.nextEvent.type, dict)}</p>
         </div>
         <a
-          className="flex flex-row gap-2 font-orbitron hover:cursor-pointer text-md font-regular"
+          className="group flex flex-row items-center gap-2 font-orbitron text-md font-regular
+            text-offWhite hover:text-red-400 transition-colors duration-300 cursor-pointer
+            hover:underline underline-offset-4 decoration-red-400/60"
           href="/schedule"
+          style={{ textShadow: "0 0 8px rgba(239, 68, 68, 0.35)" }}
         >
           {formatTimeUntil(
             upcoming.timeUntilNext,
             dict.locale === "es"
-          ).toUpperCase()}{" "}
+          ).toUpperCase()}
+          <span className="inline-block transition-transform duration-300 group-hover:translate-x-1 text-red-400/70 text-xs">
+            →
+          </span>
         </a>
       </div>
     );

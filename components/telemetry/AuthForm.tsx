@@ -78,7 +78,7 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
       const errors = dict?.auth?.errors;
       setFormError(
         (errors && (errors[code] ?? errors.default)) ||
-          dict.auth.registrationFailed
+        dict.auth.registrationFailed
       );
     }
   };
@@ -153,7 +153,7 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
                     placeholder={dict.auth.emailPlaceholder}
-                    className="w-full pl-9 pr-3 py-2 text-sm rounded-md bg-warmBlack text-gray-400 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist"
+                    className="w-full pl-9 pr-3 py-2 text-sm rounded-md bg-warmBlack text-white border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist"
                     style={{
                       boxShadow:
                         "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
@@ -177,7 +177,7 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
                     placeholder={dict.auth.passwordPlaceholder}
-                    className="w-full pl-9 pr-3 py-2 text-sm rounded-md bg-warmBlack text-gray-400 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist"
+                    className="w-full pl-9 pr-3 py-2 text-sm rounded-md bg-warmBlack text-white border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist"
                     style={{
                       boxShadow:
                         "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
@@ -232,7 +232,7 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
                     value={registerUsername}
                     onChange={(e) => setRegisterUsername(e.target.value)}
                     placeholder={dict.auth.usernamePlaceholder}
-                    className="w-full pl-9 pr-3 py-2 text-sm rounded-md bg-warmBlack text-gray-400 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist"
+                    className="w-full pl-9 pr-3 py-2 text-sm rounded-md bg-warmBlack text-white border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist"
                     style={{
                       boxShadow:
                         "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
@@ -256,7 +256,7 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
                     value={registerEmail}
                     onChange={(e) => setRegisterEmail(e.target.value)}
                     placeholder={dict.auth.emailPlaceholder}
-                    className="w-full pl-9 pr-3 py-2 text-sm rounded-md bg-warmBlack text-gray-400 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist"
+                    className="w-full pl-9 pr-3 py-2 text-sm rounded-md bg-warmBlack text-white border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist"
                     style={{
                       boxShadow:
                         "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
@@ -280,7 +280,7 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
                     value={registerPassword}
                     onChange={(e) => setRegisterPassword(e.target.value)}
                     placeholder={dict.auth.passwordHint}
-                    className="w-full pl-9 pr-3 py-2 text-sm rounded-md bg-warmBlack text-gray-400 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist"
+                    className="w-full pl-9 pr-3 py-2 text-sm rounded-md bg-warmBlack text-white border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist"
                     style={{
                       boxShadow:
                         "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
@@ -304,7 +304,7 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
                     value={registerConfirmPassword}
                     onChange={(e) => setRegisterConfirmPassword(e.target.value)}
                     placeholder={dict.auth.confirmPasswordPlaceholder}
-                    className="w-full pl-9 pr-3 py-2 text-sm rounded-md bg-warmBlack text-gray-400 border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist"
+                    className="w-full pl-9 pr-3 py-2 text-sm rounded-md bg-warmBlack text-white border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist"
                     style={{
                       boxShadow:
                         "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",

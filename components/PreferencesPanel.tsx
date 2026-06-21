@@ -60,10 +60,10 @@ export default function PreferencesPanel({
 
     const filtered = driverInfo
       ? driverInfo.filter(
-          (d) =>
-            d.full_name.toLowerCase().includes(value.toLowerCase()) ||
-            d.team_name.toLowerCase().includes(value.toLowerCase()),
-        )
+        (d) =>
+          d.full_name.toLowerCase().includes(value.toLowerCase()) ||
+          d.team_name.toLowerCase().includes(value.toLowerCase()),
+      )
       : [];
 
     setSuggestions(filtered.slice(0, 5));
@@ -154,7 +154,7 @@ export default function PreferencesPanel({
     string,
     { title: string; description: string }
   > = preferences.translate
-    ? {
+      ? {
         sectors: {
           title: "Sectores marcados",
           description:
@@ -182,6 +182,16 @@ export default function PreferencesPanel({
           title: "Clima detallado",
           description:
             "Mostrar información completa del clima (lluvia, humedad, viento, presión).",
+        },
+        driverPositions: {
+          title: "Tabla de posiciones",
+          description:
+            "Mostrar la tabla con las posiciones y tiempos de los pilotos en tiempo real.",
+        },
+        mapAndMessages: {
+          title: "Mapa y mensajes",
+          description:
+            "Mostrar el mapa del circuito y los mensajes de radio y clima.",
         },
         audioLog: {
           title: "Audios de pilotos",
@@ -213,7 +223,7 @@ export default function PreferencesPanel({
           description: "Mostrar el chat para enviar y ver mensajes en vivo.",
         },
       }
-    : {
+      : {
         sectors: {
           title: "Track Sectors",
           description: "Display colored sectors on the circuit map.",
@@ -239,6 +249,16 @@ export default function PreferencesPanel({
           title: "Detailed Weather",
           description:
             "Show complete weather information (rain, humidity, wind, pressure).",
+        },
+        driverPositions: {
+          title: "Driver Standings",
+          description:
+            "Display the table with live driver positions and timing data.",
+        },
+        mapAndMessages: {
+          title: "Map & Messages",
+          description:
+            "Show the track map alongside radio messages and weather info.",
         },
         audioLog: {
           title: "Driver Audios",
@@ -271,20 +291,20 @@ export default function PreferencesPanel({
 
   const options: LanguageOptions[] = preferences.translate
     ? [
-        { value: "en", label: "Inglés" },
-        { value: "es", label: "Español" },
-      ]
+      { value: "en", label: "Inglés" },
+      { value: "es", label: "Español" },
+    ]
     : [
-        { value: "en", label: "English" },
-        { value: "es", label: "Spanish" },
-      ];
+      { value: "en", label: "English" },
+      { value: "es", label: "Spanish" },
+    ];
 
   return (
     <>
       {/* Toggle Button */}
       <div className="relative">
         <PanelLeft
-          className="text-gray-400 hover:text-gray-400 hover:cursor-pointer preferences-step"
+          className="text-gray-400 hover:text-gray-400 hover:cursor-pointer"
           width={15}
           onClick={() => {
             setOpen((prev) => !prev);
@@ -300,11 +320,10 @@ export default function PreferencesPanel({
         <div className="relative">
           <Pencil
             width={15}
-            className={`hover:cursor-pointer transition-colors edit-step ${
-              isEditMode
-                ? "text-f1Blue hover:text-f1Blue/80"
-                : "text-gray-400 hover:text-gray-400"
-            }`}
+            className={`hover:cursor-pointer transition-colors ${isEditMode
+              ? "text-f1Blue hover:text-f1Blue/80"
+              : "text-gray-400 hover:text-gray-400"
+              }`}
             onClick={handleEditMode}
           />
           {!preferences.hasSeenEditMode && (
@@ -315,17 +334,15 @@ export default function PreferencesPanel({
 
       {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300 font-geist ${
-          open ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
+        className={`fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300 font-geist ${open ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
         onClick={() => setOpen(false)}
       />
 
       {/* Slide Panel */}
       <div
-        className={`fixed top-0 left-0 h-full w-full sm:w-96 bg-black text-white z-50 transform transition-transform duration-300 ease-in-out ${
-          open ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 left-0 h-full w-full sm:w-96 bg-black text-white z-50 transform transition-transform duration-300 ease-in-out ${open ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="p-8 overflow-y-auto h-full">
           {/* Panel button */}

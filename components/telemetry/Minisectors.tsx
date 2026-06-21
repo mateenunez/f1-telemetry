@@ -51,8 +51,8 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
           const bestColor = getBestSectorColor(bestSector);
           const bestDisplayValue = bestSector?.Value ?? "--:--";
           return (
-            <div key={sectorKey} className="flex flex-col items-start gap-1 text-xs">
-              <div className="flex gap-1 items-center text-gray-400">
+            <div key={sectorKey} className="flex flex-col w-full items-start gap-1 text-xs">
+              <div className="flex gap-1 w-full items-center text-gray-400">
                 {minisectors.map((s, sIdx) => {
                   const bg = getMinisectorColor(s);
                   return (
@@ -60,7 +60,8 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
                       key={`${sectorKey}-${sIdx}`}
                       style={{
                         backgroundColor: bg,
-                        width: 8,
+                        flex: 1,
+                        minWidth: "4px",
                         height: 5,
                         borderRadius: 4,
                         stroke: bg,
@@ -93,9 +94,9 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
             (sectorKey, sectorIdx) => {
               const minisectors = timing?.sector_segments[sectorKey] || [];
               return (
-                <div  
+                <div
                   key={sectorKey}
-                  className="flex gap-1 items-center text-xs text-gray-400 h-[1rem]"
+                  className="flex w-full gap-1 items-center text-xs text-gray-400 h-[1rem]"
                 >
                   {minisectors.map((s: number, sIdx: number) => {
                     const bg = getMinisectorColor(s);
@@ -104,14 +105,14 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
                         key={`${sectorKey}-${sIdx}`}
                         style={{
                           backgroundColor: bg,
-                          width: 8,
+                          flex: 1,
+                          minWidth: "4px",
                           height: 5,
                           borderRadius: 4,
                           stroke: bg,
                           strokeWidth: 4,
                           padding: 2,
                           display: "inline-block",
-                          marginLeft: 2,
                           opacity: 1,
                         }}
                       ></span>

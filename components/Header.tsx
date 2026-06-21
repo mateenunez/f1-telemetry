@@ -83,7 +83,7 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
   }, [session?.session_status, telemetryData?.lastUpdateTime]);
 
   return (
-    <Card className="bg-warmBlack1 text-white border-b-2 border-t-0 border-l-0 border-r-0 rounded-none border-gray-800 relative fourth-step">
+    <Card className="bg-warmBlack1 text-white border-b-2 border-t-0 border-l-0 border-r-0 rounded-none border-gray-600 relative">
       <CardHeader className="p-2">
         <div className="flex flex-col md:flex-row lg:flex-row items-center justify-between gap-1">
           <div className="flex flex-row md:justify-start items-center mx-4">
@@ -111,17 +111,17 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
                       <div className="flex flex-row items-center gap-2 w-full md:text-nowrap md:flex-nowrap">
                         {preferences.translate
                           ? sessionType(
-                              session?.session_name,
-                              preferences.translate,
-                            ) +
-                            " " +
-                            session?.circuit_short_name
+                            session?.session_name,
+                            preferences.translate,
+                          ) +
+                          " " +
+                          session?.circuit_short_name
                           : session?.circuit_short_name +
-                            " " +
-                            sessionType(
-                              session?.session_name,
-                              preferences.translate,
-                            )}
+                          " " +
+                          sessionType(
+                            session?.session_name,
+                            preferences.translate,
+                          )}
                         {": "}
                         {preferences.translate
                           ? translateSessionName(session?.session_name)

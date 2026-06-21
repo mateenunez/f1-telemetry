@@ -160,7 +160,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
 
   if (!isAuthenticated) {
     return (
-      <div className="w-full md:h-full h-[20rem] flex flex-col bg-warmBlack rounded-lg overflow-hidden chat-step">
+      <div className="w-full md:h-full h-[20rem] flex flex-col bg-warmBlack rounded-lg overflow-hidden">
         <div className="w-full h-full flex flex-col items-center justify-center bg-warmBlack rounded-lg">
           <div className="text-center space-y-4">
             <LogIn className="mx-auto" size={32} />
@@ -181,11 +181,11 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
         {/* Input Area */}
         <div className="px-2 pb-2 pt-1 bg-warmBlack">
           <form onSubmit={handleSubmit} className="flex flex-col gap-1">
-            <div className="flex items-stretch gap-1.5">
+            <div className="flex items-stretch gap-1.5 border border-gray-400 rounded-3xl">
               <div className="flex flex-row w-full items-center">
                 <Stars
                   size={16}
-                  className="ml-2 text-gray-400 cursor-not-allowed"
+                  className="h-9 ml-4 text-gray-400 cursor-not-allowed"
                 />
                 <textarea
                   placeholder={
@@ -194,14 +194,14 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                       : "Type a message..."
                   }
                   disabled={true}
-                  className="flex-1 min-h-[36px] h-9 px-2.5 py-1.5 text-white placeholder-gray-500 focus:outline-none resize-none text-sm max-h-20 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent break-words"
+                  className="flex-1 min-h-[36px] h-9 px-2.5 py-[0.4rem] overflow-y-hidden text-white placeholder-gray-500 focus:outline-none resize-none text-sm max-h-20 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent break-words"
                   rows={1}
                 />
 
                 <div className="relative flex items-center shrink-0">
                   <button
                     type="button"
-                    className="h-9 w-9 flex items-center justify-center bg-transparent transition-colors cursor-not-allowed"
+                    className="h-9 flex items-center justify-center bg-transparent transition-colors cursor-not-allowed"
                     disabled={true}
                   >
                     <span
@@ -220,7 +220,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
               <button
                 type="submit"
                 disabled={true}
-                className="h-9 px-3 flex items-center justify-center text-gray-400 disabled:cursor-not-allowed transition-colors font-medium text-sm shrink-0"
+                className="h-9 px-4 flex items-center justify-center text-gray-400 disabled:cursor-not-allowed transition-colors font-medium text-sm shrink-0"
               >
                 <Send size={14} />
               </button>
@@ -232,7 +232,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   }
 
   return (
-    <div className="w-full md:h-full h-[20rem] flex flex-col bg-warmBlack rounded-lg overflow-hidden chat-step">
+    <div className="w-full md:h-full h-[20rem] flex flex-col bg-warmBlack rounded-lg overflow-hidden">
       {/* Messages Area */}
       <div className="flex justify-center w-full z-20 bg-warmBlack pointer-events-none">
         {/* User Count */}
@@ -309,7 +309,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
       {/* Input Area */}
       <div className="px-2 pb-2 pt-1 bg-warmBlack">
         <form onSubmit={handleSubmit} className="flex flex-col gap-1">
-          <div className="flex items-stretch gap-1">
+          <div className="flex items-stretch gap-1 border border-gray-400 rounded-3xl">
             <div className="flex flex-row w-full items-center focus:outline-2 focus:ring-blue-500">
               <div className="relative flex items-center shrink-0">
                 <button
@@ -326,7 +326,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                   aria-label="Pick emoji badge"
                 >
                   <span className="text-gray-400">
-                    {selectedEmoji || <Stars size={16} />}
+                    {selectedEmoji || <Stars size={16} className="h-9 ml-4" />}
                   </span>
                 </button>
 
@@ -346,9 +346,8 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                             }
                             setShowEmojiPicker(false);
                           }}
-                          className={`hover:bg-gray-700 rounded transition-colors ${
-                            selectedEmoji === emoji ? "bg-gray-600" : ""
-                          }`}
+                          className={`hover:bg-gray-700 rounded transition-colors ${selectedEmoji === emoji ? "bg-gray-600" : ""
+                            }`}
                         >
                           {emoji}
                         </button>
@@ -375,7 +374,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                 }
                 maxLength={maxLength}
                 disabled={cooldown > 0 || isSubmitting}
-                className="flex-1 min-h-[36px] h-9 py-1.5 text-white placeholder-gray-500 focus:outline-none resize-none text-sm max-h-20 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent break-words"
+                className="flex-1 min-h-[36px] h-9 px-2.5 py-2 text-white placeholder-gray-500/50 focus:outline-none resize-none text-sm max-h-20 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent break-words"
                 rows={1}
               />
 
@@ -383,7 +382,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowColorPicker((v) => !v)}
-                  className="h-9 w-9 flex items-center justify-center bg-transparent transition-colors"
+                  className="h-9 flex items-center justify-center bg-transparent transition-colors"
                   title={
                     language === "es" ? "Color del nombre" : "Username color"
                   }
@@ -412,7 +411,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                       type="text"
                       value={usernameColor}
                       onChange={(e) => setUsernameColor(e.target.value)}
-                      className="w-20 px-2 py-1 text-white text-xs font-mono bg-transparent"
+                      className="w-20 px-2 py-2 text-white text-xs font-mono bg-transparent"
                     />
                   </div>
                 )}
@@ -427,7 +426,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                 cooldown > 0 ||
                 !isAuthenticated
               }
-              className="h-9 px-3 flex items-center justify-center bg-transparent text-gray-400 hover:text-f1Blue active:text-f1Blue hover:cursor-pointer transition-colors font-medium text-sm shrink-0"
+              className="h-9 px-4 flex items-center justify-center bg-transparent text-gray-400 hover:text-f1Blue active:text-f1Blue hover:cursor-pointer transition-colors font-medium text-sm shrink-0"
             >
               <Send size={14} />
             </button>

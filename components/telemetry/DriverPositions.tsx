@@ -112,7 +112,7 @@ const DriverPositions = memo(function DriverPositions({
       <CardContent className="flex-1 h-full p-0 overflow-x-auto">
         <ScrollArea
           className={`${
-            fullWidth && !isMobile ? "w-full" : "w-max"
+            fullWidth || !isMobile ? "w-full" : "w-max"
           } h-full overflow-x-auto`}
           type="scroll"
           ref={scrollRef}

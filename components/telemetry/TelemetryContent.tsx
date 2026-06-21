@@ -71,13 +71,13 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   const snapToGrid = createSnapModifier(GRID_SIZE);
   const gridStyle = isEditMode
     ? {
-        backgroundImage: `
+      backgroundImage: `
         linear-gradient(to right, rgba(255, 255, 255, 0.23) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255,255,255,0.23) 1px, transparent 1px)
       `,
-        backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`,
-        backgroundColor: "#050505",
-      }
+      backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`,
+      backgroundColor: "#050505",
+    }
     : {};
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -391,13 +391,13 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           carData={
                             pinnedDriver
                               ? telemetryData?.carData.find(
-                                  (c) => c.driver_number === pinnedDriver,
-                                )
+                                (c) => c.driver_number === pinnedDriver,
+                              )
                               : telemetryData?.carData.find(
-                                  (c) =>
-                                    c.driver_number ===
-                                    currentPositions.at(0)?.driver_number,
-                                )
+                                (c) =>
+                                  c.driver_number ===
+                                  currentPositions.at(0)?.driver_number,
+                              )
                           }
                           driverInfo={driverInfos}
                         />
@@ -455,9 +455,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
           </DndContext>
         ) : (
           <div
-            className={`w-full ${
-              isEditMode ? "lg:h-[220vh]" : ""
-            } welcome-step canvas-container`}
+            className={`w-full ${isEditMode ? "lg:h-[220vh]" : ""
+              } canvas-container`}
             style={{ height: !isEditMode ? maxPositionY : undefined }}
           >
             <DndContext
@@ -609,13 +608,13 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           carData={
                             pinnedDriver
                               ? telemetryData?.carData.find(
-                                  (c) => c.driver_number === pinnedDriver,
-                                )
+                                (c) => c.driver_number === pinnedDriver,
+                              )
                               : telemetryData?.carData.find(
-                                  (c) =>
-                                    c.driver_number ===
-                                    currentPositions.at(0)?.driver_number,
-                                )
+                                (c) =>
+                                  c.driver_number ===
+                                  currentPositions.at(0)?.driver_number,
+                              )
                           }
                           driverInfo={driverInfos}
                         />
