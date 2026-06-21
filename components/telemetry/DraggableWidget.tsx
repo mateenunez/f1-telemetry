@@ -62,12 +62,14 @@ export default function DraggableWidget({
   isEditMode,
   updateWidget,
   translate,
+  square = false,
 }: {
   widget: Widget;
   children: ReactNode;
   isEditMode: boolean;
   updateWidget: (id: WidgetId, updates: Partial<Widget>) => void;
   translate: boolean;
+  square?: boolean;
 }) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: widget.id,
@@ -110,21 +112,33 @@ export default function DraggableWidget({
           className="absolute -bottom-10 p-1 right-0 flex bg-warmBlack rounded shadow-lg"
           onMouseDown={(e) => e.stopPropagation()}
         >
-          <ManualInput
-            value={widget.width}
-            onUpdate={(newWidth) =>
-              updateWidget(widget.id, { width: newWidth })
-            }
-            label={translate ? "ancho" : "width"}
-          />
-          <span className="text-offWhite text-lg mx-2">×</span>
-          <ManualInput
-            value={widget.height}
-            onUpdate={(newHeight) =>
-              updateWidget(widget.id, { height: newHeight })
-            }
-            label={translate ? "alto" : "height"}
-          />
+          {square ? (
+            <ManualInput
+              value={widget.width}
+              onUpdate={(size) =>
+                updateWidget(widget.id, { width: size, height: size })
+              }
+              label={translate ? "tamaño" : "size"}
+            />
+          ) : (
+            <>
+              <ManualInput
+                value={widget.width}
+                onUpdate={(newWidth) =>
+                  updateWidget(widget.id, { width: newWidth })
+                }
+                label={translate ? "ancho" : "width"}
+              />
+              <span className="text-offWhite text-lg mx-2">×</span>
+              <ManualInput
+                value={widget.height}
+                onUpdate={(newHeight) =>
+                  updateWidget(widget.id, { height: newHeight })
+                }
+                label={translate ? "alto" : "height"}
+              />
+            </>
+          )}
         </div>
       )}
 

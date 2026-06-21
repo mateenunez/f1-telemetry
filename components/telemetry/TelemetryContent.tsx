@@ -8,7 +8,7 @@ import { useTelemetryManager } from "@/hooks/use-telemetry";
 import SessionAudios from "@/components/telemetry/SessionAudios";
 import RaceControlList from "@/components/telemetry/RaceControlList";
 import CircleOfDoom from "@/components/telemetry/CircleOfDoom";
-import { WidgetId, usePreferences } from "@/context/preferences";
+import { WidgetId, usePreferences, isSquareWidget, normalizeSquareWidget } from "@/context/preferences";
 import { CircleCarData } from "@/components/telemetry/CircleCarData";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Countdown } from "../calendar/Countdown";
@@ -83,8 +83,12 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, delta } = event;
     const widgetId = active.id as WidgetId;
-    const widget = widgets.find((w) => w.id === widgetId);
-    if (!widget || canvasSize.width === 0 || canvasSize.height === 0) return;
+    const rawWidget = widgets.find((w) => w.id === widgetId);
+    if (!rawWidget || canvasSize.width === 0 || canvasSize.height === 0) return;
+
+    const widget = isSquareWidget(widgetId)
+      ? normalizeSquareWidget(rawWidget)
+      : rawWidget;
 
     let newX = widget.x + delta.x;
     let newY = widget.y + delta.y;
@@ -470,11 +474,13 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                 ref={canvasRef}
               >
                 {visibleWidgets.map((w) => {
+                  const widget = isSquareWidget(w.id) ? normalizeSquareWidget(w) : w;
+
                   if (w.id === "driver-positions") {
                     return (
                       <DraggableWidget
                         key={w.id}
-                        widget={w}
+                        widget={widget}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
                         translate={preferences.translate}
@@ -492,7 +498,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           handlePinnedDriver={handlePinnedDriver}
                           session={session}
                           aboutToBeEliminated={aboutToBeEliminated}
-                          fullWidth={w.width >= canvasSize.width * 0.4}
+                          fullWidth={widget.width >= canvasSize.width * 0.4}
                           isMobile={isMobile}
                           driverHeadshot={preferences.headshot}
                           audioEnabled={preferences.audio}
@@ -510,7 +516,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                     return (
                       <DraggableWidget
                         key={w.id}
-                        widget={w}
+                        widget={widget}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
                         translate={preferences.translate}
@@ -532,7 +538,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                     return (
                       <DraggableWidget
                         key={w.id}
-                        widget={w}
+                        widget={widget}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
                         translate={preferences.translate}
@@ -552,7 +558,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                     return (
                       <DraggableWidget
                         key={w.id}
-                        widget={w}
+                        widget={widget}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
                         translate={preferences.translate}
@@ -575,10 +581,11 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                     return (
                       <DraggableWidget
                         key={w.id}
-                        widget={w}
+                        widget={widget}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
                         translate={preferences.translate}
+                        square
                       >
                         <CircleOfDoom
                           driverInfos={driverInfos}
@@ -599,10 +606,11 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                     return (
                       <DraggableWidget
                         key={w.id}
-                        widget={w}
+                        widget={widget}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
                         translate={preferences.translate}
+                        square
                       >
                         <CircleCarData
                           carData={
@@ -626,7 +634,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                     return (
                       <DraggableWidget
                         key={w.id}
-                        widget={w}
+                        widget={widget}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
                         translate={preferences.translate}
@@ -648,7 +656,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                     return (
                       <DraggableWidget
                         key={w.id}
-                        widget={w}
+                        widget={widget}
                         isEditMode={isEditMode}
                         updateWidget={updateWidget}
                         translate={preferences.translate}

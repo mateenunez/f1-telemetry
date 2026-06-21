@@ -3,7 +3,7 @@ import Map from "./Map";
 import RaceControl from "@/components/telemetry/RaceControl";
 import { Orbitron } from "next/font/google";
 import { memo } from "react";
-import { getTrackStatusColor, getTrackStatusLabel } from "@/utils/telemetry";
+import { getTrackStatusColor, getTrackStatusLabel, isTrackStatusVisible } from "@/utils/telemetry";
 import { TRACK_STATUS_KEYS } from "@/utils/telemetry";
 import { TelemetryData } from "@/telemetry-manager";
 import { ProcessedDriver } from "@/processors";
@@ -30,6 +30,12 @@ const MapAndMessages = memo(function MapAndMessages({
   favoriteDrivers,
 }: MapAndMessagesProps) {
   const isRace = String(session?.session_type ?? "").toLowerCase().includes("race");
+  const trackStatusLabel =
+    session?.track_status && isTrackStatusVisible(session.track_status)
+      ? translate
+        ? getTrackStatusLabel(session.track_status, true)
+        : getTrackStatusLabel(session.track_status, false)
+      : "";
   if (!telemetryData) return;
 
   return (
@@ -56,7 +62,7 @@ const MapAndMessages = memo(function MapAndMessages({
                 {session?.current_lap}/{session?.total_laps}
               </CardTitle>
             )}
-            {session.track_status && (
+            {trackStatusLabel && (
               <CardTitle
                 className={`${
                   session.session_type === "Race" ? "text-xs" : "text-md"
@@ -65,9 +71,7 @@ const MapAndMessages = memo(function MapAndMessages({
                   color: getTrackStatusColor(session.track_status),
                 }}
               >
-                {translate
-                  ? getTrackStatusLabel(session.track_status, true)
-                  : getTrackStatusLabel(session.track_status, false)}
+                {trackStatusLabel}
               </CardTitle>
             )}
           </div>

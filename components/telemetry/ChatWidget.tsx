@@ -181,7 +181,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
         {/* Input Area */}
         <div className="px-2 pb-2 pt-1 bg-warmBlack">
           <form onSubmit={handleSubmit} className="flex flex-col gap-1">
-            <div className="flex items-stretch gap-1.5 border border-gray-400 rounded-3xl">
+            <div className="flex items-stretch gap-1.5 border-2 border-gray-400 rounded-3xl">
               <div className="flex flex-row w-full items-center">
                 <Stars
                   size={16}
@@ -280,13 +280,6 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                   className="text-sm overflow-x-hidden flex flex-row gap-1 rounded-md px-4"
                 >
                   <div className="flex gap-1">
-                    <span className="text-[0.6rem] md:text-nowrap font-inter text-gray-400 text-center">
-                      {msg.timestamp.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: false,
-                      })}
-                    </span>
                     {msg.user.roleId !== 1 && <span>{msg.user.badge}</span>}
                     <span
                       className="font-semibold"
@@ -309,7 +302,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
       {/* Input Area */}
       <div className="px-2 pb-2 pt-1 bg-warmBlack">
         <form onSubmit={handleSubmit} className="flex flex-col gap-1">
-          <div className="flex items-stretch gap-1 border border-gray-400 rounded-3xl">
+          <div className="flex items-stretch gap-1 border-2 border-gray-400 rounded-3xl">
             <div className="flex flex-row w-full items-center focus:outline-2 focus:ring-blue-500">
               <div className="relative flex items-center shrink-0">
                 <button
@@ -325,8 +318,8 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                   }}
                   aria-label="Pick emoji badge"
                 >
-                  <span className="text-gray-400 md:ml-4">
-                    {selectedEmoji || <Stars size={16} className="h-9 ml-4" />}
+                  <span className="text-gray-400 ml-4">
+                    {selectedEmoji || <Stars size={16} />}
                   </span>
                 </button>
 
@@ -374,7 +367,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                 }
                 maxLength={maxLength}
                 disabled={cooldown > 0 || isSubmitting}
-                className="flex-1 min-h-[36px] h-9 px-2.5 py-[0.4rem] overflow-y-hidden text-white placeholder-gray-500/50 focus:outline-none resize-none text-sm max-h-20 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent break-words"
+                className="flex-1 min-h-[36px] px-2.5 py-2 overflow-y-hidden text-white placeholder-gray-500/50 focus:outline-none resize-none text-sm max-h-20 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent break-words"
                 rows={1}
               />
 

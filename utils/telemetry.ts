@@ -55,15 +55,17 @@ export function getCompoundColor(compound: string): string {
 
 function normalizeStatus(status: string): TrackStatusKey | null {
   if (!status) return null;
-  const key = status.replace(/\s+/g, "").trim() as TrackStatusKey;
+  const trimmed = status.replace(/\s+/g, "").trim();
+  const mapped = (TRACK_STATUS_KEYS[trimmed] ?? trimmed) as TrackStatusKey;
   const allowed: TrackStatusKey[] = [
     "AllClear",
     "Yellow",
     "Red",
     "Aborted",
     "SCDeployed",
+    "VSCDeployed",
   ];
-  return allowed.includes(key) ? key : null;
+  return allowed.includes(mapped) ? mapped : null;
 }
 
 export function getTrackStatusLabel(
@@ -72,8 +74,12 @@ export function getTrackStatusLabel(
 ): string {
   const key = normalizeStatus(status);
   if (key === "AllClear") return "";
-  if (!key) return status || "";
+  if (!key) return "";
   return translate ? TRACK_STATUS_LABELS_ES[key] : TRACK_STATUS_LABELS_EN[key];
+}
+
+export function isTrackStatusVisible(status: string): boolean {
+  return getTrackStatusLabel(status, false) !== "";
 }
 
 export function getTrackStatusColor(status: string): string {

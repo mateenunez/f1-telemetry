@@ -117,7 +117,7 @@ export default function TyresList({
             );
             return (
               <div
-                className="flex flex-row gap-2 py-1 w-full items-center justify-center mb-4"
+                className="flex flex-row gap-2 py-4 w-full items-center justify-center mb-4"
                 style={{
                   background: isFavorite
                     ? "#" + driver?.team_colour + "30"
@@ -152,12 +152,13 @@ export default function TyresList({
                 </div>
                 <div className="w-full items-center mr-6">
                   <div
-                    className={`flex w-full h-[5px] bg-warmBlack rounded-sm`}
+                    className={`flex w-full h-1.5 bg-warmBlack rounded-full`}
                   >
                     {stints &&
                       stints.map((stint, index) => {
                         const widthPercentage =
                           (stint.total_laps / totalLaps) * 100;
+                          if (widthPercentage < 1) return ;
                         const backgroundColor = getCompoundColor(
                           stint.compound,
                         );
@@ -195,13 +196,12 @@ export default function TyresList({
                               }}
                             >
                               <span
-                                className={`text-xs font-inter whitespace-nowrap ${
-                                  isPersonalBestStint
+                                className={`text-xs font-inter whitespace-nowrap ${isPersonalBestStint
                                     ? isBestStint
                                       ? "text-f1Purple"
                                       : "text-f1Green"
                                     : "text-white"
-                                }`}
+                                  }`}
                               >
                                 {stint.lap_time}
                               </span>
@@ -219,7 +219,7 @@ export default function TyresList({
                                 style={{
                                   display:
                                     stint.lap_number === totalLaps ||
-                                    stint.total_laps === 0
+                                      stint.total_laps === 0
                                       ? "none"
                                       : "block",
                                 }}

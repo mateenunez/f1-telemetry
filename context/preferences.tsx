@@ -22,6 +22,25 @@ export type WidgetId =
   | "tyres-list"
   | "chat";
 
+export const SQUARE_WIDGET_IDS: WidgetId[] = [
+  "circle-of-doom",
+  "circle-car-data",
+];
+
+export function isSquareWidget(id: WidgetId): boolean {
+  return SQUARE_WIDGET_IDS.includes(id);
+}
+
+export function toSquareDimensions(width: number, height: number): number {
+  return Math.min(width, height);
+}
+
+export function normalizeSquareWidget(widget: Widget): Widget {
+  if (!isSquareWidget(widget.id)) return widget;
+  const size = toSquareDimensions(widget.width, widget.height);
+  return { ...widget, width: size, height: size };
+}
+
 export type Widget = {
   id: WidgetId;
   enabled: boolean;
@@ -126,22 +145,22 @@ export const DEFAULT_CONFIG: Preferences = {
   },
   circleOfDoom: {
     enabled: true,
-    xPct: 890 / 1526,
-    yPct: 1094 / 1094,
+    xPct: 990 / 1526,
+    yPct: 1194 / 1094,
     widthPct: 300 / 1526,
-    heightPct: 437 / 1094,
+    heightPct: 300 / 1094,
     width: 300,
-    height: 437,
+    height: 300,
     index: 5,
   },
   circleCarData: {
     enabled: true,
-    xPct: 1195 / 1526,
-    yPct: 1094 / 1094,
+    xPct: 1235 / 1526,
+    yPct: 1194 / 1094,
     widthPct: 300 / 1526,
-    heightPct: 437 / 1094,
+    heightPct: 300 / 1094,
     width: 300,
-    height: 437,
+    height: 300,
     index: 6,
   },
   tyresList: {
@@ -296,14 +315,21 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children, dict })
           cfg.yPct !== undefined
             ? Math.round(cfg.yPct * BASE_H)
             : ((cfg as any).y ?? 0);
-        const width =
+        let width =
           cfg.widthPct !== undefined
             ? Math.round(cfg.widthPct * BASE_W)
             : (cfg.width ?? 0);
-        const height =
+        let height =
           cfg.heightPct !== undefined
             ? Math.round(cfg.heightPct * BASE_H)
             : (cfg.height ?? 0);
+
+        if (isSquareWidget(id)) {
+          const size = toSquareDimensions(width, height);
+          width = size;
+          height = size;
+        }
+
         return {
           id,
           enabled: cfg.enabled,
@@ -347,20 +373,35 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children, dict })
 
   const updateWidget = useCallback((id: WidgetId, updates: Partial<Widget>) => {
     setWidgets((prev) =>
-      prev.map((w) => (w.id === id ? { ...w, ...updates } : w)),
+      prev.map((w) => {
+        if (w.id !== id) return w;
+        const merged = { ...w, ...updates };
+        return normalizeSquareWidget(merged);
+      }),
     );
   }, []);
 
   const setWidgetsPreferences = useCallback((widgetsArr: Widget[]) => {
+    const BASE_W = typeof window !== "undefined" ? window.innerWidth : 1526;
+    const BASE_H = typeof window !== "undefined" ? window.innerHeight : 1094;
+
     widgetsArr.forEach((w, idx) => {
       const prefKey = widgetIdToPrefKey(w.id);
       if (prefKey) {
+        const normalized = normalizeSquareWidget(w);
+        const width = normalized.width;
+        const height = normalized.height;
+
         setPreference(prefKey, {
-          enabled: w.enabled,
-          x: Math.round(w.x ?? 0),
-          y: Math.round(w.y ?? 0),
-          width: w.width,
-          height: w.height,
+          enabled: normalized.enabled,
+          x: Math.round(normalized.x ?? 0),
+          y: Math.round(normalized.y ?? 0),
+          width,
+          height,
+          xPct: (normalized.x ?? 0) / BASE_W,
+          yPct: (normalized.y ?? 0) / BASE_H,
+          widthPct: width / BASE_W,
+          heightPct: height / BASE_H,
           index: idx,
         });
       }

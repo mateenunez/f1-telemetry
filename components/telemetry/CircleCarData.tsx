@@ -71,7 +71,7 @@ export function CircleCarData({
         <svg
           viewBox={`0 0 ${VW} ${VW}`}
           className="w-full h-full"
-          preserveAspectRatio="none"
+          preserveAspectRatio="xMidYMid meet"
         >
           {/* Outer speed circle background */}
           <circle

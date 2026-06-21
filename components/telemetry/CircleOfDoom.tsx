@@ -44,7 +44,7 @@ export default function CircleOfDoom({
           <svg
             viewBox="0 0 100 100"
             className="w-full h-full"
-            preserveAspectRatio="none"
+            preserveAspectRatio="xMidYMid meet"
           >
             <circle
               cx={50}
@@ -232,7 +232,7 @@ export default function CircleOfDoom({
         <svg
           viewBox="0 0 100 100"
           className="w-full h-full"
-          preserveAspectRatio="none"
+          preserveAspectRatio="xMidYMid meet"
         >
           <circle
             cx={50}
