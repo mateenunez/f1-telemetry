@@ -27,15 +27,13 @@ export default function DriverPositionInfo({
 
   return (
     <div
-      className={`flex flex-row items-center ${
-        headshot ? "min-w-[11.5rem]" : "min-w-[9rem]"
-      }`}
+      className={`flex flex-row items-center ${headshot ? "min-w-[11.5rem]" : "min-w-[9rem]"
+        }`}
     >
       {/* Posición */}
       <div
-        className={`flex flex-row items-center ${
-          headshot ? "min-w-[5.75rem]" : "min-w-[3.75rem]"
-        }`}
+        className={`flex flex-row items-center ${headshot ? "min-w-[5.75rem]" : "min-w-[3.75rem]"
+          }`}
       >
         <Badge
           className="w-[2rem] text-[1rem] items-center font-bold pr-[0px] pl-4 font-inter"
@@ -60,19 +58,18 @@ export default function DriverPositionInfo({
       </div>
 
       {/* Info del piloto */}
-      <div className="flex justify-evenly flex-row font-f1-regular">
+      <div className="flex justify-evenly flex-row font-f1-regular pr-2">
         <div className="flex flex-col self-start">
           <div className="flex items-center gap-1">
             <span className="text-xs text-white flex flex-row items-center font-f1-regular gap-2">
               {driver?.name_acronym}{" "}
               <span
-                className={`text-xs self-center font-inter ${
-                  posDiff > 0
-                    ? "text-f1Red"
-                    : posDiff < 0
-                      ? "text-f1Green"
-                      : "text-white/75"
-                }`}
+                className={`text-xs self-center font-inter ${posDiff > 0
+                  ? "text-f1Red"
+                  : posDiff < 0
+                    ? "text-f1Green"
+                    : "text-white/75"
+                  }`}
               >
                 {posDiff > 0 && `▼${posDiff}`}
                 {posDiff < 0 && `▲${Math.abs(posDiff)}`}

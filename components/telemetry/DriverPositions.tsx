@@ -1,5 +1,4 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import DriverPositionInfo from "@/components/telemetry/DriverPositionInfo";
 import Minisectors from "@/components/telemetry/Minisectors";
 import LapTimes from "@/components/telemetry/LapTimes";
@@ -109,21 +108,17 @@ const DriverPositions = memo(function DriverPositions({
 
   return (
     <Card className="w-full h-full bg-warmBlack border-none">
-      <CardContent className="flex-1 h-full p-0 overflow-x-auto">
-        <ScrollArea
-          className={`${
-            fullWidth || !isMobile ? "w-full" : "w-max"
-          } h-full overflow-x-auto`}
-          type="scroll"
+      <CardContent className="flex-1 h-full p-0">
+        <div
+          className="w-full h-full overflow-auto scrollbar-hide"
           ref={scrollRef}
         >
           <table className="table-auto min-w-max w-full text-[0.6rem] text-gray-400">
             <thead className="sticky top-0 z-30 bg-warmBlack h-[2rem] font-geist">
               <tr className="text-center">
                 <th
-                  className={`text-center font-normal ${
-                    driverHeadshot ? "w-[11.5rem]" : "w-[9rem]"
-                  }`}
+                  className={`text-center font-normal sticky left-0 z-40 bg-warmBlack ${driverHeadshot ? "w-[11.5rem]" : "w-[9rem]"
+                    }`}
                 >
                   {translate ? "PILOTO" : "DRIVER"}
                 </th>
@@ -173,25 +168,22 @@ const DriverPositions = memo(function DriverPositions({
                 const baseStyle =
                   timing?.knockedOut || timing?.retired || timing?.stopped
                     ? {
-                        opacity: 0.4,
-                        background: `linear-gradient(-50deg, #0a0a0a ${
-                          driverHeadshot ? "90%" : "100%"
+                      opacity: 0.4,
+                      background: `linear-gradient(-50deg, #0a0a0a ${driverHeadshot ? "90%" : "100%"
                         }, #${driver?.team_colour} 100%)`,
-                      }
+                    }
                     : {
-                        opacity: 1,
-                        background: `linear-gradient(-50deg, ${
-                          isAboutToBeEliminated
-                            ? "#6b040447"
-                            : isFavorite
-                              ? "#" + driver?.team_colour + "30"
-                              : "#0a0a0a"
-                        } ${
-                          driverHeadshot && !isAboutToBeEliminated ? "90%" : "100%"
+                      opacity: 1,
+                      background: `linear-gradient(-50deg, ${isAboutToBeEliminated
+                          ? "#6b040447"
+                          : isFavorite
+                            ? "#" + driver?.team_colour + "30"
+                            : "#0a0a0a"
+                        } ${driverHeadshot && !isAboutToBeEliminated ? "90%" : "100%"
                         }, #${driver?.team_colour} 100%)`,
-                       
-                        
-                      };
+
+
+                    };
 
                 return (
                   <tr
@@ -200,14 +192,19 @@ const DriverPositions = memo(function DriverPositions({
                     onDoubleClick={() => handlePinnedDriver(pos.driver_number)}
                     style={baseStyle}
                   >
-                    <td className={`${driverHeadshot ? "w-[11.5rem]" : "w-[9rem]"}`}>
-                      <DriverPositionInfo
-                        position={pos}
-                        driver={driver}
-                        isPlaying={isPlayingAudio}
-                        driverHeadshot={driverHeadshot}
-                        translate={translate}
-                      />
+                    <td
+                      className={`sticky left-0 z-20 ${driverHeadshot ? "w-[11.5rem]" : "w-[9rem]"}`}
+                      style={{ background: baseStyle.background }}
+                    >
+                      <div style={{ opacity: baseStyle.opacity }}>
+                        <DriverPositionInfo
+                          position={pos}
+                          driver={driver}
+                          isPlaying={isPlayingAudio}
+                          driverHeadshot={driverHeadshot}
+                          translate={translate}
+                        />
+                      </div>
                     </td>
 
                     <td className="w-[3rem]">
@@ -242,7 +239,7 @@ const DriverPositions = memo(function DriverPositions({
               })}
             </tbody>
           </table>
-        </ScrollArea>
+        </div>
       </CardContent>
     </Card>
   );
