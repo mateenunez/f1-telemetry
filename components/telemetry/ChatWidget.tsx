@@ -325,7 +325,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                   }}
                   aria-label="Pick emoji badge"
                 >
-                  <span className="text-gray-400">
+                  <span className="text-gray-400 ml-4">
                     {selectedEmoji || <Stars size={16} className="h-9 ml-4" />}
                   </span>
                 </button>
@@ -374,7 +374,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                 }
                 maxLength={maxLength}
                 disabled={cooldown > 0 || isSubmitting}
-                className="flex-1 min-h-[36px] h-9 px-2.5 py-2 text-white placeholder-gray-500/50 focus:outline-none resize-none text-sm max-h-20 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent break-words"
+                className="flex-1 min-h-[36px] h-9 px-2.5 py-[0.4rem] overflow-y-hidden text-white placeholder-gray-500/50 focus:outline-none resize-none text-sm max-h-20 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent break-words"
                 rows={1}
               />
 
