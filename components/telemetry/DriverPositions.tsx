@@ -175,14 +175,11 @@ const DriverPositions = memo(function DriverPositions({
                     : {
                       opacity: 1,
                       background: `linear-gradient(-50deg, ${isAboutToBeEliminated
-                          ? "#6b040447"
-                          : isFavorite
-                            ? "#" + driver?.team_colour + "30"
-                            : "#0a0a0a"
-                        } ${driverHeadshot && !isAboutToBeEliminated ? "90%" : "100%"
-                        }, #${driver?.team_colour} 100%)`,
-
-
+                        ? "#6b040447"
+                        : isFavorite
+                          ? "#" + driver?.team_colour + "30"
+                          : "#0a0a0a"
+                        } ${driverHeadshot && !isAboutToBeEliminated ? "90%" : "100%"}, #${driver?.team_colour} 100%), #0a0a0a`,
                     };
 
                 return (
@@ -202,7 +199,6 @@ const DriverPositions = memo(function DriverPositions({
                           driver={driver}
                           isPlaying={isPlayingAudio}
                           driverHeadshot={driverHeadshot}
-                          translate={translate}
                         />
                       </div>
                     </td>

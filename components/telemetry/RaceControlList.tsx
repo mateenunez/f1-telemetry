@@ -3,6 +3,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { WidgetConfig } from "@/context/preferences";
 import { ProcessedDriver, ProcessedRaceControl } from "@/processors";
 import { toLocaleTime } from "@/utils/calendar";
+import { Copy } from "lucide-react";
 interface RaceControlListProps {
   raceControl: ProcessedRaceControl[] | undefined;
   driverInfos?: (ProcessedDriver | undefined)[];
@@ -18,6 +19,13 @@ export default function RaceControlList({
   favoriteDrivers,
   raceControlLog
 }: RaceControlListProps) {
+
+  const handleCopyMessage = async (text: ProcessedRaceControl) => {
+    const message: string = text.message;
+    if (!message) return;
+    await navigator.clipboard.writeText(message);
+
+  };
 
   const getMessageStyle = (msg: ProcessedRaceControl) => {
     if (!msg.racing_number || !driverInfos) return {};
@@ -53,11 +61,12 @@ export default function RaceControlList({
                     <div
                       key={`${msg.date}-${idx}`}
                       className="border-none flex flex-col w-full p-0"
+                      style={{ backgroundColor: messageStyle.backgroundColor }}
                     >
                       <div className="flex flex-row gap-2 rounded">
                         <div
                           className="relative w-full max-w-full my-2 font-geist font-medium text-gray-400 border-none items-start border-[2px] rounded border-gray-400 flex flex-col px-2 py-1"
-                          style={{ ...messageStyle }}
+
                         >
                           <div className="pr-2 w-full max-w-full">
                             <p className="text-xs text-offWhite leading-tight w-full max-w-full whitespace-normal break-words">
@@ -73,6 +82,11 @@ export default function RaceControlList({
                                 #{msg.racing_number}
                               </span>
                             )}
+                            <Copy
+                              width={15}
+                              className="cursor-pointer"
+                              onClick={() => handleCopyMessage(msg)}
+                            />
                           </div>
                         </div>
                       </div>

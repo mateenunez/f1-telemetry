@@ -9,7 +9,6 @@ interface DriverPositionInfoProps {
   driver: ProcessedDriver | undefined;
   isPlaying: number | undefined;
   driverHeadshot?: boolean;
-  translate?: boolean;
 }
 
 export default function DriverPositionInfo({
@@ -17,7 +16,6 @@ export default function DriverPositionInfo({
   driver,
   isPlaying,
   driverHeadshot,
-  translate,
 }: DriverPositionInfoProps) {
   let headshot = driverHeadshot || false;
 
@@ -61,8 +59,11 @@ export default function DriverPositionInfo({
       <div className="flex justify-evenly flex-row font-f1-regular pr-2">
         <div className="flex flex-col self-start">
           <div className="flex items-center gap-1">
+            <span className="text-xs text-offWhite font-inter">
+              {"#" + driver?.driver_number}
+            </span>
             <span className="text-xs text-white flex flex-row items-center font-f1-regular gap-2">
-              {driver?.name_acronym}{" "}
+              {driver?.name_acronym}
               <span
                 className={`text-xs self-center font-inter ${posDiff > 0
                   ? "text-f1Red"
@@ -71,6 +72,7 @@ export default function DriverPositionInfo({
                     : "text-white/75"
                   }`}
               >
+
                 {posDiff > 0 && `▼${posDiff}`}
                 {posDiff < 0 && `▲${Math.abs(posDiff)}`}
                 {posDiff === 0 && ""}

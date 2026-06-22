@@ -355,6 +355,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           driverInfos={telemetryData?.drivers}
                           raceControlLog={preferences.raceControlLog}
                           translate={preferences.translate}
+                          favoriteDrivers={preferences.favoriteDrivers}
                         />
                       </SortableWidget>
                     );
@@ -572,6 +573,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           driverInfos={telemetryData?.drivers}
                           raceControlLog={preferences.raceControlLog}
                           translate={preferences.translate}
+                          favoriteDrivers={preferences.favoriteDrivers}
                         />
                       </DraggableWidget>
                     );

@@ -106,8 +106,8 @@ export default function SessionAudios({
 
   const orderedCaptures = teamRadio
     ? [...teamRadio.captures].sort(
-        (a, b) => Date.parse(String(b.utc)) - Date.parse(String(a.utc)),
-      )
+      (a, b) => Date.parse(String(b.utc)) - Date.parse(String(a.utc)),
+    )
     : [];
 
   useEffect(() => {
@@ -157,22 +157,20 @@ export default function SessionAudios({
                 return (
                   <div
                     key={idx}
-                    className="border-none flex flex-col max-w-full p-0 rounded"
+                    className="flex flex-col max-w-full p-0 rounded"
                     style={{ ...messageStyle }}
                   >
-                    <div className="flex flex-row gap-2 rounded max-w-full px-1 ">
-                      <div className="w-[3rem]">
-                        <p
-                          className="text-md text-gray-400 h-[3rem] flex items-center font-f1-regular"
-                          style={{
-                            color: "#" + driver.team_color,
-                          }}
-                        >
-                          {driver.name_acronym}
-                        </p>
-                      </div>
+                    <div className="flex flex-row rounded max-w-full px-1 ">
+                      <p
+                        className="text-sm text-gray-400 h-[3rem] flex items-center font-f1-regular"
+                        style={{
+                          color: "#" + driver.team_color,
+                        }}
+                      >
+                        {driver.name_acronym}
+                      </p>
                       <div
-                        className="relative w-full max-w-full my-2 text-gray-400 border-none items-center border-[2px] rounded border-gray-400 flex justify-start overflow-hidden"
+                        className="relative w-full max-w-full mx-2 my-2 text-gray-400 border-none items-center border-[2px] rounded border-gray-400 flex justify-start overflow-hidden"
                         onPointerUp={(e) => {
                           e.stopPropagation();
                           e.preventDefault();
@@ -274,7 +272,7 @@ export default function SessionAudios({
                               ? `" ${capture.transcriptionEs} "`
                               : capture.transcription
                             : capture.transcription &&
-                              `" ${capture.transcription} "`}
+                            `" ${capture.transcription} "`}
                         </span>
                       </div>
                     )}

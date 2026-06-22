@@ -117,7 +117,7 @@ export default function TyresList({
             );
             return (
               <div
-                className="flex flex-row gap-2 py-4 w-full items-center justify-center mb-4"
+                className="flex flex-row gap-2 px-2 py-4 w-full items-center justify-center mb-4"
                 style={{
                   background: isFavorite
                     ? "#" + driver?.team_colour + "30"
@@ -127,38 +127,24 @@ export default function TyresList({
               >
                 <div className={`flex flex-row gap-2 items-center`}>
                   <div
-                    className={`flex flex-row gap-1 items-center min-w-[3rem]`}
+                    className={`flex flex-row gap-1 items-center min-w-[2rem]`}
                   >
-                    <Badge
-                      className="w-[2rem] text-sm items-center font-bold pr-[0px] font-inter"
-                      style={{
-                        backgroundColor: `transparent`,
-                      }}
+                    <p
+                      className="text-xs text-offWhite flex items-center font-f1-regular"
                     >
-                      {pos.position}
-                    </Badge>
-
-                    <div className="w-[2rem]">
-                      <p
-                        className="text-xs text-gray-400 flex items-center font-f1-regular"
-                        style={{
-                          color: "#" + driver?.team_colour,
-                        }}
-                      >
-                        {driver?.name_acronym}
-                      </p>
-                    </div>
+                      {driver?.name_acronym}
+                    </p>
                   </div>
                 </div>
-                <div className="w-full items-center mr-6">
+                <div className="w-full items-center mr-4">
                   <div
-                    className={`flex w-full h-1.5 bg-warmBlack rounded-full`}
+                    className={`flex w-full h-1.5 bg-transparent rounded-full`}
                   >
                     {stints &&
                       stints.map((stint, index) => {
                         const widthPercentage =
                           (stint.total_laps / totalLaps) * 100;
-                          if (widthPercentage < 1) return ;
+                        if (widthPercentage < 1) return;
                         const backgroundColor = getCompoundColor(
                           stint.compound,
                         );
@@ -172,19 +158,10 @@ export default function TyresList({
                         return (
                           <div
                             key={index}
-                            className="relative rounded-sm"
+                            className="relative rounded-none"
                             style={{
                               width: `${widthPercentage}%`,
                               backgroundColor,
-                              borderRight:
-                                index < stints.length - 1
-                                  ? `4px solid ${isFavorite ? "#" + driver?.team_colour : "#000"}`
-                                  : "none",
-                              borderLeft:
-                                index !== 0
-                                  ? `4px solid ${isFavorite ? "#" + driver?.team_colour : "#000"}`
-                                  : "none",
-                              borderRadius: "0px",
                             }}
                           >
                             <div
@@ -197,10 +174,10 @@ export default function TyresList({
                             >
                               <span
                                 className={`text-xs font-inter whitespace-nowrap ${isPersonalBestStint
-                                    ? isBestStint
-                                      ? "text-f1Purple"
-                                      : "text-f1Green"
-                                    : "text-white"
+                                  ? isBestStint
+                                    ? "text-f1Purple"
+                                    : "text-f1Green"
+                                  : "text-white"
                                   }`}
                               >
                                 {stint.lap_time}
