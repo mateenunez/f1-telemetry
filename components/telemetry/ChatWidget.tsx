@@ -15,6 +15,7 @@ interface ChatWidgetProps {
   deletePinMessage: (id: number) => void;
   onOpenAuth: () => void;
   userCount: number;
+  sessionFinalised?: boolean;
 }
 
 export const ChatWidget: React.FC<ChatWidgetProps> = ({
@@ -25,6 +26,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   onOpenAuth,
   deletePinMessage,
   userCount,
+  sessionFinalised,
 }) => {
   const DEFAULT_USERNAME_COLORS = [
     "#60a5fa",
@@ -236,7 +238,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
       {/* Messages Area */}
       <div className="flex justify-center w-full z-20 bg-warmBlack pointer-events-none">
         {/* User Count */}
-        {userCount >= 20 && (
+        {(userCount >= 20 && !sessionFinalised) && (
           <div className="text-center text-f1Blue gap-1 text-xs mb-1 flex items-center justify-center">
             <User size={15} className="text-f1Blue" />
             <span className="font-inter">{userCount}</span>

@@ -24,7 +24,7 @@ interface SessionAudiosProps {
   translate?: boolean;
 }
 
-const AUDIO_DOWNLOAD_URL = config.public + "download-mp3";
+const AUDIO_DOWNLOAD_URL = config.public.apiUrl + "download-mp3";
 
 export default function SessionAudios({
   teamRadio,

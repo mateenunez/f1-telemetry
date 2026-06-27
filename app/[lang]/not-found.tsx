@@ -35,7 +35,7 @@ export default async function NotFound() {
         <Link href={`/`}>
           <Button
             size="lg"
-            className="bg-transparent font-geist text-lg border-2 border-f1Yellow rounded-lg hover:bg-f1Yellow/90 text-gray-400 hover:text-warmBlack hover:border-warmBlack"
+            className="bg-transparent font-geist text-lg border-2 border-f1Yellow rounded-lg hover:bg-f1Yellow/90 text-offWhite hover:text-warmBlack hover:border-warmBlack"
           >
             Box!
           </Button>
