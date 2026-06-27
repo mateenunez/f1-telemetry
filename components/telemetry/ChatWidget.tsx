@@ -304,7 +304,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
       {/* Input Area */}
       <div className="px-2 pb-2 pt-1 bg-warmBlack">
         <form onSubmit={handleSubmit} className="flex flex-col gap-1">
-          <div className="flex items-stretch gap-1 border-2 border-gray-400 rounded-3xl">
+          <div className="flex items-stretch gap-1 bg-darkBlue/40 rounded-3xl">
             <div className="flex flex-row w-full items-center focus:outline-2 focus:ring-blue-500">
               <div className="relative flex items-center shrink-0">
                 <button
