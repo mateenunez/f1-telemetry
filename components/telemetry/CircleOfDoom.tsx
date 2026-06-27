@@ -51,7 +51,7 @@ export default function CircleOfDoom({
               cy={50}
               r={r}
               fill="transparent"
-              stroke="rgb(40, 40, 40)  "
+              stroke="rgba(22, 27, 34, 0.4)"
               strokeWidth={strokeWidth}
             />
             <text
