@@ -14,10 +14,6 @@ import {
   rad,
 } from "@/processors/map-processor";
 import { getSectorColor } from "@/hooks/use-raceControl";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-// @ts-ignore
-import "react-loading-skeleton/dist/skeleton.css";
-import { Card, CardContent } from "@/components/ui/card";
 
 // This is basically fearlessly copied from
 // https://github.com/tdjsnelling/monaco
@@ -44,6 +40,7 @@ type MapProps = {
   cornersPreferences?: boolean;
   sectorsPreferences?: boolean;
   favoriteDrivers?: ProcessedDriver[];
+  onReady?: () => void;
 };
 
 export default function Map({
@@ -57,6 +54,7 @@ export default function Map({
   cornersPreferences,
   sectorsPreferences,
   favoriteDrivers,
+  onReady,
 }: MapProps) {
   const [[minX, minY, widthX, widthY], setBounds] = useState<(null | number)[]>(
     [null, null, null, null]
@@ -85,11 +83,12 @@ export default function Map({
   useEffect(() => {
     (async () => {
       if (!circuitKey) return;
-      const mapJson = await fetchMap(circuitKey);
+      try {
+        const mapJson = await fetchMap(circuitKey);
 
-      if (!mapJson) return;
+        if (!mapJson) return;
 
-      const centerX = (Math.max(...mapJson.x) - Math.min(...mapJson.x)) / 2;
+        const centerX = (Math.max(...mapJson.x) - Math.min(...mapJson.x)) / 2;
       const centerY = (Math.max(...mapJson.y) - Math.min(...mapJson.y)) / 2;
 
       const fixedRotation = mapJson.rotation + ROTATION_FIX;
@@ -158,6 +157,9 @@ export default function Map({
         y: rotatedFinishLine.y,
         startAngle,
       });
+      } finally {
+        onReady?.();
+      }
     })();
   }, [circuitKey]);
 
@@ -197,17 +199,7 @@ export default function Map({
   }, [sectors, yellowSectors, sectorsCookie, redFlag, safetyCar]);
 
   if (!points || !minX || !minY || !widthX || !widthY) {
-    return (
-      <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
-        <Card className="lg:col-span-4 bg-warmBlack1 border-none flex flex-col mt-8">
-          <CardContent className="flex flex-col justify-center h-full">
-            <div className="overflow-hidden h-fit">
-              <Skeleton height={400} width="100%" />
-            </div>
-          </CardContent>
-        </Card>
-      </SkeletonTheme>
-    );
+    return null;
   }
 
   return (

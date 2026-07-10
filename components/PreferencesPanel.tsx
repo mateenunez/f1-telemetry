@@ -132,7 +132,6 @@ export default function PreferencesPanel({
       "circleOfDoom",
       "circleCarData",
       "tyresList",
-      "chat",
     ];
 
     widgetKeys.forEach((key) => {
@@ -218,10 +217,6 @@ export default function PreferencesPanel({
           description:
             "Mostrar el historial de compuestos de cada piloto, incluyendo promedios y mejores vueltas.",
         },
-        chat: {
-          title: "Chat",
-          description: "Mostrar el chat para enviar y ver mensajes en vivo.",
-        },
       }
       : {
         sectors: {
@@ -282,10 +277,6 @@ export default function PreferencesPanel({
           title: "Compounds Record",
           description:
             "Display each driver's tire compound history, including averages and best laps.",
-        },
-        chat: {
-          title: "Chat",
-          description: "Show the chat to send and view live messages.",
         },
       };
 

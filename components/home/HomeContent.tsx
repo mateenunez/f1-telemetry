@@ -21,7 +21,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
         f1t_url={config.public.assets.f1_white}
         maxScrollPosition={100}
       />
-      <div className="h-screen py-5 w-full bg-cover bg-center isolate">
+      <div className="min-h-screen py-5 w-full bg-cover bg-center isolate">
         <Image
           src={config.public.assets.f1telemetrybg_v1}
           alt="F1 Telemetry Background"
@@ -128,6 +128,14 @@ export default function HomeContent({ dict }: HomeContentProps) {
               />
             </div>
           )}
+          <a
+            href={dict.donate.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-geist text-sm text-gray-400 underline underline-offset-4 decoration-gray-600 transition-colors duration-300 hover:text-gray-300 hover:decoration-gray-400"
+          >
+            {dict.donate.button}
+          </a>
         </div>
       </div>
     </div>

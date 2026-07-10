@@ -4,11 +4,10 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import F1Calendar from "@/components/calendar/Calendar";
 import type { TelemetryData } from "@/telemetry-manager";
 import { useEffect, useState } from "react";
+import { User } from "lucide-react";
 import {
-  ensureUtc,
   formatTime,
   getCountryCode,
-  parseTimeOffset,
   sessionType,
   translateSessionName,
   translateSessionStatus,
@@ -26,61 +25,38 @@ interface HeaderProps {
 export default function Header({ telemetryData, dict }: HeaderProps) {
   const session = telemetryData?.session;
   const weather = telemetryData?.weather;
+  const userCount = telemetryData?.userCount ?? 0;
   const [sessionTime, setSessionTime] = useState<number>();
 
   const { preferences } = usePreferences();
 
   useEffect(() => {
-    if (!session?.date_end) return;
-
-    const offset = parseTimeOffset(session.gmt_offset);
-    const endTime = new Date(ensureUtc(session.date_end)).getTime() - offset;
-
+    if (!session?.remaining) return;
     if (session.session_status === "Finalised") return;
 
+    const [hours, minutes, seconds] = session.remaining.split(":").map(Number);
+    const remainingAtAnchor = (hours * 3600 + minutes * 60 + seconds) * 1000;
+    // Anchor to the moment we received this update rather than the server's
+    // embedded Utc: during replay (fast-forward) that timestamp is the
+    // original historical recording time, not "now", which would make the
+    // elapsed-time math wildly wrong the instant Extrapolating turns true.
+    const anchorTime = Date.now();
+
     const update = () => {
-      const now = new Date().getTime();
-
-      // Qualy
-      if (session.series && session.series.length > 0 && session.session_type === "Qualifying") {
-        const activePart = session.series.slice(-1)[0];
-        if (activePart && activePart.QualifyingPart) {
-          const partNumber = activePart.QualifyingPart;
-          let durationMinutes: number;
-          switch (partNumber) {
-            case 1: // Q1
-              durationMinutes = 18;
-              break;
-            case 2: // Q2
-              durationMinutes = 15;
-              break;
-            case 3: // Q3
-              durationMinutes = 12;
-              break;
-            default:
-              durationMinutes = 60;
-              return;
-          }
-
-          const partStartTime =
-            new Date(ensureUtc(activePart.Utc)).getTime() - offset;
-          const partEndTime = partStartTime + durationMinutes * 60 * 1000;
-          const remaining = Math.max(0, partEndTime - now);
-          setSessionTime(remaining);
-        } else {
-          setSessionTime(0);
-        }
-      } else {
-        // Race
-        const remaining = Math.max(0, endTime - now);
-        setSessionTime(remaining);
+      if (!session.extrapolating) {
+        setSessionTime(remainingAtAnchor);
+        return;
       }
+      const elapsed = Date.now() - anchorTime;
+      setSessionTime(Math.max(0, remainingAtAnchor - elapsed));
     };
 
     update();
+    if (!session.extrapolating) return;
+
     const id = setInterval(update, 1000);
     return () => clearInterval(id);
-  }, [session?.session_status, telemetryData?.lastUpdateTime]);
+  }, [session?.remaining, session?.extrapolating, session?.session_status]);
 
   return (
     <Card className="bg-warmBlack1 text-white border-b-2 border-t-0 border-l-0 border-r-0 rounded-none border-gray-600 relative">
@@ -148,11 +124,19 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
               </div>
             </div>
           </div>
-          <div className="flex items-center text-nowrap flex-col md:flex-row text-xs md:text-sm font-orbitron">
+          <div className="flex items-center text-nowrap flex-col md:flex-row gap-3 text-xs md:text-sm font-orbitron">
             {session?.session_status === "Finalised" ? (
               <F1Calendar dict={dict} />
             ) : (
-              weather && <Weather weather={weather} dict={dict} />
+              <>
+                {userCount >= 20 && (
+                  <div className="flex items-center gap-1 text-xs text-f1Blue">
+                    <User size={15} />
+                    <span className="font-inter">{userCount}</span>
+                  </div>
+                )}
+                {weather && <Weather weather={weather} dict={dict} />}
+              </>
             )}
           </div>
         </div>

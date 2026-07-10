@@ -31,10 +31,10 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import DraggableWidget from "@/components/telemetry/DraggableWidget";
 import SortableWidget from "@/components/telemetry/SortableWidget";
 import TyresList from "./TyresList";
-import { useChat } from "@/hooks/use-chat";
-import { ChatWidget } from "./ChatWidget";
-import AuthForm from "@/components/telemetry/AuthForm";
+
 import { Button } from "../ui/button";
+import { useAuth } from "@/hooks/use-auth";
+
 
 interface TelemetryContentProps {
   dict: any;
@@ -61,12 +61,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   const { preferences, isEditMode, widgets, updateWidget, updateWidgets } =
     usePreferences();
   const isMobile = useIsMobile();
-  const [authFormOpen, setAuthFormOpen] = useState(false);
-  const { messages, pinnedMessages, sendMessage, deletePinMessage } = useChat(
-    telemetryData?.chatMessages,
-    telemetryData?.pinnedMessages,
-    dict,
-  );
+  const { isAuthenticated } = useAuth();
+
   const GRID_SIZE = 20;
   const minPositionY = 400;
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -257,12 +253,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
       <div className="max-w-8xl mx-auto space-y-4 h-full">
         <Header telemetryData={telemetryData} dict={dict} />
 
-        <AuthForm
-          isOpen={authFormOpen}
-          onClose={() => setAuthFormOpen(false)}
-          dict={dict}
-        />
-
         {isMobile ? (
           <DndContext onDragEnd={handleMobileDragEnd} sensors={sensors}>
             <SortableContext items={visibleWidgets.map((w) => w.id)}>
@@ -319,6 +309,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           cornersPreferences={preferences.corners}
                           sectorsPreferences={preferences.sectors}
                           favoriteDrivers={preferences.favoriteDrivers}
+                          isAuthenticated={isAuthenticated}
+                          dict={dict}
                         />
                       </SortableWidget>
                     );
@@ -438,31 +430,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                     );
                   }
 
-                  // 8) Chat Widget
-                  if (w.id === "chat" && w.enabled) {
-                    return (
-                      <SortableWidget
-                        key={w.id}
-                        id={w.id}
-                        className="col-span-12 lg:col-span-4"
-                      >
-                        <ChatWidget
-                          language={preferences.translate ? "es" : "en"}
-                          messages={messages}
-                          pinnedMessages={pinnedMessages}
-                          dict={dict}
-                          sendMessage={sendMessage}
-                          deletePinMessage={deletePinMessage}
-                          onOpenAuth={() => setAuthFormOpen(true)}
-                          userCount={telemetryData?.userCount || 0}
-                          sessionFinalised={
-                            session?.session_status === "Finalised" || false
-                          }
-                        />
-                      </SortableWidget>
-                    );
-                  }
-
                   return null;
                 })}
               </div>
@@ -543,6 +510,8 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           cornersPreferences={preferences.corners}
                           sectorsPreferences={preferences.sectors}
                           favoriteDrivers={preferences.favoriteDrivers}
+                          isAuthenticated={isAuthenticated}
+                          dict={dict}
                         />
                       </DraggableWidget>
                     );
@@ -664,32 +633,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           sessionType={session?.session_type}
                           translate={preferences.translate}
                           favoriteDrivers={preferences.favoriteDrivers}
-                        />
-                      </DraggableWidget>
-                    );
-                  }
-
-                  if (w.id === "chat" && w.enabled) {
-                    return (
-                      <DraggableWidget
-                        key={w.id}
-                        widget={widget}
-                        isEditMode={isEditMode}
-                        updateWidget={updateWidget}
-                        translate={preferences.translate}
-                      >
-                        <ChatWidget
-                          messages={messages}
-                          pinnedMessages={pinnedMessages}
-                          language={preferences.translate ? "es" : "en"}
-                          dict={dict}
-                          sendMessage={sendMessage}
-                          deletePinMessage={deletePinMessage}
-                          onOpenAuth={() => setAuthFormOpen(true)}
-                          userCount={telemetryData?.userCount || 0}
-                          sessionFinalised={
-                            session?.session_status === "Finalised" || false
-                          }
                         />
                       </DraggableWidget>
                     );

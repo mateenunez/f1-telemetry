@@ -11,14 +11,13 @@ export interface Role {
 export interface VerifiyTokenResponse {
   success: boolean;
   user: User;
+  token?: string;
 }
 
 export interface User {
   id: number;
   username: string;
   role: Role;
-  chat_color: string;
-  chat_badge?: string;
   email: string;
   created_at: string;
 }
@@ -26,6 +25,29 @@ export interface User {
 export interface AuthResponse {
   user: User;
   token: string;
+}
+
+/**
+ * Reads the `exp` claim (seconds since epoch) out of a JWT without
+ * verifying its signature — used client-side only to know when to
+ * proactively log the user out; the server always re-validates the
+ * signature on every request.
+ */
+export function getTokenExpiryMs(token: string): number | null {
+  try {
+    const payload = token.split(".")[1];
+    if (!payload) return null;
+    const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const json = JSON.parse(atob(base64));
+    return typeof json.exp === "number" ? json.exp * 1000 : null;
+  } catch {
+    return null;
+  }
+}
+
+export function isTokenExpired(token: string): boolean {
+  const expiryMs = getTokenExpiryMs(token);
+  return expiryMs !== null && expiryMs <= Date.now();
 }
 
 export const userEndpoints = {

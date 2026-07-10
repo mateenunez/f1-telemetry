@@ -1,6 +1,5 @@
 import { useAuth } from "@/hooks/use-auth";
 import { decode as cborDecode, encode as cborEncode } from "cbor2";
-import { PinnedChatMessage } from "@/processors";
 
 export interface SignalRMessage {
   H: string;
@@ -36,7 +35,6 @@ export interface WebSocketData {
   H?: string;
   A?: [string, any, string];
   wsu?: number;
-  PinnedMessages?: PinnedChatMessage[];
 }
 
 export class WebSocketManager {
@@ -55,6 +53,19 @@ export class WebSocketManager {
       encoded.byteOffset,
       encoded.byteLength,
     );
+  }
+
+  /**
+   * Appends the auth token to the connection URL so the API can authenticate
+   * the socket during the WebSocket handshake itself (negotiation time),
+   * instead of only via a post-connect message. This avoids a race where the
+   * server's initial state snapshot is sent before the auth message would
+   * have arrived.
+   */
+  private buildConnectionUrl(): string {
+    if (!this.token) return this.url;
+    const separator = this.url.includes("?") ? "&" : "?";
+    return `${this.url}${separator}token=${encodeURIComponent(this.token)}`;
   }
 
   private decodeWebSocketMessage(rawData: unknown): any {
@@ -86,7 +97,7 @@ export class WebSocketManager {
 
   private attemptConnection() {
     try {
-      this.ws = new WebSocket(this.url);
+      this.ws = new WebSocket(this.buildConnectionUrl());
       this.ws.binaryType = "arraybuffer";
 
       this.ws.onopen = () => {
@@ -97,12 +108,6 @@ export class WebSocketManager {
         const stateRequest = { type: "get:state" };
         this.ws!.send(
           this.encodeWebSocketMessage(stateRequest) as any,
-        );
-
-        // Request pinned messages
-        const pinnedRequest = { type: "get:pinned" };
-        this.ws!.send(
-          this.encodeWebSocketMessage(pinnedRequest) as any,
         );
 
         if (this.token) {
@@ -139,6 +144,12 @@ export class WebSocketManager {
 
     if (data.type === "auth:success" || data.success) {
       console.log("Authentication successful");
+      // The initial `get:state` (sent at onopen, before auth resolved) was
+      // filtered down to unauthenticated data, so positions/translations are
+      // missing from it. Re-request state now that the socket is
+      // authenticated to get the full, unfiltered snapshot without forcing a
+      // page reload.
+      this.requestState();
       this.onAuthSuccess?.();
       return;
     }
@@ -156,6 +167,13 @@ export class WebSocketManager {
         payload: { token },
       };
       this.ws.send(this.encodeWebSocketMessage(authMessage) as any);
+    }
+  }
+
+  private requestState() {
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      const stateRequest = { type: "get:state" };
+      this.ws.send(this.encodeWebSocketMessage(stateRequest) as any);
     }
   }
 

@@ -274,6 +274,19 @@ export function HelpContent({ dict }: HelpContentProps) {
             </div>
           </div>
 
+          {/* Transcriptions and Translations */}
+          <div className="flex flex-col gap-2 py-4">
+            <h1 className="text-2xl font-orbitron">
+              {dict.help.transcriptions.title}
+            </h1>
+            <p className="text-gray-400 font-geist">
+              {dict.help.transcriptions.description}
+            </p>
+            <p className="text-gray-400 font-geist underline">
+              {dict.help.transcriptions.auth_required}
+            </p>
+          </div>
+
           {/* Compound history */}
         </div>
       </div>

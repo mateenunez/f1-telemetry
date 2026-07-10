@@ -1,9 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Map from "./Map";
 import RaceControl from "@/components/telemetry/RaceControl";
+import AuthForm from "@/components/telemetry/AuthForm";
 import { Orbitron } from "next/font/google";
-import { memo } from "react";
-import { getTrackStatusColor, getTrackStatusLabel, isTrackStatusVisible } from "@/utils/telemetry";
+import { memo, useEffect, useState } from "react";
+import { X } from "lucide-react";
+import {
+  getTrackStatusColor,
+  getTrackStatusLabel,
+  isTrackStatusVisible,
+} from "@/utils/telemetry";
 import { TRACK_STATUS_KEYS } from "@/utils/telemetry";
 import { TelemetryData } from "@/telemetry-manager";
 import { ProcessedDriver } from "@/processors";
@@ -18,6 +24,8 @@ interface MapAndMessagesProps {
   cornersPreferences?: boolean;
   sectorsPreferences?: boolean;
   favoriteDrivers?: ProcessedDriver[];
+  isAuthenticated?: boolean;
+  dict?: any;
 }
 
 const MapAndMessages = memo(function MapAndMessages({
@@ -28,15 +36,35 @@ const MapAndMessages = memo(function MapAndMessages({
   cornersPreferences,
   sectorsPreferences,
   favoriteDrivers,
+  isAuthenticated = false,
+  dict,
 }: MapAndMessagesProps) {
-  const isRace = String(session?.session_type ?? "").toLowerCase().includes("race");
+  const [showAuthWarning, setShowAuthWarning] = useState(true);
+  const [authFormOpen, setAuthFormOpen] = useState(false);
+  const [mapReady, setMapReady] = useState(false);
+  
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setShowAuthWarning(true);
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    setMapReady(false);
+  }, [telemetryData?.session?.circuit_key]);
+
+  const isRace = String(session?.session_type ?? "")
+    .toLowerCase()
+    .includes("race");
   const trackStatusLabel =
     session?.track_status && isTrackStatusVisible(session.track_status)
       ? translate
         ? getTrackStatusLabel(session.track_status, true)
         : getTrackStatusLabel(session.track_status, false)
       : "";
-  if (!telemetryData) return;
+
+  if (!telemetryData) return null;
 
   return (
     <Card className="lg:col-span-5 bg-warmBlack flex flex-col border-none">
@@ -80,8 +108,8 @@ const MapAndMessages = memo(function MapAndMessages({
       <CardContent className="flex flex-col justify-center h-full p-0">
         {telemetryData && telemetryData.session?.circuit_key && (
           <Map
-            positions={telemetryData.positionData}
-            drivers={telemetryData.drivers}
+            positions={isAuthenticated ? telemetryData.positionData : []}
+            drivers={isAuthenticated ? telemetryData.drivers : ([] as any)}
             timing={telemetryData.timing}
             circuitKey={telemetryData.session.circuit_key}
             yellowSectors={yellowSectors}
@@ -93,9 +121,45 @@ const MapAndMessages = memo(function MapAndMessages({
             cornersPreferences={cornersPreferences}
             sectorsPreferences={sectorsPreferences}
             favoriteDrivers={favoriteDrivers}
+            onReady={() => setMapReady(true)}
           />
         )}
+        {mapReady && !isAuthenticated && showAuthWarning && (
+          <div className="relative w-full bg-f1Red/20 text-white font-geist text-center py-2 px-8 text-sm z-10">
+            <button
+              type="button"
+              aria-label="Dismiss login warning"
+              onClick={() => setShowAuthWarning(false)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-white hover:text-gray-200"
+            >
+              <X size={16} />
+            </button>
+            <div className="flex flex-col items-center justify-center gap-2">
+              <span>
+                {translate
+                  ? "Iniciá sesión para ver la posición de los pilotos y traducciones."
+                  : "Login to view pilot positions and transcriptions."}
+              </span>{" "}
+              <button
+                type="button"
+                onClick={() => setAuthFormOpen(true)}
+                className="py-2 px-4 text-sm rounded-md bg-offWhite/20 text-white font-geist font-medium transition-all duration-300 hover:bg-offWhite/25 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-f1Blue"
+                style={{
+                  boxShadow:
+                    "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
+                }}
+              >
+                {translate ? "Iniciar sesión" : "Log in"}
+              </button>
+            </div>
+          </div>
+        )}
       </CardContent>
+      <AuthForm
+        isOpen={authFormOpen}
+        onClose={() => setAuthFormOpen(false)}
+        dict={dict}
+      />
     </Card>
   );
 });

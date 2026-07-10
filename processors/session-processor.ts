@@ -64,8 +64,16 @@ export class SessionProcessor {
 
     if (Array.isArray(sessionData.Series)) {
       series = sessionData.Series;
-    } else {
-      series.push(sessionData.Series)
+    } else if (sessionData.Series && typeof sessionData.Series === "object") {
+      // F1's live-timing feed sends incremental Series updates (e.g. when Q2/Q3
+      // start) as an object keyed by array index instead of a full array.
+      series = [...series];
+      Object.entries(sessionData.Series).forEach(([indexStr, value]) => {
+        const index = Number.parseInt(indexStr, 10);
+        if (!Number.isNaN(index)) {
+          series[index] = { ...series[index], ...(value as QualifyingParts) };
+        }
+      });
     }
 
     const processed: ProcessedSession = {

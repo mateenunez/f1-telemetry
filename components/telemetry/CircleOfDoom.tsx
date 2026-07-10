@@ -26,7 +26,7 @@ export default function CircleOfDoom({
 }: CircleOfDoomProps) {
   const isRace = String(sessionType ?? "").toLowerCase().includes("race");
   const noRaceMessage = translate
-    ? "Circle of Doom disponible solo en carreras."
+    ? "Circle of Doom solo disponible en carreras."
     : "Circle of Doom is available on a Race.";
 
   const ANGLE_OFFSET = 90;
@@ -239,7 +239,7 @@ export default function CircleOfDoom({
             cy={50}
             r={50 - strokeWidth / 2}
             fill={"transparent"}
-            stroke={"rgb(40, 40, 40)  "}
+            stroke={"rgba(22, 27, 34, 0.4)"}
             strokeWidth={strokeWidth}
           />
 

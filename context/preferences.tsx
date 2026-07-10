@@ -19,8 +19,7 @@ export type WidgetId =
   | "race-control-list"
   | "circle-of-doom"
   | "circle-car-data"
-  | "tyres-list"
-  | "chat";
+  | "tyres-list";
 
 export const SQUARE_WIDGET_IDS: WidgetId[] = [
   "circle-of-doom",
@@ -78,7 +77,6 @@ export interface Preferences {
   driverPositions: WidgetConfig;
   mapAndMessages: WidgetConfig;
   tyresList: WidgetConfig;
-  chat: WidgetConfig;
   favoriteDrivers: ProcessedDriver[];
   delay: number;
   translate: boolean;
@@ -113,16 +111,6 @@ export const DEFAULT_CONFIG: Preferences = {
     height: 500,
     index: 1,
   },
-  chat: {
-    enabled: true,
-    xPct: 1015 / 1526,
-    yPct: 590 / 1094,
-    widthPct: 500 / 1526,
-    heightPct: 430 / 1094,
-    width: 600,
-    height: 430,
-    index: 2,
-  },
   audioLog: {
     enabled: true,
     xPct: 0,
@@ -145,22 +133,22 @@ export const DEFAULT_CONFIG: Preferences = {
   },
   circleOfDoom: {
     enabled: true,
-    xPct: 990 / 1526,
-    yPct: 1194 / 1094,
-    widthPct: 300 / 1526,
-    heightPct: 300 / 1094,
-    width: 300,
-    height: 300,
+    xPct: 950 / 1526,
+    yPct: 1170 / 1094,
+    widthPct: 400 / 1526,
+    heightPct: 400 / 1094,
+    width: 400,
+    height: 400,
     index: 5,
   },
   circleCarData: {
     enabled: true,
     xPct: 1235 / 1526,
-    yPct: 1194 / 1094,
-    widthPct: 300 / 1526,
-    heightPct: 300 / 1094,
-    width: 300,
-    height: 300,
+    yPct: 1170 / 1094,
+    widthPct: 400 / 1526,
+    heightPct: 400 / 1094,
+    width: 400,
+    height: 400,
     index: 6,
   },
   tyresList: {
@@ -243,7 +231,6 @@ function isPreferences(obj: any): obj is Preferences {
         "driverPositions",
         "mapAndMessages",
         "tyresList",
-        "chat",
       ].includes(key)
     ) {
       const widgetConfig = obj[key];
@@ -351,7 +338,6 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children, dict })
         { ...toAbs(prefs.circleOfDoom, "circle-of-doom") },
         { ...toAbs(prefs.circleCarData, "circle-car-data") },
         { ...toAbs(prefs.tyresList, "tyres-list") },
-        { ...toAbs(prefs.chat, "chat") },
       ];
       return list.sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
     },
@@ -417,7 +403,6 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children, dict })
       "circle-of-doom": "circleOfDoom",
       "circle-car-data": "circleCarData",
       "tyres-list": "tyresList",
-      chat: "chat",
     };
     return map[id] ?? null;
   }

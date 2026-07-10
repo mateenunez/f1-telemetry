@@ -1,6 +1,6 @@
 "use client";
-import React, { createContext, useState, useCallback, useEffect } from "react";
-import { User, userEndpoints } from "../utils/user";
+import React, { createContext, useState, useCallback, useEffect, useRef } from "react";
+import { User, userEndpoints, getTokenExpiryMs, isTokenExpired } from "../utils/user";
 import Cookies from "js-cookie";
 import { getTelemetryManager } from "@/telemetry-manager-singleton";
 
@@ -33,6 +33,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [error, setError] = useState<string | null>(null);
   const telemetryManager = getTelemetryManager();
   const tokenName = "f1t_auth";
+  const expiryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearExpiryTimer = () => {
+    if (expiryTimerRef.current) {
+      clearTimeout(expiryTimerRef.current);
+      expiryTimerRef.current = null;
+    }
+  };
+
+  // Schedules an automatic logout for the moment the token's own `exp`
+  // claim elapses, so a tab left open past the 7-day session length gets
+  // logged out without needing a page reload to notice the expiry.
+  const scheduleExpiryLogout = (tokenToSchedule: string) => {
+    clearExpiryTimer();
+    const expiryMs = getTokenExpiryMs(tokenToSchedule);
+    if (expiryMs === null) return;
+
+    const remainingMs = expiryMs - Date.now();
+    if (remainingMs <= 0) {
+      handleAuthError();
+      return;
+    }
+    expiryTimerRef.current = setTimeout(() => {
+      handleAuthError();
+    }, remainingMs);
+  };
 
   const verifyToken = useCallback(async (tokenToVerify: string) => {
     setIsLoading(true);
@@ -40,7 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const userData = await userEndpoints.verifyToken(tokenToVerify);
       if (userData.success) {
-        handleAuthSuccess(userData.user, tokenToVerify);
+        handleAuthSuccess(userData.user, userData.token || tokenToVerify);
       }
     } catch (err) {
      handleAuthError();
@@ -50,6 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const handleAuthError = () => {
+    clearExpiryTimer();
     setUser(null);
     setToken(null);
     Cookies.remove(tokenName);
@@ -63,14 +90,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     Cookies.set(tokenName, newToken, { expires: 7 });
     localStorage.setItem(tokenName, newToken);
     telemetryManager.updateToken(newToken);
+    scheduleExpiryLogout(newToken);
   };
 
   useEffect(() => {
     const storedToken = Cookies.get(tokenName);
-    if (storedToken) {
-      verifyToken(storedToken);
+    if (!storedToken) return;
+
+    if (isTokenExpired(storedToken)) {
+      handleAuthError();
+      return;
     }
+
+    verifyToken(storedToken);
   }, [verifyToken, tokenName]);
+
+  useEffect(() => clearExpiryTimer, []);
 
   const login = useCallback(
     async (email: string, password: string) => {

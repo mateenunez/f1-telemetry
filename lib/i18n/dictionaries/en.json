@@ -10,7 +10,6 @@
     "audioDesc": "Listen instantly to each driver’s team radio during the race—we also use AI for translation and transcription!",
     "circlesTitle": "Real-Time Analysis",
     "circlesDesc": "We keep adding features to boost race analysis, such as the Circle of Doom, perfect for undercut decisions.",
-    "version": "Version 1.6.0 has a new chat feature, you can now send and view live messages!",
     "announce": "We are still working on migrating to a new server, this website may not work properly until then. See you in march!"
   },
   "feedback": {
@@ -18,6 +17,10 @@
     "button": "Fill survey",
     "hideButton": "Hide survey",
     "url": "https://docs.google.com/forms/d/e/1FAIpQLScs9cIGiZamLcDUkDPEqoMeufFAX9ITOvrncGG0WltD8XMs4g/viewform"
+  },
+  "donate": {
+    "button": "Enjoying F1 Telemetry? Support via PayPal",
+    "url": "https://paypal.me/Mateenunez"
   },
   "footer": {
     "legal": "This website is not associated, affiliated, authorized, endorsed, or officially connected in any way with Formula 1, the FIA, or any of its subsidiaries or affiliates.",
@@ -95,6 +98,11 @@
     "car_data": {
       "title": "Circle of Car Data",
       "description": "Displays real-time car data in a circular format: current speed, throttle, brake, gear, and RPM."
+    },
+    "transcriptions": {
+      "title": "Transcriptions and Translations",
+      "description": "F1 Telemetry translates race control messages to Spanish (for now) and transcribes team radio audios.",
+      "auth_required": "Transcriptions and translations require a logged in user account."
     }
   },
   "map": {

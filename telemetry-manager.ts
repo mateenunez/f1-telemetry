@@ -22,9 +22,6 @@ import {
   type ProcessedTimingStats,
   TeamRadioProcessor,
   ProcessedTeamRadio,
-  ChatProcessor,
-  ProcessedChatMessage,
-  PinnedChatMessage,
 } from "@/processors";
 import {
   WebSocketManager,
@@ -47,8 +44,6 @@ export interface TelemetryData {
   driversWithDRS: number[];
   timingStats: ProcessedTimingStats[];
   teamRadio: ProcessedTeamRadio;
-  chatMessages: ProcessedChatMessage[];
-  pinnedMessages: PinnedChatMessage[];
   userCount: number;
   lastUpdateTime: Date;
 }
@@ -66,7 +61,7 @@ export class TelemetryManager {
   private positionDataProcessor: PositionDataProcessor;
   private timingStatsProcessor: TimingStatsProcessor;
   private teamRadioProcessor: TeamRadioProcessor;
-  private chatProcessor: ChatProcessor;
+  private userCount: number = 0;
 
   private onDataUpdateCallback: ((data: TelemetryData) => void) | null = null;
 
@@ -83,7 +78,6 @@ export class TelemetryManager {
     this.positionDataProcessor = new PositionDataProcessor();
     this.timingStatsProcessor = new TimingStatsProcessor();
     this.teamRadioProcessor = new TeamRadioProcessor();
-    this.chatProcessor = new ChatProcessor();
   }
 
   connect(
@@ -115,11 +109,7 @@ export class TelemetryManager {
   private processWebSocketData(data: WebSocketData) {
     // Handle wsu (WebSocket Users) if present
     if (typeof data.wsu === "number") {
-      this.chatProcessor.setUserCount(data.wsu);
-    }
-
-    if (typeof data.PinnedMessages === "object"){
-      this.chatProcessor.processPinnedMessages(data.PinnedMessages);
+      this.userCount = data.wsu;
     }
 
     if (Array.isArray(data.M)) {
@@ -238,14 +228,6 @@ export class TelemetryManager {
         this.teamRadioProcessor.processTeamRadio(messageData);
         break;
 
-      case "ChatMessageEn":
-        this.chatProcessor.processMessage(messageData, "en");
-        break;
-
-      case "ChatMessageEs":
-        this.chatProcessor.processMessage(messageData, "es");
-        break;
-
       default:
         break;
     }
@@ -269,9 +251,7 @@ export class TelemetryManager {
       driversWithDRS: this.carDataProcessor.getDriversWithDRS(),
       timingStats: this.timingStatsProcessor.getAllStats(),
       teamRadio: this.teamRadioProcessor.getTeamRadio(),
-      chatMessages: this.chatProcessor.getAllMessages(),
-      pinnedMessages: this.chatProcessor.getPinnedMessages(),
-      userCount: this.chatProcessor.getUserCount(),
+      userCount: this.userCount,
       lastUpdateTime: new Date(),
     };
 
@@ -317,14 +297,6 @@ export class TelemetryManager {
     driverNumber: number,
   ): ProcessedPositionData | undefined {
     return this.positionDataProcessor.getDriverPosition(driverNumber);
-  }
-
-  getMessages(): ProcessedChatMessage[] {
-    return this.chatProcessor.getAllMessages();
-  }
-
-  sendMessage(messageType: string, payload: any): void {
-    this.wsManager.sendMessage(messageType, payload);
   }
 
   getTeamRadioCaptures(): ProcessedTeamRadio | undefined {

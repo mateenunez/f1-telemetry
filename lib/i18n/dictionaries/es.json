@@ -10,7 +10,6 @@
     "audioDesc": "Podés escuchar al instante el mensaje de radio de equipo de cada piloto durante la carrera, y además ¡usamos IA para la traducción y transcripción!",
     "circlesTitle": "Análisis en tiempo real",
     "circlesDesc": "Estamos añadiendo constantemente funcionalidades para mejorar el análisis de carreras, como el Circle of Doom que sirve para tomar decisiones de undercut.",
-    "version": "La version 1.6.0 trae un chat en vivo para todos los usuarios!",
     "announce": "Seguimos trabajando en migrar a un nuevo servidor, la telemetría puede no funcionar correctamente hasta que finalice el proceso. ¡Te esperamos en marzo!"
   },
   "feedback": {
@@ -18,6 +17,10 @@
     "button": "Rellenar encuesta",
     "hideButton": "Ocultar encuesta",
     "url": "https://docs.google.com/forms/d/e/1FAIpQLSfN_x5J8-zpuoKh8pU8fe35n-eWbgkwNiYvkNOR9_e64Ejf3Q/viewform"
+  },
+  "donate": {
+    "button": "¿Te gusta F1 Telemetry? Invitame un café en Cafecito",
+    "url": "https://cafecito.app/skoncito"
   },
   "footer": {
     "legal": "Este sitio web no está asociado, afiliado, autorizado, respaldado ni conectado oficialmente de ninguna manera con la Fórmula 1, la FIA o cualquiera de sus subsidiarias o afiliadas.",
@@ -95,6 +98,11 @@
     "car_data": {
       "title": "Círculo de Datos del Coche",
       "description": "Muestra los datos del coche en formato circular: velocidad actual, acelerador, freno, marcha y RPM."
+    },
+    "transcriptions": {
+      "title": "Transcripciones y Traducciones",
+      "description": "F1 Telemetry traduce los mensajes de control de carrera al español (por ahora) y transcribe los audios de radio de equipos.",
+      "auth_required": "Las transcripciones y traducciones requieren una cuenta de usuario logueada."
     }
   },
   "map": {
