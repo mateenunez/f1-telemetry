@@ -24,7 +24,8 @@
   },
   "footer": {
     "legal": "Este sitio web no está asociado, afiliado, autorizado, respaldado ni conectado oficialmente de ninguna manera con la Fórmula 1, la FIA o cualquiera de sus subsidiarias o afiliadas.",
-    "help": "Más información sobre widgets."
+    "help": "Más información sobre widgets.",
+    "changelog": "Novedades"
   },
   "schedule": {
     "homeButton": "Inicio",
@@ -108,6 +109,21 @@
   "map": {
     "title": "Mapa en vivo",
     "description": "Mapa del circuito en vivo de Formula 1 por F1 Telemetry."
+  },
+  "changelog": {
+    "title": "Novedades",
+    "description": "El historial de novedades de F1 Telemetry, tanto del dashboard como del servicio de datos en vivo.",
+    "types": {
+      "added": "Nuevo",
+      "changed": "Cambios",
+      "fixed": "Arreglos",
+      "removed": "Eliminado"
+    },
+    "scopes": {
+      "frontend": "Dashboard",
+      "backend": "Servicio de datos en vivo",
+      "both": "Dashboard y servicio de datos en vivo"
+    }
   },
   "sessionTypes": {
     "practice1": "Práctica 1",

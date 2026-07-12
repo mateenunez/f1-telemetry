@@ -280,6 +280,88 @@ export default function PreferencesPanel({
         },
       };
 
+  const handleWidgetToggle = (key: keyof Preferences, enabled: boolean) => {
+    const currentValue = preferences[key];
+    if (
+      typeof currentValue === "object" &&
+      currentValue !== null &&
+      "enabled" in currentValue &&
+      ("x" in currentValue || "xPct" in currentValue) &&
+      ("y" in currentValue || "yPct" in currentValue) &&
+      ("width" in currentValue || "widthPct" in currentValue) &&
+      ("height" in currentValue || "heightPct" in currentValue)
+    ) {
+      setPreference(key, {
+        ...currentValue,
+        enabled,
+      } as Preferences[keyof Preferences]);
+    } else {
+      setPreference(key, enabled as Preferences[keyof Preferences]);
+    }
+  };
+
+  const renderPreferenceToggle = (key: keyof Preferences) => {
+    const details = preferenceDetails[key as string];
+    if (!details) return null;
+
+    const value = preferences[key];
+    const isWidgetConfig =
+      typeof value === "object" &&
+      value !== null &&
+      "enabled" in value &&
+      ("x" in value || "xPct" in value);
+
+    const checked = isWidgetConfig
+      ? (value as WidgetConfig).enabled
+      : (value as boolean);
+
+    return (
+      <div key={key} className="flex items-center justify-between">
+        <div className="flex flex-col px-2 py-2">
+          <span className="text-xs font-geist font-medium text-offWhite">
+            {details.title}
+          </span>
+          <span className="text-xs text-gray-400 font-geist font-medium">
+            {details.description}
+          </span>
+        </div>
+        <label className="relative inline-flex items-start cursor-pointer">
+          <input
+            type="checkbox"
+            className="sr-only peer"
+            checked={checked}
+            onChange={(e) => handleWidgetToggle(key, e.target.checked)}
+          />
+          <div className="w-10 h-5 bg-gray-800 rounded-full peer-checked:bg-f1Blue/80 transition-colors peer-checked:shadow-f1Blue-md"></div>
+          <div className="absolute left-1 top-1 bg-f1Blue peer-checked:bg-white w-3 h-3 rounded-full transition-transform peer-checked:translate-x-5 "></div>
+        </label>
+      </div>
+    );
+  };
+
+  // Map & circuit related toggles; "Map & Messages" (the widget-level toggle) stays last.
+  const mapPreferenceKeys: Array<keyof Preferences> = [
+    "sectors",
+    "corners",
+    "mapAndMessages",
+  ];
+
+  // Telemetry related toggles; "Driver Standings" (the widget-level toggle) stays last.
+  const telemetryPreferenceKeys: Array<keyof Preferences> = [
+    "audio",
+    "headshot",
+    "minisectorHorizontal",
+    "driverPositions",
+  ];
+
+  const visualsPreferenceKeys = (
+    Object.keys(preferenceDetails) as Array<keyof Preferences>
+  ).filter(
+    (key) =>
+      !mapPreferenceKeys.includes(key) &&
+      !telemetryPreferenceKeys.includes(key),
+  );
+
   const options: LanguageOptions[] = preferences.translate
     ? [
       { value: "en", label: "Inglés" },
@@ -522,10 +604,10 @@ export default function PreferencesPanel({
             </div>
           </div>
 
-          {/* Visuals */}
+          {/* Map */}
           <div className="flex flex-col justify-evenly pb-4">
             <p className="text-md text-offWhite font-orbitron">
-              {preferences.translate ? "Vista" : "Visuals"}
+              {preferences.translate ? "Mapa" : "Map"}
             </p>
             <a
               href="/help"
@@ -536,75 +618,25 @@ export default function PreferencesPanel({
                 ? "Más información sobre los widgets acá."
                 : "Learn more about widgets here."}
             </a>
-            {Object.entries(preferences).map(([key, value]) => {
-              const handleWidgetToggle = (
-                key: keyof Preferences,
-                enabled: boolean,
-              ) => {
-                const currentValue = preferences[key];
-                if (
-                  typeof currentValue === "object" &&
-                  currentValue !== null &&
-                  "enabled" in currentValue &&
-                  ("x" in currentValue || "xPct" in currentValue) &&
-                  ("y" in currentValue || "yPct" in currentValue) &&
-                  ("width" in currentValue || "widthPct" in currentValue) &&
-                  ("height" in currentValue || "heightPct" in currentValue)
-                ) {
-                  setPreference(key, {
-                    ...currentValue,
-                    enabled,
-                  } as Preferences[keyof Preferences]);
-                } else {
-                  setPreference(key, enabled as Preferences[keyof Preferences]);
-                }
-              };
+            {mapPreferenceKeys.map((key) => renderPreferenceToggle(key))}
+          </div>
 
-              const isWidgetConfig =
-                typeof value === "object" &&
-                value !== null &&
-                "enabled" in value &&
-                ("x" in value || "xPct" in value);
+          {/* Telemetry */}
+          <div className="flex flex-col justify-evenly pb-4">
+            <p className="text-md text-offWhite font-orbitron">
+              {preferences.translate ? "Telemetría" : "Telemetry"}
+            </p>
+            {telemetryPreferenceKeys.map((key) =>
+              renderPreferenceToggle(key),
+            )}
+          </div>
 
-              const checked = isWidgetConfig
-                ? (value as WidgetConfig).enabled
-                : (value as boolean);
-
-              return (
-                <div key={key} className="flex items-center justify-between">
-                  {preferenceDetails[key as string] ? (
-                    <>
-                      {" "}
-                      <div className="flex flex-col px-2 py-2">
-                        <span className="text-xs font-geist font-medium text-offWhite">
-                          {preferenceDetails[key as string].title}
-                        </span>
-                        <span className="text-xs text-gray-400 font-geist font-medium">
-                          {preferenceDetails[key as string].description}
-                        </span>
-                      </div>
-                      <label className="relative inline-flex items-start cursor-pointer">
-                        <input
-                          type="checkbox"
-                          className="sr-only peer"
-                          checked={checked}
-                          onChange={(e) =>
-                            handleWidgetToggle(
-                              key as keyof Preferences,
-                              e.target.checked,
-                            )
-                          }
-                        />
-                        <div className="w-10 h-5 bg-gray-800 rounded-full peer-checked:bg-f1Blue/80 transition-colors peer-checked:shadow-f1Blue-md"></div>
-                        <div className="absolute left-1 top-1 bg-f1Blue peer-checked:bg-white w-3 h-3 rounded-full transition-transform peer-checked:translate-x-5 "></div>
-                      </label>
-                    </>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              );
-            })}
+          {/* Visuals */}
+          <div className="flex flex-col justify-evenly pb-4">
+            <p className="text-md text-offWhite font-orbitron">
+              {preferences.translate ? "Vista" : "Visuals"}
+            </p>
+            {visualsPreferenceKeys.map((key) => renderPreferenceToggle(key))}
           </div>
 
           {/* Reset config */}

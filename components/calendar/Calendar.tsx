@@ -10,6 +10,14 @@ import {
 export default function F1Calendar({ dict }: { dict: any }) {
   const [upcoming, setUpcoming] = useState<F1UpcomingResponse | null>(null);
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    e.currentTarget.style.setProperty("--mouse-x", `${x}%`);
+    e.currentTarget.style.setProperty("--mouse-y", `${y}%`);
+  };
+
   useEffect(() => {
     const loadCalendar = async () => {
       try {
@@ -36,24 +44,28 @@ export default function F1Calendar({ dict }: { dict: any }) {
           <p>{translateSessionType(upcoming?.nextEvent.type, dict)}</p>
         </div>
         <a
-          className="group relative overflow-hidden flex flex-row items-center justify-center font-orbitron text-md font-regular text-white cursor-pointer underline-offset-4 decoration-red-400/60 bg-black aurora-wrapper"
+          className="group relative flex flex-row items-center justify-center font-orbitron text-md font-regular cursor-pointer underline-offset-4 decoration-red-400/60 calendar-glow-wrapper"
           href="/schedule"
+          onMouseMove={handleMouseMove}
         >
-          {/* 1. El texto va primero (abajo de la aurora) y DEBE ser text-white siempre */}
-          <span className="px-4 block text-white transition-opacity duration-300 group-hover:opacity-90">
+          {/* Texto base: rojo siempre, sin fondo */}
+          <span className="px-4 block calendar-glow-text-base">
             {formatTimeUntil(
               upcoming.timeUntilNext,
               dict.locale === "es",
             ).toUpperCase()}
           </span>
 
-          {/* 2. La aurora va después (arriba del texto) para poder aplicar el mix-blend-mode */}
-          <div className="aurora-container">
-            <div className="aurora__item"></div>
-            <div className="aurora__item"></div>
-            <div className="aurora__item"></div>
-            <div className="aurora__item"></div>
-          </div>
+          {/* Texto duplicado: brillo que sigue al cursor, enmascarado a las letras */}
+          <span
+            className="px-4 block calendar-glow-text-spot"
+            aria-hidden="true"
+          >
+            {formatTimeUntil(
+              upcoming.timeUntilNext,
+              dict.locale === "es",
+            ).toUpperCase()}
+          </span>
         </a>
       </div>
     );

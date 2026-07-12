@@ -1,12 +1,15 @@
 import { Github } from "lucide-react";
 import { config } from "@/lib/config";
+import { getDiscordInviteUrl } from "@/lib/discord";
 import Image from "next/image";
 
 interface FooterProps {
   dict: any;
 }
 
-export default function Footer({ dict }: FooterProps) {
+export default async function Footer({ dict }: FooterProps) {
+  const discordUrl = await getDiscordInviteUrl();
+
   return (
     <div className="flex flex-row items-center justify-between gap-[2rem] py-8 px-4 max-w-5xl mx-auto text-gray-400">
       <div className="flex flex-col lg:flex-row items-center gap-4">
@@ -25,7 +28,7 @@ export default function Footer({ dict }: FooterProps) {
             <Github size={18} />
           </a>
           <a
-            href={config.public.discord}
+            href={discordUrl}
             target="_blank"
             className="text-gray-400 w-[1rem]"
           >
@@ -44,6 +47,13 @@ export default function Footer({ dict }: FooterProps) {
           className="text-xs text-gray-400 font-geist hover:text-f1Blue text-center"
         >
           {dict.footer.help}
+        </a>
+        <a
+          href="/changelog"
+          target="_blank"
+          className="text-xs text-gray-400 font-geist hover:text-f1Blue text-center"
+        >
+          {dict.footer.changelog}
         </a>
       </div>
     </div>
