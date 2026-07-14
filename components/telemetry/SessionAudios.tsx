@@ -6,7 +6,7 @@ import {
   ProcessedSession,
   ProcessedTeamRadio,
 } from "@/processors";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Copy, DownloadIcon, PauseIcon, PlayIcon } from "lucide-react";
@@ -35,6 +35,7 @@ export default function SessionAudios({
 }: SessionAudiosProps) {
   const [playingAudio, setPlayingAudio] = useState<number | undefined>();
   const [progressMap, setProgressMap] = useState<Map<number, number>>();
+  const pendingSeekRatioRef = useRef<number | null>(null);
   const { preferences } = usePreferences();
 
   const { playTeamRadioSound, radioAudioRef, stopTeamRadioSound } =
@@ -87,6 +88,38 @@ export default function SessionAudios({
     }
   };
 
+  const handleSeek = (
+    e: React.PointerEvent<HTMLDivElement>,
+    idx: number,
+    capturePath: string,
+  ) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const rect = e.currentTarget.getBoundingClientRect();
+    const ratio = Math.min(
+      Math.max((e.clientX - rect.left) / rect.width, 0),
+      1,
+    );
+
+    if (playingAudio === idx) {
+      const audio = radioAudioRef.current;
+      if (audio?.duration) {
+        audio.currentTime = ratio * audio.duration;
+        setProgressMap((prev) => {
+          const next = new Map(prev);
+          next.set(idx, ratio * 100);
+          return next;
+        });
+      } else {
+        pendingSeekRatioRef.current = ratio;
+      }
+      return;
+    }
+
+    pendingSeekRatioRef.current = ratio;
+    handleAudioPlay(idx, capturePath);
+  };
+
   const handleCopyTranscription = async (cap: ProcessedCapture) => {
     const text = translate ? cap?.transcriptionEs : cap?.transcription;
     if (!text) return;
@@ -125,8 +158,29 @@ export default function SessionAudios({
         return next;
       });
     };
+    const handleLoadedMetadata = () => {
+      if (
+        pendingSeekRatioRef.current === null ||
+        !radioAudioRef.current?.duration ||
+        playingAudio === undefined
+      )
+        return;
+      radioAudioRef.current.currentTime =
+        pendingSeekRatioRef.current * radioAudioRef.current.duration;
+      setProgressMap((prev) => {
+        const next = new Map(prev);
+        next.set(playingAudio, pendingSeekRatioRef.current! * 100);
+        return next;
+      });
+      pendingSeekRatioRef.current = null;
+    };
+
     radioAudioRef.current.addEventListener("timeupdate", handleTimeUpdate);
     radioAudioRef.current.addEventListener("ended", handleEnded);
+    radioAudioRef.current.addEventListener(
+      "loadedmetadata",
+      handleLoadedMetadata,
+    );
 
     return () => {
       radioAudioRef.current?.removeEventListener(
@@ -134,6 +188,10 @@ export default function SessionAudios({
         handleTimeUpdate,
       );
       radioAudioRef.current?.removeEventListener("ended", handleEnded);
+      radioAudioRef.current?.removeEventListener(
+        "loadedmetadata",
+        handleLoadedMetadata,
+      );
     };
   }, [radioAudioRef.current, playingAudio]);
 
@@ -148,7 +206,7 @@ export default function SessionAudios({
             <div className="space-y-2">
               {orderedCaptures.map((capture, idx) => {
                 const driver = getdriver(capture.racingNumber);
-                const progress = progressMap?.get(idx) ?? 100;
+                const progress = progressMap?.get(idx) ?? 0;
                 const hasTranscription =
                   capture.transcription && capture.transcription !== "";
                 const hasEsTranscription =
@@ -157,68 +215,69 @@ export default function SessionAudios({
                 return (
                   <div
                     key={idx}
-                    className="flex flex-col max-w-full p-0 rounded"
+                    className="flex flex-col max-w-full p-0"
                     style={{ ...messageStyle }}
                   >
                     <div className="flex flex-row rounded max-w-full px-1 ">
                       <p
-                        className="text-sm text-gray-400 h-[3rem] flex items-center font-f1-regular"
+                        className="text-sm text-gray-400 h-[3rem] w-12 shrink-0 flex items-center justify-center text-center font-f1-regular"
                         style={{
                           color: "#" + driver.team_color,
                         }}
                       >
                         {driver.name_acronym}
                       </p>
-                      <div
-                        className="relative w-full max-w-full mx-2 my-2 text-gray-400 border-none items-center border-[2px] rounded border-gray-400 flex justify-start overflow-hidden"
-                        onPointerUp={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          handleAudioPlay(idx, capture.path);
-                        }}
-                      >
-                        <div
-                          className={cn(
-                            "absolute inset-0 flex flex-row w-full items-center px-0",
-                            playingAudio === idx
-                              ? "opacity-100 translate-y-0"
-                              : "opacity-0 -translate-y-2",
-                          )}
+                      <div className="relative w-full max-w-full mx-2 my-2 h-8 text-gray-400 border-none items-center border-[2px] rounded border-gray-400 flex justify-start gap-2 px-2">
+                        <button
+                          type="button"
+                          aria-label={
+                            playingAudio === idx ? "Pause" : "Play"
+                          }
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAudioPlay(idx, capture.path);
+                          }}
+                          className="shrink-0 flex items-center justify-center hover:scale-110 transition-transform"
                         >
-                          <PauseIcon
-                            className="mx-1 hover:cursor-pointer transition fill-gray-400"
-                            width={15}
-                          />
-                          <div className="flex flex-col gap-0 w-full">
-                            <div className="w-full h-[2px] rounded overflow-hidden">
-                              <div
-                                className="h-full w-full transition-[width] duration-150 ease-linear"
-                                style={{
-                                  width: `${progress}%`,
-                                  background: "#" + driver.team_color,
-                                }}
-                              />
-                            </div>
-                          </div>
-                        </div>
+                          {playingAudio === idx ? (
+                            <PauseIcon
+                              className="fill-gray-400 transition"
+                              width={15}
+                            />
+                          ) : (
+                            <PlayIcon
+                              className="fill-gray-400 transition"
+                              width={15}
+                            />
+                          )}
+                        </button>
 
                         <div
-                          className={cn(
-                            "absolute inset-0 flex flex-row w-full items-center px-0 transition-all duration-300 ease-out",
-                            playingAudio === idx ? "opacity-0" : "opacity-100",
-                          )}
+                          className="group/track relative w-full h-4 flex items-center cursor-pointer"
+                          onPointerDown={(e) =>
+                            handleSeek(e, idx, capture.path)
+                          }
                         >
-                          <PlayIcon
-                            className="mx-1 hover:cursor-pointer fill-gray-400"
-                            width={15}
-                          />
-                          <div
-                            className="w-full h-[2px] rounded"
-                            style={{
-                              width: `${progress}%`,
-                              background: "#" + driver.team_color,
-                            }}
-                          ></div>
+                          <div className="relative w-full h-1.5 rounded-full bg-gray-500/30 transition-[height] duration-150 group-hover/track:h-2">
+                            <div
+                              className={cn(
+                                "absolute inset-y-0 left-0 rounded-full",
+                                playingAudio === idx &&
+                                  "transition-[width] duration-150 ease-linear",
+                              )}
+                              style={{
+                                width: `${progress}%`,
+                                background: "#" + driver.team_color,
+                              }}
+                            />
+                            <div
+                              className="absolute top-1/2 h-3 w-3 -translate-y-1/2 -translate-x-1/2 rounded-full opacity-0 shadow transition-opacity group-hover/track:opacity-100"
+                              style={{
+                                left: `${progress}%`,
+                                background: "#" + driver.team_color,
+                              }}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -262,17 +321,17 @@ export default function SessionAudios({
                           style={{ backgroundColor: "#" + driver.team_color }}
                         />
                         <span
-                          className="text-start py-1.5 px-2 whitespace-pre-wrap text-sm italic font-geist font-medium"
+                          className="text-start py-1.5 px-2 whitespace-pre-wrap text-xs italic font-f1-regular font-medium"
                           style={{
                             color: "#" + driver.team_color,
                           }}
                         >
                           {translate
                             ? hasEsTranscription
-                              ? `" ${capture.transcriptionEs} "`
+                              ? `"${capture.transcriptionEs}"`
                               : capture.transcription
                             : capture.transcription &&
-                            `" ${capture.transcription} "`}
+                            `"${capture.transcription}"`}
                         </span>
                       </div>
                     )}

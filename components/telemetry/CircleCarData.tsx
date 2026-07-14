@@ -79,7 +79,7 @@ export function CircleCarData({
             cy={50}
             r={outerRadius}
             fill={"transparent"}
-            stroke={"rgba(22, 27, 34, 0.4)"}
+            stroke={"rgba(79, 82, 88, 0.3)"}
             strokeWidth={strokeWidth}
             strokeDasharray={`${blueArcLength} ${outerCircumference}`}
             transform={`rotate(135 ${size / 2} ${size / 2})`}
@@ -103,7 +103,7 @@ export function CircleCarData({
             cy={size / 2}
             r={innerRadius}
             fill="none"
-            stroke="rgba(22, 27, 34, 0.4)"
+            stroke="rgba(79, 82, 88, 0.3)"
             strokeWidth={strokeWidth}
             strokeDasharray={`${throttleArcLength} ${innerCircumference}`}
             transform={`rotate(135 ${size / 2} ${size / 2})`}
@@ -127,7 +127,7 @@ export function CircleCarData({
             cy={size / 2}
             r={innerRadius}
             fill="none"
-            stroke="rgba(22, 27, 34, 0.4)"
+            stroke="rgba(79, 82, 88, 0.3)"
             strokeWidth={strokeWidth}
             strokeDasharray={`${brakesArcLength} ${innerCircumference}`}
             transform={`rotate(225 ${size / 2} ${

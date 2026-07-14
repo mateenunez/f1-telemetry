@@ -51,7 +51,7 @@ export default function CircleOfDoom({
               cy={50}
               r={r}
               fill="transparent"
-              stroke="rgba(22, 27, 34, 0.4)"
+              stroke="rgba(79, 82, 88, 0.3)"
               strokeWidth={strokeWidth}
             />
             <text
@@ -239,7 +239,7 @@ export default function CircleOfDoom({
             cy={50}
             r={50 - strokeWidth / 2}
             fill={"transparent"}
-            stroke={"rgba(22, 27, 34, 0.4)"}
+            stroke={"rgba(79, 82, 88, 0.3)"}
             strokeWidth={strokeWidth}
           />
 
@@ -279,7 +279,7 @@ export default function CircleOfDoom({
                 <text
                   x={0}
                   y={-20}
-                  fontSize={6}
+                  fontSize={7}
                   fill={
                     "#" +
                     (adjacentDrivers.ahead.driverInfo?.team_colour || "e5e7eb")
@@ -296,7 +296,7 @@ export default function CircleOfDoom({
                 <text
                   x={0}
                   y={-13}
-                  fontSize={5}
+                  fontSize={6}
                   fill={"#e5e7eb"}
                   textAnchor="middle"
                   dominantBaseline="middle"
@@ -311,8 +311,8 @@ export default function CircleOfDoom({
               <g>
                 <text
                   x={0}
-                  y={0}
-                  fontSize={7}
+                  y={3}
+                  fontSize={8.5}
                   fill={"#" + (pilotRef?.team_colour || "e5e7eb")}
                   textAnchor="middle"
                   dominantBaseline="middle"
@@ -323,8 +323,8 @@ export default function CircleOfDoom({
                 </text>
                 <text
                   x={0}
-                  y={8}
-                  fontSize={6}
+                  y={11}
+                  fontSize={6.5}
                   fill="#e5e7eb"
                   textAnchor="middle"
                   dominantBaseline="middle"
@@ -339,8 +339,8 @@ export default function CircleOfDoom({
               <g>
                 <text
                   x={0}
-                  y={20}
-                  fontSize={6}
+                  y={28}
+                  fontSize={7}
                   fill={
                     "#" +
                     (adjacentDrivers.behind.driverInfo?.team_colour || "e5e7eb")
@@ -356,8 +356,8 @@ export default function CircleOfDoom({
                 </text>
                 <text
                   x={0}
-                  y={27}
-                  fontSize={5}
+                  y={35}
+                  fontSize={6}
                   fill={"#e5e7eb"}
                   textAnchor="middle"
                   dominantBaseline="middle"

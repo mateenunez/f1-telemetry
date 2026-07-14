@@ -106,9 +106,9 @@ export const DEFAULT_CONFIG: Preferences = {
     xPct: 1015 / 1526,
     yPct: 0,
     widthPct: 500 / 1526,
-    heightPct: 500 / 1094,
+    heightPct: 600 / 1094,
     width: 500,
-    height: 500,
+    height: 600,
     index: 1,
   },
   audioLog: {
