@@ -103,4 +103,9 @@ export class RaceControlProcessor {
   getAllMessages(): ProcessedRaceControl[] {
     return this.messages
   }
+
+  reset(): void {
+    this.messages = []
+    this.translatedMessages = []
+  }
 }

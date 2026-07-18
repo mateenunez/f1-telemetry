@@ -44,12 +44,20 @@ export default function F1Calendar({ dict }: { dict: any }) {
           <p>{translateSessionType(upcoming?.nextEvent.type, dict)}</p>
         </div>
         <a
-          className="group relative flex flex-row items-center justify-center font-orbitron text-md font-regular cursor-pointer underline-offset-4 decoration-red-400/60 calendar-glow-wrapper"
+          className={`group relative flex flex-row items-center justify-center font-orbitron text-md font-regular cursor-pointer underline-offset-4 calendar-glow-wrapper ${
+            upcoming.isWeekRace ? "decoration-red-400/60" : "decoration-gray-400/60"
+          }`}
           href="/schedule"
           onMouseMove={handleMouseMove}
         >
-          {/* Texto base: rojo siempre, sin fondo */}
-          <span className="px-4 block calendar-glow-text-base">
+          {/* Texto base: rojo en week race, blanco/gris el resto del tiempo */}
+          <span
+            className={`px-4 block ${
+              upcoming.isWeekRace
+                ? "calendar-glow-text-base"
+                : "calendar-glow-text-base-neutral"
+            }`}
+          >
             {formatTimeUntil(
               upcoming.timeUntilNext,
               dict.locale === "es",
@@ -58,7 +66,11 @@ export default function F1Calendar({ dict }: { dict: any }) {
 
           {/* Texto duplicado: brillo que sigue al cursor, enmascarado a las letras */}
           <span
-            className="px-4 block calendar-glow-text-spot"
+            className={`px-4 block ${
+              upcoming.isWeekRace
+                ? "calendar-glow-text-spot"
+                : "calendar-glow-text-spot-neutral"
+            }`}
             aria-hidden="true"
           >
             {formatTimeUntil(

@@ -217,6 +217,41 @@ body {
   opacity: 1;
 }
 
+/* --- Variante neutra (sin week race): blanco/gris, sin brillo rojo --- */
+.calendar-glow-text-base-neutral {
+  position: relative;
+  color: #e5e5e5; /* offWhite */
+  transition: color 0.3s ease;
+}
+
+.group:hover .calendar-glow-text-base-neutral {
+  color: #9ca3af; /* gray-400 */
+}
+
+.calendar-glow-text-spot-neutral {
+  position: absolute;
+  inset: 0;
+  color: #f5f5f5;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.6), 0 0 18px rgba(200, 200, 200, 0.5);
+  pointer-events: none;
+  opacity: 0;
+  -webkit-mask-image: radial-gradient(
+    120px circle at var(--mouse-x) var(--mouse-y),
+    black 0%,
+    transparent 70%
+  );
+  mask-image: radial-gradient(
+    120px circle at var(--mouse-x) var(--mouse-y),
+    black 0%,
+    transparent 70%
+  );
+  transition: opacity 0.35s ease;
+}
+
+.group:hover .calendar-glow-text-spot-neutral {
+  opacity: 1;
+}
+
 .Sound {
   width:var(--width, 1rem);
   height:0.5rem;

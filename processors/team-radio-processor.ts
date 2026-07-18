@@ -74,4 +74,8 @@ export class TeamRadioProcessor {
   getTeamRadio(): ProcessedTeamRadio {
     return this.teamRadio;
   }
+
+  reset(): void {
+    this.teamRadio = { captures: [] };
+  }
 }

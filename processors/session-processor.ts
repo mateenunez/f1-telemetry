@@ -26,6 +26,7 @@ export interface ProcessedSession {
 
 export class SessionProcessor {
   private sessionInfo: ProcessedSession
+  private sessionChanged = false
 
   constructor() {
     // Initialize with default values
@@ -97,8 +98,27 @@ export class SessionProcessor {
       extrapolating: existing.extrapolating,
     }
 
+    if (
+      typeof sessionData.Path === "string" &&
+      sessionData.Path &&
+      existing.path &&
+      sessionData.Path !== existing.path
+    ) {
+      this.sessionChanged = true
+    }
+
     this.sessionInfo = processed
     return processed
+  }
+
+  // True once, right after Path shows we've moved to a new session (e.g.
+  // Quali -> Race). Callers should consume it to reset any per-session state
+  // (race control messages, team radio) that would otherwise persist stale
+  // entries from the previous session until fresh ones arrive.
+  consumeSessionChanged(): boolean {
+    const changed = this.sessionChanged
+    this.sessionChanged = false
+    return changed
   }
 
   processLapCount(lapCountData: any): void {

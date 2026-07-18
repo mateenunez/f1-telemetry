@@ -35,6 +35,7 @@ export interface F1CalendarResponse {
   success: boolean;
   nextEvent: F1Event;
   timeUntilNext: TimeUntilNext;
+  isWeekRace: boolean;
   totalEvents: number;
   groupsByLocation: GroupByLocation[];
   lastUpdated: string;
@@ -44,6 +45,7 @@ export interface F1UpcomingResponse {
   success: boolean;
   nextEvent: F1Event;
   timeUntilNext: TimeUntilNext;
+  isWeekRace: boolean;
   lastUpdated: string;
 }
 
@@ -447,11 +449,11 @@ export function formatTime(ms: number) {
 
 export const toLocaleTime = (dateString: string) => {
   const date = new Date(ensureUtc(dateString));
-  return date.toLocaleTimeString("es-AR", {
+  return date.toLocaleTimeString(undefined, {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
-    timeZone: "America/Argentina/Buenos_Aires",
+    hour12: false,
   });
 };
 

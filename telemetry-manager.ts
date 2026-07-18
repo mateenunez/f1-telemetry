@@ -202,6 +202,10 @@ export class TelemetryManager {
 
       case "SessionInfo":
         this.sessionProcessor.processSessionInfo(messageData);
+        if (this.sessionProcessor.consumeSessionChanged()) {
+          this.raceControlProcessor.reset();
+          this.teamRadioProcessor.reset();
+        }
         break;
 
       case "SessionData":
