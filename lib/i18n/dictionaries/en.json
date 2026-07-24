@@ -20,6 +20,7 @@
   },
   "donate": {
     "button": "Enjoying F1 Telemetry? Support via PayPal",
+    "shortLabel": "Donate",
     "url": "https://paypal.me/Mateenunez"
   },
   "footer": {

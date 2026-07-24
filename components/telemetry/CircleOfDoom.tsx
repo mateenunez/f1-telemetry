@@ -221,6 +221,9 @@ export default function CircleOfDoom({
     return map;
   }, [cleanTimings, refDriver]);
 
+  const isLeader = pilotRef.position === 1;
+  const raceLeaderLabel = translate ? "LÍDER DE CARRERA" : "RACE LEADER";
+
   const pitStopDeg = markersDeg.get(924);
   const pitOuter = polarToCartesian(adjusted(pitStopDeg || 60), r + tickLength);
   const pitInner = polarToCartesian(adjusted(pitStopDeg || 60), r - tickLength);
@@ -273,12 +276,12 @@ export default function CircleOfDoom({
             </g>
           )}
 
-          <g transform={`translate(${50}, ${45})`}>
-            {adjacentDrivers.ahead && (
+          <g transform={`translate(${50}, ${50})`}>
+            {adjacentDrivers.ahead ? (
               <g>
                 <text
                   x={0}
-                  y={-20}
+                  y={-21}
                   fontSize={7}
                   fill={
                     "#" +
@@ -295,7 +298,7 @@ export default function CircleOfDoom({
                 </text>
                 <text
                   x={0}
-                  y={-13}
+                  y={-14}
                   fontSize={6}
                   fill={"#e5e7eb"}
                   textAnchor="middle"
@@ -305,13 +308,27 @@ export default function CircleOfDoom({
                   {adjacentDrivers.ahead.gap}
                 </text>
               </g>
+            ) : (
+              isLeader && (
+                <text
+                  x={0}
+                  y={-15}
+                  fontSize={5.5}
+                  fill="#e5e7eb"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  className="font-f1-regular"
+                >
+                  {raceLeaderLabel}
+                </text>
+              )
             )}
 
             {refDriver && (
               <g>
                 <text
                   x={0}
-                  y={3}
+                  y={-4}
                   fontSize={8.5}
                   fill={"#" + (pilotRef?.team_colour || "e5e7eb")}
                   textAnchor="middle"
@@ -323,7 +340,7 @@ export default function CircleOfDoom({
                 </text>
                 <text
                   x={0}
-                  y={11}
+                  y={4}
                   fontSize={6.5}
                   fill="#e5e7eb"
                   textAnchor="middle"
@@ -339,7 +356,7 @@ export default function CircleOfDoom({
               <g>
                 <text
                   x={0}
-                  y={28}
+                  y={15}
                   fontSize={7}
                   fill={
                     "#" +
@@ -356,7 +373,7 @@ export default function CircleOfDoom({
                 </text>
                 <text
                   x={0}
-                  y={35}
+                  y={22}
                   fontSize={6}
                   fill={"#e5e7eb"}
                   textAnchor="middle"

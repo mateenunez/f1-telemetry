@@ -20,6 +20,7 @@
   },
   "donate": {
     "button": "¿Te gusta F1 Telemetry? Invitame un café en Cafecito",
+    "shortLabel": "Donar",
     "url": "https://cafecito.app/skoncito"
   },
   "footer": {

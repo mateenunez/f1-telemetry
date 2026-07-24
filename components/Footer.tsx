@@ -55,6 +55,14 @@ export default async function Footer({ dict }: FooterProps) {
         >
           {dict.footer.changelog}
         </a>
+        <a
+          href={dict.donate.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs text-gray-400 font-geist hover:text-f1Blue text-center"
+        >
+          {dict.donate.shortLabel}
+        </a>
       </div>
     </div>
   );
