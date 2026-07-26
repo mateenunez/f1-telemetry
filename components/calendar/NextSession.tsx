@@ -89,10 +89,12 @@ export default function NextSession({
 
         {/* Session Details */}
         <div className="my-8 mx-8 flex flex-col">
-          <span className="font-semibol text-xl tracking-wide mb-4 w-full">
-            {session.track +
-              " " +
-              translateSessionType(session.type, dict).toUpperCase()}
+          <span className="text-3xl font-thin tracking-widest mb-4 w-full">
+            {session.track}
+          </span>
+
+          <span className="text-2xl font-thin tracking-widest mb-4 w-full">
+            {translateSessionType(session.type, dict).toUpperCase()}
           </span>
 
           <div className="flex md:flex-row justify-center gap-4 items-center">

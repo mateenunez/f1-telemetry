@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import {
   F1Event,
   formatEventDateShort,
@@ -6,10 +7,33 @@ import {
 } from "@/utils/calendar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { config } from "@/lib/config";
+import { cn } from "@/lib/utils";
 
 interface UpNextProps {
   upNextEvents: GroupByLocation[];
   dict: any;
+  viewportRef: React.RefObject<HTMLDivElement | null>;
+}
+
+function isPast(dateString: string | undefined): boolean {
+  if (!dateString) return false;
+  return new Date(dateString).getTime() < Date.now();
+}
+
+function getGroupEndTime(event: GroupByLocation): number {
+  const sessions = [
+    event.p1,
+    event.p2,
+    event.p3,
+    event.sq,
+    event.sr,
+    event.q,
+    event.r,
+  ].filter(Boolean) as F1Event[];
+
+  if (sessions.length === 0) return new Date(event.start).getTime();
+
+  return Math.max(...sessions.map((s) => new Date(s.start).getTime()));
 }
 
 function Session({
@@ -26,20 +50,52 @@ function Session({
   const displayLabel = sessionKey.toUpperCase();
 
   return (
-    <div className="flex flex-col gap-0 text-wrap text-gray-400 text-xs">
+    <div
+      className={cn(
+        "flex flex-col gap-0 text-wrap text-gray-400 text-xs",
+        isPast(eventData.start) && "opacity-50",
+      )}
+    >
       <span className="text-md text-offWhite">{displayLabel}</span>
       <span>{formatEventDateShort(eventData.start || "", dict.locale)}</span>
     </div>
   );
 }
 
-export default function Upnext({ upNextEvents, dict }: UpNextProps) {
+export default function Upnext({
+  upNextEvents,
+  dict,
+  viewportRef,
+}: UpNextProps) {
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport || upNextEvents.length === 0) return;
+
+    let anchorIndex = upNextEvents.findIndex(
+      (event) => getGroupEndTime(event) >= Date.now(),
+    );
+    if (anchorIndex === -1) anchorIndex = upNextEvents.length - 1;
+
+    const anchorCard = cardRefs.current[anchorIndex];
+    if (anchorCard) {
+      viewport.scrollLeft = anchorCard.offsetLeft;
+    }
+  }, [upNextEvents, viewportRef]);
+
   return (
     <div className="flex gap-4 pb-4 flex-row">
       {upNextEvents.map((event, index) => (
         <Card
           key={index}
-          className="min-w-[20rem] max-w-[320px] flex-shrink-0 flex flex-col justify-between bg-transparent border-none"
+          ref={(el) => {
+            cardRefs.current[index] = el;
+          }}
+          className={cn(
+            "min-w-[20rem] max-w-[320px] flex-shrink-0 flex flex-col justify-between bg-transparent border-none",
+            getGroupEndTime(event) < Date.now() && "opacity-50",
+          )}
         >
           <CardHeader className="py-0 flex flex-row gap-4 items-center">
             <img

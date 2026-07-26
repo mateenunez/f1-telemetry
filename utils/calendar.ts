@@ -212,7 +212,13 @@ export function getRelativeDate(dateString: string, dict: any): string {
       return "Invalid date";
     }
 
-    const diffDays = date.getUTCDate() - now.getUTCDate();
+    const startOfDay = (d: Date) =>
+      new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+
+    const msPerDay = 24 * 60 * 60 * 1000;
+    const diffDays = Math.round(
+      (startOfDay(date) - startOfDay(now)) / msPerDay,
+    );
 
     if (diffDays === 0) {
       return `(${dict.schedule.today})`;

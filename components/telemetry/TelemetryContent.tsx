@@ -1,7 +1,6 @@
 "use client";
 
 import Header from "@/components/Header";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import DriverPositions from "@/components/telemetry/DriverPositions";
 import MapAndMessages from "@/components/telemetry/MapAndMessages";
 import { useTelemetryManager } from "@/hooks/use-telemetry";
@@ -218,30 +217,9 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
       </div>
     );
 
-    const HeaderSkeleton = () => (
-      <div className="flex flex-col lg:flex-row px-6 py-4 mb-4 gap-4 lg:gap-0 justify-between items-center border-b-2 border-t-0 border-l-0 border-r-0 rounded-none border-gray-800">
-        <Skeleton height={60} width={300} />
-        <Skeleton height={60} width={300} />
-      </div>
-    );
-
-    const CanvasSkeleton = () => (
-      <div className="w-full h-full">
-        <Skeleton width="100%" height="95%" />
-      </div>
-    );
-
     return (
       <div className="lg:h-[170vh] h-[120vh] bg-warmBlack px-2">
         <LoaderOverlay />
-        <SkeletonTheme baseColor="#151515ff" highlightColor="#444">
-          <div className="w-full h-[20vh]">
-            <HeaderSkeleton />
-            <div className="h-[100vh] w-[100%] lg:h-[150vh]">
-              <CanvasSkeleton />
-            </div>
-          </div>
-        </SkeletonTheme>
       </div>
     );
   }
