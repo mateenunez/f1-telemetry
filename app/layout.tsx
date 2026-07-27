@@ -7,7 +7,6 @@ import Script from "next/script";
 import localFont from "next/font/local";
 import { Geist, Orbitron, Inter } from "next/font/google";
 
-
 const f1RegularfFont = localFont({
   src: "../public/fonts/Formula1-Regular.otf",
   weight: "300",
@@ -91,6 +90,10 @@ export default async function RootLayout({
           name="google-site-verification"
           content="eF8UbK8ghA29zsWnzurWzjJgXzmLeucRd59QUDpdHTE"
         />
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-5942441293893843"
+        ></meta>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#b91c1c" />
         <link rel="canonical" href={`https://www.f1telemetry.com/${lang}`} />
