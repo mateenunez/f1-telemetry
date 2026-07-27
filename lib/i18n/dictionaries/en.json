@@ -23,6 +23,11 @@
     "shortLabel": "Donate",
     "url": "https://paypal.me/Mateenunez"
   },
+  "funding": {
+    "description": "We need your support to cover expenses and avoid ads. Thanks!",
+    "cta": "Contribute",
+    "thanks": "Fully funded this month, thank you so much!"
+  },
   "footer": {
     "legal": "This website is not associated, affiliated, authorized, endorsed, or officially connected in any way with Formula 1, the FIA, or any of its subsidiaries or affiliates.",
     "help": "About widgets.",

@@ -104,6 +104,67 @@ const findMinDistance = (point: TrackPosition, points: TrackPosition[]) => {
 	return minIndex;
 };
 
+export interface TrackProgressIndex {
+	points: TrackPosition[];
+	cumulative: number[];
+	total: number;
+}
+
+export const buildTrackProgressIndex = (map: iMap): TrackProgressIndex => {
+	const points: TrackPosition[] = map.x.map((x, index) => ({ x, y: map.y[index] }));
+
+	const cumulative: number[] = [0];
+	for (let i = 1; i < points.length; i++) {
+		cumulative.push(
+			cumulative[i - 1] + calculateDistance(points[i - 1].x, points[i - 1].y, points[i].x, points[i].y)
+		);
+	}
+
+	const closingDistance = calculateDistance(
+		points[points.length - 1].x,
+		points[points.length - 1].y,
+		points[0].x,
+		points[0].y
+	);
+	const total = cumulative[cumulative.length - 1] + closingDistance;
+
+	return { points, cumulative, total };
+};
+
+// Projects (x, y) onto the closest segment of the reference lap polyline and
+// returns how far along the lap that projection sits, as a 0..1 fraction.
+export const getTrackProgress = (x: number, y: number, index: TrackProgressIndex): number => {
+	const { points, cumulative, total } = index;
+	if (!points.length || total === 0) return 0;
+
+	let bestDistSq = Infinity;
+	let bestProgress = 0;
+
+	for (let i = 0; i < points.length; i++) {
+		const a = points[i];
+		const b = points[i + 1] ?? points[0];
+
+		const abx = b.x - a.x;
+		const aby = b.y - a.y;
+		const lenSq = abx * abx + aby * aby;
+
+		let t = lenSq === 0 ? 0 : ((x - a.x) * abx + (y - a.y) * aby) / lenSq;
+		t = Math.max(0, Math.min(1, t));
+
+		const projX = a.x + abx * t;
+		const projY = a.y + aby * t;
+		const distSq = Math.pow(x - projX, 2) + Math.pow(y - projY, 2);
+
+		if (distSq < bestDistSq) {
+			bestDistSq = distSq;
+			const segLen = Math.sqrt(lenSq);
+			bestProgress = (cumulative[i] + segLen * t) / total;
+		}
+	}
+
+	return bestProgress;
+};
+
 export const createSectors = (map: iMap): MapSector[] => {
 	const sectors: MapSector[] = [];
 	const points: TrackPosition[] = map.x.map((x, index) => ({ x, y: map.y[index] }));

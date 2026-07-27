@@ -132,6 +132,7 @@ export default function PreferencesPanel({
       "circleOfDoom",
       "circleCarData",
       "tyresList",
+      "linealDriverPositions",
     ];
 
     widgetKeys.forEach((key) => {
@@ -217,6 +218,11 @@ export default function PreferencesPanel({
           description:
             "Mostrar el historial de compuestos de cada piloto, incluyendo promedios y mejores vueltas.",
         },
+        linealDriverPositions: {
+          title: "Posiciones en línea",
+          description:
+            "Mostrar la posición de cada piloto en el circuito como una línea recta.",
+        },
       }
       : {
         sectors: {
@@ -277,6 +283,11 @@ export default function PreferencesPanel({
           title: "Compounds Record",
           description:
             "Display each driver's tire compound history, including averages and best laps.",
+        },
+        linealDriverPositions: {
+          title: "Lineal Driver Positions",
+          description:
+            "Show each driver's position on the circuit flattened onto a straight line.",
         },
       };
 

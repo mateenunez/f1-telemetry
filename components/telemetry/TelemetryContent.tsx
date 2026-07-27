@@ -3,6 +3,7 @@
 import Header from "@/components/Header";
 import DriverPositions from "@/components/telemetry/DriverPositions";
 import MapAndMessages from "@/components/telemetry/MapAndMessages";
+import LinealDriverPositions from "@/components/telemetry/LinealDriverPositions";
 import { useTelemetryManager } from "@/hooks/use-telemetry";
 import SessionAudios from "@/components/telemetry/SessionAudios";
 import RaceControlList from "@/components/telemetry/RaceControlList";
@@ -408,6 +409,27 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                     );
                   }
 
+                  // 8) Lineal Driver Positions
+                  if (w.id === "lineal-driver-positions" && w.enabled) {
+                    return (
+                      <SortableWidget
+                        key={w.id}
+                        id={w.id}
+                        className="col-span-12"
+                      >
+                        <LinealDriverPositions
+                          positions={
+                            isAuthenticated ? telemetryData?.positionData ?? [] : []
+                          }
+                          drivers={isAuthenticated ? driverInfos : []}
+                          timing={driverTimings}
+                          circuitKey={session?.circuit_key ?? 0}
+                          favoriteDrivers={preferences.favoriteDrivers}
+                        />
+                      </SortableWidget>
+                    );
+                  }
+
                   return null;
                 })}
               </div>
@@ -610,6 +632,28 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           totalLaps={session?.total_laps}
                           sessionType={session?.session_type}
                           translate={preferences.translate}
+                          favoriteDrivers={preferences.favoriteDrivers}
+                        />
+                      </DraggableWidget>
+                    );
+                  }
+
+                  if (w.id === "lineal-driver-positions" && w.enabled) {
+                    return (
+                      <DraggableWidget
+                        key={w.id}
+                        widget={widget}
+                        isEditMode={isEditMode}
+                        updateWidget={updateWidget}
+                        translate={preferences.translate}
+                      >
+                        <LinealDriverPositions
+                          positions={
+                            isAuthenticated ? telemetryData?.positionData ?? [] : []
+                          }
+                          drivers={isAuthenticated ? driverInfos : []}
+                          timing={driverTimings}
+                          circuitKey={session?.circuit_key ?? 0}
                           favoriteDrivers={preferences.favoriteDrivers}
                         />
                       </DraggableWidget>
