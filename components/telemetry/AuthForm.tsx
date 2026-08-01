@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { userEndpoints } from "@/utils/user";
 import { X, Mail, Lock, User } from "lucide-react";
 
 interface AuthFormProps {
@@ -13,6 +14,7 @@ interface AuthFormProps {
 export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
   const { login, register, isLoading, error, clearError } = useAuth();
   const [isLoginMode, setIsLoginMode] = useState(true);
+  const [isForgotMode, setIsForgotMode] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
   // Login form state
@@ -24,6 +26,11 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerConfirmPassword, setRegisterConfirmPassword] = useState("");
+
+  // Forgot-password form state
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotSubmitted, setForgotSubmitted] = useState(false);
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,6 +90,26 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
     }
   };
 
+  const handleForgotSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormError(null);
+
+    if (!forgotEmail) {
+      setFormError(dict.auth.fillAllFields);
+      return;
+    }
+
+    setForgotLoading(true);
+    try {
+      await userEndpoints.requestPasswordReset(forgotEmail, dict.locale);
+      setForgotSubmitted(true);
+    } catch {
+      setFormError(dict.auth.forgotPasswordFailed);
+    } finally {
+      setForgotLoading(false);
+    }
+  };
+
   const handleClose = () => {
     setFormError(null);
     clearError();
@@ -92,7 +119,10 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
     setRegisterEmail("");
     setRegisterPassword("");
     setRegisterConfirmPassword("");
+    setForgotEmail("");
+    setForgotSubmitted(false);
     setIsLoginMode(true);
+    setIsForgotMode(false);
     onClose();
   };
 
@@ -125,7 +155,11 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
 
           {/* Title */}
           <h2 className="text-2xl font-orbitron font-normal mb-6 text-center">
-            {isLoginMode ? dict.auth.loginTitle : dict.auth.registerTitle}
+            {isForgotMode
+              ? dict.auth.forgotPasswordTitle
+              : isLoginMode
+                ? dict.auth.loginTitle
+                : dict.auth.registerTitle}
           </h2>
 
           {/* Error Message */}
@@ -135,8 +169,83 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
             </div>
           )}
 
-          {/* Login Form */}
-          {isLoginMode ? (
+          {/* Forgot Password Form */}
+          {isForgotMode ? (
+            forgotSubmitted ? (
+              <div className="text-center space-y-4">
+                <p className="text-sm text-gray-300 font-geist">
+                  {dict.auth.resetLinkSentDescription}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsForgotMode(false);
+                    setForgotSubmitted(false);
+                    setForgotEmail("");
+                  }}
+                  className="text-f1Blue hover:text-f1Blue/80 font-medium transition-colors font-geist text-sm"
+                >
+                  {dict.auth.backToLogin}
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleForgotSubmit} className="space-y-4">
+                <p className="text-sm text-gray-400 font-geist">
+                  {dict.auth.forgotPasswordDescription}
+                </p>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-geist font-medium text-offWhite">
+                    {dict.auth.email}
+                  </label>
+                  <div className="relative">
+                    <Mail
+                      width={16}
+                      className="absolute left-3 top-2 text-gray-400"
+                    />
+                    <input
+                      type="email"
+                      value={forgotEmail}
+                      onChange={(e) => setForgotEmail(e.target.value)}
+                      placeholder={dict.auth.emailPlaceholder}
+                      className="w-full pl-9 pr-3 py-2 text-sm rounded-md bg-warmBlack text-white border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist"
+                      style={{
+                        boxShadow:
+                          "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={forgotLoading}
+                  className="w-full mt-6 px-4 py-2 text-sm rounded-md bg-f1Blue text-white font-geist font-medium transition-all duration-300 hover:bg-f1Blue/80 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-f1Blue"
+                  style={{
+                    boxShadow:
+                      "0 6px 12px -3px #37415140, -3px 0 12px -3px #37415140, 3px 0 12px -3px #37415140",
+                  }}
+                >
+                  {forgotLoading
+                    ? dict.auth.sendingResetLink
+                    : dict.auth.sendResetLink}
+                </button>
+
+                <p className="text-center text-sm text-gray-400 font-geist">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsForgotMode(false);
+                      setFormError(null);
+                    }}
+                    className="text-f1Blue hover:text-f1Blue/80 font-medium transition-colors"
+                  >
+                    {dict.auth.backToLogin}
+                  </button>
+                </p>
+              </form>
+            )
+          ) : /* Login Form */
+          isLoginMode ? (
             <form onSubmit={handleLoginSubmit} className="space-y-4">
               {/* Email Input */}
               <div className="flex flex-col gap-2">
@@ -184,6 +293,21 @@ export default function AuthForm({ isOpen, onClose, dict }: AuthFormProps) {
                     }}
                   />
                 </div>
+              </div>
+
+              {/* Forgot password link */}
+              <div className="flex justify-end -mt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsForgotMode(true);
+                    setFormError(null);
+                    clearError();
+                  }}
+                  className="text-xs text-f1Blue hover:text-f1Blue/80 transition-colors font-geist"
+                >
+                  {dict.auth.forgotPassword}
+                </button>
               </div>
 
               {/* Submit Button */}

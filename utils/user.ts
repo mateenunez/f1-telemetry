@@ -107,6 +107,46 @@ export const userEndpoints = {
     return data;
   },
 
+  async requestPasswordReset(
+    email: string,
+    locale?: string,
+  ): Promise<{ success: boolean }> {
+    const response = await fetch(`${API_BASE_URL}users/forgot-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, locale }),
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(data?.error ?? "FORGOT_PASSWORD_FAILED");
+    }
+
+    return data;
+  },
+
+  async resetPassword(
+    token: string,
+    password: string,
+  ): Promise<{ success: boolean }> {
+    const response = await fetch(`${API_BASE_URL}users/reset-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token, password }),
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(data?.error ?? "RESET_PASSWORD_FAILED");
+    }
+
+    return data;
+  },
+
   async getUser(token: string): Promise<User> {
     const response = await fetch(`${API_BASE_URL}/user`, {
       method: "GET",
