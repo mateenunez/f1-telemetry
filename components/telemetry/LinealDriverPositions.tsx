@@ -26,27 +26,6 @@ type DriverProgress = {
   progress: number;
 };
 
-// Minimum horizontal gap (px) between two driver dots so their acronym
-// labels never overlap, regardless of how close their track progress is.
-const MIN_GAP_PX = 26;
-
-function spreadPositions(rawX: number[], maxX: number): number[] {
-  const x = [...rawX];
-
-  for (let i = 1; i < x.length; i++) {
-    if (x[i] < x[i - 1] + MIN_GAP_PX) x[i] = x[i - 1] + MIN_GAP_PX;
-  }
-
-  if (x.length && x[x.length - 1] > maxX) {
-    x[x.length - 1] = maxX;
-    for (let i = x.length - 2; i >= 0; i--) {
-      if (x[i] > x[i + 1] - MIN_GAP_PX) x[i] = x[i + 1] - MIN_GAP_PX;
-    }
-  }
-
-  return x;
-}
-
 export default function LinealDriverPositions({
   positions,
   drivers,
@@ -57,8 +36,6 @@ export default function LinealDriverPositions({
 }: LinealDriverPositionsProps) {
   const [progressIndex, setProgressIndex] =
     useState<TrackProgressIndex | null>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
-  const [lineWidth, setLineWidth] = useState(0);
 
   const favorites = new Set(
     favoriteDrivers?.map((d) => d.driver_number) || []
@@ -76,17 +53,6 @@ export default function LinealDriverPositions({
       }
     })();
   }, [circuitKey]);
-
-  useEffect(() => {
-    const el = lineRef.current;
-    if (!el) return;
-
-    const observer = new ResizeObserver(([entry]) => {
-      setLineWidth(entry.contentRect.width);
-    });
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [progressIndex]);
 
   const driverProgress = useMemo<DriverProgress[]>(() => {
     if (!progressIndex || !positions?.length) return [];
@@ -107,24 +73,43 @@ export default function LinealDriverPositions({
     return result.sort((a, b) => a.progress - b.progress);
   }, [progressIndex, positions, drivers, timing]);
 
+  // A driver crossing the start/finish line jumps from progress ~1 back to
+  // ~0. Left this as a normal CSS transition and the dot visibly flies
+  // backwards across the whole line instead of teleporting. Detect that
+  // wrap-around per driver (a large backward jump vs. its last known
+  // progress) and drop the transition for just that one render.
+  const prevProgressRef = useRef<Map<number, number>>(new Map());
+
   const driverLayout = useMemo(() => {
-    if (!lineWidth) return [];
+    return driverProgress.map((entry) => {
+      const prev = prevProgressRef.current.get(entry.driver.driver_number);
+      const wrapped = prev !== undefined && entry.progress < prev - 0.5;
+      return { ...entry, wrapped };
+    });
+  }, [driverProgress]);
 
-    const rawX = driverProgress.map(({ progress }) => progress * lineWidth);
-    const x = spreadPositions(rawX, lineWidth);
-
-    return driverProgress.map((entry, idx) => ({ ...entry, x: x[idx] }));
-  }, [driverProgress, lineWidth]);
+  useEffect(() => {
+    const prevProgress = prevProgressRef.current;
+    for (const { driver, progress } of driverProgress) {
+      prevProgress.set(driver.driver_number, progress);
+    }
+  }, [driverProgress]);
 
   if (!progressIndex) return null;
 
   return (
     <div className="w-full h-full flex items-center justify-center px-8">
-      <div ref={lineRef} className="relative w-full h-12">
+      <div className="relative w-full h-12">
         <div className="absolute left-0 right-0 top-1/2 h-[2px] bg-gray-700 -translate-y-1/2 rounded-full" />
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-[3px] h-4 bg-white rounded-full" />
+        <div
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-[4px] h-5 rounded-sm"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(to bottom, #fff 0px, #fff 4px, #000 4px, #000 8px)",
+          }}
+        />
 
-        {driverLayout.map(({ driver, x }) => {
+        {driverLayout.map(({ driver, progress, wrapped }) => {
           const isFavorite = favorites.size === 0 || favorites.has(driver.driver_number);
 
           return (
@@ -132,10 +117,11 @@ export default function LinealDriverPositions({
               key={`lineal.driver.${driver.driver_number}`}
               className="absolute flex flex-col items-center transition-all duration-1000 ease-linear"
               style={{
-                left: `${x}px`,
+                left: `${progress * 100}%`,
                 top: "50%",
                 transform: "translate(-50%, -50%)",
                 opacity: isFavorite ? 1 : 0.5,
+                transitionProperty: wrapped ? "none" : undefined,
               }}
             >
               <span
