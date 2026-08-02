@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { config } from "@/lib/config";
+import { trackEvent } from "@/lib/analytics";
 import Navigation from "../Navigation";
 
 interface HomeContentProps {
@@ -55,6 +56,9 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 focus:ring-gray-500 
                 focus:ring-opacity-50"
               href="/live-timing"
+              onClick={() =>
+                trackEvent("cta_click", { cta: "live_timing", location: "home_hero" })
+              }
             >
               {dict.home.dashboardButton}
             </a>
@@ -74,6 +78,9 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 focus:ring-gray-500 
                 focus:ring-opacity-50"
               href="/schedule"
+              onClick={() =>
+                trackEvent("cta_click", { cta: "schedule", location: "home_hero" })
+              }
             >
               {dict.home.scheduleButton}
             </a>
@@ -94,7 +101,12 @@ export default function HomeContent({ dict }: HomeContentProps) {
               </h3>
               <button
                 type="button"
-                onClick={() => setIsSurveyVisible((visible) => !visible)}
+                onClick={() => {
+                  if (!isSurveyVisible) {
+                    trackEvent("cta_click", { cta: "feedback_survey", location: "home" });
+                  }
+                  setIsSurveyVisible((visible) => !visible);
+                }}
                 className="rounded px-6 w-[15rem] py-3 text-[1rem] border-2 border-gray-200 text-offWhite text-center transition duration-300 ease-in-out 
                 hover:-translate-y-1 
                 hover:scale-105 
@@ -132,6 +144,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
             href={dict.donate.url}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackEvent("donate_click", { location: "home" })}
             className="font-geist text-sm text-gray-400 underline underline-offset-4 decoration-gray-600 transition-colors duration-300 hover:text-gray-300 hover:decoration-gray-400"
           >
             {dict.donate.button}

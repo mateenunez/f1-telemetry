@@ -15,6 +15,7 @@ import {
 import PreferencesPanel from "./PreferencesPanel";
 import { usePreferences } from "@/context/preferences";
 import Weather from "./Weather";
+import FundingBanner from "./FundingBanner";
 import { config } from "@/lib/config";
 
 interface HeaderProps {
@@ -124,6 +125,7 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
               </div>
             </div>
           </div>
+          <FundingBanner dict={dict} />
           <div className="flex items-center text-nowrap flex-col md:flex-row gap-3 text-xs md:text-sm font-orbitron">
             {session?.session_status === "Finalised" ? (
               <F1Calendar dict={dict} />

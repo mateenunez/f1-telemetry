@@ -2,6 +2,7 @@ import { Github } from "lucide-react";
 import { config } from "@/lib/config";
 import { getDiscordInviteUrl } from "@/lib/discord";
 import Image from "next/image";
+import TrackedLink from "@/components/TrackedLink";
 
 interface FooterProps {
   dict: any;
@@ -20,16 +21,18 @@ export default async function Footer({ dict }: FooterProps) {
           alt="F1 Telemetry logo"
         />
         <div className="flex items-center gap-2">
-          <a
+          <TrackedLink
             href={config.public.github}
-            target="_blank"
+            action="cta_click"
+            params={{ cta: "github", location: "footer" }}
             className="text-gray-400"
           >
             <Github size={18} />
-          </a>
-          <a
+          </TrackedLink>
+          <TrackedLink
             href={discordUrl}
-            target="_blank"
+            action="cta_click"
+            params={{ cta: "discord", location: "footer" }}
             className="text-gray-400 w-[1rem]"
           >
             <Image
@@ -38,31 +41,33 @@ export default async function Footer({ dict }: FooterProps) {
               height={18}
               alt="Discord"
             />
-          </a>
+          </TrackedLink>
         </div>
         <p className="text-xs text-center text-gray-400 font-geist">{dict.footer.legal}</p>
-        <a
+        <TrackedLink
           href="/help"
-          target="_blank"
+          action="cta_click"
+          params={{ cta: "help", location: "footer" }}
           className="text-xs text-gray-400 font-geist hover:text-f1Blue text-center"
         >
           {dict.footer.help}
-        </a>
-        <a
+        </TrackedLink>
+        <TrackedLink
           href="/changelog"
-          target="_blank"
+          action="cta_click"
+          params={{ cta: "changelog", location: "footer" }}
           className="text-xs text-gray-400 font-geist hover:text-f1Blue text-center"
         >
           {dict.footer.changelog}
-        </a>
-        <a
+        </TrackedLink>
+        <TrackedLink
           href={dict.donate.url}
-          target="_blank"
-          rel="noopener noreferrer"
+          action="donate_click"
+          params={{ location: "footer" }}
           className="text-xs text-gray-400 font-geist hover:text-f1Blue text-center"
         >
           {dict.donate.shortLabel}
-        </a>
+        </TrackedLink>
       </div>
     </div>
   );

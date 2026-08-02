@@ -23,6 +23,11 @@
     "shortLabel": "Donar",
     "url": "https://cafecito.app/skoncito"
   },
+  "funding": {
+    "description": "Considerá apoyarnos para cubrir costos. Gracias!",
+    "cta": "Colaborar",
+    "thanks": "Cubrimos el mes por completo, muchísimas gracias!"
+  },
   "footer": {
     "legal": "Este sitio web no está asociado, afiliado, autorizado, respaldado ni conectado oficialmente de ninguna manera con la Fórmula 1, la FIA o cualquiera de sus subsidiarias o afiliadas.",
     "help": "Más información sobre widgets.",

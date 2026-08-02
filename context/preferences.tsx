@@ -15,6 +15,7 @@ import { ProcessedDriver } from "@/processors";
 export type WidgetId =
   | "driver-positions"
   | "map-and-messages"
+  | "lineal-driver-positions"
   | "session-audios"
   | "race-control-list"
   | "circle-of-doom"
@@ -76,6 +77,7 @@ export interface Preferences {
   circleCarData: WidgetConfig;
   driverPositions: WidgetConfig;
   mapAndMessages: WidgetConfig;
+  linealDriverPositions: WidgetConfig;
   tyresList: WidgetConfig;
   favoriteDrivers: ProcessedDriver[];
   delay: number;
@@ -110,6 +112,18 @@ export const DEFAULT_CONFIG: Preferences = {
     width: 500,
     height: 600,
     index: 1,
+  },
+  linealDriverPositions: {
+    enabled: true,
+    x: 1004,
+    y: 534,
+    width: 520,
+    height: 150,
+    xPct: 0.6536458333333334,
+    yPct: 0.7683453237410072,
+    widthPct: 0.3385416666666667,
+    heightPct: 0.2158273381294964,
+    index: 2,
   },
   audioLog: {
     enabled: true,
@@ -230,6 +244,7 @@ function isPreferences(obj: any): obj is Preferences {
         "circleCarData",
         "driverPositions",
         "mapAndMessages",
+        "linealDriverPositions",
         "tyresList",
       ].includes(key)
     ) {
@@ -267,7 +282,10 @@ function isPreferences(obj: any): obj is Preferences {
   return true;
 }
 
-export const PreferencesProvider: React.FC<ProviderProps> = ({ children, dict }) => {
+export const PreferencesProvider: React.FC<ProviderProps> = ({
+  children,
+  dict,
+}) => {
   const cookieName = "f1t_pref";
   const [preferences, setPreferences] = useState<Preferences>(() => {
     const cookie = Cookies.get(cookieName);
@@ -338,6 +356,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children, dict })
         { ...toAbs(prefs.circleOfDoom, "circle-of-doom") },
         { ...toAbs(prefs.circleCarData, "circle-car-data") },
         { ...toAbs(prefs.tyresList, "tyres-list") },
+        { ...toAbs(prefs.linealDriverPositions, "lineal-driver-positions") },
       ];
       return list.sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
     },
@@ -403,6 +422,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children, dict })
       "circle-of-doom": "circleOfDoom",
       "circle-car-data": "circleCarData",
       "tyres-list": "tyresList",
+      "lineal-driver-positions": "linealDriverPositions",
     };
     return map[id] ?? null;
   }
@@ -433,7 +453,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({ children, dict })
         if (JSON.stringify(parsed) !== JSON.stringify(preferences)) {
           setPreferences(parsed);
         }
-      } catch { }
+      } catch {}
     };
 
     window.addEventListener("storage", handleStorage);
