@@ -312,6 +312,12 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({
       const BASE_H = typeof window !== "undefined" ? window.innerHeight : 1094;
 
       const toAbs = (cfg: WidgetConfig, id: WidgetId) => {
+        if (typeof cfg !== "object" || cfg === null) {
+          const prefKey = widgetIdToPrefKey(id);
+          cfg = prefKey
+            ? (DEFAULT_CONFIG[prefKey] as WidgetConfig)
+            : { enabled: false, width: 0, height: 0 };
+        }
         const x =
           cfg.xPct !== undefined
             ? Math.round(cfg.xPct * BASE_W)
@@ -450,7 +456,10 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({
       if (!cookie) return;
       try {
         const parsed = JSON.parse(cookie);
-        if (JSON.stringify(parsed) !== JSON.stringify(preferences)) {
+        if (
+          isPreferences(parsed) &&
+          JSON.stringify(parsed) !== JSON.stringify(preferences)
+        ) {
           setPreferences(parsed);
         }
       } catch {}
