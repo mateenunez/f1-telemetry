@@ -101,14 +101,6 @@ export default function LinealDriverPositions({
     <div className="w-full h-full flex items-center justify-center px-8">
       <div className="relative w-full h-12">
         <div className="absolute left-0 right-0 top-1/2 h-[2px] bg-gray-700 -translate-y-1/2 rounded-full" />
-        <div
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-[4px] h-5 rounded-sm"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(to bottom, #fff 0px, #fff 4px, #000 4px, #000 8px)",
-          }}
-        />
-
         {driverLayout.map(({ driver, progress, wrapped }) => {
           const isFavorite = favorites.size === 0 || favorites.has(driver.driver_number);
 
