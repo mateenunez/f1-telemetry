@@ -98,7 +98,7 @@ export default function LinealDriverPositions({
   if (!progressIndex) return null;
 
   return (
-    <div className="w-full h-full flex items-center justify-center px-8">
+    <div className="w-full h-full flex items-center justify-center px-8 bg-warmBlack">
       <div className="relative w-full h-12">
         <div className="absolute left-0 right-0 top-1/2 h-[2px] bg-gray-700 -translate-y-1/2 rounded-full" />
         {driverLayout.map(({ driver, progress, wrapped }) => {
