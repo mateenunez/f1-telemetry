@@ -20,6 +20,11 @@ that's user-facing, add a matching item there (in English and Spanish) too.
 
 ## [Unreleased]
 
+### Added
+
+- Lineal Driver Positions widget: shows each driver's position on the circuit flattened onto a straight line.
+- Forgot/reset password flow.
+
 ## [2.0.0] - 2026-07-12
 
 ### Added

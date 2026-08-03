@@ -29,6 +29,24 @@ export interface ChangelogRelease {
 
 export const changelog: ChangelogRelease[] = [
   {
+    version: "2.1.0",
+    date: "2026-08-02",
+    items: [
+      {
+        type: "added",
+        scope: "frontend",
+        en: "Added the Lineal Driver Positions widget, showing each driver's position on the circuit flattened onto a straight line.",
+        es: "Se añadió el widget de Posiciones en línea, que muestra la posición de cada piloto en el circuito como una línea recta.",
+      },
+      {
+        type: "added",
+        scope: "both",
+        en: "Added a forgot/reset password flow so you can recover access to your account.",
+        es: "Se añadió un flujo de recuperación de contraseña para que puedas recuperar el acceso a tu cuenta.",
+      },
+    ],
+  },
+  {
     version: "2.0.0",
     date: "2026-07-12",
     items: [

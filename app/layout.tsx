@@ -86,6 +86,13 @@ export default async function RootLayout({
   return (
     <html lang={lang}>
       <head>
+        <Script id="gtm-script" strategy="beforeInteractive">
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-W5LJ4LJB');`}
+        </Script>
         <meta
           name="google-site-verification"
           content="eF8UbK8ghA29zsWnzurWzjJgXzmLeucRd59QUDpdHTE"
@@ -110,13 +117,6 @@ export default async function RootLayout({
           hrefLang="x-default"
           href="https://www.f1telemetry.com/en"
         />
-        <Script id="gtm-script" strategy="afterInteractive">
-          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-          })(window,document,'script','dataLayer','GTM-W5LJ4LJB');`}
-        </Script>
       </head>
       <body
         className={`${f1RegularfFont.variable} ${geist.variable} ${orbitron.variable} ${inter.variable}`}
