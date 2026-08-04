@@ -12,6 +12,7 @@ import { ProcessedDriver } from "@/processors";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/hooks/use-auth";
 import AuthForm from "./telemetry/AuthForm";
+import { trackEvent } from "@/lib/analytics";
 
 interface PreferencesPanelProps {
   driverInfo: ProcessedDriver[] | undefined;
@@ -114,6 +115,11 @@ export default function PreferencesPanel({
   };
 
   const handleDelay = () => {
+    trackEvent("cta_click", {
+      cta: "delay_apply",
+      location: "preferences_panel",
+      value: delay,
+    });
     setPreference("delay", delay);
   };
 
@@ -140,7 +146,12 @@ export default function PreferencesPanel({
     });
   };
 
-  const handleEditMode = () => {
+  const handleEditMode = (location: "toolbar" | "preferences_panel") => {
+    trackEvent("cta_click", {
+      cta: "edit_mode",
+      location,
+      state: isEditMode ? "disabled" : "enabled",
+    });
     if (isEditMode) {
       setWidgetsPreferences(widgets);
     } else {
@@ -391,8 +402,14 @@ export default function PreferencesPanel({
           className="text-gray-400 hover:text-gray-400 hover:cursor-pointer"
           width={15}
           onClick={() => {
+            if (!open) {
+              trackEvent("cta_click", {
+                cta: "preferences_panel",
+                location: "toolbar",
+              });
+              setPreference("hasSeenPanel", true);
+            }
             setOpen((prev) => !prev);
-            if (!open) setPreference("hasSeenPanel", true);
           }}
         />
         {!preferences.hasSeenPanel && (
@@ -408,7 +425,7 @@ export default function PreferencesPanel({
               ? "text-f1Blue hover:text-f1Blue/80"
               : "text-gray-400 hover:text-gray-400"
               }`}
-            onClick={handleEditMode}
+            onClick={() => handleEditMode("toolbar")}
           />
           {!preferences.hasSeenEditMode && (
             <div className="absolute -bottom-0.5 -right-1 w-1.5 h-1.5 bg-f1Blue rounded-full animate-pulse"></div>
@@ -523,7 +540,7 @@ export default function PreferencesPanel({
                   : "Enable edit mode to move or redimension widgets."}
               </p>
               <button
-                onClick={handleEditMode}
+                onClick={() => handleEditMode("preferences_panel")}
                 className="flex items-start justify-start gap-2 px-4 py-2 text-sm rounded-md bg-warmBlack text-offWhite border-2 border-gray-700 hover:border-offWhite hover:bg-warmBlack/80 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-f1Blue font-geist font-medium"
                 style={{
                   boxShadow:
