@@ -19,8 +19,9 @@
     "url": "https://docs.google.com/forms/d/e/1FAIpQLScs9cIGiZamLcDUkDPEqoMeufFAX9ITOvrncGG0WltD8XMs4g/viewform"
   },
   "donate": {
-    "button": "Enjoying F1 Telemetry? Support via PayPal",
+    "button": "Support the project on PayPal",
     "shortLabel": "Donate",
+    "platform": "paypal",
     "url": "https://paypal.me/Mateenunez"
   },
   "funding": {

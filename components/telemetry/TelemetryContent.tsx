@@ -186,7 +186,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
           <Button
             onClick={() => window.location.reload()}
             size="lg"
-            className="bg-transparent font-geist text-lg border-2 border-f1Red rounded-lg hover:bg-f1Red/90 text-gray-400 hover:text-warmBlack hover:border-warmBlack"
+            className="bg-transparent font-geist text-lg border-2 border-f1Red rounded-lg hover:bg-f1Red/90 text-offWhite hover:text-warmBlack hover:border-warmBlack"
           >
             {dict.error.reload}
           </Button>

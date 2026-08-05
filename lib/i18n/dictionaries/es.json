@@ -19,8 +19,9 @@
     "url": "https://docs.google.com/forms/d/e/1FAIpQLSfN_x5J8-zpuoKh8pU8fe35n-eWbgkwNiYvkNOR9_e64Ejf3Q/viewform"
   },
   "donate": {
-    "button": "¿Te gusta F1 Telemetry? Invitame un café en Cafecito",
+    "button": "Apoyá el proyecto en Cafecito",
     "shortLabel": "Donar",
+    "platform": "cafecito",
     "url": "https://cafecito.app/skoncito"
   },
   "funding": {

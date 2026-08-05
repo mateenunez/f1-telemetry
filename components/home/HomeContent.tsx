@@ -145,8 +145,17 @@ export default function HomeContent({ dict }: HomeContentProps) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => trackEvent("donate_click", { location: "home" })}
-            className="font-geist text-sm text-gray-400 underline underline-offset-4 decoration-gray-600 transition-colors duration-300 hover:text-gray-300 hover:decoration-gray-400"
+            className="inline-flex items-center gap-2 rounded-full bg-f1Yellow pl-2 pr-4 py-2 font-geist text-sm font-semibold text-warmBlack shadow-md transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-f1Yellow/30"
           >
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white">
+              <Image
+                src={`/assets/${dict.donate.platform}-logo.png`}
+                alt={dict.donate.platform}
+                width={16}
+                height={16}
+                className="h-4 w-4 object-contain"
+              />
+            </span>
             {dict.donate.button}
           </a>
         </div>
