@@ -96,6 +96,9 @@ export default async function RootLayout({
         <Script id="monetag-banner" strategy="afterInteractive">
           {`(function(s){s.dataset.zone='11654017',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))}`}
         </Script>
+        <Script id="monetag-vignette" strategy="afterInteractive">
+          {`(function(s){s.dataset.zone='11654025',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))}`}
+        </Script>
         <meta
           name="google-site-verification"
           content="eF8UbK8ghA29zsWnzurWzjJgXzmLeucRd59QUDpdHTE"
