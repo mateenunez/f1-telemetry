@@ -158,6 +158,53 @@ export default function HomeContent({ dict }: HomeContentProps) {
             </span>
             {dict.donate.button}
           </a>
+          <section
+            className="w-full border-t border-gray-800 px-4 pt-6 text-gray-500"
+            aria-labelledby="telemetry-guides-title"
+          >
+            <div className="mb-4 text-center">
+              <h2 id="telemetry-guides-title" className="font-geist text-sm font-medium text-gray-400">
+                {dict.home.guides.title}
+              </h2>
+            </div>
+            <div className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
+              {dict.home.guides.articles.map((article: { title: string; description: string }) => (
+                <article key={article.title} className="text-xs leading-5">
+                  <h3 className="font-geist font-medium text-gray-400">{article.title}</h3>
+                  <p className="mt-1">{article.description}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+          <section
+            className="w-full border-t border-gray-800 px-4 pt-6 text-gray-500"
+            aria-labelledby="legal-information-title"
+          >
+            <h2 id="legal-information-title" className="text-center font-geist text-sm font-medium text-gray-400">
+              {dict.footer.legalNavigation}
+            </h2>
+            <div className="mt-4 grid gap-x-6 gap-y-4 sm:grid-cols-2">
+              {(Object.entries(dict.legal) as [string, { title: string; body: string[] }][]).map(
+                ([slug, page]) => (
+                  <article key={slug} className="text-xs leading-5">
+                    <h3 className="font-geist font-medium text-gray-400">
+                      <a
+                        href={`/${dict.locale}/legal/${slug}`}
+                        className="underline underline-offset-2 hover:text-f1Blue"
+                      >
+                        {page.title}
+                      </a>
+                    </h3>
+                    {page.body.map((paragraph) => (
+                      <p key={paragraph} className="mt-1">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </article>
+                ),
+              )}
+            </div>
+          </section>
         </div>
       </div>
     </div>

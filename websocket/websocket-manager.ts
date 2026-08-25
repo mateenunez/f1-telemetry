@@ -1,4 +1,3 @@
-import { useAuth } from "@/hooks/use-auth";
 import { decode as cborDecode, encode as cborEncode } from "cbor2";
 
 export interface SignalRMessage {

@@ -1,6 +1,5 @@
 "use client";
 
-import { usePreferences } from "@/context/preferences";
 import {
   F1Event,
   getCountryCode,
@@ -100,10 +99,7 @@ export default function NextSession({
           <div className="flex md:flex-row justify-center gap-4 items-center">
             {/* Location and Status */}
             <div>
-              <InfoRowWithFlag
-                label="session.location"
-                value={session.location}
-              />
+              <InfoRowWithFlag value={session.location} />
             </div>
             {/* Time Information */}
             <div className="flex flex-col text-left gap-0">
@@ -133,7 +129,7 @@ function TimeUnit({ value, label }: { value: number; label: string }) {
 }
 
 // Componente para filas de información con bandera
-function InfoRowWithFlag({ label, value }: { label: string; value: string }) {
+function InfoRowWithFlag({ value }: { value: string }) {
   return (
     <span className="text-gray-400 flex flex-col gap-0 items-center">
       <img

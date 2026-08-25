@@ -1,7 +1,7 @@
 "use client";
 
 import type { ProcessedSession, ProcessedTiming } from "@/processors";
-import { useRef } from "react";
+import { useLastValidGap } from "@/hooks/use-last-valid-gap";
 
 interface DriverGap1Props {
   timing: ProcessedTiming | undefined;
@@ -9,29 +9,10 @@ interface DriverGap1Props {
 }
 
 export default function DriverGap1({ timing, session }: DriverGap1Props) {
-  const lastValidGapRef = useRef<any>(null);
-
-  let lastGap;
-  const qualifyingPartIndex = session?.series?.findLast(
-    (q) => q
-  )?.QualifyingPart;
-
-  if (
-    timing?.stats &&
-    timing?.stats.length > 0 &&
-    qualifyingPartIndex !== undefined
-  ) {
-    lastGap = timing.stats[qualifyingPartIndex - 1];
-
-    if (
-      lastGap &&
-      (lastGap.TimeDiffToFastest !== "" || lastGap.GapToLeader !== "")
-    ) {
-      lastValidGapRef.current = lastGap;
-    }
-  } else {
-    lastGap = lastValidGapRef.current;
-  }
+  const lastGap = useLastValidGap(timing, session, [
+    "TimeDiffToFastest",
+    "GapToLeader",
+  ]);
 
   const isRace = session?.session_type === "Race";
 

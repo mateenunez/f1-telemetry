@@ -108,51 +108,6 @@ export function formatTimeUntil(
   }
 }
 
-export function extendedFormatTimeUntil(timeUntil: TimeUntilNext): string {
-  if (timeUntil.days > 0) {
-    return `${timeUntil.days} day${timeUntil.days > 1 ? "s" : ""} ${timeUntil.hours} hours ${timeUntil.minutes} minutes`;
-  } else if (timeUntil.hours > 0) {
-    return `${timeUntil.hours} hour ${timeUntil.minutes} minutes`;
-  } else {
-    return `${timeUntil.minutes}minutes`;
-  }
-}
-
-export function formatEventDate(dateString: string): string {
-  try {
-    const date = new Date(dateString);
-
-    // Verificar si la fecha es válida
-    if (isNaN(date.getTime())) {
-      return "Invalid date";
-    }
-
-    // Opciones de formateo para la fecha
-    const dateOptions: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-
-    // Opciones de formateo para la hora
-    const timeOptions: Intl.DateTimeFormatOptions = {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    };
-
-    // Formatear fecha y hora por separado
-    const formattedDate = date.toLocaleDateString("en-US", dateOptions);
-    const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
-
-    return `${formattedDate} at ${formattedTime}`;
-  } catch (error) {
-    console.error("Error formatting date:", error);
-    return "Invalid date";
-  }
-}
-
 export function formatEventDateShort(
   dateString: string,
   locale: string,
@@ -181,25 +136,6 @@ export function formatEventDateShort(
   } catch (error) {
     console.error("Error formatting date:", error);
     return "Invalid date";
-  }
-}
-
-export function formatEventTime(dateString: string): string {
-  try {
-    const date = new Date(dateString);
-
-    if (isNaN(date.getTime())) {
-      return "Invalid date";
-    }
-
-    return date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-  } catch (error) {
-    console.error("Error formatting time:", error);
-    return "Invalid time";
   }
 }
 
@@ -461,11 +397,6 @@ export const toLocaleTime = (dateString: string) => {
     second: "2-digit",
     hour12: false,
   });
-};
-
-export const parseTimeOffset = (timeString: string) => {
-  const [hours, minutes, seconds] = timeString.split(":").map(Number);
-  return (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
 };
 
 export const sessionType = (

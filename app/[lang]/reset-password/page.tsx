@@ -3,6 +3,7 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import type { Locale } from "@/lib/i18n/config";
 import type { Metadata } from "next";
 import ResetPasswordContent from "@/components/auth/ResetPasswordContent";
+import Footer from "@/components/Footer";
 
 export async function generateMetadata({
   params,
@@ -26,10 +27,13 @@ export default async function ResetPassword({
   const dict = await getDictionary(lang);
 
   return (
-    <div className="min-h-screen bg-warmBlack flex items-center justify-center p-4">
-      <Suspense fallback={null}>
-        <ResetPasswordContent dict={dict} lang={lang} />
-      </Suspense>
+    <div className="min-h-screen bg-warmBlack flex flex-col">
+      <div className="flex-1 flex items-center justify-center p-4">
+        <Suspense fallback={null}>
+          <ResetPasswordContent dict={dict} lang={lang} />
+        </Suspense>
+      </div>
+      <Footer dict={dict} />
     </div>
   );
 }

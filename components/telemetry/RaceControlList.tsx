@@ -3,6 +3,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { WidgetConfig } from "@/context/preferences";
 import { ProcessedDriver, ProcessedRaceControl } from "@/processors";
 import { toLocaleTime } from "@/utils/calendar";
+import { getFavoriteDriverStyle } from "@/utils/telemetry";
 import { Copy } from "lucide-react";
 interface RaceControlListProps {
   raceControl: ProcessedRaceControl[] | undefined;
@@ -27,26 +28,12 @@ export default function RaceControlList({
 
   };
 
-  const getMessageStyle = (msg: ProcessedRaceControl) => {
-    if (!msg.racing_number || !driverInfos) return {};
-
-    const racingNumber = parseInt(msg.racing_number, 10);
-    if (isNaN(racingNumber)) return {};
-
-    const driver = driverInfos.find((d) => d?.driver_number === racingNumber);
-    if (!driver) return {};
-
-    const isFavorite = favoriteDrivers?.some(
-      (fav) => fav.driver_number === driver.driver_number
+  const getMessageStyle = (msg: ProcessedRaceControl) =>
+    getFavoriteDriverStyle(
+      msg.racing_number ? parseInt(msg.racing_number, 10) : undefined,
+      driverInfos,
+      favoriteDrivers,
     );
-
-    if (!isFavorite) return {};
-
-    return {
-      backgroundColor: `#${driver.team_colour}30`,
-      borderColor: `#${driver.team_colour}60`,
-    };
-  };
 
   return (
     <Card className="flex w-full h-full bg-warmBlack border-none">

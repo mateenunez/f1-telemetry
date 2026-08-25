@@ -8,7 +8,6 @@ import {
 import { getCompoundSvg } from "@/hooks/use-telemetry";
 import { Card, CardContent } from "../ui/card";
 import { ScrollArea } from "../ui/scroll-area";
-import { Badge } from "../ui/badge";
 import { getCompoundColor, parseLapTime } from "@/utils/telemetry";
 
 interface TyresListProps {
@@ -101,7 +100,7 @@ export default function TyresList({
           className="overflow-x-auto h-[18rem] lg:h-[80%] p-0"
           type="scroll"
         >
-          {positions.map((pos, idx) => {
+          {positions.map((_pos, idx) => {
             const driver = driverInfos[idx];
             const stints = driverStints[idx];
             const isFavorite =

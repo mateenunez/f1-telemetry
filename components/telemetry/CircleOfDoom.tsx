@@ -4,6 +4,8 @@ import {
   ProcessedTiming,
 } from "@/processors";
 import { useMemo } from "react";
+import { polarPoint } from "@/utils/svg-polar";
+import { findDriverByNumber } from "@/utils/telemetry";
 
 interface CircleOfDoomProps {
   currentPositions: (ProcessedPosition | undefined)[];
@@ -11,7 +13,6 @@ interface CircleOfDoomProps {
   driverInfos: (ProcessedDriver | undefined)[];
   refDriver: number | undefined;
   sessionType?: string | null;
-  dict?: any;
   translate?: boolean;
 }
 
@@ -21,7 +22,6 @@ export default function CircleOfDoom({
   driverInfos,
   refDriver = 1,
   sessionType,
-  dict,
   translate,
 }: CircleOfDoomProps) {
   const isRace = String(sessionType ?? "").toLowerCase().includes("race");
@@ -33,8 +33,6 @@ export default function CircleOfDoom({
   const CLOCKWISE = true;
   const tickLength = 2;
   const strokeWidth = 4.5;
-  const cx = 50;
-  const cy = 50;
   const r = 50 - strokeWidth / 2;
 
   if (!isRace) {
@@ -72,21 +70,6 @@ export default function CircleOfDoom({
     );
   }
 
-  const deg2rad = (deg: number) => (deg * Math.PI) / 180;
-
-  const polarToCartesian = (angleDeg: number, radius = r) => {
-    const rad = deg2rad(angleDeg);
-    return {
-      x: cx - radius * Math.cos(rad),
-      y: cy - radius * Math.sin(rad),
-    };
-  };
-
-  const polar = (deg: number, radius: number) => {
-    const rad = deg2rad(deg);
-    return { x: cx - radius * Math.cos(rad), y: cy - radius * Math.sin(rad) };
-  };
-
   const getAngularPos = (ref: number, dri: number, lastLap: number) => {
     const angularPos = (dri - ref) / lastLap;
     return angularPos * 360;
@@ -107,7 +90,7 @@ export default function CircleOfDoom({
   );
 
   const pilotRef = useMemo(() => {
-    const info = driverInfos.find((d) => d?.driver_number === refDriver);
+    const info = findDriverByNumber(driverInfos, refDriver);
     const timing = cleanTimings.find((d) => d.driver_number === refDriver);
     const refIndex = currentPositions.findIndex(
       (pos) => pos?.driver_number === refDriver,
@@ -157,8 +140,9 @@ export default function CircleOfDoom({
           ? {
               position: refIndex,
               driver: aheadPosition,
-              driverInfo: driverInfos.find(
-                (d) => d?.driver_number === aheadPosition.driver_number,
+              driverInfo: findDriverByNumber(
+                driverInfos,
+                aheadPosition.driver_number,
               ),
               gap: aheadGapToRef,
             }
@@ -168,8 +152,9 @@ export default function CircleOfDoom({
           ? {
               position: refIndex + 2,
               driver: behindPosition,
-              driverInfo: driverInfos.find(
-                (d) => d?.driver_number === behindPosition.driver_number,
+              driverInfo: findDriverByNumber(
+                driverInfos,
+                behindPosition.driver_number,
               ),
               gap: behindGapToRef,
             }
@@ -191,7 +176,7 @@ export default function CircleOfDoom({
     let gtl = 0;
     let gapToLeaders = new Map();
 
-    currentPositions.forEach((d, idx) => {
+    currentPositions.forEach((d) => {
       const driverTimings = timings.find(
         (dt) => dt?.driver_number === d?.driver_number,
       );
@@ -225,9 +210,9 @@ export default function CircleOfDoom({
   const raceLeaderLabel = translate ? "LÍDER DE CARRERA" : "RACE LEADER";
 
   const pitStopDeg = markersDeg.get(924);
-  const pitOuter = polarToCartesian(adjusted(pitStopDeg || 60), r + tickLength);
-  const pitInner = polarToCartesian(adjusted(pitStopDeg || 60), r - tickLength);
-  const pitLabelPos = polar(adjusted(pitStopDeg || 60), r - 7);
+  const pitOuter = polarPoint(adjusted(pitStopDeg || 60), r + tickLength);
+  const pitInner = polarPoint(adjusted(pitStopDeg || 60), r - tickLength);
+  const pitLabelPos = polarPoint(adjusted(pitStopDeg || 60), r - 7);
 
   return (
     <div className="flex items-center bg-warmBlack justify-center w-full h-full p-6 lg:p-0">
@@ -389,13 +374,14 @@ export default function CircleOfDoom({
           {currentPositions.map((dri, i) => {
             if (!dri) return;
             const deg = markersDeg?.get(dri?.driver_number);
-            const driverInfo = driverInfos.find(
-              (driver) => driver?.driver_number === dri.driver_number,
+            const driverInfo = findDriverByNumber(
+              driverInfos,
+              dri.driver_number,
             );
             if (deg === undefined || Number.isNaN(deg)) return;
-            const outer = polarToCartesian(adjusted(deg), r + tickLength);
-            const inner = polarToCartesian(adjusted(deg), r - tickLength);
-            const labelPos = polar(adjusted(deg), r - 7);
+            const outer = polarPoint(adjusted(deg), r + tickLength);
+            const inner = polarPoint(adjusted(deg), r - tickLength);
+            const labelPos = polarPoint(adjusted(deg), r - 7);
 
             return (
               <g key={i}>

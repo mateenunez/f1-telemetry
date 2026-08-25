@@ -10,7 +10,24 @@
     "audioDesc": "Podés escuchar al instante el mensaje de radio de equipo de cada piloto durante la carrera, y además ¡usamos IA para la traducción y transcripción!",
     "circlesTitle": "Análisis en tiempo real",
     "circlesDesc": "Estamos añadiendo constantemente funcionalidades para mejorar el análisis de carreras, como el Circle of Doom que sirve para tomar decisiones de undercut.",
-    "announce": "Seguimos trabajando en migrar a un nuevo servidor, la telemetría puede no funcionar correctamente hasta que finalice el proceso. ¡Te esperamos en marzo!"
+    "announce": "Seguimos trabajando en migrar a un nuevo servidor, la telemetría puede no funcionar correctamente hasta que finalice el proceso. ¡Te esperamos en marzo!",
+    "guides": {
+      "title": "Guías de telemetría",
+      "articles": [
+        {
+          "title": "Cómo analizar la telemetría de frenada",
+          "description": "Compara los puntos de frenada, la presión y la velocidad de liberación para entender dónde gana tiempo un piloto al entrar en una curva. Frenar más tarde no siempre es más rápido: una liberación suave conserva el agarre y mejora la salida."
+        },
+        {
+          "title": "Cómo encontrar velocidad punta y aceleración",
+          "description": "Usa la curva de velocidad para separar el rendimiento de la salida de curva de la velocidad en recta. El pico más alto suele depender de una buena salida, poca resistencia y la elección correcta de marcha."
+        },
+        {
+          "title": "Cómo leer las diferencias de vuelta",
+          "description": "Los tiempos por sector y las diferencias de vuelta muestran dónde cambia la carrera. Una brecha que crece en un sector puede revelar desgaste, tráfico o una debilidad del reglaje antes de que se note en la clasificación general."
+        }
+      ]
+    }
   },
   "feedback": {
     "description": "Queremos saber tu opinión",
@@ -32,7 +49,42 @@
   "footer": {
     "legal": "Este sitio web no está asociado, afiliado, autorizado, respaldado ni conectado oficialmente de ninguna manera con la Fórmula 1, la FIA o cualquiera de sus subsidiarias o afiliadas.",
     "help": "Más información sobre widgets.",
-    "changelog": "Novedades"
+    "changelog": "Novedades",
+    "about": "Sobre nosotros",
+    "privacy": "Política de privacidad",
+    "terms": "Términos de uso",
+    "contact": "Contacto",
+    "legalNavigation": "Información legal"
+  },
+  "legal": {
+    "about": {
+      "title": "Sobre nosotros",
+      "body": [
+        "F1 Telemetry es un proyecto independiente de fans, creado para facilitar la exploración de datos de Fórmula 1.",
+        "Desarrollamos dashboards en tiempo real, visualizaciones de circuitos y herramientas de análisis usando datos públicos de tiempos y telemetría. El proyecto no está afiliado a la Fórmula 1, la FIA ni sus socios."
+      ]
+    },
+    "privacy": {
+      "title": "Política de privacidad",
+      "body": [
+        "F1 Telemetry utiliza datos técnicos esenciales para ofrecer el sitio y puede utilizar servicios de analítica y publicidad para entender el uso y sostener los costos de operación.",
+        "Los servicios de terceros pueden instalar cookies o procesar información según sus propias políticas. Puedes administrar las cookies desde la configuración de tu navegador. Para consultas sobre datos personales, contáctanos mediante la dirección indicada abajo."
+      ]
+    },
+    "terms": {
+      "title": "Términos de uso",
+      "body": [
+        "F1 Telemetry se ofrece con fines personales, informativos y de entretenimiento. Los datos pueden estar retrasados, incompletos o no disponibles, y no deben considerarse una fuente oficial.",
+        "Aceptas no usar el servicio indebidamente, interferir con su funcionamiento ni presentar este proyecto de fans como un servicio oficial de Fórmula 1. Podemos modificar o retirar funciones a medida que el proyecto evolucione."
+      ]
+    },
+    "contact": {
+      "title": "Contacto",
+      "body": [
+        "Para consultas, comentarios, solicitudes de privacidad o propuestas de colaboración, puedes contactar al equipo por correo electrónico.",
+        "Correo: contacto@f1telemetry.com"
+      ]
+    }
   },
   "schedule": {
     "homeButton": "Inicio",

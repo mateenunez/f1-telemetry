@@ -31,8 +31,6 @@ interface DriverPositionsProps {
   handlePinnedDriver: (driverNumber: number) => void;
   session: ProcessedSession | null | undefined;
   aboutToBeEliminated: number[];
-  fullWidth?: boolean;
-  isMobile?: boolean;
   translate?: boolean;
   driverHeadshot?: boolean;
   audioEnabled?: boolean;
@@ -51,8 +49,6 @@ const DriverPositions = memo(function DriverPositions({
   handlePinnedDriver,
   session,
   aboutToBeEliminated,
-  fullWidth,
-  isMobile,
   translate,
   driverHeadshot,
   audioEnabled,

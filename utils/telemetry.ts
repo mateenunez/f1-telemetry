@@ -89,10 +89,39 @@ export function getTrackStatusColor(status: string): string {
 }
 
 import type {
+  ProcessedDriver,
   ProcessedPosition,
   ProcessedSession,
   ProcessedTiming,
 } from "@/processors";
+
+export function findDriverByNumber(
+  driverInfos: (ProcessedDriver | undefined)[] | undefined,
+  driverNumber: number | undefined
+): ProcessedDriver | undefined {
+  if (driverNumber === undefined) return undefined;
+  return driverInfos?.find((d) => d?.driver_number === driverNumber);
+}
+
+export function getFavoriteDriverStyle(
+  driverNumber: number | undefined,
+  driverInfos: (ProcessedDriver | undefined)[] | undefined,
+  favoriteDrivers: ProcessedDriver[] | undefined
+): { backgroundColor?: string; borderColor?: string } {
+  if (!driverNumber || isNaN(driverNumber)) return {};
+  const driver = findDriverByNumber(driverInfos, driverNumber);
+  if (!driver) return {};
+
+  const isFavorite = favoriteDrivers?.some(
+    (fav) => fav.driver_number === driver.driver_number
+  );
+  if (!isFavorite) return {};
+
+  return {
+    backgroundColor: `#${driver.team_colour}30`,
+    borderColor: `#${driver.team_colour}60`,
+  };
+}
 
 export function getAboutToBeEliminatedDrivers(
   currentPositions: ProcessedPosition[],

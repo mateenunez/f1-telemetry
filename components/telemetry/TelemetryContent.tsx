@@ -258,8 +258,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           handlePinnedDriver={handlePinnedDriver}
                           session={session}
                           aboutToBeEliminated={aboutToBeEliminated}
-                          fullWidth={w.width >= canvasSize.width * 0.4}
-                          isMobile={isMobile}
                           driverHeadshot={preferences.headshot}
                           audioEnabled={preferences.audio}
                           translate={preferences.translate}
@@ -479,8 +477,6 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           handlePinnedDriver={handlePinnedDriver}
                           session={session}
                           aboutToBeEliminated={aboutToBeEliminated}
-                          fullWidth={widget.width >= canvasSize.width * 0.4}
-                          isMobile={isMobile}
                           driverHeadshot={preferences.headshot}
                           audioEnabled={preferences.audio}
                           translate={preferences.translate}

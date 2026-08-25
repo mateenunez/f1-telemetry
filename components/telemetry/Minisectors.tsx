@@ -91,7 +91,7 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
         {/* Minisectores */}
         <div className="text-xs text-white w-full">
           {(["sector1", "sector2", "sector3"] as const).map(
-            (sectorKey, sectorIdx) => {
+            (sectorKey) => {
               const minisectors = timing?.sector_segments[sectorKey] || [];
               return (
                 <div
@@ -130,7 +130,7 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
             className="flex items-center flex-col text-xs text-white min-w-[2rem] w-full font-inter"
           >
             {(["sector1", "sector2", "sector3"] as const).map(
-              (sectorKey, idx) => {
+              (sectorKey) => {
                 const sector = timing?.sector_times[sectorKey];
                 const color = getSectorTimeColor(sector);
                 const displayValue =
@@ -150,7 +150,7 @@ export default function Minisectors({ timing, timingStats, MinisectorHorizontal 
           <div
             className="flex items-center flex-col text-xs min-w-[2rem] w-full font-inter"
           >
-            {timingStats?.best_sectors.map((sectorKey, idx) => {
+            {timingStats?.best_sectors.map((_sectorKey, idx) => {
               const sector = timingStats.best_sectors[idx];
               const color = getBestSectorColor(sector);
               const displayValue = sector?.Value ?? "--:--";

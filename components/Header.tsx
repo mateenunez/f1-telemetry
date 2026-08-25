@@ -137,7 +137,7 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
                     <span className="font-inter">{userCount}</span>
                   </div>
                 )}
-                {weather && <Weather weather={weather} dict={dict} />}
+                {weather && <Weather weather={weather} />}
               </>
             )}
           </div>

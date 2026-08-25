@@ -10,7 +10,24 @@
     "audioDesc": "Listen instantly to each driver’s team radio during the race—we also use AI for translation and transcription!",
     "circlesTitle": "Real-Time Analysis",
     "circlesDesc": "We keep adding features to boost race analysis, such as the Circle of Doom, perfect for undercut decisions.",
-    "announce": "We are still working on migrating to a new server, this website may not work properly until then. See you in march!"
+    "announce": "We are still working on migrating to a new server, this website may not work properly until then. See you in march!",
+    "guides": {
+      "title": "Telemetry guides",
+      "articles": [
+        {
+          "title": "How to analyze braking telemetry",
+          "description": "Compare braking points, pressure and release speed to understand where a driver gains time entering a corner. A later brake point is not always faster: a smooth release can preserve tire grip and improve the exit."
+        },
+        {
+          "title": "Finding top speed and acceleration",
+          "description": "Use the speed trace to separate corner exit performance from straight-line speed. The fastest peak usually comes from a strong exit, low drag and the right gear selection rather than one isolated throttle input."
+        },
+        {
+          "title": "Reading lap time gaps",
+          "description": "Sector times and lap gaps show where the race is changing. A growing gap in one sector can reveal tire wear, traffic or a setup weakness before it becomes obvious in the overall timing order."
+        }
+      ]
+    }
   },
   "feedback": {
     "description": "We want to know your opinion",
@@ -32,7 +49,42 @@
   "footer": {
     "legal": "This website is not associated, affiliated, authorized, endorsed, or officially connected in any way with Formula 1, the FIA, or any of its subsidiaries or affiliates.",
     "help": "About widgets.",
-    "changelog": "Changelog"
+    "changelog": "Changelog",
+    "about": "About us",
+    "privacy": "Privacy policy",
+    "terms": "Terms of use",
+    "contact": "Contact",
+    "legalNavigation": "Legal information"
+  },
+  "legal": {
+    "about": {
+      "title": "About us",
+      "body": [
+        "F1 Telemetry is an independent fan project created to make Formula 1 data easier to explore.",
+        "We build real-time dashboards, circuit visualizations and analysis tools using publicly available timing and telemetry data. The project is not affiliated with Formula 1, the FIA or their partners."
+      ]
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "body": [
+        "F1 Telemetry uses essential technical data to provide the website and may use analytics and advertising services to understand usage and support operating costs.",
+        "Third-party services may place cookies or process information according to their own policies. You can manage cookies through your browser settings. For questions about personal data, contact us using the address below."
+      ]
+    },
+    "terms": {
+      "title": "Terms of use",
+      "body": [
+        "F1 Telemetry is provided for personal, informational and entertainment purposes. Data can be delayed, incomplete or unavailable, and should not be treated as an official source.",
+        "You agree not to misuse the service, interfere with its operation or present this fan-made project as an official Formula 1 service. We may change or discontinue features as the project evolves."
+      ]
+    },
+    "contact": {
+      "title": "Contact",
+      "body": [
+        "For questions, feedback, privacy requests or partnership enquiries, please contact the project team by email.",
+        "Email: contacto@f1telemetry.com"
+      ]
+    }
   },
   "schedule": {
     "homeButton": "Home",

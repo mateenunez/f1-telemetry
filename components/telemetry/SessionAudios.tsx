@@ -11,6 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Copy, DownloadIcon, PauseIcon, PlayIcon } from "lucide-react";
 import { toLocaleTime } from "@/utils/calendar";
+import { findDriverByNumber, getFavoriteDriverStyle } from "@/utils/telemetry";
 import { cn } from "@/lib/utils";
 import { useTelemetryAudio, audioUrl } from "@/hooks/use-raceControl";
 import { config } from "@/lib/config";
@@ -41,29 +42,15 @@ export default function SessionAudios({
   const { playTeamRadioSound, radioAudioRef, stopTeamRadioSound } =
     useTelemetryAudio();
 
-  const getMessageStyle = (msg: ProcessedCapture) => {
-    const racingNumber = msg.racingNumber;
-    if (!racingNumber || !driverInfos) return {};
-
-    if (isNaN(racingNumber)) return {};
-
-    const driver = driverInfos.find((d) => d?.driver_number === racingNumber);
-    if (!driver) return {};
-
-    const isFavorite = preferences?.favoriteDrivers?.some(
-      (fav) => fav.driver_number === driver.driver_number,
+  const getMessageStyle = (msg: ProcessedCapture) =>
+    getFavoriteDriverStyle(
+      msg.racingNumber,
+      driverInfos,
+      preferences?.favoriteDrivers,
     );
 
-    if (!isFavorite) return {};
-
-    return {
-      backgroundColor: `#${driver.team_colour}30`,
-      borderColor: `#${driver.team_colour}60`,
-    };
-  };
-
   const getdriver = (driverNumber: number) => {
-    const driver = drivers.find((d) => d?.driver_number === driverNumber);
+    const driver = findDriverByNumber(drivers, driverNumber);
     return {
       headshot_url: driver?.headshot_url,
       team_color: driver?.team_colour,

@@ -8,10 +8,3 @@ export function getTelemetryManager(): TelemetryManager {
   }
   return instance
 }
-
-export function resetTelemetryManager(): void {
-  if (instance) {
-    instance.disconnect()
-    instance = null
-  }
-}

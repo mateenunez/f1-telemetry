@@ -3,15 +3,11 @@
 import { useState, useEffect } from "react";
 interface CountdownProps {
   totalSeconds?: number;
-  size?: number;
-  strokeWidth?: number;
   dict: any;
 }
 
 export function Countdown({
   totalSeconds,
-  size = 50,
-  strokeWidth = 4,
   dict,
 }: CountdownProps) {
   const [mounted, setMounted] = useState(false);

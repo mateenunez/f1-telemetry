@@ -10,6 +10,7 @@ import {
   getTrackProgress,
   TrackProgressIndex,
 } from "@/processors/map-processor";
+import { findDriverByNumber } from "@/utils/telemetry";
 
 type LinealDriverPositionsProps = {
   positions: ProcessedPositionData[];
@@ -60,7 +61,7 @@ export default function LinealDriverPositions({
     const result: DriverProgress[] = [];
 
     for (const pos of positions) {
-      const driver = drivers?.find((d) => d?.driver_number === pos.driver_number);
+      const driver = findDriverByNumber(drivers, pos.driver_number);
       if (!driver) continue;
       const tim = timing.find((t) => t?.driver_number === pos.driver_number);
       // Only running cars belong on the line: drivers that have retired,

@@ -6,7 +6,6 @@ import { CloudRain, Sun, CloudSun } from "lucide-react";
 
 interface WeatherProps {
   weather: ProcessedWeather;
-  dict: any;
 }
 
 interface ClimateConditionProps {
@@ -179,7 +178,7 @@ const ClimateCircle = ({
   );
 };
 
-export default function Weather({ weather, dict }: WeatherProps) {
+export default function Weather({ weather }: WeatherProps) {
   const { preferences } = usePreferences();
 
   // Función helper para obtener las traducciones basadas en preferences.translate

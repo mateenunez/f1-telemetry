@@ -1,5 +1,7 @@
 import { usePreferences } from "@/context/preferences";
 import { ProcessedCarData, ProcessedDriver } from "@/processors";
+import { polarPoint } from "@/utils/svg-polar";
+import { findDriverByNumber } from "@/utils/telemetry";
 
 interface CircleCarDataProps {
   driverInfo: (ProcessedDriver | undefined)[];
@@ -21,16 +23,7 @@ export function CircleCarData({
   }
 
   const VW = size;
-  const cx = 50;
-  const cy = 50;
   const r = 50 - 5 / 2;
-
-  const deg2rad = (deg: number) => (deg * Math.PI) / 180;
-
-  const polar = (deg: number, radius: number) => {
-    const rad = deg2rad(deg);
-    return { x: cx - radius * Math.cos(rad), y: cy - radius * Math.sin(rad) };
-  };
   const strokeWidth = 4;
   const outerRadius = (size - strokeWidth) / 2;
   const outerCircumference = 2 * Math.PI * outerRadius;
@@ -58,9 +51,7 @@ export function CircleCarData({
 
   const drs = carData?.drs || false;
   const rpm = carData?.rpm || 0;
-  const driver = driverInfo.find(
-    (d) => d?.driver_number === carData?.driver_number,
-  );
+  const driver = findDriverByNumber(driverInfo, carData?.driver_number);
   const gear = carData?.gear || 0;
 
   const speedMarks = [0, 60, 120, 180, 240, 300, 360];
@@ -252,7 +243,7 @@ export function CircleCarData({
             const speedFraction = Math.min(Math.max(speed, 0), 360) / 300;
             const speedProgressDistance = speedFraction * blueArcLength;
             const speedStrokeDashoffset = blueArcLength - speedProgressDistance;
-            const labelPos = polar(-speedStrokeDashoffset, -r + 10);
+            const labelPos = polarPoint(-speedStrokeDashoffset, -r + 10);
             return (
               <g key={idx}>
                 <text

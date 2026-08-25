@@ -7,7 +7,7 @@ export interface ProcessedPosition {
 export class PositionProcessor {
   private latestPositions: Map<number, ProcessedPosition> = new Map()
 
-  processPositionData(positionData: any, compressedData?: string): ProcessedPosition[] {
+  processPositionData(positionData: any, _compressedData?: string): ProcessedPosition[] {
     const processedPositions: ProcessedPosition[] = []
 
     // Procesar datos normales de Position si existen
@@ -37,7 +37,7 @@ export class PositionProcessor {
 
     const processedPositions: ProcessedPosition[] = []
 
-    Object.entries(topThreeData.Lines).forEach(([driverNumber, line]: [string, any]) => {
+    Object.entries(topThreeData.Lines).forEach(([_driverNumber, line]: [string, any]) => {
       if (line.RacingNumber && line.Position) {
         const processed: ProcessedPosition = {
           driver_number: Number.parseInt(line.RacingNumber),

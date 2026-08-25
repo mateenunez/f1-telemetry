@@ -253,10 +253,6 @@ export default function Map({
 
         {!sectorsCookie &&
           sectors.map((sector, idx) => {
-            const startDx = sector.points[1]?.x - sector.points[0]?.x || 0;
-            const startDy = sector.points[1]?.y - sector.points[0]?.y || 0;
-            const startAngle = Math.atan2(startDy, startDx) * (180 / Math.PI);
-
             const endDx =
               sector.points[sector.points.length - 1]?.x -
                 sector.points[sector.points.length - 2]?.x || 0;

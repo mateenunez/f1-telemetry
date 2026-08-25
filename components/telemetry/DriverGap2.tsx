@@ -1,7 +1,7 @@
 "use client";
 
 import type { ProcessedSession, ProcessedTiming } from "@/processors";
-import { useRef } from "react";
+import { useLastValidGap } from "@/hooks/use-last-valid-gap";
 
 interface DriverGap2Props {
   timing: ProcessedTiming | undefined;
@@ -9,30 +9,10 @@ interface DriverGap2Props {
 }
 
 export default function DriverGap2({ timing, session }: DriverGap2Props) {
-  const lastValidGapRef = useRef<any>(null);
-
-  let lastGap;
-  const qualifyingPartIndex = session?.series?.findLast(
-    (q) => q
-  )?.QualifyingPart;
-
-  if (
-    timing?.stats &&
-    timing?.stats.length > 0 &&
-    qualifyingPartIndex !== undefined
-  ) {
-    lastGap = timing.stats[qualifyingPartIndex - 1];
-
-    if (
-      lastGap &&
-      (lastGap.IntervalToPositionAhead !== "" ||
-        lastGap.TimeDiffToPositionAhead !== "")
-    ) {
-      lastValidGapRef.current = lastGap;
-    }
-  } else {
-    lastGap = lastValidGapRef.current;
-  }
+  const lastGap = useLastValidGap(timing, session, [
+    "IntervalToPositionAhead",
+    "TimeDiffToPositionAhead",
+  ]);
 
   const gap2Value =
     timing?.interval_to_ahead || lastGap?.IntervalToPositionAhead || "";

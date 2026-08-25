@@ -138,7 +138,7 @@ export class TelemetryManager {
   private processDataByType(
     dataType: string,
     messageData: any,
-    timestamp?: string,
+    _timestamp?: string,
   ) {
     switch (dataType) {
       case "CarData":
