@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { PreferencesProvider } from "@/context/preferences";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import Script from "next/script";
+import MonetagScripts from "@/components/MonetagScripts";
 import localFont from "next/font/local";
 import { Geist, Orbitron, Inter } from "next/font/google";
 
@@ -93,12 +94,6 @@ export default async function RootLayout({
           'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','GTM-W5LJ4LJB');`}
         </Script>
-        <Script id="monetag-banner" strategy="afterInteractive">
-          {`(function(s){s.dataset.zone='11654017',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))}`}
-        </Script>
-        <Script id="monetag-vignette" strategy="afterInteractive">
-          {`(function(s){s.dataset.zone='11654025',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))}`}
-        </Script>
         <meta
           name="google-site-verification"
           content="eF8UbK8ghA29zsWnzurWzjJgXzmLeucRd59QUDpdHTE"
@@ -137,6 +132,8 @@ export default async function RootLayout({
           />
         </noscript>
         <PreferencesProvider>{children}</PreferencesProvider>
+        <MonetagScripts />
+        <MonetagScripts />
 
         <Analytics />
       </body>
