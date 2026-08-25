@@ -97,6 +97,7 @@ export default async function RootLayout({
           name="google-site-verification"
           content="eF8UbK8ghA29zsWnzurWzjJgXzmLeucRd59QUDpdHTE"
         />
+        <meta name="monetag" content="af51f8ad3da1919ce2a1bf8d7dd71268"/>
         <meta
           name="google-adsense-account"
           content="ca-pub-5942441293893843"
