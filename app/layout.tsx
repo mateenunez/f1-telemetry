@@ -93,6 +93,9 @@ export default async function RootLayout({
           'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','GTM-W5LJ4LJB');`}
         </Script>
+        <Script id="monetag-banner" strategy="afterInteractive">
+          {`(function(s){s.dataset.zone='11654017',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))}`}
+        </Script>
         <meta
           name="google-site-verification"
           content="eF8UbK8ghA29zsWnzurWzjJgXzmLeucRd59QUDpdHTE"
