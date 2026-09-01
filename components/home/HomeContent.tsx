@@ -159,19 +159,19 @@ export default function HomeContent({ dict }: HomeContentProps) {
             {dict.donate.button}
           </a>
           <section
-            className="w-full border-t border-gray-800 px-4 pt-6 text-gray-500"
+            className="w-full px-4 pt-6 text-gray-500"
             aria-labelledby="telemetry-guides-title"
           >
-            <div className="mb-4 text-center">
-              <h2 id="telemetry-guides-title" className="font-geist text-sm font-medium text-gray-400">
-                {dict.home.guides.title}
-              </h2>
-            </div>
-            <div className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
+            <div className="mt-6 flex max-w-3xl flex-col gap-5 mx-auto">
               {dict.home.guides.articles.map((article: { title: string; description: string }) => (
-                <article key={article.title} className="text-xs leading-5">
-                  <h3 className="font-geist font-medium text-gray-400">{article.title}</h3>
-                  <p className="mt-1">{article.description}</p>
+                <article
+                  key={article.title}
+                  className="rounded-lg bg-black/20 p-4 text-left text-sm leading-6 text-gray-300 font-inter"
+                >
+                  <h3 className="mb-2 font-geist text-sm font-medium uppercase tracking-[0.12em] text-gray-200">
+                    {article.title}
+                  </h3>
+                  <p className="mt-1 text-sm leading-6 text-gray-400">{article.description}</p>
                 </article>
               ))}
             </div>
@@ -180,23 +180,23 @@ export default function HomeContent({ dict }: HomeContentProps) {
             className="w-full border-t border-gray-800 px-4 pt-6 text-gray-500"
             aria-labelledby="legal-information-title"
           >
-            <h2 id="legal-information-title" className="text-center font-geist text-sm font-medium text-gray-400">
-              {dict.footer.legalNavigation}
-            </h2>
-            <div className="mt-4 grid gap-x-6 gap-y-4 sm:grid-cols-2">
+            <div className="mt-6 flex max-w-3xl flex-col gap-5 mx-auto">
               {(Object.entries(dict.legal) as [string, { title: string; body: string[] }][]).map(
                 ([slug, page]) => (
-                  <article key={slug} className="text-xs leading-5">
-                    <h3 className="font-geist font-medium text-gray-400">
+                  <article
+                    key={slug}
+                    className="rounded-lg bg-black/20 p-4 text-left text-sm leading-6 text-gray-300 font-inter"
+                  >
+                    <h3 className="mb-2 font-geist text-sm font-medium uppercase tracking-[0.12em] text-gray-200">
                       <a
                         href={`/${dict.locale}/legal/${slug}`}
-                        className="underline underline-offset-2 hover:text-f1Blue"
+                        className="decoration-gray-600 transition-colors hover:text-f1Blue"
                       >
                         {page.title}
                       </a>
                     </h3>
                     {page.body.map((paragraph) => (
-                      <p key={paragraph} className="mt-1">
+                      <p key={paragraph} className="mt-1 text-sm leading-6 text-gray-400">
                         {paragraph}
                       </p>
                     ))}
