@@ -35,8 +35,10 @@ export default async function Help({
   const param = await params;
   const dict = await getDictionary(param.lang);
   return (
-    <div className="min-h-screen bg-warmBlack">
-      <HelpContent dict={dict} />
+    <div className="min-h-screen bg-warmBlack flex flex-col">
+      <div className="flex-1">
+        <HelpContent dict={dict} />
+      </div>
       <Footer dict={dict} />
     </div>
   );

@@ -36,8 +36,10 @@ export default async function SchedulePage({
   const dict = await getDictionary(lang);
 
   return (
-    <div className="min-h-screen bg-warmBlack">
-      <ScheduleContent dict={dict} />
+    <div className="min-h-screen bg-warmBlack flex flex-col">
+      <div className="flex-1">
+        <ScheduleContent dict={dict} />
+      </div>
       <Footer dict={dict} />
     </div>
   );

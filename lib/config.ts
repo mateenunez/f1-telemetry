@@ -25,7 +25,6 @@ export const config = {
       chequered_flag: `${blobBaseUrl}/chequered_flag.png`,
       f1_white: `${blobBaseUrl}/F1White.svg`,
       f1_black: `${blobBaseUrl}/F1Black.svg`,
-      f1_blue: `${blobBaseUrl}/F1Blue.svg`,
       discordIcon: `${blobBaseUrl}/discord.svg`,
       driver: `${blobBaseUrl}/driver.png`,
       f1telemetry_black: `${blobBaseUrl}/F1TelemetryBlack.svg`,

@@ -29,6 +29,24 @@ export interface ChangelogRelease {
 
 export const changelog: ChangelogRelease[] = [
   {
+    version: "2.2.0",
+    date: "2026-09-05",
+    items: [
+      {
+        type: "added",
+        scope: "backend",
+        en: "Increased server capacity to support higher concurrency and keep the platform stable during peak usage.",
+        es: "Se aumentó la capacidad de los servidores para soportar más concurrencia y mantener la plataforma estable durante los picos de uso.",
+      },
+      {
+        type: "added",
+        scope: "frontend",
+        en: "Added the Malaysia circuit to the race calendar.",
+        es: "Se agregó el circuito de Malasia al calendario de carreras.",
+      },
+    ],
+  },
+  {
     version: "2.1.0",
     date: "2026-08-02",
     items: [

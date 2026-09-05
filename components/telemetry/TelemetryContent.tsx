@@ -202,18 +202,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
         {delayed ? (
           <Countdown totalSeconds={Math.max(secondsDelay, 0)} dict={dict} />
         ) : (
-          <div className="relative flex items-center justify-center w-24 h-24">
-            <img
-              src="/assets/F1White.svg"
-              className="absolute w-full h-full"
-              alt="F1 Telemetry Logo White"
-            />
-            <img
-              src="/assets/F1Blue.svg"
-              className="absolute w-full h-full animate-fill-color"
-              alt="F1 Telemetry Logo Blue"
-            />
-          </div>
+          <div className="loader" aria-label={dict.loading} role="status" />
         )}
       </div>
     );
@@ -228,14 +217,14 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   const visibleWidgets = widgets.filter((w) => w.enabled);
 
   return (
-    <div className="min-h-screen bg-warmBlack">
-      <div className="max-w-8xl mx-auto space-y-4 h-full">
+    <div className="min-h-screen w-full min-w-0 overflow-hidden bg-warmBlack">
+      <div className="max-w-8xl mx-auto space-y-4 h-full min-w-0">
         <Header telemetryData={telemetryData} dict={dict} />
 
         {isMobile ? (
           <DndContext onDragEnd={handleMobileDragEnd} sensors={sensors}>
             <SortableContext items={visibleWidgets.map((w) => w.id)}>
-              <div className="grid h-full w-full grid-cols-12 gap-8">
+              <div className="grid h-full w-full min-w-0 grid-cols-12 gap-8">
                 {visibleWidgets.map((w) => {
                   // 1) Posiciones
                   if (w.id === "driver-positions") {
@@ -341,7 +330,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                       <SortableWidget
                         key={w.id}
                         id={w.id}
-                        className="col-span-12 lg:col-span-4"
+                        className="col-span-12 sm:col-span-6 lg:col-span-4 aspect-square w-full max-w-[32rem] min-w-0 mx-auto"
                       >
                         <CircleOfDoom
                           driverInfos={driverInfos}
@@ -365,7 +354,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                       <SortableWidget
                         key={w.id}
                         id={w.id}
-                        className="col-span-12 lg:col-span-4"
+                        className="col-span-12 sm:col-span-6 lg:col-span-4 aspect-square w-full max-w-[32rem] min-w-0 mx-auto"
                       >
                         <CircleCarData
                           carData={

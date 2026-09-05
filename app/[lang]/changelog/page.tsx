@@ -31,8 +31,10 @@ export default async function Changelog({
   const param = await params;
   const dict = await getDictionary(param.lang);
   return (
-    <div className="min-h-screen bg-warmBlack">
-      <ChangelogContent dict={dict} />
+    <div className="min-h-screen bg-warmBlack flex flex-col">
+      <div className="flex-1">
+        <ChangelogContent dict={dict} />
+      </div>
       <Footer dict={dict} />
     </div>
   );

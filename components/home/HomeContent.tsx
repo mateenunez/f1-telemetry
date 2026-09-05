@@ -166,7 +166,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
               {dict.home.guides.articles.map((article: { title: string; description: string }) => (
                 <article
                   key={article.title}
-                  className="rounded-lg bg-black/20 p-4 text-left text-sm leading-6 text-gray-300 font-inter"
+                  className="rounded-lg bg-transparent p-4 text-left text-sm leading-6 text-gray-300 font-inter"
                 >
                   <h3 className="mb-2 font-geist text-sm font-medium uppercase tracking-[0.12em] text-gray-200">
                     {article.title}
@@ -185,7 +185,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 ([slug, page]) => (
                   <article
                     key={slug}
-                    className="rounded-lg bg-black/20 p-4 text-left text-sm leading-6 text-gray-300 font-inter"
+                    className="rounded-lg bg-transparent p-4 text-left text-sm leading-6 text-gray-300 font-inter"
                   >
                     <h3 className="mb-2 font-geist text-sm font-medium uppercase tracking-[0.12em] text-gray-200">
                       <a

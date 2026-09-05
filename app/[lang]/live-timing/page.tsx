@@ -35,8 +35,10 @@ export default async function Telemetry({
   const param = await params;
   const dict = await getDictionary(param.lang);
   return (
-    <div className="min-h-screen bg-warmBlack">
-      <TelemetryContent dict={dict} />
+    <div className="min-h-screen bg-warmBlack flex flex-col">
+      <div className="flex-1">
+        <TelemetryContent dict={dict} />
+      </div>
       <Footer dict={dict} />
     </div>
   );

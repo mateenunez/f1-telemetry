@@ -33,18 +33,7 @@ export function ScheduleContent({ dict }: ScheduleContentProps) {
   if (!calendar) {
     const LoaderOverlay = () => (
       <div className="fixed inset-0 z-20 flex items-center justify-center bg-warmBlack/40 backdrop-blur-sm">
-        <div className="relative flex items-center justify-center w-24 h-24">
-          <img
-            src="/assets/F1White.svg"
-            className="absolute w-full h-full"
-            alt="F1 Telemetry Logo White"
-          />
-          <img
-            src="/assets/F1Red.svg"
-            className="absolute w-full h-full animate-fill-color"
-            alt="F1 Telemetry Logo Red"
-          />
-        </div>
+        <div className="loader" aria-label={dict.loading} role="status" />
       </div>
     );
 

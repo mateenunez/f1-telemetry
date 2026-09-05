@@ -214,7 +214,7 @@ export function useTelemetryManager() {
 
   const teamRadioCaptures = useMemo(
     () => telemetryManager.getTeamRadioCaptures(),
-    [currentPositions, telemetryManager],
+    [telemetryData?.session?.path, telemetryManager],
   );
 
   const yellowSectors = useMemo(

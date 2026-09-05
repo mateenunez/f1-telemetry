@@ -53,8 +53,10 @@ export default async function Page({
   const dict = await getDictionary(lang);
 
   return (
-    <div className="min-h-screen bg-warmBlack">
-      <HomeContent dict={dict} />
+    <div className="min-h-screen bg-warmBlack flex flex-col">
+      <div className="flex-1">
+        <HomeContent dict={dict} />
+      </div>
       <Footer dict={dict} />
     </div>
   );
