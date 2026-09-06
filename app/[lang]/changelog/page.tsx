@@ -13,10 +13,10 @@ export async function generateMetadata({
   const dict = await getDictionary(lang);
 
   return {
-    title: `${dict.changelog.title} | F1 Telemetry`,
+    title: `F1 Telemetry | ${dict.changelog.title}`,
     description: dict.changelog.description,
     openGraph: {
-      title: `${dict.changelog.title} | F1 Telemetry`,
+      title: `F1 Telemetry | ${dict.changelog.title}`,
       description: dict.changelog.description,
       url: `https://www.f1telemetry.com/${lang}/changelog`,
     },

@@ -11,13 +11,13 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { lang: Locale };
+  params: Promise<{ lang: Locale }>;
 }): Promise<Metadata> {
   const { lang } = await params;
   const dict = await getDictionary(lang);
 
   return {
-    title: dict.home.title, // Use localized title
+    title: `F1 Telemetry | ${dict.home.title}`,
     description: dict.home.description, // Use localized description
     keywords:
       "telemetry dashboard, F1 live, F1 realtime, F1 data, F1 analytics, f1 telemetry dashboard, f1 streaming, F1 resultados en vivo, F1 dashboard interactivo, f1 telemetry, F1 TELEMETRY, f1 dashboard, f1 telemetria, f1 estadisticas",
@@ -28,7 +28,7 @@ export async function generateMetadata({
       },
     ],
     openGraph: {
-      title: dict.home.title, // Use localized title
+      title: `F1 Telemetry | ${dict.home.title}`,
       description: dict.home.description, // Use localized description
       url: `https://www.f1telemetry.com/${lang}`, // Include language in URL
       siteName: "F1 Telemetry",

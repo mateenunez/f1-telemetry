@@ -4,17 +4,28 @@ import { useEffect, useState } from "react";
 import { config } from "@/lib/config";
 import { trackEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
-
-interface FundingBannerProps {
-  dict: any;
-}
+import { usePreferences } from "@/context/preferences";
 
 interface FundingStatus {
   costUsd: number;
   donatedUsd: number;
 }
 
-export default function FundingBanner({ dict }: FundingBannerProps) {
+export default function FundingBanner() {
+  const { preferences } = usePreferences();
+  const copy = preferences.translate
+    ? {
+        description: "Considerá apoyarnos para cubrir costos. Gracias!",
+        cta: "Colaborar",
+        thanks: "Cubrimos el mes por completo, muchísimas gracias!",
+        donateUrl: "https://cafecito.app/skoncito",
+      }
+    : {
+        description: "Consider supporting us to cover expenses. Thanks!",
+        cta: "Contribute",
+        thanks: "Fully funded this month, thank you so much!",
+        donateUrl: "https://paypal.me/Mateenunez",
+      };
   const [status, setStatus] = useState<FundingStatus | null>(null);
   const [entered, setEntered] = useState(false);
   const [fading, setFading] = useState(false);
@@ -104,7 +115,7 @@ export default function FundingBanner({ dict }: FundingBannerProps) {
                ${status.costUsd.toFixed(0)}
             </span>
           </div>
-          <span className="text-gray-400 text-center">{dict.funding.thanks}</span>
+          <span className="text-gray-400 text-center">{copy.thanks}</span>
         </>
       ) : (
         <>
@@ -132,10 +143,10 @@ export default function FundingBanner({ dict }: FundingBannerProps) {
                 collapsed ? "max-w-0 opacity-0 overflow-hidden whitespace-nowrap" : "max-w-[13rem] opacity-100"
               }`}
             >
-              {dict.funding.description}
+              {copy.description}
             </span>
             <a
-              href={dict.donate.url}
+              href={copy.donateUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackEvent("donate_click", { location: "header" })}
@@ -145,7 +156,7 @@ export default function FundingBanner({ dict }: FundingBannerProps) {
                 variant="outline"
                 className="h-6 px-2 text-xs bg-f1Blue/10 text-f1Blue hover:bg-f1Blue/20 hover:text-offWhite border-f1Blue border-1"
               >
-                {dict.funding.cta}
+                {copy.cta}
               </Button>
             </a>
           </div>

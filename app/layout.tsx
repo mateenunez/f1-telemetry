@@ -77,15 +77,11 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { lang: Locale };
 }>) {
-  const { lang } = params;
-
   return (
-    <html lang={lang}>
+    <html lang="en">
       <head>
         <Script id="gtm-script" strategy="beforeInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -105,7 +101,6 @@ export default async function RootLayout({
         ></meta>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#b91c1c" />
-        <link rel="canonical" href={`https://www.f1telemetry.com/${lang}`} />
         {i18n.locales.map((l) => (
           <link
             key={l}

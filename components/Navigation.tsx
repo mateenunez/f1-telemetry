@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 type HeaderNavProps = {
@@ -11,6 +12,13 @@ type HeaderNavProps = {
   rightColor?: string;
   f1t_url: string;
   maxScrollPosition?: number;
+  prodeUrl?: string;
+  prodeTitle?: string;
+  prodeColor?: string;
+  homeUrl: string;
+  homeTitle: string;
+  scheduleUrl: string;
+  scheduleTitle: string;
 };
 
 export default function Navigation({
@@ -22,7 +30,18 @@ export default function Navigation({
   rightColor = "f1Red",
   f1t_url,
   maxScrollPosition = 0,
+  prodeUrl,
+  prodeTitle,
+  prodeColor = "f1Yellow",
+  homeUrl,
+  homeTitle,
+  scheduleUrl,
+  scheduleTitle,
 }: HeaderNavProps) {
+  const pathname = usePathname();
+  const isProdeRoute = pathname.split("/").includes("prode");
+  const isScheduleRoute = pathname.endsWith("/schedule");
+  const isHomeRoute = pathname.split("/").filter(Boolean).length === 1;
   const [isVisible, setIsVisible] = useState(false);
   const handleScroll = () => {
     const scrollPosition = window.scrollY;
@@ -52,8 +71,18 @@ export default function Navigation({
 
   const leftColorClasses = COLOR_MAP[leftColor] ?? COLOR_MAP.f1Blue;
   const rightColorClasses = COLOR_MAP[rightColor] ?? COLOR_MAP.f1Red;
+  const homeColorClasses = COLOR_MAP.f1Purple;
+  const prodeColorClasses = COLOR_MAP[prodeColor] ?? COLOR_MAP.f1Yellow;
+  const prodeBtnClass = `flex flex-none items-center justify-center truncate rounded py-3 px-3 text-sm bg-transparent border-2 border-f1Yellow text-f1Yellow text-center transition duration-300 ease-in-out max-[400px]:min-w-0 max-[400px]:flex-1 max-[400px]:px-1 max-[400px]:py-2 max-[400px]:text-xs
+                font-geist font-medium
+                hover:bg-f1Yellow hover:border-f1Yellow hover:text-warmBlack
+                hover:shadow-2xl
+                hover:cursor-pointer
+                focus:outline-none
+                focus:ring-4
+                focus:ring-f1Yellow/40`;
 
-  const leftBtnClass = `rounded px-3 py-3 text-sm bg-white text-black border-2 border-white text-center transition duration-300 ease-in-out 
+  const leftBtnClass = `flex flex-none items-center justify-center truncate rounded px-3 py-3 text-sm bg-white text-black border-2 border-white text-center transition duration-300 ease-in-out max-[400px]:min-w-0 max-[400px]:flex-1 max-[400px]:px-1 max-[400px]:py-2 max-[400px]:text-xs
                 font-geist font-medium
                 hover:shadow-2xl 
                 hover:text-offWhite
@@ -63,7 +92,7 @@ export default function Navigation({
                 focus:ring-gray-500 
                 focus:ring-opacity-50 ${leftColorClasses}`;
 
-  const rightBtnClass = `rounded w-full py-3 px-3 text-sm bg-transparent border-2 border-gray text-offWhite text-center transition duration-300 ease-in-out 
+  const rightBtnClass = `flex flex-none items-center justify-center truncate rounded py-3 px-3 text-sm bg-transparent border-2 border-gray text-offWhite text-center transition duration-300 ease-in-out max-[400px]:min-w-0 max-[400px]:flex-1 max-[400px]:px-1 max-[400px]:py-2 max-[400px]:text-xs
                 font-geist font-medium
                 hover:text-offWhite
                 hover:cursor-pointer
@@ -71,6 +100,7 @@ export default function Navigation({
                 focus:ring-4 
                 focus:ring-gray-500 
                 focus:ring-opacity-50 ${rightColorClasses}`;
+  const homeBtnClass = rightBtnClass.replace(rightColorClasses, homeColorClasses);
 
   return (
     <header
@@ -81,20 +111,33 @@ export default function Navigation({
         ${isVisible ? "translate-y-0" : "-translate-y-full"}
       `}
     >
-      <div className="flex justify-between items-center mx-auto px-4 h-full">
+      <div className="flex justify-between items-center mx-auto gap-4 px-4 h-full max-[400px]:gap-2 max-[400px]:px-2">
         <Image
           src={f1t_url}
           width={80}
           height={80}
           alt="Telemetría telemetria telemetrics Formula 1 F1 Telemetry logo"
+          className="h-16 w-16 shrink-0 object-contain max-[400px]:h-12 max-[400px]:w-12"
         />
-        <nav className="flex flex-row gap-2 items-center justify-center">
+        <nav className="flex min-w-0 flex-row gap-2 items-center justify-center max-[400px]:flex-1 max-[400px]:gap-1">
           <a className={leftBtnClass} href={leftUrl}>
             {leftTitle}
           </a>
-          <a className={rightBtnClass} href={rightUrl}>
-            {rightTitle}
-          </a>
+          {!isScheduleRoute && (
+            <a className={rightBtnClass} href={scheduleUrl}>
+              {scheduleTitle}
+            </a>
+          )}
+          {!isProdeRoute && prodeUrl && prodeTitle && (
+            <a className={`${prodeBtnClass} ${prodeColorClasses}`} href={prodeUrl}>
+              {prodeTitle}
+            </a>
+          )}
+          {!isHomeRoute && (
+            <a className={homeBtnClass} href={homeUrl}>
+              {homeTitle}
+            </a>
+          )}
         </nav>
       </div>
     </header>

@@ -4,6 +4,11 @@
     "description": "F1 Telemetry es un dashboard de telemetría en tiempo real, hecho para que puedas seguir la Fórmula 1 por completo y desde cualquier lado, sin necesidad de ver la transmisión.",
     "dashboardButton": "Telemetría",
     "scheduleButton": "Calendario",
+    "prodeLeaderboardButton": "Leaderboard",
+    "prodeInfoButton": "¿Cómo funciona?",
+    "prodeEyebrow": "Prode F1",
+    "prodeTitle": "Compite con tus predicciones",
+    "prodeDescription": "Predice el resultado de cada sesión y consulta tu posición junto a la comunidad.",
     "mapTitle": "Mapa en vivo",
     "mapDesc": "Vista previa del mapa en tiempo real.",
     "audioTitle": "Radio de Equipo + IA",
@@ -29,6 +34,18 @@
       ]
     }
   },
+  "leaderboard": {
+    "title": "Ranking de",
+    "currentGp": "Gran Premio actual",
+    "season": "Temporada",
+    "search": "Buscar usuario",
+    "period": "Periodo del ranking",
+    "points": "pts",
+    "yourPosition": "Tu posición",
+    "previous": "Página anterior",
+    "next": "Página siguiente",
+    "page": "Página"
+  },
   "feedback": {
     "description": "Queremos saber tu opinión",
     "button": "Rellenar encuesta",
@@ -40,11 +57,6 @@
     "shortLabel": "Donar",
     "platform": "cafecito",
     "url": "https://cafecito.app/skoncito"
-  },
-  "funding": {
-    "description": "Considerá apoyarnos para cubrir costos. Gracias!",
-    "cta": "Colaborar",
-    "thanks": "Cubrimos el mes por completo, muchísimas gracias!"
   },
   "footer": {
     "legal": "Este sitio web no está asociado, afiliado, autorizado, respaldado ni conectado oficialmente de ninguna manera con la Fórmula 1, la FIA o cualquiera de sus subsidiarias o afiliadas.",

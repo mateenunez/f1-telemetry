@@ -49,12 +49,19 @@ export function ScheduleContent({ dict }: ScheduleContentProps) {
       <div className="min-h-screen bg-warmBlack text-white overflow-hidden font-geist">
         <div className="max-w-6xl mx-auto mt-20 px-4 md:px-8">
           <Navigation
-            leftUrl="/live-timing"
-            rightUrl="/"
+            leftUrl={`/${dict.locale}/live-timing`}
+            rightUrl={`/${dict.locale}`}
             leftTitle={dict.schedule.dashboardButton}
             rightTitle={dict.schedule.homeButton}
             f1t_url={f1t}
             rightColor="f1Purple"
+            prodeUrl={`/${dict.locale}/prode/leaderboard`}
+            prodeTitle={dict.home.prodeLeaderboardButton}
+            prodeColor="f1Yellow"
+            homeUrl={`/${dict.locale}`}
+            homeTitle={dict.schedule.homeButton}
+            scheduleUrl={`/${dict.locale}/schedule`}
+            scheduleTitle={dict.schedule.title}
           />
           <div className="flex flex-row my-4">
             <div className="flex flex-col md:mx-8 w-full gap-6">

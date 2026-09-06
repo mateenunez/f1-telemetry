@@ -15,12 +15,19 @@ export default function HomeContent({ dict }: HomeContentProps) {
   return (
     <div className="min-h-screen w-full">
       <Navigation
-        leftUrl="/live-timing"
-        rightUrl="/schedule"
+        leftUrl={`/${dict.locale}/live-timing`}
+        rightUrl={`/${dict.locale}/schedule`}
         leftTitle={dict.home.dashboardButton}
         rightTitle={dict.home.scheduleButton}
         f1t_url={config.public.assets.f1_white}
         maxScrollPosition={100}
+        prodeUrl={`/${dict.locale}/prode/leaderboard`}
+        prodeTitle={dict.home.prodeLeaderboardButton}
+        prodeColor="f1Yellow"
+        homeUrl={`/${dict.locale}`}
+        homeTitle={dict.schedule.homeButton}
+        scheduleUrl={`/${dict.locale}/schedule`}
+        scheduleTitle={dict.home.scheduleButton}
       />
       <div className="min-h-screen py-5 w-full bg-cover bg-center isolate">
         <Image
@@ -40,9 +47,10 @@ export default function HomeContent({ dict }: HomeContentProps) {
               alt="F1 Telemetry black logo"
             />
           </div>
-          <div className="flex md:flex-row flex-col justify-center items-center md:gap-[4rem] gap-[2rem] w-full">
-            <a
-              className="rounded px-6 w-[15rem] py-3 text-[1.5rem] bg-white text-black text-center transition duration-300 ease-in-out 
+          <div className="flex flex-col items-center gap-5 w-full">
+            <div className="flex md:flex-row flex-col justify-center items-center md:gap-[4rem] gap-[2rem] w-full">
+              <a
+                className="rounded px-6 w-[15rem] py-3 text-[1.5rem] bg-white text-black text-center transition duration-300 ease-in-out 
                 hover:-translate-y-1 
                 hover:scale-105 
                 hover:bg-f1Blue 
@@ -55,15 +63,15 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 focus:ring-4 
                 focus:ring-gray-500 
                 focus:ring-opacity-50"
-              href="/live-timing"
+              href={`/${dict.locale}/live-timing`}
               onClick={() =>
                 trackEvent("cta_click", { cta: "live_timing", location: "home_hero" })
               }
-            >
-              {dict.home.dashboardButton}
-            </a>
-            <a
-              className="rounded px-6 w-[15rem] py-3 text-[1.5rem] bg-transparent border-2 border-gray text-offWhite text-center transition duration-300 ease-in-out 
+              >
+                {dict.home.dashboardButton}
+              </a>
+              <a
+                className="rounded px-6 w-[15rem] py-3 text-[1.5rem] bg-transparent border-2 border-gray text-offWhite text-center transition duration-300 ease-in-out 
                 hover:-translate-y-1 
                 hover:scale-105 
                 hover:bg-f1Red
@@ -77,12 +85,20 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 focus:ring-4 
                 focus:ring-gray-500 
                 focus:ring-opacity-50"
-              href="/schedule"
+              href={`/${dict.locale}/schedule`}
               onClick={() =>
                 trackEvent("cta_click", { cta: "schedule", location: "home_hero" })
               }
+              >
+                {dict.home.scheduleButton}
+              </a>
+            </div>
+            <a
+              className="rounded px-6 w-[15rem] py-3 text-[1.5rem] bg-transparent border-2 border-f1Yellow text-f1Yellow text-center transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:bg-f1Yellow hover:text-warmBlack hover:shadow-2xl hover:cursor-pointer font-geist font-medium focus:outline-none focus:ring-4 focus:ring-f1Yellow/40"
+              href={`/${dict.locale}/prode/leaderboard`}
+              onClick={() => trackEvent("cta_click", { cta: "prode_leaderboard", location: "home_hero" })}
             >
-              {dict.home.scheduleButton}
+              {dict.home.prodeLeaderboardButton}
             </a>
           </div>
         </div>
@@ -158,53 +174,6 @@ export default function HomeContent({ dict }: HomeContentProps) {
             </span>
             {dict.donate.button}
           </a>
-          <section
-            className="w-full px-4 pt-6 text-gray-500"
-            aria-labelledby="telemetry-guides-title"
-          >
-            <div className="mt-6 flex max-w-3xl flex-col gap-5 mx-auto">
-              {dict.home.guides.articles.map((article: { title: string; description: string }) => (
-                <article
-                  key={article.title}
-                  className="rounded-lg bg-transparent p-4 text-left text-sm leading-6 text-gray-300 font-inter"
-                >
-                  <h3 className="mb-2 font-geist text-sm font-medium uppercase tracking-[0.12em] text-gray-200">
-                    {article.title}
-                  </h3>
-                  <p className="mt-1 text-sm leading-6 text-gray-400">{article.description}</p>
-                </article>
-              ))}
-            </div>
-          </section>
-          <section
-            className="w-full border-t border-gray-800 px-4 pt-6 text-gray-500"
-            aria-labelledby="legal-information-title"
-          >
-            <div className="mt-6 flex max-w-3xl flex-col gap-5 mx-auto">
-              {(Object.entries(dict.legal) as [string, { title: string; body: string[] }][]).map(
-                ([slug, page]) => (
-                  <article
-                    key={slug}
-                    className="rounded-lg bg-transparent p-4 text-left text-sm leading-6 text-gray-300 font-inter"
-                  >
-                    <h3 className="mb-2 font-geist text-sm font-medium uppercase tracking-[0.12em] text-gray-200">
-                      <a
-                        href={`/${dict.locale}/legal/${slug}`}
-                        className="decoration-gray-600 transition-colors hover:text-f1Blue"
-                      >
-                        {page.title}
-                      </a>
-                    </h3>
-                    {page.body.map((paragraph) => (
-                      <p key={paragraph} className="mt-1 text-sm leading-6 text-gray-400">
-                        {paragraph}
-                      </p>
-                    ))}
-                  </article>
-                ),
-              )}
-            </div>
-          </section>
         </div>
       </div>
     </div>

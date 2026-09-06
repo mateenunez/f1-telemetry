@@ -44,6 +44,12 @@ export const changelog: ChangelogRelease[] = [
         en: "Added the Malaysia circuit to the race calendar.",
         es: "Se agregó el circuito de Malasia al calendario de carreras.",
       },
+      {
+        type: "added",
+        scope: "both",
+        en: "Added a prediction system for Free Practice, Qualifying, Sprint, and Race sessions, with structured predictions and points leaderboards.",
+        es: "Se añadió un sistema de predicciones para las sesiones de entrenamientos libres, clasificación, sprint y carrera, con predicciones estructuradas y tablas de posiciones por puntos.",
+      },
     ],
   },
   {

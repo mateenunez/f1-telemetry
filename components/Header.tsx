@@ -17,6 +17,7 @@ import { usePreferences } from "@/context/preferences";
 import Weather from "./Weather";
 import FundingBanner from "./FundingBanner";
 import { config } from "@/lib/config";
+import ProdeButton from "./prode/ProdeButton";
 
 interface HeaderProps {
   telemetryData: TelemetryData | null;
@@ -125,7 +126,10 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
               </div>
             </div>
           </div>
-          <FundingBanner dict={dict} />
+          <div className="flex items-center gap-3">
+            <FundingBanner />
+            <ProdeButton />
+          </div>
           <div className="flex items-center text-nowrap flex-col md:flex-row gap-3 text-xs md:text-sm font-orbitron">
             {session?.session_status === "Finalised" ? (
               <F1Calendar dict={dict} />

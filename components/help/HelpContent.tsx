@@ -33,6 +33,13 @@ export function HelpContent({ dict }: HelpContentProps) {
           rightTitle={dict.schedule.homeButton}
           f1t_url={f1t}
           rightColor="f1Purple"
+          prodeUrl={`/${dict.locale}/prode/leaderboard`}
+          prodeTitle={dict.home.prodeLeaderboardButton}
+          prodeColor="f1Yellow"
+          homeUrl={`/${dict.locale}`}
+          homeTitle={dict.schedule.homeButton}
+          scheduleUrl={`/${dict.locale}/schedule`}
+          scheduleTitle={dict.schedule.title}
         />
         <div className="w-full h-full flex flex-col">
           {/* Introduction */}
