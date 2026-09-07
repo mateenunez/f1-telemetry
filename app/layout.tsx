@@ -90,6 +90,12 @@ export default async function RootLayout({
           'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','GTM-W5LJ4LJB');`}
         </Script>
+        <Script
+          src="https://quge5.com/88/tag.min.js"
+          data-zone="277522"
+          data-cfasync="false"
+          strategy="afterInteractive"
+        />
         <meta
           name="google-site-verification"
           content="eF8UbK8ghA29zsWnzurWzjJgXzmLeucRd59QUDpdHTE"
@@ -128,8 +134,6 @@ export default async function RootLayout({
         </noscript>
         <PreferencesProvider>{children}</PreferencesProvider>
         <MonetagScripts />
-        <MonetagScripts />
-
         <Analytics />
       </body>
     </html>

@@ -73,8 +73,7 @@ export default function Navigation({
   const rightColorClasses = COLOR_MAP[rightColor] ?? COLOR_MAP.f1Red;
   const homeColorClasses = COLOR_MAP.f1Purple;
   const prodeColorClasses = COLOR_MAP[prodeColor] ?? COLOR_MAP.f1Yellow;
-  const prodeBtnClass = `flex flex-none items-center justify-center truncate rounded py-3 px-3 text-sm bg-transparent border-2 border-f1Yellow text-f1Yellow text-center transition duration-300 ease-in-out max-[400px]:min-w-0 max-[400px]:flex-1 max-[400px]:px-1 max-[400px]:py-2 max-[400px]:text-xs
-                font-geist font-medium
+  const prodeBtnClass = `flex flex-none items-center justify-center truncate rounded py-2 px-2 md:py-3 md:px-3 text-xs md:text-sm bg-transparent border-2 border-f1Yellow text-f1Yellow text-center transition duration-300 ease-in-out                 font-geist font-medium
                 hover:bg-f1Yellow hover:border-f1Yellow hover:text-warmBlack
                 hover:shadow-2xl
                 hover:cursor-pointer
@@ -82,7 +81,7 @@ export default function Navigation({
                 focus:ring-4
                 focus:ring-f1Yellow/40`;
 
-  const leftBtnClass = `flex flex-none items-center justify-center truncate rounded px-3 py-3 text-sm bg-white text-black border-2 border-white text-center transition duration-300 ease-in-out max-[400px]:min-w-0 max-[400px]:flex-1 max-[400px]:px-1 max-[400px]:py-2 max-[400px]:text-xs
+  const leftBtnClass = `flex flex-none items-center justify-center truncate rounded py-2 px-2 md:py-3 md:px-3 text-xs md:text-sm bg-white text-black border-2 border-white text-center transition duration-300 ease-in-out
                 font-geist font-medium
                 hover:shadow-2xl 
                 hover:text-offWhite
@@ -92,7 +91,7 @@ export default function Navigation({
                 focus:ring-gray-500 
                 focus:ring-opacity-50 ${leftColorClasses}`;
 
-  const rightBtnClass = `flex flex-none items-center justify-center truncate rounded py-3 px-3 text-sm bg-transparent border-2 border-gray text-offWhite text-center transition duration-300 ease-in-out max-[400px]:min-w-0 max-[400px]:flex-1 max-[400px]:px-1 max-[400px]:py-2 max-[400px]:text-xs
+  const rightBtnClass = `flex flex-none items-center justify-center truncate rounded py-2 px-2 md:py-3 md:px-3 text-xs md:text-sm bg-transparent border-2 border-gray text-offWhite text-center transition duration-300 ease-in-out
                 font-geist font-medium
                 hover:text-offWhite
                 hover:cursor-pointer
@@ -100,7 +99,10 @@ export default function Navigation({
                 focus:ring-4 
                 focus:ring-gray-500 
                 focus:ring-opacity-50 ${rightColorClasses}`;
-  const homeBtnClass = rightBtnClass.replace(rightColorClasses, homeColorClasses);
+  const homeBtnClass = rightBtnClass.replace(
+    rightColorClasses,
+    homeColorClasses,
+  );
 
   return (
     <header
@@ -117,9 +119,9 @@ export default function Navigation({
           width={80}
           height={80}
           alt="Telemetría telemetria telemetrics Formula 1 F1 Telemetry logo"
-          className="h-16 w-16 shrink-0 object-contain max-[400px]:h-12 max-[400px]:w-12"
+          className="h-16 w-16 shrink-0 object-contain"
         />
-        <nav className="flex min-w-0 flex-row gap-2 items-center justify-center max-[400px]:flex-1 max-[400px]:gap-1">
+        <nav className="flex flex-row gap-2 items-center justify-center">
           <a className={leftBtnClass} href={leftUrl}>
             {leftTitle}
           </a>
@@ -129,7 +131,10 @@ export default function Navigation({
             </a>
           )}
           {!isProdeRoute && prodeUrl && prodeTitle && (
-            <a className={`${prodeBtnClass} ${prodeColorClasses}`} href={prodeUrl}>
+            <a
+              className={`${prodeBtnClass} ${prodeColorClasses}`}
+              href={prodeUrl}
+            >
               {prodeTitle}
             </a>
           )}
