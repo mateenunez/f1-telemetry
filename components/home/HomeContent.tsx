@@ -63,10 +63,10 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 focus:ring-4 
                 focus:ring-gray-500 
                 focus:ring-opacity-50"
-              href={`/${dict.locale}/live-timing`}
-              onClick={() =>
-                trackEvent("cta_click", { cta: "live_timing", location: "home_hero" })
-              }
+                href={`/${dict.locale}/live-timing`}
+                onClick={() =>
+                  trackEvent("cta_click", { cta: "live_timing", location: "home_hero" })
+                }
               >
                 {dict.home.dashboardButton}
               </a>
@@ -85,16 +85,16 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 focus:ring-4 
                 focus:ring-gray-500 
                 focus:ring-opacity-50"
-              href={`/${dict.locale}/schedule`}
-              onClick={() =>
-                trackEvent("cta_click", { cta: "schedule", location: "home_hero" })
-              }
+                href={`/${dict.locale}/schedule`}
+                onClick={() =>
+                  trackEvent("cta_click", { cta: "schedule", location: "home_hero" })
+                }
               >
                 {dict.home.scheduleButton}
               </a>
             </div>
             <a
-              className="rounded px-6 w-[15rem] py-3 text-[1.5rem] bg-transparent border-2 border-f1Yellow text-f1Yellow text-center transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:bg-f1Yellow hover:text-warmBlack hover:shadow-2xl hover:cursor-pointer font-geist font-medium focus:outline-none focus:ring-4 focus:ring-f1Yellow/40"
+              className="rounded px-6 w-[15rem] mt-4 py-3 text-[1.5rem] bg-transparent border-2 border-f1Yellow text-f1Yellow text-center transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:bg-f1Yellow hover:text-warmBlack hover:shadow-2xl hover:cursor-pointer font-geist font-medium focus:outline-none focus:ring-4 focus:ring-f1Yellow/40"
               href={`/${dict.locale}/prode/leaderboard`}
               onClick={() => trackEvent("cta_click", { cta: "prode_leaderboard", location: "home_hero" })}
             >

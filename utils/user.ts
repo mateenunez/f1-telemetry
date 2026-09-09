@@ -47,7 +47,59 @@ export function getTokenExpiryMs(token: string): number | null {
 
 export function isTokenExpired(token: string): boolean {
   const expiryMs = getTokenExpiryMs(token);
-  return expiryMs !== null && expiryMs <= Date.now();
+  if (expiryMs === null) return true;
+  return expiryMs <= Date.now();
+}
+
+export const AD_FREE_ROLE_IDS = [2, 3] as const;
+
+/**
+ * Returns true if the given role or role ID corresponds to a role that does not receive ads.
+ * Evaluated strictly by role ID:
+ * - 1: base (receives ads)
+ * - 2: premium (no ads)
+ * - 3: admin (no ads)
+ */
+export function isAdFreeRole(
+  role?: Role | { id?: number } | number | null,
+): boolean {
+  if (role == null) return false;
+  const roleId = typeof role === "number" ? role : role.id;
+  return roleId === 2 || roleId === 3;
+}
+
+/**
+ * Decodes the JWT payload client-side to inspect the user's role ID without waiting for network verification.
+ */
+export function getTokenRoleId(token: string): number | null {
+  try {
+    const payload = token.split(".")[1];
+    if (!payload) return null;
+    const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const json = JSON.parse(atob(base64));
+    if (typeof json.role_id === "number") {
+      return json.role_id;
+    }
+    if (typeof json.role === "string") {
+      const name = json.role.toLowerCase().trim();
+      if (name === "admin") return 3;
+      if (name === "premium") return 2;
+      if (name === "base") return 1;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * @deprecated Use getTokenRoleId instead
+ */
+export function getTokenRole(
+  token: string,
+): { id?: number; name?: string } | null {
+  const roleId = getTokenRoleId(token);
+  return roleId ? { id: roleId } : null;
 }
 
 export const userEndpoints = {

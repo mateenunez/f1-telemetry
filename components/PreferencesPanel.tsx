@@ -690,7 +690,7 @@ export default function PreferencesPanel({
             </button>
           </div>
 
-          {user && (
+          {user ? (
             <div className="flex flex-row gap-1">
               <p className="text-xs text-gray-400 font-geist font-medium">
                 {preferences.translate
@@ -705,6 +705,15 @@ export default function PreferencesPanel({
                 onClick={logout}
               >
                 {preferences.translate ? " Cerrar sesión. " : " Sign out. "}
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-row gap-1">
+              <p
+                className="text-xs text-gray-400 hover:text-f1Blue font-geist font-medium underline hover:cursor-pointer"
+                onClick={() => setAuthFormOpen(true)}
+              >
+                {preferences.translate ? "Iniciar sesión." : "Log in."}
               </p>
             </div>
           )}
