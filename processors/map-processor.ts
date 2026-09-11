@@ -52,24 +52,53 @@ export interface MapSector {
 };
 
 
+const normalizeMap = (map: Partial<iMap>): iMap | null => {
+	if (!Array.isArray(map.x) || !Array.isArray(map.y) || map.x.length < 2 || map.x.length !== map.y.length) {
+		return null;
+	}
+
+	return {
+		...map,
+		corners: map.corners ?? [],
+		marshalSectors: map.marshalSectors ?? [],
+	} as iMap;
+};
+
+const fetchLocalMap = async (circuitKey: number): Promise<iMap | null> => {
+	const paths = [`/assets/tracks/circuits/${circuitKey}_circuit.json`];
+	if (circuitKey === 153) paths.push("/assets/tracks/circuits/madring_circuit.json");
+
+	for (const path of paths) {
+		try {
+			const response = await fetch(path);
+			if (!response.ok) continue;
+
+			const map = normalizeMap(await response.json());
+			if (map) return map;
+		} catch {
+			continue;
+		}
+	}
+
+	return null;
+};
+
 export const fetchMap = async (circuitKey: number): Promise<iMap | null> => {
 	try {
 		const year = new Date().getFullYear();
-
 		const mapRequest = await fetch(`https://api.multiviewer.app/api/v1/circuits/${circuitKey}/${year}`, {
 			next: { revalidate: 60 * 60 * 2 },
 		});
 
-		if (!mapRequest.ok) {
-			console.error("Failed to fetch map", mapRequest);
-			return null;
+		if (mapRequest.ok) {
+			const map = normalizeMap(await mapRequest.json());
+			if (map) return map;
 		}
-
-		return mapRequest.json();
 	} catch (error) {
-		console.error("Failed to fetch map", error);
-		return null;
+		console.error("Failed to fetch map from API", error);
 	}
+
+	return fetchLocalMap(circuitKey);
 };
 
 export const rad = (deg: number) => deg * (Math.PI / 180);
@@ -168,6 +197,7 @@ export const getTrackProgress = (x: number, y: number, index: TrackProgressIndex
 export const createSectors = (map: iMap): MapSector[] => {
 	const sectors: MapSector[] = [];
 	const points: TrackPosition[] = map.x.map((x, index) => ({ x, y: map.y[index] }));
+	if (!map.marshalSectors?.length) return sectors;
 
 	for (let i = 0; i < map.marshalSectors.length; i++) {
 		sectors.push({

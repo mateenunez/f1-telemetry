@@ -51,6 +51,7 @@ export default function Map({
   yellowSectors,
   redFlag = false,
   safetyCar = false,
+  translate,
   cornersPreferences,
   sectorsPreferences,
   favoriteDrivers,
@@ -73,6 +74,7 @@ export default function Map({
     y: number;
     startAngle: number;
   }>(null);
+  const [mapUnavailable, setMapUnavailable] = useState(false);
 
   const cornersCookie = cornersPreferences ?? false;
   const sectorsCookie = sectorsPreferences ?? false;
@@ -83,10 +85,15 @@ export default function Map({
   useEffect(() => {
     (async () => {
       if (!circuitKey) return;
+      setMapUnavailable(false);
+      setPoints(null);
       try {
         const mapJson = await fetchMap(circuitKey);
 
-        if (!mapJson) return;
+        if (!mapJson) {
+          setMapUnavailable(true);
+          return;
+        }
 
         const centerX = (Math.max(...mapJson.x) - Math.min(...mapJson.x)) / 2;
       const centerY = (Math.max(...mapJson.y) - Math.min(...mapJson.y)) / 2;
@@ -102,7 +109,7 @@ export default function Map({
         ),
       }));
 
-      const cornerPositions: Corner[] = mapJson.corners.map((corner) => ({
+      const cornerPositions: Corner[] = (mapJson.corners ?? []).map((corner) => ({
         number: corner.number,
         letter: corner.letter,
         pos: rotate(
@@ -141,8 +148,9 @@ export default function Map({
         centerY
       );
 
-      const dx = rotatedPoints[3].x - rotatedPoints[0].x;
-      const dy = rotatedPoints[3].y - rotatedPoints[0].y;
+      const finishLineDirectionPoint = rotatedPoints[Math.min(3, rotatedPoints.length - 1)];
+      const dx = finishLineDirectionPoint.x - rotatedPoints[0].x;
+      const dy = finishLineDirectionPoint.y - rotatedPoints[0].y;
       const startAngle = Math.atan2(dy, dx) * (180 / Math.PI);
 
       setCenter([centerX, centerY]);
@@ -198,7 +206,18 @@ export default function Map({
     });
   }, [sectors, yellowSectors, sectorsCookie, redFlag, safetyCar]);
 
-  if (!points || !minX || !minY || !widthX || !widthY) {
+  if (mapUnavailable) {
+    return (
+      <div className="flex h-full min-h-24 items-center justify-center p-4 text-center text-sm text-gray-400 font-inter">
+        {translate ? "El circuito no esta disponible" : "The circuit is not available"}
+      </div>
+    );
+  }
+
+  if (
+    !points ||
+    [minX, minY, widthX, widthY].some((value) => value === null)
+  ) {
     return null;
   }
 

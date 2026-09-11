@@ -121,6 +121,7 @@ const MapAndMessages = memo(function MapAndMessages({
             cornersPreferences={cornersPreferences}
             sectorsPreferences={sectorsPreferences}
             favoriteDrivers={favoriteDrivers}
+            translate={translate}
             onReady={() => setMapReady(true)}
           />
         )}
