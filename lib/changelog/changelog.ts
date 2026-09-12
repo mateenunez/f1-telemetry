@@ -28,6 +28,18 @@ export interface ChangelogRelease {
 }
 
 export const changelog: ChangelogRelease[] = [
+    {
+    version: "2.2.1",
+    date: "2026-09-12",
+    items: [
+      {
+        type: "fixed",
+        scope: "frontend",
+        en: "Fixed an issue with the Madring circuit in the telemetrics display.",
+        es: "Se corrigió el circuito de Madring en la telemetría.",
+      }
+    ],
+  },
   {
     version: "2.2.0",
     date: "2026-09-05",

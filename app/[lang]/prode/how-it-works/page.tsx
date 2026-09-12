@@ -33,7 +33,7 @@ export default async function ProdeInfoPage({
           "Elegí tus pilotos y registrá tu predicción antes del inicio. Cuando comienza la sesión, la votación se cierra.",
         points: "Sistema de puntos",
         exact: "posición acertada",
-        partial: "acierto en otra posición",
+        partial: "piloto en otra posición",
         practice: "Prácticas libres",
         practiceText: "Elegí el Top 3 de la tabla final.",
         qualifying: "Clasificación",
@@ -104,7 +104,7 @@ export default async function ProdeInfoPage({
                     {copy.exact}
                   </span>
                 </div>
-                <div className="mt-5 border-t border-white/10 pt-5">
+                <div className="pt-5">
                   <strong className="text-4xl font-black text-gray-400 font-geist">
                     +2
                   </strong>
@@ -150,7 +150,7 @@ export default async function ProdeInfoPage({
                     {copy.exact}
                   </span>
                 </div>
-                <div className="mt-5 border-t border-white/10 pt-5">
+                <div className="pt-5">
                   <strong className="text-5xl font-black text-f1Blue font-geist">
                     +5
                   </strong>
@@ -159,7 +159,7 @@ export default async function ProdeInfoPage({
                   </span>
                 </div>
 
-                <div className="mt-5 border-t border-white/10 pt-5">
+                <div className="pt-5">
                   <strong className="text-4xl font-black text-gray-400 font-geist">
                     +2
                   </strong>

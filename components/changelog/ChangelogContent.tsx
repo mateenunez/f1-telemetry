@@ -26,7 +26,7 @@ export function ChangelogContent({ dict }: ChangelogContentProps) {
           leftTitle={dict.schedule.dashboardButton}
           rightTitle={dict.schedule.homeButton}
           f1t_url={f1t}
-          rightColor="f1Purple"
+          rightColor="f1Red"
           prodeUrl={`/${dict.locale}/prode/leaderboard`}
           prodeTitle={dict.home.prodeLeaderboardButton}
           prodeColor="f1Yellow"
