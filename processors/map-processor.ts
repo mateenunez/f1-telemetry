@@ -56,11 +56,12 @@ const normalizeMap = (map: Partial<iMap>): iMap | null => {
 	if (!Array.isArray(map.x) || !Array.isArray(map.y) || map.x.length < 2 || map.x.length !== map.y.length) {
 		return null;
 	}
+	const localMap = map as Partial<iMap> & { marshallSectors?: Corner[] };
 
 	return {
 		...map,
 		corners: map.corners ?? [],
-		marshalSectors: map.marshalSectors ?? [],
+		marshalSectors: map.marshalSectors ?? localMap.marshallSectors ?? [],
 	} as iMap;
 };
 

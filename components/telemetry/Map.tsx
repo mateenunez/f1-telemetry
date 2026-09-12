@@ -20,6 +20,14 @@ import { getSectorColor } from "@/hooks/use-raceControl";
 
 const SPACE = 1000;
 const ROTATION_FIX = 90;
+const MAP_SCALE_Y_BY_CIRCUIT: Record<number, number> = {
+  153: 0.5,
+};
+
+const scalePoint = (point: TrackPosition, scaleY: number, centerY: number) => ({
+  x: point.x,
+  y: centerY + (point.y - centerY) * scaleY,
+});
 
 type Corner = {
   number: number;
@@ -75,6 +83,7 @@ export default function Map({
     startAngle: number;
   }>(null);
   const [mapUnavailable, setMapUnavailable] = useState(false);
+  const scaleY = MAP_SCALE_Y_BY_CIRCUIT[circuitKey] ?? 1;
 
   const cornersCookie = cornersPreferences ?? false;
   const sectorsCookie = sectorsPreferences ?? false;
@@ -102,34 +111,46 @@ export default function Map({
 
       const sectors = createSectors(mapJson).map((s) => ({
         ...s,
-        start: rotate(s.start.x, s.start.y, fixedRotation, centerX, centerY),
-        end: rotate(s.end.x, s.end.y, fixedRotation, centerX, centerY),
+        start: scalePoint(rotate(s.start.x, s.start.y, fixedRotation, centerX, centerY), scaleY, centerY),
+        end: scalePoint(rotate(s.end.x, s.end.y, fixedRotation, centerX, centerY), scaleY, centerY),
         points: s.points.map((p) =>
-          rotate(p.x, p.y, fixedRotation, centerX, centerY)
+          scalePoint(rotate(p.x, p.y, fixedRotation, centerX, centerY), scaleY, centerY)
         ),
       }));
 
       const cornerPositions: Corner[] = (mapJson.corners ?? []).map((corner) => ({
         number: corner.number,
         letter: corner.letter,
-        pos: rotate(
-          corner.trackPosition.x,
-          corner.trackPosition.y,
-          fixedRotation,
-          centerX,
+        pos: scalePoint(
+          rotate(
+            corner.trackPosition.x,
+            corner.trackPosition.y,
+            fixedRotation,
+            centerX,
+            centerY
+          ),
+          scaleY,
           centerY
         ),
-        labelPos: rotate(
-          corner.trackPosition.x + 540 * Math.cos(rad(corner.angle)),
-          corner.trackPosition.y + 540 * Math.sin(rad(corner.angle)),
-          fixedRotation,
-          centerX,
+        labelPos: scalePoint(
+          rotate(
+            corner.trackPosition.x + 540 * Math.cos(rad(corner.angle)),
+            corner.trackPosition.y + 540 * Math.sin(rad(corner.angle)),
+            fixedRotation,
+            centerX,
+            centerY
+          ),
+          scaleY,
           centerY
         ),
       }));
 
       const rotatedPoints = mapJson.x.map((x, index) =>
-        rotate(x, mapJson.y[index], fixedRotation, centerX, centerY)
+        scalePoint(
+          rotate(x, mapJson.y[index], fixedRotation, centerX, centerY),
+          scaleY,
+          centerY
+        )
       );
 
       const pointsX = rotatedPoints.map((item) => item.x);
@@ -140,11 +161,9 @@ export default function Map({
       const cWidthX = Math.max(...pointsX) - cMinX + SPACE * 2;
       const cWidthY = Math.max(...pointsY) - cMinY + SPACE * 2;
 
-      const rotatedFinishLine = rotate(
-        mapJson.x[0],
-        mapJson.y[0],
-        fixedRotation,
-        centerX,
+      const rotatedFinishLine = scalePoint(
+        rotate(mapJson.x[0], mapJson.y[0], fixedRotation, centerX, centerY),
+        scaleY,
         centerY
       );
 
@@ -386,6 +405,7 @@ export default function Map({
                     rotation={rotation}
                     centerX={centerX}
                     centerY={centerY}
+                    scaleY={scaleY}
                     favorite={isFavorite}
                   />
                 );
@@ -434,6 +454,7 @@ type CarDotProps = {
 
   centerX: number;
   centerY: number;
+  scaleY: number;
 
   timing: ProcessedTiming;
 };
@@ -446,9 +467,14 @@ const CarDot = ({
   rotation,
   centerX,
   centerY,
+  scaleY,
   timing,
 }: CarDotProps) => {
-  const rotatedPos = rotate(pos.X, pos.Y, rotation, centerX, centerY);
+  const rotatedPosition = rotate(pos.X, pos.Y, rotation, centerX, centerY);
+  const rotatedPos = {
+    x: rotatedPosition.x,
+    y: centerY + (rotatedPosition.y - centerY) * scaleY,
+  };
   const transform = [
     `translateX(${rotatedPos.x}px)`,
     `translateY(${rotatedPos.y}px)`,
