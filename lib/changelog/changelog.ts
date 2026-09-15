@@ -28,7 +28,19 @@ export interface ChangelogRelease {
 }
 
 export const changelog: ChangelogRelease[] = [
-    {
+  {
+    version: "2.2.2",
+    date: "2026-09-15",
+    items: [
+      {
+        type: "changed",
+        scope: "frontend",
+        en: "The Circle of Doom now uses the circuit's real pit loss time (from the circuit API) to position the PIT marker, instead of a fixed estimate.",
+        es: "El Circle of Doom ahora usa el tiempo real de pit loss del circuito (obtenido de la API) para posicionar la marca PIT, en lugar de un estimativo fijo.",
+      },
+    ],
+  },
+  {
     version: "2.2.1",
     date: "2026-09-12",
     items: [
@@ -55,13 +67,7 @@ export const changelog: ChangelogRelease[] = [
         scope: "frontend",
         en: "Added the Malaysia circuit to the race calendar.",
         es: "Se agregó el circuito de Malasia al calendario de carreras.",
-      },
-      {
-        type: "added",
-        scope: "both",
-        en: "Added a prediction system for Free Practice, Qualifying, Sprint, and Race sessions, with structured predictions and points leaderboards.",
-        es: "Se añadió un sistema de predicciones para las sesiones de entrenamientos libres, clasificación, sprint y carrera, con predicciones estructuradas y tablas de posiciones por puntos.",
-      },
+      }
     ],
   },
   {

@@ -343,6 +343,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           }
                           sessionType={session?.session_type}
                           translate={preferences.translate}
+                          circuitKey={session?.circuit_key}
                         />
                       </SortableWidget>
                     );
@@ -567,6 +568,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
                           }
                           sessionType={session?.session_type}
                           translate={preferences.translate}
+                          circuitKey={session?.circuit_key}
                         />
                       </DraggableWidget>
                     );

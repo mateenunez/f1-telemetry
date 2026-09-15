@@ -4,11 +4,6 @@
     "description": "F1 Telemetry es un dashboard de telemetría en tiempo real, hecho para que puedas seguir la Fórmula 1 por completo y desde cualquier lado, sin necesidad de ver la transmisión.",
     "dashboardButton": "Telemetría",
     "scheduleButton": "Calendario",
-    "prodeLeaderboardButton": "Leaderboard",
-    "prodeInfoButton": "¿Cómo funciona?",
-    "prodeEyebrow": "Prode F1",
-    "prodeTitle": "Compite con tus predicciones",
-    "prodeDescription": "Predice el resultado de cada sesión y consulta tu posición junto a la comunidad.",
     "mapTitle": "Mapa en vivo",
     "mapDesc": "Vista previa del mapa en tiempo real.",
     "audioTitle": "Radio de Equipo + IA",
@@ -33,18 +28,6 @@
         }
       ]
     }
-  },
-  "leaderboard": {
-    "title": "Ranking de",
-    "currentGp": "Gran Premio actual",
-    "season": "Temporada",
-    "search": "Buscar usuario",
-    "period": "Periodo del ranking",
-    "points": "pts",
-    "yourPosition": "Tu posición",
-    "previous": "Página anterior",
-    "next": "Página siguiente",
-    "page": "Página"
   },
   "feedback": {
     "description": "Queremos saber tu opinión",

@@ -3,9 +3,10 @@ import {
   ProcessedPosition,
   ProcessedTiming,
 } from "@/processors";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { polarPoint } from "@/utils/svg-polar";
 import { findDriverByNumber } from "@/utils/telemetry";
+import { fetchMap } from "@/processors/map-processor";
 
 interface CircleOfDoomProps {
   currentPositions: (ProcessedPosition | undefined)[];
@@ -14,6 +15,7 @@ interface CircleOfDoomProps {
   refDriver: number | undefined;
   sessionType?: string | null;
   translate?: boolean;
+  circuitKey?: number;
 }
 
 export default function CircleOfDoom({
@@ -23,11 +25,26 @@ export default function CircleOfDoom({
   refDriver = 1,
   sessionType,
   translate,
+  circuitKey,
 }: CircleOfDoomProps) {
   const isRace = String(sessionType ?? "").toLowerCase().includes("race");
   const noRaceMessage = translate
     ? "Circle of Doom solo disponible en carreras."
     : "Circle of Doom is available on a Race.";
+
+  const [pitLossNormal, setPitLossNormal] = useState<number>(24);
+
+  useEffect(() => {
+    if (!circuitKey) return;
+    fetchMap(circuitKey).then((mapData) => {
+      if (mapData?.pitLoss?.normal) {
+        const parsed = parseFloat(mapData.pitLoss.normal);
+        if (!isNaN(parsed) && parsed > 0) {
+          setPitLossNormal(parsed);
+        }
+      }
+    });
+  }, [circuitKey]);
 
   const ANGLE_OFFSET = 90;
   const CLOCKWISE = true;
@@ -190,7 +207,7 @@ export default function CircleOfDoom({
     const lastLapTime = gtl + 5; // 5 segundos agregados arbitrariamente.
     if (!lastLapTime) return map;
 
-    const pitStopTime = 24; // Segundos que tarda un pit stop promedio
+    const pitStopTime = pitLossNormal; // Seconds from circuit API (pitLoss.normal), fallback 24s
     const pitAngularPos = (pitStopTime / lastLapTime) * 360; // Posición angular del pit
     map.set(924, pitAngularPos); // 924 key arbitraria seleccionada por dejar caer la mano en el teclado.
 

@@ -14,21 +14,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
 
   return (
     <div className="min-h-screen w-full">
-      <Navigation
-        leftUrl={`/${dict.locale}/live-timing`}
-        rightUrl={`/${dict.locale}/schedule`}
-        leftTitle={dict.home.dashboardButton}
-        rightTitle={dict.home.scheduleButton}
-        f1t_url={config.public.assets.f1_white}
-        maxScrollPosition={100}
-        prodeUrl={`/${dict.locale}/prode/leaderboard`}
-        prodeTitle={dict.home.prodeLeaderboardButton}
-        prodeColor="f1Yellow"
-        homeUrl={`/${dict.locale}`}
-        homeTitle={dict.schedule.homeButton}
-        scheduleUrl={`/${dict.locale}/schedule`}
-        scheduleTitle={dict.home.scheduleButton}
-      />
+      <Navigation dict={dict} maxScrollPosition={100} />
       <div className="min-h-screen py-5 w-full bg-cover bg-center isolate">
         <Image
           src={config.public.assets.f1telemetrybg_v1}
@@ -93,13 +79,6 @@ export default function HomeContent({ dict }: HomeContentProps) {
                 {dict.home.scheduleButton}
               </a>
             </div>
-            <a
-              className="rounded px-6 w-[15rem] mt-4 py-3 text-[1.5rem] bg-transparent border-2 border-f1Yellow text-f1Yellow text-center transition duration-300 ease-in-out hover:-translate-y-1 hover:scale-105 hover:bg-f1Yellow hover:text-warmBlack hover:shadow-2xl hover:cursor-pointer font-geist font-medium focus:outline-none focus:ring-4 focus:ring-f1Yellow/40"
-              href={`/${dict.locale}/prode/leaderboard`}
-              onClick={() => trackEvent("cta_click", { cta: "prode_leaderboard", location: "home_hero" })}
-            >
-              {dict.home.prodeLeaderboardButton}
-            </a>
           </div>
         </div>
       </div>

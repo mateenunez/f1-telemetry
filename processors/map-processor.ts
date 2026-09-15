@@ -1,3 +1,9 @@
+export interface PitLoss {
+	normal: string;
+	sc: string;
+	vsc: string;
+};
+
 export interface iMap {
 	corners: Corner[];
 	marshalLights: Corner[];
@@ -19,6 +25,7 @@ export interface iMap {
 	x: number[];
 	y: number[];
 	year: number;
+	pitLoss?: PitLoss;
 };
 
 export interface CandidateLap {

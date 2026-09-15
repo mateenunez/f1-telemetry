@@ -5,7 +5,6 @@ import { F1CalendarResponse, fetchCalendar } from "@/utils/calendar";
 import NextSession from "@/components/calendar/NextSession";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Upnext from "@/components/calendar/Upnext";
-import { config } from "@/lib/config";
 import Navigation from "../Navigation";
 
 interface ScheduleContentProps {
@@ -14,7 +13,6 @@ interface ScheduleContentProps {
 
 export function ScheduleContent({ dict }: ScheduleContentProps) {
   const [calendar, setCalendar] = useState<F1CalendarResponse | null>(null);
-  const f1t = config.public.assets.f1_white;
   const viewportRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -48,21 +46,7 @@ export function ScheduleContent({ dict }: ScheduleContentProps) {
     return (
       <div className="min-h-screen bg-warmBlack text-white overflow-hidden font-geist">
         <div className="max-w-6xl mx-auto mt-20 px-4 md:px-8">
-          <Navigation
-            leftUrl={`/${dict.locale}/live-timing`}
-            rightUrl={`/${dict.locale}`}
-            leftTitle={dict.schedule.dashboardButton}
-            rightTitle={dict.schedule.homeButton}
-            f1t_url={f1t}
-            rightColor="f1Purple"
-            prodeUrl={`/${dict.locale}/prode/leaderboard`}
-            prodeTitle={dict.home.prodeLeaderboardButton}
-            prodeColor="f1Yellow"
-            homeUrl={`/${dict.locale}`}
-            homeTitle={dict.schedule.homeButton}
-            scheduleUrl={`/${dict.locale}/schedule`}
-            scheduleTitle={dict.schedule.title}
-          />
+          <Navigation dict={dict} />
           <div className="flex flex-row my-4">
             <div className="flex flex-col md:mx-8 w-full gap-6">
               {/* Proxima sesion */}

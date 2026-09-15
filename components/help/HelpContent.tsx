@@ -1,7 +1,6 @@
 // @ts-nocheck
 "use client";
 import Navigation from "../Navigation";
-import { config } from "@/lib/config";
 import DriverPositions from "../telemetry/DriverPositions";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Tyres from "../telemetry/Tyres";
@@ -20,27 +19,12 @@ interface HelpContentProps {
 }
 
 export function HelpContent({ dict }: HelpContentProps) {
-  const f1t = config.public.assets.f1_white;
   const isMobile = useIsMobile();
 
   return (
     <div className="min-h-screen bg-warmBlack text-white overflow-hidden font-geist">
       <div className="max-w-6xl mx-auto mt-20 px-4 md:px-8">
-        <Navigation
-          leftUrl="/live-timing"
-          rightUrl="/"
-          leftTitle={dict.schedule.dashboardButton}
-          rightTitle={dict.schedule.homeButton}
-          f1t_url={f1t}
-          rightColor="f1Purple"
-          prodeUrl={`/${dict.locale}/prode/leaderboard`}
-          prodeTitle={dict.home.prodeLeaderboardButton}
-          prodeColor="f1Yellow"
-          homeUrl={`/${dict.locale}`}
-          homeTitle={dict.schedule.homeButton}
-          scheduleUrl={`/${dict.locale}/schedule`}
-          scheduleTitle={dict.schedule.title}
-        />
+        <Navigation dict={dict} />
         <div className="w-full h-full flex flex-col">
           {/* Introduction */}
           <div className="flex flex-col gap-2 py-4">
