@@ -7,20 +7,18 @@ import { isAdFreeRole, getTokenRoleId, isTokenExpired } from "@/utils/user";
 
 const monetagScripts = [
   { zone: "277522", src: "https://quge5.com/88/tag.min.js" },
-  { zone: "11654017", src: "https://nap5k.com/tag.min.js" },
-  { zone: "11654025", src: "https://n6wxm.com/vignette.min.js" },
 ];
 
 function removeMonetagArtifacts() {
   // Remove all ad script tags
   const scripts = document.querySelectorAll(
-    'script[data-monetag-zone], script[data-zone="277522"], script[src*="quge5.com"], script[src*="nap5k.com"], script[src*="n6wxm.com"]',
+    'script[data-monetag-zone], script[data-zone="277522"], script[src*="quge5.com"]',
   );
   scripts.forEach((el) => el.remove());
 
   // Clean up any active Monetag popups/vignettes/iframes if present
   const adNodes = document.querySelectorAll(
-    '[id*="monetag"], [class*="monetag"], [data-zone="277522"], [data-zone="11654017"], [data-zone="11654025"]',
+    '[id*="monetag"], [class*="monetag"], [data-zone="277522"]',
   );
   adNodes.forEach((el) => {
     if (el.tagName !== "SCRIPT") {
@@ -75,4 +73,4 @@ export default function MonetagScripts() {
   }, [user, isAuthenticated]);
 
   return null;
-}
+}
