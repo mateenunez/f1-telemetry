@@ -6,25 +6,37 @@ import { useAuth } from "@/hooks/use-auth";
 import { isAdFreeRole, getTokenRoleId, isTokenExpired } from "@/utils/user";
 
 const monetagScripts = [
-  { zone: "277522", src: "https://quge5.com/88/tag.min.js" },
+  { zone: "11654017", src: "https://nap5k.com/tag.min.js" },
 ];
 
 function removeMonetagArtifacts() {
-  // Remove all ad script tags
-  const scripts = document.querySelectorAll(
-    'script[data-monetag-zone], script[data-zone="277522"], script[src*="quge5.com"]',
-  );
-  scripts.forEach((el) => el.remove());
+  // Selectores dinámicos basados en la lista de monetagScripts
+  const scriptSelectors = [
+    'script[data-monetag-zone]',
+    ...monetagScripts.flatMap(({ zone, src }) => [
+      `script[data-zone="${zone}"]`,
+      `script[src="${src}"]`,
+    ]),
+  ];
 
-  // Clean up any active Monetag popups/vignettes/iframes if present
-  const adNodes = document.querySelectorAll(
-    '[id*="monetag"], [class*="monetag"], [data-zone="277522"]',
-  );
-  adNodes.forEach((el) => {
-    if (el.tagName !== "SCRIPT") {
-      el.remove();
-    }
-  });
+  document
+    .querySelectorAll(scriptSelectors.join(", "))
+    .forEach((el) => el.remove());
+
+  // Limpiar nodos/banners/popups generados en el DOM por Monetag
+  const adNodeSelectors = [
+    '[id*="monetag"]',
+    '[class*="monetag"]',
+    ...monetagScripts.map(({ zone }) => `[data-zone="${zone}"]`),
+  ];
+
+  document
+    .querySelectorAll(adNodeSelectors.join(", "))
+    .forEach((el) => {
+      if (el.tagName !== "SCRIPT") {
+        el.remove();
+      }
+    });
 }
 
 export default function MonetagScripts() {
@@ -68,7 +80,8 @@ export default function MonetagScripts() {
       script.setAttribute("data-cfasync", "false");
       script.src = src;
       script.async = true;
-      document.body.appendChild(script);
+      const target = document.body || document.documentElement;
+      target?.appendChild(script);
     }
   }, [user, isAuthenticated]);
 

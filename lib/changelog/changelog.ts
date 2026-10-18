@@ -29,6 +29,24 @@ export interface ChangelogRelease {
 
 export const changelog: ChangelogRelease[] = [
   {
+    version: "2.2.3",
+    date: "2026-10-18",
+    items: [
+      {
+        type: "added",
+        scope: "frontend",
+        en: "The Driver Positions table is now more customizable: you can now reorder columns by dragging and remove columns you don't need.",
+        es: "La tabla de posiciones ahora es más personalizable: ahora puedes reordenar columnas arrastrándolas y quitar las que no necesites.",
+      },
+      {
+        type: "changed",
+        scope: "frontend",
+        en: "Drastically reduced advertisements across the platform for a cleaner and less intrusive viewing experience.",
+        es: "Se redujeron drásticamente los anuncios en toda la plataforma para una experiencia más limpia y menos invasiva.",
+      },
+    ],
+  },
+  {
     version: "2.2.2",
     date: "2026-09-15",
     items: [

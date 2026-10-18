@@ -12,6 +12,33 @@ import React, {
 import Cookies from "js-cookie";
 import { ProcessedDriver } from "@/processors";
 
+export type DriverPositionColumnId =
+  | "driver"
+  | "tyres"
+  | "speed"
+  | "pits"
+  | "leader"
+  | "pos"
+  | "lapTimes"
+  | "minisectors";
+
+export interface DriverPositionColumnConfig {
+  id: DriverPositionColumnId;
+  order: number;
+  visible: boolean;
+}
+
+export const DEFAULT_DRIVER_POSITION_COLUMNS: DriverPositionColumnConfig[] = [
+  { id: "driver", order: 0, visible: true },
+  { id: "tyres", order: 1, visible: true },
+  { id: "speed", order: 2, visible: true },
+  { id: "pits", order: 3, visible: true },
+  { id: "leader", order: 4, visible: true },
+  { id: "pos", order: 5, visible: true },
+  { id: "lapTimes", order: 6, visible: true },
+  { id: "minisectors", order: 7, visible: true },
+];
+
 export type WidgetId =
   | "driver-positions"
   | "map-and-messages"
@@ -85,6 +112,7 @@ export interface Preferences {
   hasSeenPanel: boolean;
   hasSeenEditMode: boolean;
   weatherDetailed: boolean;
+  driverPositionColumns: DriverPositionColumnConfig[];
 }
 
 export const DEFAULT_CONFIG: Preferences = {
@@ -181,6 +209,7 @@ export const DEFAULT_CONFIG: Preferences = {
   hasSeenPanel: false,
   hasSeenEditMode: false,
   weatherDetailed: false,
+  driverPositionColumns: DEFAULT_DRIVER_POSITION_COLUMNS,
 };
 
 interface PreferencesContextValue {
@@ -190,10 +219,17 @@ interface PreferencesContextValue {
     key: K,
     value: Preferences[K],
   ) => void;
+  updateDriverPositionColumns: (
+    action:
+      | DriverPositionColumnConfig[]
+      | ((prev: DriverPositionColumnConfig[]) => DriverPositionColumnConfig[]),
+  ) => void;
   isEditMode: boolean;
   setIsEditMode: (value: boolean) => void;
   isResizing: boolean;
   setIsResizing: (value: boolean) => void;
+  isColumnDragging: boolean;
+  setIsColumnDragging: (value: boolean) => void;
   widgets: Widget[];
   updateWidget: (id: WidgetId, updates: Partial<Widget>) => void;
   updateWidgets: (updates: Widget[]) => void;
@@ -234,6 +270,21 @@ function isPreferences(obj: any): obj is Preferences {
       ].includes(key)
     ) {
       if (typeof obj[key] !== "boolean") return false;
+    }
+
+    if (key === "driverPositionColumns") {
+      if (!Array.isArray(obj[key])) return false;
+      const cols = obj[key] as any[];
+      for (const col of cols) {
+        if (
+          typeof col !== "object" ||
+          typeof col.id !== "string" ||
+          typeof col.order !== "number" ||
+          typeof col.visible !== "boolean"
+        ) {
+          return false;
+        }
+      }
     }
 
     if (
@@ -292,8 +343,14 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({
     try {
       if (cookie) {
         const cookieJson = JSON.parse(cookie);
-        const cookieUpdated = isPreferences(cookieJson);
-        return cookieUpdated ? cookieJson : DEFAULT_CONFIG;
+        // Merge with defaults so new fields get default values for old cookies
+        const merged = { ...DEFAULT_CONFIG, ...cookieJson };
+        // Ensure driverPositionColumns always has valid entries
+        if (!Array.isArray(merged.driverPositionColumns) || merged.driverPositionColumns.length === 0) {
+          merged.driverPositionColumns = DEFAULT_DRIVER_POSITION_COLUMNS;
+        }
+        const cookieUpdated = isPreferences(merged);
+        return cookieUpdated ? merged : DEFAULT_CONFIG;
       }
       return DEFAULT_CONFIG;
     } catch {
@@ -304,6 +361,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({
   const [isEditMode, setIsEditMode] = useState(false);
 
   const [isResizing, setIsResizing] = useState(false);
+  const [isColumnDragging, setIsColumnDragging] = useState(false);
 
   const buildWidgetsFromPreferences = useCallback(
     (prefs: Preferences): Widget[] => {
@@ -392,33 +450,6 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({
     );
   }, []);
 
-  const setWidgetsPreferences = useCallback((widgetsArr: Widget[]) => {
-    const BASE_W = typeof window !== "undefined" ? window.innerWidth : 1526;
-    const BASE_H = typeof window !== "undefined" ? window.innerHeight : 1094;
-
-    widgetsArr.forEach((w, idx) => {
-      const prefKey = widgetIdToPrefKey(w.id);
-      if (prefKey) {
-        const normalized = normalizeSquareWidget(w);
-        const width = normalized.width;
-        const height = normalized.height;
-
-        setPreference(prefKey, {
-          enabled: normalized.enabled,
-          x: Math.round(normalized.x ?? 0),
-          y: Math.round(normalized.y ?? 0),
-          width,
-          height,
-          xPct: (normalized.x ?? 0) / BASE_W,
-          yPct: (normalized.y ?? 0) / BASE_H,
-          widthPct: width / BASE_W,
-          heightPct: height / BASE_H,
-          index: idx,
-        });
-      }
-    });
-  }, []);
-
   function widgetIdToPrefKey(id: WidgetId): keyof Preferences | null {
     const map: Record<WidgetId, keyof Preferences> = {
       "driver-positions": "driverPositions",
@@ -439,8 +470,19 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({
   );
 
   const setPreference = useCallback(
-    <K extends keyof Preferences>(key: K, value: Preferences[K]) => {
+    <K extends keyof Preferences>(
+      key: K,
+      valueOrUpdater:
+        | Preferences[K]
+        | ((prevVal: Preferences[K]) => Preferences[K]),
+    ) => {
       setPreferences((prev) => {
+        const value =
+          typeof valueOrUpdater === "function"
+            ? (valueOrUpdater as (prevVal: Preferences[K]) => Preferences[K])(
+                prev[key],
+              )
+            : valueOrUpdater;
         const updated = { ...prev, [key]: value };
         Cookies.set(cookieName, JSON.stringify(updated), { expires: 365 });
         return updated;
@@ -448,6 +490,59 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({
     },
     [],
   );
+
+  const updateDriverPositionColumns = useCallback(
+    (
+      action:
+        | DriverPositionColumnConfig[]
+        | ((
+            prev: DriverPositionColumnConfig[],
+          ) => DriverPositionColumnConfig[]),
+    ) => {
+      setPreferences((prev) => {
+        const current =
+          prev.driverPositionColumns ?? DEFAULT_DRIVER_POSITION_COLUMNS;
+        const updatedCols =
+          typeof action === "function" ? action(current) : action;
+        const updated = { ...prev, driverPositionColumns: updatedCols };
+        Cookies.set(cookieName, JSON.stringify(updated), { expires: 365 });
+        return updated;
+      });
+    },
+    [],
+  );
+
+  const setWidgetsPreferences = useCallback((widgetsArr: Widget[]) => {
+    const BASE_W = typeof window !== "undefined" ? window.innerWidth : 1526;
+    const BASE_H = typeof window !== "undefined" ? window.innerHeight : 1094;
+
+    setPreferences((prev) => {
+      const updated = { ...prev };
+      widgetsArr.forEach((w, idx) => {
+        const prefKey = widgetIdToPrefKey(w.id);
+        if (prefKey) {
+          const normalized = normalizeSquareWidget(w);
+          const width = normalized.width;
+          const height = normalized.height;
+
+          (updated as any)[prefKey] = {
+            enabled: normalized.enabled,
+            x: Math.round(normalized.x ?? 0),
+            y: Math.round(normalized.y ?? 0),
+            width,
+            height,
+            xPct: (normalized.x ?? 0) / BASE_W,
+            yPct: (normalized.y ?? 0) / BASE_H,
+            widthPct: width / BASE_W,
+            heightPct: height / BASE_H,
+            index: idx,
+          };
+        }
+      });
+      Cookies.set(cookieName, JSON.stringify(updated), { expires: 365 });
+      return updated;
+    });
+  }, []);
 
   // Optional: sync cookie changes (multi-tab)
   useEffect(() => {
@@ -474,6 +569,7 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({
       preferences,
       getPreference,
       setPreference,
+      updateDriverPositionColumns,
       isEditMode,
       setIsEditMode,
       widgets,
@@ -482,12 +578,15 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({
       setWidgetsPreferences,
       isResizing,
       setIsResizing,
+      isColumnDragging,
+      setIsColumnDragging,
       dict,
     }),
     [
       preferences,
       getPreference,
       setPreference,
+      updateDriverPositionColumns,
       isEditMode,
       widgets,
       updateWidget,
@@ -495,6 +594,8 @@ export const PreferencesProvider: React.FC<ProviderProps> = ({
       setWidgetsPreferences,
       isResizing,
       setIsResizing,
+      isColumnDragging,
+      setIsColumnDragging,
       dict,
     ],
   );

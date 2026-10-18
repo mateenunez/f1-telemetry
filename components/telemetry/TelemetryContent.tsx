@@ -154,7 +154,11 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
       activationConstraint: { delay: 200, tolerance: 5 },
       onActivation: (event) => {
         const target = event.event.target as HTMLElement;
-        if (target.tagName === "INPUT" || target.closest("button")) {
+        if (
+          target.tagName === "INPUT" ||
+          target.closest("button") ||
+          target.closest("[data-no-widget-drag]")
+        ) {
           return false;
         }
         return true;
@@ -162,6 +166,17 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     }),
     useSensor(MouseSensor, {
       activationConstraint: { distance: 3 },
+      onActivation: (event) => {
+        const target = event.event.target as HTMLElement;
+        if (
+          target.tagName === "INPUT" ||
+          target.closest("button") ||
+          target.closest("[data-no-widget-drag]")
+        ) {
+          return false;
+        }
+        return true;
+      },
     }),
   );
 

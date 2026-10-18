@@ -30,7 +30,7 @@ export default async function ResetPassword({
   return (
     <div className="min-h-screen bg-warmBlack flex flex-col">
       <Navigation dict={dict} />
-      <div className="flex-1 flex items-center justify-center p-4">
+      <div className="flex-1 flex items-center justify-center p-4 mt-20">
         <Suspense fallback={null}>
           <ResetPasswordContent dict={dict} lang={lang} />
         </Suspense>

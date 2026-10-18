@@ -1,6 +1,6 @@
 "use client";
 
-import { Widget, WidgetId } from "@/context/preferences";
+import { Widget, WidgetId, usePreferences } from "@/context/preferences";
 import { ReactNode, useEffect, useState } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
@@ -71,9 +71,10 @@ export default function DraggableWidget({
   translate: boolean;
   square?: boolean;
 }) {
+  const { isColumnDragging } = usePreferences();
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: widget.id,
-    disabled: !isEditMode,
+    disabled: !isEditMode || isColumnDragging,
   });
   const style = {
     position: "absolute" as const,
@@ -143,21 +144,23 @@ export default function DraggableWidget({
       )}
 
       {isEditMode && (
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              updateWidget(widget.id, { enabled: false });
-            }}
-            onMouseDownCapture={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              updateWidget(widget.id, { enabled: false });
-            }}
-            className="absolute -top-0 m-2 -right-0 z-[9999] text-gray-400 hover:text-f1Red p-2 shadow-lg transition-colors pointer-events-auto w-[2rem] text-md"
-          >
-            <X size={18} />
-          </button>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            updateWidget(widget.id, { enabled: false });
+          }}
+          onMouseDownCapture={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            updateWidget(widget.id, { enabled: false });
+          }}
+          className="absolute top-0.5 right-1 z-[9999] text-gray-400 hover:text-f1Red p-0.5 transition-colors pointer-events-auto"
+          title={translate ? "Ocultar widget" : "Hide widget"}
+        >
+          <X size={15} />
+        </button>
       )}
 
       <div

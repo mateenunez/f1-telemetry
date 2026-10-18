@@ -95,7 +95,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const storedToken = Cookies.get(tokenName);
-    if (!storedToken) return;
+    if (!storedToken) {
+      handleAuthError();
+      return;
+    }
 
     if (isTokenExpired(storedToken)) {
       handleAuthError();

@@ -6,6 +6,7 @@ import {
   WidgetConfig,
   usePreferences,
   DEFAULT_CONFIG,
+  DEFAULT_DRIVER_POSITION_COLUMNS,
 } from "@/context/preferences";
 import { X, Check, PanelLeft, Pencil } from "lucide-react";
 import { ProcessedDriver } from "@/processors";
@@ -144,6 +145,9 @@ export default function PreferencesPanel({
     widgetKeys.forEach((key) => {
       setPreference(key, DEFAULT_CONFIG[key]);
     });
+
+    // Reset driver position columns to defaults
+    setPreference("driverPositionColumns", DEFAULT_DRIVER_POSITION_COLUMNS);
   };
 
   const handleEditMode = (location: "toolbar" | "preferences_panel") => {

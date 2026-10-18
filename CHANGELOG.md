@@ -20,10 +20,41 @@ that's user-facing, add a matching item there (in English and Spanish) too.
 
 ## [Unreleased]
 
+## [2.2.3] - 2026-10-18
+
 ### Added
 
-- Lineal Driver Positions widget: shows each driver's position on the circuit flattened onto a straight line.
-- Forgot/reset password flow.
+- The Driver Positions table is now more customizable: you can now reorder columns by dragging and remove columns you don't need.
+
+### Changed
+
+- Drastically reduced advertisements across the platform for a cleaner and less intrusive viewing experience.
+
+## [2.2.2] - 2026-09-15
+
+### Changed
+
+- The Circle of Doom now uses the circuit's real pit loss time (from the circuit API) to position the PIT marker, instead of a fixed estimate.
+
+## [2.2.1] - 2026-09-12
+
+### Fixed
+
+- Fixed an issue with the Madring circuit in the telemetrics display.
+
+## [2.2.0] - 2026-09-05
+
+### Added
+
+- Added the Malaysia circuit to the race calendar.
+- Increased server capacity to support higher concurrency and keep the platform stable during peak usage.
+
+## [2.1.0] - 2026-08-02
+
+### Added
+
+- Added the Lineal Driver Positions widget, showing each driver's position on the circuit flattened onto a straight line.
+- Added a forgot/reset password flow so you can recover access to your account.
 
 ## [2.0.0] - 2026-07-12
 

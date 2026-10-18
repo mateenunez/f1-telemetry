@@ -23,7 +23,7 @@ export function HelpContent({ dict }: HelpContentProps) {
 
   return (
     <div className="min-h-screen bg-warmBlack text-white overflow-hidden font-geist">
-      <div className="max-w-6xl mx-auto mt-20 px-4 md:px-8">
+      <div className="max-w-6xl mx-auto mt-24 md:mt-28 px-4 md:px-8">
         <Navigation dict={dict} />
         <div className="w-full h-full flex flex-col">
           {/* Introduction */}

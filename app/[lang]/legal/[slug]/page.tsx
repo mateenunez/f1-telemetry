@@ -29,7 +29,7 @@ export default async function LegalPage({ params }: { params: Promise<{ lang: Lo
   return (
     <div className="min-h-screen bg-warmBlack text-offWhite flex flex-col">
       <Navigation dict={dict} />
-      <main className="flex-1 mx-auto w-full max-w-3xl px-6 py-16 font-geist">
+      <main className="flex-1 mx-auto w-full max-w-3xl px-6 py-16 mt-20 font-geist">
         <h1 className="font-orbitron text-3xl">{page.title}</h1>
         <div className="mt-8 space-y-5 text-base leading-7 text-gray-300">
           {page.body.map((paragraph: string) => <p key={paragraph}>{paragraph}</p>)}

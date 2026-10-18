@@ -45,7 +45,7 @@ export function ScheduleContent({ dict }: ScheduleContentProps) {
   if (calendar)
     return (
       <div className="min-h-screen bg-warmBlack text-white overflow-hidden font-geist">
-        <div className="max-w-6xl mx-auto mt-20 px-4 md:px-8">
+        <div className="max-w-6xl mx-auto mt-24 md:mt-28 px-4 md:px-8">
           <Navigation dict={dict} />
           <div className="flex flex-row my-4">
             <div className="flex flex-col md:mx-8 w-full gap-6">
