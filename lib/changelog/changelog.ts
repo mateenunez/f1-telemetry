@@ -29,6 +29,18 @@ export interface ChangelogRelease {
 
 export const changelog: ChangelogRelease[] = [
   {
+    version: "2.3.0",
+    date: "2026-10-31",
+    items: [
+      {
+        type: "added",
+        scope: "both",
+        en: "Added session replays: browse available recordings and replay telemetry in your browser with playback controls, progress seeking, and adjustable playback speed.",
+        es: "Se añadieron las repeticiones de sesiones: consulta las grabaciones disponibles y reproduce la telemetría en el navegador con controles, avance por la barra de progreso y velocidad ajustable.",
+      },
+    ],
+  },
+  {
     version: "2.2.3",
     date: "2026-10-18",
     items: [

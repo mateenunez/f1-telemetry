@@ -106,6 +106,14 @@ export class TelemetryManager {
     };
   }
 
+  processReplayFrame(
+    data: WebSocketData,
+    onDataUpdate: (data: TelemetryData) => void,
+  ) {
+    this.onDataUpdateCallback = onDataUpdate;
+    this.processWebSocketData(data);
+  }
+
   private processWebSocketData(data: WebSocketData) {
     // Handle wsu (WebSocket Users) if present
     if (typeof data.wsu === "number") {

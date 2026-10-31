@@ -20,9 +20,16 @@ import { config } from "@/lib/config";
 interface HeaderProps {
   telemetryData: TelemetryData | null;
   dict: any;
+  replay?: boolean;
+  replayRemaining?: string;
 }
 
-export default function Header({ telemetryData, dict }: HeaderProps) {
+export default function Header({
+  telemetryData,
+  dict,
+  replay = false,
+  replayRemaining,
+}: HeaderProps) {
   const session = telemetryData?.session;
   const weather = telemetryData?.weather;
   const userCount = telemetryData?.userCount ?? 0;
@@ -31,15 +38,20 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
   const { preferences } = usePreferences();
 
   useEffect(() => {
-    if (!session?.remaining) return;
+    const remaining = replay
+      ? replayRemaining ?? session?.remaining
+      : session?.remaining;
+    if (!session || !remaining) return;
     if (session.session_status === "Finalised") return;
 
-    const [hours, minutes, seconds] = session.remaining.split(":").map(Number);
+    const [hours, minutes, seconds] = remaining.split(":").map(Number);
     const remainingAtAnchor = (hours * 3600 + minutes * 60 + seconds) * 1000;
-    // Anchor to the moment we received this update rather than the server's
-    // embedded Utc: during replay (fast-forward) that timestamp is the
-    // original historical recording time, not "now", which would make the
-    // elapsed-time math wildly wrong the instant Extrapolating turns true.
+    if (replay) {
+      setSessionTime(remainingAtAnchor);
+      return;
+    }
+
+    // Live sessions extrapolate the countdown from the received update time.
     const anchorTime = Date.now();
 
     const update = () => {
@@ -56,7 +68,13 @@ export default function Header({ telemetryData, dict }: HeaderProps) {
 
     const id = setInterval(update, 1000);
     return () => clearInterval(id);
-  }, [session?.remaining, session?.extrapolating, session?.session_status]);
+  }, [
+    replay,
+    replayRemaining,
+    session?.remaining,
+    session?.extrapolating,
+    session?.session_status,
+  ]);
 
   return (
     <Card className="bg-warmBlack1 text-white border-b-2 border-t-0 border-l-0 border-r-0 rounded-none border-gray-600 relative">

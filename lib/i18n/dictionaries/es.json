@@ -100,6 +100,31 @@
     "title": "Telemetría en vivo",
     "description": "Dashboard de F1 Telemetry en tiempo real con tiempos en vivo, posiciones de pilotos, tiempos por vuelta y análisis de carrera. Sigue las carreras de Fórmula 1 con datos detallados."
   },
+  "replay": {
+    "title": "Repeticiones",
+    "description": "Explora y reproduce grabaciones de telemetría de sesiones anteriores.",
+    "loading": "Cargando grabaciones...",
+    "loginRequired": "Inicia sesión para ver las grabaciones.",
+    "loadError": "No se pudieron cargar las grabaciones.",
+    "empty": "Todavía no hay grabaciones disponibles.",
+    "session": "Sesión",
+    "savedAt": "Guardado",
+    "size": "Tamaño",
+    "open": "Ver grabación",
+    "back": "Volver a grabaciones",
+    "recordingLoading": "Descargando y preparando la grabación...",
+    "recordingLoadError": "No se pudo descargar o procesar esta grabación.",
+    "recordingNotFound": "La API no encontró una grabación con ese ID. Volvé al listado y seleccioná la sesión otra vez.",
+    "sessionName": "Nombre",
+    "sessionType": "Tipo",
+    "player": "Reproductor de telemetría",
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "restart": "Volver al inicio",
+    "line": "Línea",
+    "seek": "Posición de reproducción",
+    "linesPerSecond": "Líneas/s"
+  },
   "help": {
     "title": "Widgets y funcionalidades",
     "description": "Ayuda y documentación para F1 Telemetry, el dashboard de telemetría en vivo hecho por fans de Formula 1.",
@@ -194,6 +219,9 @@
     "error": "Las transcripciones para los audios de equipos estarán disponibles en breve."
   },
   "auth": {
+    "account": "Cuenta",
+    "signedInAs": "Sesión iniciada como",
+    "logout": "Cerrar sesión",
     "loginTitle": "Iniciar sesión",
     "registerTitle": "Registrarse",
     "email": "Correo electrónico",

@@ -1,6 +1,6 @@
 {
   "name": "f1telemetry",
-  "version": "2.2.3",
+  "version": "2.3.0",
   "private": true,
   "scripts": {
     "build": "next build",

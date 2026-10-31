@@ -100,6 +100,31 @@
     "title": "Live timing",
     "description": "Real-time F1 telemetry dashboard with live timing, driver positions, lap times, and race analytics. Follow Formula 1 races with detailed data."
   },
+  "replay": {
+    "title": "Replays",
+    "description": "Explore and replay telemetry recordings from previous sessions.",
+    "loading": "Loading recordings...",
+    "loginRequired": "Sign in to view recordings.",
+    "loadError": "Could not load recordings.",
+    "empty": "No recordings are available yet.",
+    "session": "Session",
+    "savedAt": "Saved",
+    "size": "Size",
+    "open": "View recording",
+    "back": "Back to recordings",
+    "recordingLoading": "Downloading and preparing recording...",
+    "recordingLoadError": "Could not download or process this recording.",
+    "recordingNotFound": "The API could not find a recording with that ID. Return to the list and select the session again.",
+    "sessionName": "Name",
+    "sessionType": "Type",
+    "player": "Telemetry player",
+    "play": "Play",
+    "pause": "Pause",
+    "restart": "Restart",
+    "line": "Line",
+    "seek": "Playback position",
+    "linesPerSecond": "Lines/s"
+  },
   "help": {
     "title": "Widgets and features",
     "description": "Help and documentation for F1 Telemetry, the fan-made live timing dashboard for Formula 1 fans.",
@@ -194,6 +219,9 @@
     "error": "Las transcripciones para los audios de equipos estarán disponibles en breve."
   },
   "auth": {
+    "account": "Account",
+    "signedInAs": "Signed in as",
+    "logout": "Sign out",
     "loginTitle": "Login",
     "registerTitle": "Register",
     "email": "Email",

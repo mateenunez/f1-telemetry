@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { type TelemetryData } from "../telemetry-manager";
+import { TelemetryManager } from "../telemetry-manager";
 import { getTelemetryManager } from "../telemetry-manager-singleton";
+import type { WebSocketData } from "@/websocket/websocket-manager";
 import { findYellowSectors } from "@/hooks/use-raceControl";
 import { usePreferences } from "@/context/preferences";
 import { getAboutToBeEliminatedDrivers } from "@/utils/telemetry";
@@ -12,6 +14,12 @@ const tyres = config.public.assets.tyres;
 interface QueuedMessage {
   data: TelemetryData;
   releaseTime: number;
+}
+
+interface ReplayTelemetryOptions {
+  frames: WebSocketData[];
+  index: number;
+  resetKey: number;
 }
 
 export const getCompoundSvg = (
@@ -41,14 +49,17 @@ export const getCompoundSvg = (
   );
 };
 
-export function useTelemetryManager() {
+export function useTelemetryManager(replay?: ReplayTelemetryOptions) {
   const [telemetryData, setTelemetryData] = useState<TelemetryData | null>(
     null,
   );
   const [loading, setLoading] = useState(true);
   const { preferences } = usePreferences();
   const {token} = useAuth();
-  const [telemetryManager] = useState(() => getTelemetryManager());
+  const telemetryManager = useMemo(
+    () => (replay ? new TelemetryManager() : getTelemetryManager()),
+    [Boolean(replay), replay?.resetKey],
+  );
   const [pinnedDriver, setPinnedDriver] = useState<number | null>(null);
   const [delayed, setDelayed] = useState(false);
   const delayedRef = useRef(false);
@@ -57,6 +68,10 @@ export function useTelemetryManager() {
   const previousDelay = useRef<number>(0);
   const PROCESS_INTERVAL_MS = 100;
   const isSessionFinalisedRef = useRef(false);
+  const processedReplayRef = useRef<{
+    manager: typeof telemetryManager | null;
+    index: number;
+  }>({ manager: null, index: -1 });
 
   const deltaDelay = useMemo(() => {
     return (previousDelay.current - preferences.delay) * 1000;
@@ -67,6 +82,8 @@ export function useTelemetryManager() {
   }, [delayed]);
 
   useEffect(() => {
+    if (replay) return;
+
     let intervalId: NodeJS.Timeout | null = null;
     let timeoutId: NodeJS.Timeout | null = null;
 
@@ -131,7 +148,27 @@ export function useTelemetryManager() {
       if (intervalId) clearInterval(intervalId);
       telemetryManager.disconnect();
     };
-  }, [telemetryManager, deltaDelay]);
+  }, [telemetryManager, deltaDelay, replay]);
+
+  useEffect(() => {
+    if (!replay) return;
+
+    if (processedReplayRef.current.manager !== telemetryManager) {
+      processedReplayRef.current = { manager: telemetryManager, index: -1 };
+      setTelemetryData(null);
+      setLoading(true);
+    }
+
+    const startIndex = processedReplayRef.current.index + 1;
+    const endIndex = Math.min(replay.index, replay.frames.length - 1);
+    for (let index = startIndex; index <= endIndex; index += 1) {
+      telemetryManager.processReplayFrame(replay.frames[index], setTelemetryData);
+    }
+    if (endIndex >= startIndex) {
+      processedReplayRef.current.index = endIndex;
+      setLoading(false);
+    }
+  }, [replay, telemetryManager]);
 
   useEffect(() => {
     previousDelay.current = preferences.delay;

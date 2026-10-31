@@ -34,13 +34,20 @@ import TyresList from "./TyresList";
 
 import { Button } from "../ui/button";
 import { useAuth } from "@/hooks/use-auth";
+import type { WebSocketData } from "@/websocket/websocket-manager";
 
 
 interface TelemetryContentProps {
   dict: any;
+  replay?: {
+    frames: WebSocketData[];
+    index: number;
+    resetKey: number;
+    remaining?: string;
+  };
 }
 
-export function TelemetryContent({ dict }: TelemetryContentProps) {
+export function TelemetryContent({ dict, replay }: TelemetryContentProps) {
   const {
     telemetryData,
     loading,
@@ -57,7 +64,7 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
     delayed,
     deltaDelay,
     aboutToBeEliminated,
-  } = useTelemetryManager();
+  } = useTelemetryManager(replay);
   const { preferences, isEditMode, widgets, updateWidget, updateWidgets } =
     usePreferences();
   const isMobile = useIsMobile();
@@ -234,7 +241,12 @@ export function TelemetryContent({ dict }: TelemetryContentProps) {
   return (
     <div className="min-h-screen w-full min-w-0 overflow-hidden bg-warmBlack">
       <div className="max-w-8xl mx-auto space-y-4 h-full min-w-0">
-        <Header telemetryData={telemetryData} dict={dict} />
+        <Header
+          telemetryData={telemetryData}
+          dict={dict}
+          replay={Boolean(replay)}
+          replayRemaining={replay?.remaining}
+        />
 
         {isMobile ? (
           <DndContext onDragEnd={handleMobileDragEnd} sensors={sensors}>
