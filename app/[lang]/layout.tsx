@@ -3,7 +3,7 @@ import { PreferencesProvider } from "@/context/preferences";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { AuthProvider } from "@/context/auth";
-import MonetagScripts from "@/components/MonetagScripts";
+import AdScripts from "@/components/AdScripts";
 
 export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }));
@@ -60,7 +60,7 @@ export default async function LangLayout({
   return (
     <AuthProvider>
       <PreferencesProvider dict={dict}>{children}</PreferencesProvider>
-      <MonetagScripts />
+      <AdScripts />
     </AuthProvider>
   );
 }
