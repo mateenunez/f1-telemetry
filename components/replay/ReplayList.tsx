@@ -127,7 +127,7 @@ export function ReplayList({ dict, locale }: ReplayListProps) {
             {error}
           </p>
         ) : recordings.length === 0 ? (
-          <p className="rounded border border-gray-700 bg-warmBlack1 p-5 text-gray-300">
+          <p className="text-gray-300">
             {dict.replay.empty}
           </p>
         ) : (
