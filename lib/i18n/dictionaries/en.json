@@ -36,10 +36,10 @@
     "url": "https://docs.google.com/forms/d/e/1FAIpQLScs9cIGiZamLcDUkDPEqoMeufFAX9ITOvrncGG0WltD8XMs4g/viewform"
   },
   "donate": {
-    "button": "Support the project on PayPal",
+    "button": "Support the project on Ko-Fi",
     "shortLabel": "Donate",
-    "platform": "paypal",
-    "url": "https://paypal.me/Mateenunez"
+    "platform": "ko-fi",
+    "url": "https://ko-fi.com/theskon"
   },
   "footer": {
     "legal": "This website is not associated, affiliated, authorized, endorsed, or officially connected in any way with Formula 1, the FIA, or any of its subsidiaries or affiliates.",
