@@ -13,6 +13,10 @@ export async function generateMetadata({
   const dict = await getDictionary(lang);
   return {
     title: `F1 Telemetry | ${dict.replay.title}`,
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

@@ -131,7 +131,7 @@ export default function Navigation({
                         logout();
                         setAccountMenuOpen(false);
                       }}
-                      className="flex w-full items-center gap-2 rounded px-3 py-2 text-left text-sm text-gray-400 hover:text-f1Blue focus:outline-none focus-visible:ring-2 focus-visible:ring-f1Blue"
+                      className="flex w-full items-center text-xs gap-2 rounded px-3 py-2 text-left text-sm text-gray-400 hover:text-f1Blue focus:outline-none focus-visible:ring-2 focus-visible:ring-f1Blue"
                     >
                       <LogOut size={16} aria-hidden="true" />
                       {dict.auth?.logout ?? "Sign out"}
@@ -168,7 +168,7 @@ export default function Navigation({
           {!isReplayRoute && (
             <Link
               href={`/${locale}/replay`}
-              className={`${baseBtnClass} bg-transparent border-2 border-gray text-offWhite hover:bg-f1Purple hover:border-f1Purple`}
+              className={`${baseBtnClass} bg-transparent border-2 border-gray text-offWhite hover:bg-f1Green hover:border-f1Green`}
             >
               {dict.replay?.title ?? "Replay"}
             </Link>

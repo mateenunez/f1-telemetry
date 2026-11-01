@@ -22,6 +22,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: 'https://www.f1telemetry.com/es/replay',
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
       url: 'https://www.f1telemetry.com/es/help',
       lastModified: new Date(),
       changeFrequency: 'yearly',
@@ -69,6 +75,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.9,
+    },
+    {
+      url: 'https://www.f1telemetry.com/en/replay',
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
     },
     {
       url: 'https://www.f1telemetry.com/en/help',

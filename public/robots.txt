@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Allow: /es/replay
+Allow: /en/replay
 
 Sitemap: https://www.f1telemetry.com/sitemap.xml

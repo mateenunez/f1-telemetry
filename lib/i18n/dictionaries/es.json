@@ -1,7 +1,7 @@
 {
   "home": {
     "title": "Telemetría en vivo",
-    "description": "F1 Telemetry es un dashboard de telemetría en tiempo real, hecho para que puedas seguir la Fórmula 1 por completo y desde cualquier lado, sin necesidad de ver la transmisión.",
+    "description": "F1 Telemetry es un dashboard de telemetría en tiempo real, hecho para que puedas seguir la Fórmula 1 por completo y desde cualquier lado, sin necesidad de ver la transmisión. Podés ver la telemetría en tiempo real y también sesiones pasadas de forma gratuita.",
     "dashboardButton": "Telemetría",
     "scheduleButton": "Calendario",
     "mapTitle": "Mapa en vivo",
@@ -63,7 +63,8 @@
       "title": "Política de privacidad",
       "body": [
         "F1 Telemetry utiliza datos técnicos esenciales para ofrecer el sitio y puede utilizar servicios de analítica y publicidad para entender el uso y sostener los costos de operación.",
-        "Los servicios de terceros pueden instalar cookies o procesar información según sus propias políticas. Puedes administrar las cookies desde la configuración de tu navegador. Para consultas sobre datos personales, contáctanos mediante la dirección indicada abajo."
+        "Los servicios de terceros pueden instalar cookies o procesar información según sus propias políticas. Puedes administrar las cookies desde la configuración de tu navegador. Para consultas sobre datos personales, contáctanos mediante la dirección indicada abajo.",
+        "Email: contacto@f1telemetry.com"
       ]
     },
     "terms": {
@@ -102,7 +103,7 @@
   },
   "replay": {
     "title": "Repeticiones",
-    "description": "Explora y reproduce grabaciones de telemetría de sesiones anteriores.",
+    "description": "Explora grabaciones de telemetría de sesiones anteriores de Fórmula 1 y vuelve a reproducir sus datos con controles de reproducción y navegación por la sesión. Inicia sesión para consultar las grabaciones disponibles y analizar la actividad registrada después de cada evento.",
     "loading": "Cargando grabaciones...",
     "loginRequired": "Inicia sesión para ver las grabaciones.",
     "loadError": "No se pudieron cargar las grabaciones.",

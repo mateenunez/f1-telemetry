@@ -1,7 +1,7 @@
 {
   "home": {
     "title": "Real time dashboard and analytics",
-    "description": "F1 Telemetry is a real-time telemetry dashboard so you can follow Formula 1 completely and from anywhere, without needing to watch the broadcast.",
+    "description": "F1 Telemetry is a real-time telemetry dashboard so you can follow Formula 1 completely and from anywhere, without needing to watch the broadcast. You can view real-time telemetry and also past sessions for free.",
     "dashboardButton": "Telemetry",
     "scheduleButton": "Schedule",
     "mapTitle": "Live Map",
@@ -63,7 +63,8 @@
       "title": "Privacy policy",
       "body": [
         "F1 Telemetry uses essential technical data to provide the website and may use analytics and advertising services to understand usage and support operating costs.",
-        "Third-party services may place cookies or process information according to their own policies. You can manage cookies through your browser settings. For questions about personal data, contact us using the address below."
+        "Third-party services may place cookies or process information according to their own policies. You can manage cookies through your browser settings. For questions about personal data, contact us using the address below.",
+        "Email: contacto@f1telemetry.com"
       ]
     },
     "terms": {
@@ -102,7 +103,7 @@
   },
   "replay": {
     "title": "Replays",
-    "description": "Explore and replay telemetry recordings from previous sessions.",
+    "description": "Explore telemetry recordings from previous Formula 1 sessions and replay their data with playback controls and session navigation. Sign in to browse available recordings and analyze the activity captured during each event.",
     "loading": "Loading recordings...",
     "loginRequired": "Sign in to view recordings.",
     "loadError": "Could not load recordings.",
