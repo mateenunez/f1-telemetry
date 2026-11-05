@@ -24,7 +24,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
           quality={85}
           className="object-cover -z-10 w-full h-full"
         />
-        <div className="flex flex-col justify-evenly h-full justify-center items-center max-w-4xl mx-auto">
+        <div className="home-hero-stagger flex flex-col justify-evenly h-full justify-center items-center max-w-4xl mx-auto">
           <div className="flex flex-col items-center">
             <Image
               src={config.public.assets.f1telemetry_black}
@@ -34,7 +34,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
             />
           </div>
           <div className="flex flex-col items-center gap-5 w-full">
-            <div className="flex md:flex-row flex-col justify-center items-center md:gap-[4rem] gap-[2rem] w-full">
+            <div className="home-hero-actions flex md:flex-row flex-col justify-center items-center md:gap-[4rem] gap-[2rem] w-full">
               <a
                 className="rounded px-6 w-[15rem] py-3 text-[1.5rem] bg-white text-black text-center transition duration-300 ease-in-out 
                 hover:-translate-y-1 
@@ -140,7 +140,7 @@ export default function HomeContent({ dict }: HomeContentProps) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => trackEvent("donate_click", { location: "home" })}
-            className="inline-flex items-center gap-2 rounded-full bg-f1Yellow pl-2 pr-4 py-2 font-geist text-sm font-semibold text-warmBlack shadow-md transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-f1Yellow/30"
+            className="inline-flex items-center gap-2 rounded-full bg-f1Yellow pl-2 pr-4 py-2 font-geist text-sm font-semibold text-warmBlack shadow-md transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-lg"
           >
             <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white">
               <Image

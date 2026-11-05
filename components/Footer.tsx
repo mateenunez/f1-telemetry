@@ -32,7 +32,7 @@ export default async function Footer({ dict }: FooterProps) {
             href={config.public.github}
             action="cta_click"
             params={{ cta: "github", location: "footer" }}
-            className="text-gray-400"
+            className="inline-flex text-gray-400 transition-all duration-200 ease-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
           >
             <Github size={18} />
           </TrackedLink>
@@ -40,7 +40,7 @@ export default async function Footer({ dict }: FooterProps) {
             href={discordUrl}
             action="cta_click"
             params={{ cta: "discord", location: "footer" }}
-            className="text-gray-400 w-[1rem]"
+            className="inline-flex w-[1rem] text-gray-400 transition-all duration-200 ease-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
           >
             <Image
               src={config.public.assets.discordIcon}
@@ -61,7 +61,7 @@ export default async function Footer({ dict }: FooterProps) {
               action="cta_click"
               params={{ cta: link.label, location: "footer" }}
               target="_self"
-              className="text-xs text-gray-400 font-geist hover:text-f1Blue text-center"
+              className="text-xs text-gray-400 font-geist text-center transition-all duration-200 ease-out hover:-translate-y-0.5 hover:text-f1Blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-f1Blue"
             >
               {link.label}
             </TrackedLink>
@@ -71,7 +71,7 @@ export default async function Footer({ dict }: FooterProps) {
             action="cta_click"
             params={{ cta: "help", location: "footer" }}
             target="_self"
-            className="text-xs text-gray-400 font-geist hover:text-f1Blue text-center"
+            className="text-xs text-gray-400 font-geist text-center transition-all duration-200 ease-out hover:-translate-y-0.5 hover:text-f1Blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-f1Blue"
           >
             {dict.footer.help}
           </TrackedLink>
@@ -80,7 +80,7 @@ export default async function Footer({ dict }: FooterProps) {
             action="cta_click"
             params={{ cta: "changelog", location: "footer" }}
             target="_self"
-            className="text-xs text-gray-400 font-geist hover:text-f1Blue text-center"
+            className="text-xs text-gray-400 font-geist text-center transition-all duration-200 ease-out hover:-translate-y-0.5 hover:text-f1Blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-f1Blue"
           >
             {dict.footer.changelog}
           </TrackedLink>
@@ -88,7 +88,7 @@ export default async function Footer({ dict }: FooterProps) {
             href={dict.donate.url}
             action="donate_click"
             params={{ location: "footer" }}
-            className="text-xs text-gray-400 font-geist hover:text-f1Blue text-center"
+            className="text-xs text-gray-400 font-geist text-center transition-all duration-200 ease-out hover:-translate-y-0.5 hover:text-f1Blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-f1Blue"
           >
             {dict.donate.shortLabel}
           </TrackedLink>

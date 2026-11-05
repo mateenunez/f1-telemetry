@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import {
   F1Event,
   formatEventDateShort,
@@ -6,13 +5,23 @@ import {
   GroupByLocation,
 } from "@/utils/calendar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { config } from "@/lib/config";
+import TrackCircuit from "@/components/calendar/TrackCircuit";
+import { getTrackAsset } from "@/utils/track-assets";
 import { cn } from "@/lib/utils";
+
+const sessionDictKeys: Record<string, string> = {
+  p1: "practice1",
+  p2: "practice2",
+  p3: "practice3",
+  sq: "sprintqualification",
+  sr: "sprintrace",
+  q: "qualifying",
+  r: "race",
+};
 
 interface UpNextProps {
   upNextEvents: GroupByLocation[];
   dict: any;
-  viewportRef: React.RefObject<HTMLDivElement | null>;
 }
 
 function isPast(dateString: string | undefined): boolean {
@@ -33,7 +42,14 @@ function getGroupEndTime(event: GroupByLocation): number {
 
   if (sessions.length === 0) return new Date(event.start).getTime();
 
-  return Math.max(...sessions.map((s) => new Date(s.start).getTime()));
+  return Math.max(
+    ...sessions.map((s) => new Date(s.end || s.start).getTime()),
+  );
+}
+
+function getSessionLabel(sessionKey: string, dict: any): string {
+  const dictKey = sessionDictKeys[sessionKey];
+  return dict?.sessionTypes?.[dictKey] ?? sessionKey.toUpperCase();
 }
 
 function Session({
@@ -45,94 +61,94 @@ function Session({
   eventData: F1Event | undefined;
   dict: any;
 }) {
-  if (!eventData) return <></>;
+  if (!eventData) return null;
 
-  const displayLabel = sessionKey.toUpperCase();
+  const past = isPast(eventData.start);
 
   return (
     <div
       className={cn(
-        "flex flex-col gap-0 text-wrap text-gray-400 text-xs",
-        isPast(eventData.start) && "opacity-50",
+        "flex w-full flex-wrap items-center justify-start gap-x-3 gap-y-0.5 py-2 sm:justify-start sm:py-1.5",
+        past && "opacity-45",
       )}
     >
-      <span className="text-md text-offWhite">{displayLabel}</span>
-      <span>{formatEventDateShort(eventData.start || "", dict.locale)}</span>
+      <span className="font-medium text-offWhite text-base">
+        {getSessionLabel(sessionKey, dict)}
+      </span>
+      <span className="whitespace-nowrap text-base text-gray-400">
+        {formatEventDateShort(eventData.start || "", dict.locale)}
+      </span>
     </div>
   );
 }
 
-export default function Upnext({
-  upNextEvents,
-  dict,
-  viewportRef,
-}: UpNextProps) {
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    const viewport = viewportRef.current;
-    if (!viewport || upNextEvents.length === 0) return;
-
-    let anchorIndex = upNextEvents.findIndex(
-      (event) => getGroupEndTime(event) >= Date.now(),
-    );
-    if (anchorIndex === -1) anchorIndex = upNextEvents.length - 1;
-
-    const anchorCard = cardRefs.current[anchorIndex];
-    if (anchorCard) {
-      viewport.scrollLeft = anchorCard.offsetLeft;
-    }
-  }, [upNextEvents, viewportRef]);
+export default function Upnext({ upNextEvents, dict }: UpNextProps) {
+  const now = Date.now();
+  const upcomingEvents = upNextEvents
+    .filter((event) => getGroupEndTime(event) >= now)
+    .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
 
   return (
-    <div className="flex gap-4 pb-4 flex-row">
-      {upNextEvents.map((event, index) => (
-        <Card
-          key={index}
-          ref={(el) => {
-            cardRefs.current[index] = el;
-          }}
-          className={cn(
-            "min-w-[20rem] max-w-[320px] flex-shrink-0 flex flex-col justify-between bg-transparent border-none",
-            getGroupEndTime(event) < Date.now() && "opacity-50",
-          )}
-        >
-          <CardHeader className="py-0 flex flex-row gap-4 items-center">
-            <img
-              src={`https://flagsapi.com/${getCountryCode(
-                event.location
-              )}/flat/32.png`}
-              alt={`Flag of ${event.location}`}
-              className="w-8 h-8"
-            />
-            <p className="text-md text-bold text-start text-white text-wrap font-regular">
-              {event.track.toUpperCase()}
-            </p>
-          </CardHeader>
-          <CardContent className="flex flex-row gap-2">
-            <div className="text-start flex flex-row justify-between">
-              <div className="flex flex-col gap-0 justify-evenly px-2">
-                <Session sessionKey="p1" eventData={event.p1} dict={dict} />
-                <Session sessionKey="p2" eventData={event.p2} dict={dict} />
-                <Session sessionKey="p3" eventData={event.p3} dict={dict} />
-                <Session sessionKey="sq" eventData={event.sq} dict={dict} />
-                <Session sessionKey="sr" eventData={event.sr} dict={dict} />
-                <Session sessionKey="q" eventData={event.q} dict={dict} />
-                <Session sessionKey="r" eventData={event.r} dict={dict} />
+    <div className="grid grid-cols-1 gap-5 pb-4 md:grid-cols-2">
+      {upcomingEvents.map((event, index) => {
+        const trackAsset = getTrackAsset(event);
+        const isNextRace = index === 0;
+
+        return (
+          <Card
+            key={index}
+            className={cn(
+              "relative flex flex-col overflow-hidden rounded-xl bg-warmBlack p-5 shadow-none transition-colors",
+              isNextRace
+                ? "border-white/60 next-race-glow"
+                : "border-none",
+            )}
+          >
+            {trackAsset && (
+              <TrackCircuit
+                asset={trackAsset}
+                variant={isNextRace ? "trail" : "image"}
+                className={cn(
+                  "pointer-events-none absolute right-1.5 top-1 h-auto w-full select-none lg:w-[80%]",
+                  isNextRace && trackAsset.format === "svg"
+                    ? "text-white"
+                    : trackAsset.format === "svg"
+                      ? "opacity-5"
+                      : "opacity-15",
+                )}
+              />
+            )}
+
+            <CardHeader className="relative z-10 flex flex-row items-center gap-3 p-0">
+              <img
+                src={`https://flagsapi.com/${getCountryCode(
+                  event.location
+                )}/flat/32.png`}
+                alt={`Flag of ${event.location}`}
+                className="h-9 w-9 rounded-sm object-cover"
+              />
+              <div className="flex min-w-0 flex-col">
+                <p className="truncate text-base font-geist text-f1White">
+                  {event.track.toUpperCase()}
+                </p>
+                <p className="truncate text-xs font-geist text-gray-400">
+                  {event.location}
+                </p>
               </div>
-              <div className="flex items-center max-w-[10rem]">
-                <img
-                  alt={event.location}
-                  src={
-                    config.public.blobBaseUrl +
-                    `/tracks/${event.location.replaceAll(" ", "")}.png`
-                  }
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+            </CardHeader>
+
+            <CardContent className="relative z-10 mt-4 flex w-full min-w-0 flex-col gap-1.5 p-0">
+              <Session sessionKey="p1" eventData={event.p1} dict={dict} />
+              <Session sessionKey="p2" eventData={event.p2} dict={dict} />
+              <Session sessionKey="p3" eventData={event.p3} dict={dict} />
+              <Session sessionKey="sq" eventData={event.sq} dict={dict} />
+              <Session sessionKey="sr" eventData={event.sr} dict={dict} />
+              <Session sessionKey="q" eventData={event.q} dict={dict} />
+              <Session sessionKey="r" eventData={event.r} dict={dict} />
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   );
 }

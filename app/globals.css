@@ -7,6 +7,103 @@
   100% { opacity: 1; }
 }
 
+@keyframes f1-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.home-hero-stagger > *,
+.home-hero-actions > * {
+  animation: f1-fade-up 500ms ease-out both;
+}
+
+.home-hero-stagger > :nth-child(2) {
+  animation-delay: 80ms;
+}
+
+.home-hero-actions > :nth-child(2) {
+  animation-delay: 80ms;
+}
+
+.page-enter {
+  animation: f1-page-enter 550ms ease-out;
+}
+
+.page-enter:has(.loader) {
+  animation: none;
+}
+
+@keyframes f1-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- Brillo suave y estático para la próxima carrera del calendario --- */
+.next-race-glow {
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 0 20px -6px rgba(255, 255, 255, 0.18);
+}
+
+@keyframes account-menu-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes account-menu-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+}
+
+.account-menu-enter {
+  animation: account-menu-enter 160ms ease-out both;
+  transform-origin: top left;
+}
+
+.account-menu-exit {
+  animation: account-menu-exit 160ms ease-in both;
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-stagger > *,
+  .home-hero-actions > *,
+  .page-enter {
+    animation: none;
+  }
+
+  .account-menu-enter,
+  .account-menu-exit {
+    animation: none;
+  }
+}
+
 .animate-fill-color {
   animation: fillColor 2s ease-in-out infinite;
 }

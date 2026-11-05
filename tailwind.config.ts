@@ -75,6 +75,7 @@ const config: Config = {
         f1Purple: "#A855F7",
         f1Green: "#51cf66",
         f1Blue: "#3B82F6",
+        f1White: "#FFFFFF",
         warmBlack: "#0a0a0a",
         warmBlack2: "#111111",
         warmBlack3: "#1a1a1a",

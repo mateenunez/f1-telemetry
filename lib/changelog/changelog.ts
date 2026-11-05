@@ -29,6 +29,24 @@ export interface ChangelogRelease {
 
 export const changelog: ChangelogRelease[] = [
   {
+    version: "2.3.1",
+    date: "2026-11-04",
+    items: [
+      {
+        type: "changed",
+        scope: "frontend",
+        en: "Redesign of the countdown to the next session: clearer hierarchy with days and hours highlighted, and live minutes and seconds ticking locally every second with no extra API requests.",
+        es: "Rediseño del countdown a la próxima sesión: jerarquía más clara con los días y las horas destacados, y minutos y segundos en vivo actualizándose localmente cada segundo sin peticiones adicionales a la API.",
+      },
+      {
+        type: "changed",
+        scope: "frontend",
+        en: "Improved navigation with a smoother transition to the schedule page, including the highlighted countdown that follows the cursor over the upcoming session.",
+        es: "Navegación mejorada con una transición más fluida a la página del calendario, incluyendo el countdown destacado que sigue al cursor sobre la próxima sesión.",
+      },
+    ],
+  },
+  {
     version: "2.3.0",
     date: "2026-10-31",
     items: [

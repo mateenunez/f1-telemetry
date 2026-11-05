@@ -1,10 +1,13 @@
 {
   "name": "f1telemetry",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "private": true,
   "scripts": {
+    "prebuild": "node scripts/generate-track-manifest.mjs",
     "build": "next build",
+    "predev": "node scripts/generate-track-manifest.mjs",
     "dev": "next dev",
+    "generate:track-manifest": "node scripts/generate-track-manifest.mjs",
     "lint": "next lint",
     "start": "next start"
   },
@@ -51,6 +54,7 @@
     "cookies-next": "^6.1.0",
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.5.1",
+    "framer-motion": "^14.9.0",
     "i18n": "^0.15.2",
     "input-otp": "1.4.1",
     "js-cookie": "^3.0.5",

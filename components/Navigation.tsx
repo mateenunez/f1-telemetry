@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { LogOut, User } from "lucide-react";
 import { config } from "@/lib/config";
 import { useAuth } from "@/hooks/use-auth";
@@ -39,8 +39,26 @@ export default function Navigation({
     typeof maxScrollPosition === "number" && maxScrollPosition > 0;
   const [isVisible, setIsVisible] = useState(!hasScrollTrigger);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const [accountMenuClosing, setAccountMenuClosing] = useState(false);
   const [authFormOpen, setAuthFormOpen] = useState(false);
   const accountMenuRef = useRef<HTMLDivElement>(null);
+  const accountMenuCloseTimeout = useRef<number | null>(null);
+  const previousIsAuthenticated = useRef(isAuthenticated);
+
+  const closeAccountMenu = useCallback(() => {
+    if (!accountMenuOpen || accountMenuClosing) return;
+
+    setAccountMenuClosing(true);
+    const closeDelay = window.matchMedia("(prefers-reduced-motion: reduce)")
+      .matches
+      ? 0
+      : 160;
+    accountMenuCloseTimeout.current = window.setTimeout(() => {
+      setAccountMenuOpen(false);
+      setAccountMenuClosing(false);
+      accountMenuCloseTimeout.current = null;
+    }, closeDelay);
+  }, [accountMenuClosing, accountMenuOpen]);
 
   useEffect(() => {
     if (!accountMenuOpen) return;
@@ -50,11 +68,11 @@ export default function Navigation({
         event.target instanceof Node &&
         !accountMenuRef.current?.contains(event.target)
       ) {
-        setAccountMenuOpen(false);
+        closeAccountMenu();
       }
     };
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setAccountMenuOpen(false);
+      if (event.key === "Escape") closeAccountMenu();
     };
 
     document.addEventListener("pointerdown", handlePointerDown);
@@ -63,11 +81,23 @@ export default function Navigation({
       document.removeEventListener("pointerdown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [accountMenuOpen]);
+  }, [accountMenuOpen, closeAccountMenu]);
+
+  useEffect(
+    () => () => {
+      if (accountMenuCloseTimeout.current !== null) {
+        window.clearTimeout(accountMenuCloseTimeout.current);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
-    if (isAuthenticated) setAccountMenuOpen(false);
-  }, [isAuthenticated]);
+    if (previousIsAuthenticated.current !== isAuthenticated) {
+      previousIsAuthenticated.current = isAuthenticated;
+      if (isAuthenticated) closeAccountMenu();
+    }
+  }, [closeAccountMenu, isAuthenticated]);
 
   useEffect(() => {
     if (!hasScrollTrigger) return;
@@ -101,7 +131,16 @@ export default function Navigation({
                   setAuthFormOpen(true);
                   return;
                 }
-                setAccountMenuOpen((open) => !open);
+                if (accountMenuOpen && !accountMenuClosing) {
+                  closeAccountMenu();
+                  return;
+                }
+                if (accountMenuCloseTimeout.current !== null) {
+                  window.clearTimeout(accountMenuCloseTimeout.current);
+                  accountMenuCloseTimeout.current = null;
+                }
+                setAccountMenuClosing(false);
+                setAccountMenuOpen(true);
               }}
               aria-label={dict.auth?.account ?? "Account"}
               aria-expanded={isAuthenticated ? accountMenuOpen : undefined}
@@ -110,11 +149,15 @@ export default function Navigation({
             >
               <User size={20} aria-hidden="true" />
             </button>
-            {accountMenuOpen && (
+            {(accountMenuOpen || accountMenuClosing) && (
               <div
                 role="menu"
                 aria-label={dict.auth?.account ?? "Account"}
-                className="absolute left-0 top-full z-[60] mt-2 min-w-52 rounded border border-gray-700 bg-warmBlack p-2 shadow-xl"
+                className={`absolute left-0 top-full z-[60] mt-2 min-w-52 rounded border border-warmBlack2 bg-warmBlack p-2 shadow-xl ${
+                  accountMenuClosing
+                    ? "account-menu-exit"
+                    : "account-menu-enter"
+                }`}
               >
                 {isAuthenticated ? (
                   <>
@@ -129,7 +172,7 @@ export default function Navigation({
                       role="menuitem"
                       onClick={() => {
                         logout();
-                        setAccountMenuOpen(false);
+                        closeAccountMenu();
                       }}
                       className="flex w-full items-center text-xs gap-2 rounded px-3 py-2 text-left text-sm text-gray-400 hover:text-f1Blue focus:outline-none focus-visible:ring-2 focus-visible:ring-f1Blue"
                     >

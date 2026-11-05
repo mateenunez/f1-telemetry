@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { F1CalendarResponse, fetchCalendar } from "@/utils/calendar";
 import NextSession from "@/components/calendar/NextSession";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Upnext from "@/components/calendar/Upnext";
 import Navigation from "../Navigation";
 
@@ -13,7 +12,6 @@ interface ScheduleContentProps {
 
 export function ScheduleContent({ dict }: ScheduleContentProps) {
   const [calendar, setCalendar] = useState<F1CalendarResponse | null>(null);
-  const viewportRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const loadCalendar = async () => {
@@ -47,8 +45,8 @@ export function ScheduleContent({ dict }: ScheduleContentProps) {
       <div className="min-h-screen bg-warmBlack text-white overflow-hidden font-geist">
         <div className="max-w-6xl mx-auto mt-24 md:mt-28 px-4 md:px-8">
           <Navigation dict={dict} />
-          <div className="flex flex-row my-4">
-            <div className="flex flex-col md:mx-8 w-full gap-6">
+          <div className="flex flex-row">
+            <div className="flex flex-col md:mx-8 w-full gap-2">
               {/* Proxima sesion */}
               <NextSession
                 dict={dict}
@@ -59,17 +57,10 @@ export function ScheduleContent({ dict }: ScheduleContentProps) {
               {/* Calendario completo */}
               <div className="flex flex-col w-full">
                 <span className="text-xl mb-4">{dict.schedule.upnext}</span>
-                <ScrollArea className="w-full" viewportRef={viewportRef}>
-                  <Upnext
-                    upNextEvents={calendar.groupsByLocation}
-                    dict={dict}
-                    viewportRef={viewportRef}
-                  />
-                  <ScrollBar
-                    orientation="horizontal"
-                    className="bg-gray-700 hidden md:block"
-                  />
-                </ScrollArea>
+                <Upnext
+                  upNextEvents={calendar.groupsByLocation}
+                  dict={dict}
+                />
               </div>
             </div>
           </div>

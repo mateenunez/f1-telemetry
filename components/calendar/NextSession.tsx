@@ -10,6 +10,8 @@ import {
   translateSessionType,
 } from "@/utils/calendar";
 import { useEffect, useState } from "react";
+import TrackCircuit from "@/components/calendar/TrackCircuit";
+import { getTrackAsset } from "@/utils/track-assets";
 
 interface NextSessionProps {
   session: F1Event;
@@ -23,7 +25,6 @@ export default function NextSession({
   dict,
 }: NextSessionProps) {
   const [time, setTime] = useState<TimeUntilNext>(timeUntil);
-  if (!session) return null;
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -52,6 +53,13 @@ export default function NextSession({
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  if (!session) return null;
+
+  const trackAsset = getTrackAsset({
+    location: session.location,
+    track: session.track,
+  });
 
   return (
     <div className="flex md:flex-col py-4 max-w-fulljustify-center font-geist">
@@ -112,6 +120,19 @@ export default function NextSession({
               </div>
             </div>
           </div>
+          {trackAsset && (
+            <div className="flex w-full justify-center">
+              <TrackCircuit
+                asset={trackAsset}
+                variant={trackAsset.format === "svg" ? "trace" : "image"}
+                className={
+                  trackAsset.format === "svg"
+                    ? "h-auto w-full max-w-80 text-white"
+                    : "h-auto w-full max-w-80 invert opacity-25"
+                }
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
