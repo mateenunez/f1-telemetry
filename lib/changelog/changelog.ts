@@ -44,6 +44,12 @@ export const changelog: ChangelogRelease[] = [
         en: "Improved navigation with a smoother transition to the schedule page, including the highlighted countdown that follows the cursor over the upcoming session.",
         es: "Navegación mejorada con una transición más fluida a la página del calendario, incluyendo el countdown destacado que sigue al cursor sobre la próxima sesión.",
       },
+      {
+        type: "changed",
+        scope: "frontend",
+        en: "Improved replay search to make it easier to find recordings.",
+        es: "Se mejoró la búsqueda de repeticiones para facilitar la búsqueda de grabaciones.",
+      },
     ],
   },
   {

@@ -124,7 +124,7 @@ export default function NextSession({
             <div className="flex w-full justify-center">
               <TrackCircuit
                 asset={trackAsset}
-                variant={trackAsset.format === "svg" ? "trace" : "image"}
+                variant={trackAsset.format === "svg" ? "draw" : "image"}
                 className={
                   trackAsset.format === "svg"
                     ? "h-auto w-full max-w-80 text-white"

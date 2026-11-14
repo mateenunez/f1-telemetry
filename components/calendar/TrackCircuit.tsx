@@ -1,12 +1,10 @@
 "use client";
 
-import AnimatedCircuit, {
-  type CircuitAnimation,
-} from "@/components/calendar/AnimatedCircuit";
+import AnimatedCircuit from "@/components/calendar/AnimatedCircuit";
 import TrackImage from "@/components/calendar/TrackImage";
 import type { TrackAsset } from "@/utils/track-assets";
 
-export type TrackCircuitVariant = CircuitAnimation | "image";
+export type TrackCircuitVariant = "draw" | "image";
 
 interface TrackCircuitProps {
   asset: TrackAsset;
@@ -24,13 +22,7 @@ export default function TrackCircuit({
   className,
 }: TrackCircuitProps) {
   if (asset.format === "svg" && variant !== "image") {
-    return (
-      <AnimatedCircuit
-        src={asset.src}
-        animation={variant}
-        className={className}
-      />
-    );
+    return <AnimatedCircuit src={asset.src} className={className} />;
   }
 
   return <TrackImage asset={asset} className={className} />;
