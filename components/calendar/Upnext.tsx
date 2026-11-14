@@ -107,11 +107,11 @@ export default function Upnext({ upNextEvents, dict }: UpNextProps) {
             {trackAsset && (
               <TrackCircuit
                 asset={trackAsset}
-                variant={isNextRace ? "trail" : "image"}
+                variant="image"
                 className={cn(
                   "pointer-events-none absolute right-1.5 top-1 h-auto w-full select-none lg:w-[80%]",
-                  isNextRace && trackAsset.format === "svg"
-                    ? "text-white"
+                  isNextRace
+                    ? "opacity-25"
                     : trackAsset.format === "svg"
                       ? "opacity-5"
                       : "opacity-15",

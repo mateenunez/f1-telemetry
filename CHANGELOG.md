@@ -20,6 +20,10 @@ that's user-facing, add a matching item there (in English and Spanish) too.
 
 ## [Unreleased]
 
+### Changed
+
+- Improved replay search to make it easier to find recordings.
+
 ## [2.2.3] - 2026-10-18
 
 ### Added
